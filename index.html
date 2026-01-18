@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дорожная карта масштабирования бизнеса ремонта окон и дверей</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            color: var(--gray-900);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            padding: 3rem 2rem;
+            color: white;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header .subtitle {
+            font-size: 1.25rem;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .tech-stack {
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .tech-stack h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tech-items {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tech-item {
+            background: white;
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .content {
+            padding: 3rem 2rem;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--success) 100%);
+            border-radius: 2px;
+        }
+
+        .phase {
+            position: relative;
+            margin-bottom: 3rem;
+        }
+
+        .phase-marker {
+            position: absolute;
+            left: -2.5rem;
+            top: 0;
+            width: 2.5rem;
+            height: 2.5rem;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 900;
+            font-size: 1.125rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        .phase-header {
+            background: var(--gray-50);
+            padding: 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid var(--gray-200);
+        }
+
+        .phase-header:hover {
+            background: var(--gray-100);
+            border-color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        .phase-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .phase-duration {
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .phase-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .stat-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+
+        .stat-icon.money { background: #dcfce7; color: var(--success); }
+        .stat-icon.team { background: #dbeafe; color: var(--primary); }
+        .stat-icon.time { background: #fed7aa; color: var(--warning); }
+
+        .phase-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .phase.active .phase-content {
+            max-height: 5000px;
+        }
+
+        .phase.active .phase-header {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary-dark);
+        }
+
+        .phase.active .phase-title,
+        .phase.active .phase-duration,
+        .phase.active .stat {
+            color: white;
+        }
+
+        .phase-content-inner {
+            padding: 2rem 1.5rem;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .task-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .task {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.5rem;
+        }
+
+        .task-title {
+            font-weight: 600;
+            color: var(--gray-900);
+            flex: 1;
+        }
+
+        .task-priority {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .task-priority.high {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+
+        .task-priority.medium {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .task-priority.low {
+            background: #dbeafe;
+            color: var(--primary);
+        }
+
+        .task-description {
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            line-height: 1.6;
+        }
+
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid var(--warning);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .warning-list {
+            font-size: 0.875rem;
+            color: #78350f;
+            list-style-position: inside;
+        }
+
+        .warning-list li {
+            margin-bottom: 0.25rem;
+        }
+
+        .results-box {
+            background: #dcfce7;
+            border-left: 4px solid var(--success);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .results-title {
+            font-weight: 600;
+            color: #166534;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .results-list {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .result-item {
+            font-size: 0.875rem;
+            color: #166534;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .result-item::before {
+            content: '✓';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.25rem;
+            height: 1.25rem;
+            background: var(--success);
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .integration-diagram {
+            background: var(--gray-50);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .integration-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--gray-900);
+        }
+
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .flow-box {
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-weight: 600;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .legend {
+            background: var(--gray-50);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+        }
+
+        .legend-title {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--gray-900);
+        }
+
+        .legend-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .legend-color {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .footer {
+            background: var(--gray-900);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .footer-note {
+            opacity: 0.8;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.75rem;
+            }
+
+            .phase-title {
+                font-size: 1.25rem;
+            }
+
+            .timeline {
+                padding-left: 2rem;
+            }
+
+            .phase-marker {
+                left: -1.75rem;
+                width: 2rem;
+                height: 2rem;
+                font-size: 0.875rem;
+            }
+        }
+
+        .toggle-indicator {
+            transition: transform 0.3s ease;
+        }
+
+        .phase.active .toggle-indicator {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 Дорожная карта масштабирования бизнеса</h1>
+            <div class="subtitle">Ремонт окон и дверей • США • 2025-2028</div>
+            
+            <div class="tech-stack">
+                <h3>Технологический стек</h3>
+                <div class="tech-items">
+                    <div class="tech-item">Workiz CRM</div>
+                    <div class="tech-item">Thumbtack</div>
+                    <div class="tech-item">OpenPhone</div>
+                    <div class="tech-item">AI Agent (n8n)</div>
+                    <div class="tech-item">Google Maps</div>
+                    <div class="tech-item">Zapier</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="timeline">
+                
+                <!-- МЕСЯЦ 1 -->
+                <div class="phase active">
+                    <div class="phase-marker">1</div>
+                    <div class="phase-header" onclick="togglePhase(this)">
+                        <div class="phase-title">
+                            Месяц 1: Запуск первой ячейки
+                            <span class="toggle-indicator">▼</span>
+                        </div>
+                        <div class="phase-duration">20 октября - 31 октября 2025 (2 недели)</div>
+                        <div class="phase-stats">
+                            <div class="stat">
+                                <div class="stat-icon money">💰</div>
+                                <span>+$5,000 выручки</span>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-icon team">👥</div>
+                                <span>1 ассистент + Владимир</span>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-icon time">⏱️</div>
+                                <span>20-30 заявок</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-content">
+                        <div class="phase-content-inner">
+                            
+                            <!-- Неделя 1-2 -->
+                            <div class="section">
+                                <div class="section-title">📋 Срочные приоритеты (Неделя 1-2)</div>
+                                
+                                <div class="task-list">
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Обучение ассистента и начало работы</div>
+                                            <div class="task-priority high">КРИТИЧНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            • Обработка заявок из Thumbtack в реальном времени<br>
+                                            • Ответ на заявки в течение 15-60 минут<br>
+                                            • Использование готовых шаблонов сообщений<br>
+                                            • Координация расписания с Владимиром
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Настройка Workiz CRM</div>
+                                            <div class="task-priority high">КРИТИЧНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            • Интеграция с Thumbtack (webhook)<br>
+                                            • Создание шаблонов услуг (двери, окна, замки)<br>
+                                            • Настройка прайс-листа ($250-500 за двери)<br>
+                                            • Настройка календаря и зон обслуживания
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Настройка телефонии OpenPhone</div>
+                                            <div class="task-priority high">КРИТИЧНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            • Синхронизация с Workiz<br>
+                                            • Настройка SMS-шаблонов<br>
+                                            • Автоматические подтверждения встреч<br>
+                                            • Логирование всех звонков и SMS
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Создание AI агента для базы знаний</div>
+                                            <div class="task-priority medium">ВАЖНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            • Анализ 50+ SMS-переписок (уже есть в документе)<br>
+                                            • Загрузка Q&A в базу знаний<br>
+                                            • Настройка n8n для автоматизации<br>
+                                            • Тестирование AI-ответов
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Документирование процессов</div>
+                                            <div class="task-priority medium">ВАЖНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            • Процессы ассистента (блок-схема обработки заявки)<br>
+                                            • Процессы мастера (от приезда до оплаты)<br>
+                                            • Должностная инструкция ассистента v1.0<br>
+                                            • Должностная инструкция мастера v1.0
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Регламент обработки заявок</div>
+                                            <div class="task-priority medium">ВАЖНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            • Время ответа: < 60 минут (цель: 15-30 мин)<br>
+                                            • Алгоритм квалификации заявки<br>
+                                            • Правила ценообразования<br>
+                                            • SLA по согласованию и подтверждению
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Интеграционная диаграмма -->
+                            <div class="integration-diagram">
+                                <div class="integration-title">Поток данных (Месяц 1)</div>
+                                <div class="flow-diagram">
+                                    <div class="flow-box">Thumbtack<br>Заявка</div>
+                                    <div class="flow-arrow">→</div>
+                                    <div class="flow-box">Workiz<br>Лид</div>
+                                    <div class="flow-arrow">→</div>
+                                    <div class="flow-box">Ассистент<br>Обработка</div>
+                                    <div class="flow-arrow">→</div>
+                                    <div class="flow-box">OpenPhone<br>SMS/Звонок</div>
+                                    <div class="flow-arrow">→</div>
+                                    <div class="flow-box">Владимир<br>Выполнение</div>
+                                </div>
+                            </div>
+
+                            <!-- Подводные камни -->
+                            <div class="warning-box">
+                                <div class="warning-title">⚠️ Подводные камни Месяца 1</div>
+                                <ul class="warning-list">
+                                    <li><strong>Интеграция Thumbtack:</strong> Может потребоваться custom webhook - не все CRM имеют нативную интеграцию</li>
+                                    <li><strong>Скорость ответа:</strong> Конкуренты отвечают за 5-10 минут, важно быть быстрее</li>
+                                    <li><strong>AI агент:</strong> Первая версия будет несовершенной - нужны тесты и итерации</li>
+                                    <li><strong>Перегрузка ассистента:</strong> 20-30 новых заявок + текущие клиенты = риск выгорания</li>
+                                    <li><strong>Документация:</strong> Легко забыть документировать в спешке - выделить время!</li>
+                                </ul>
+                            </div>
+
+                            <!-- Результаты -->
+                            <div class="results-box">
+                                <div class="results-title">✅ Ожидаемые результаты к 31 октября 2025</div>
+                                <div class="results-list">
+                                    <div class="result-item">+$5,000 дополнительной выручки</div>
+                                    <div class="result-item">20-30 обработанных заявок</div>
+                                    <div class="result-item">Workiz настроен и работает</div>
+                                    <div class="result-item">AI агент в тестировании</div>
+                                    <div class="result-item">Базовые инструкции готовы</div>
+                                    <div class="result-item">Регламент заявок описан</div>
+                                    <div class="result-item">Фундамент для масштабирования заложен</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- КВАРТАЛ (Месяцы 2-4) -->
+                <div class="phase">
+                    <div class="phase-marker">2</div>
+                    <div class="phase-header" onclick="togglePhase(this)">
+                        <div class="phase-title">
+                            Квартал: Наём и обучение 5 мастеров
+                            <span class="toggle-indicator">▼</span>
+                        </div>
+                        <div class="phase-duration">1 ноября 2025 - 31 января 2026 (3 месяца)</div>
+                        <div class="phase-stats">
+                            <div class="stat">
+                                <div class="stat-icon money">💰</div>
+                                <span>$75,000/мес к концу</span>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-icon team">👥</div>
+                                <span>5 мастеров + команда</span>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-icon time">📹</div>
+                                <span>40+ обучающих видео</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-content">
+                        <div class="phase-content-inner">
+                            
+                            <div class="section">
+                                <div class="section-title">👥 Найм 5 мастеров (Неделя 3-6)</div>
+                                
+                                <div class="task-list">
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Поиск и отбор кандидатов</div>
+                                            <div class="task-priority high">КРИТИЧНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>Каналы:</strong><br>
+                                            • Indeed, Craigslist (США)<br>
+                                            • Местные Facebook группы мастеров<br>
+                                            • Referral program (бонус за приведенного мастера)<br>
+                                            <br>
+                                            <strong>Критерии отбора:</strong><br>
+                                            • Опыт ремонта дверей/окон (2+ года)<br>
+                                            • Водительские права + авто<br>
+                                            • Английский (базовый уровень)<br>
+                                            • Готовность к полевой работе
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Интервью и проверка (2-3 раунда)</div>
+                                            <div class="task-priority high">КРИТИЧНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>Раунд 1:</strong> Телефонное интервью (30 мин)<br>
+                                            • Опыт работы<br>
+                                            • Мотивация<br>
+                                            • График работы<br>
+                                            <br>
+                                            <strong>Раунд 2:</strong> Техническое интервью (1 час)<br>
+                                            • Диагностика проблем (фото/видео кейсы)<br>
+                                            • Знание инструментов<br>
+                                            • Оценка стоимости работ<br>
+                                            <br>
+                                            <strong>Раунд 3:</strong> Пробный день на объекте<br>
+                                            • Работа вместе с Владимиром<br>
+                                            • Оценка качества и скорости
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Оформление и онбординг</div>
+                                            <div class="task-priority medium">ВАЖНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            • Подписание контрактов (W2 или 1099)<br>
+                                            • Background check (обязательно в США)<br>
+                                            • Страхование (liability insurance)<br>
+                                            • Выдача брендированной формы<br>
+                                            • Создание аккаунтов в Workiz
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="section">
+                                <div class="section-title">🎓 15-дневное обучение (Неделя 7-9)</div>
+                                
+                                <div class="task-list">
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">День 1-3: Теория и регламенты</div>
+                                            <div class="task-priority high">КРИТИЧНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>Материалы для изучения:</strong><br>
+                                            • Должностная инструкция мастера<br>
+                                            • Типы дверей и окон (видео база)<br>
+                                            • Инструменты и их использование<br>
+                                            • Стандарты качества компании<br>
+                                            • Customer service протоколы<br>
+                                            <br>
+                                            <strong>Формат:</strong> 4 часа теории + 2 часа тестов ежедневно
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">День 4-10: Практика с наставником</div>
+                                            <div class="task-priority high">КРИТИЧНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            • Выезд на реальные объекты с Владимиром<br>
+                                            • Наблюдение: 2 дня<br>
+                                            • Помощь: 3 дня<br>
+                                            • Самостоятельная работа под присмотром: 2 дня<br>
+                                            <br>
+                                            <strong>Обязательные навыки:</strong><br>
+                                            ✓ Диагностика проблемы<br>
+                                            ✓ Оценка стоимости<br>
+                                            ✓ Выполнение ремонта<br>
+                                            ✓ Фото до/после<br>
+                                            ✓ Взаимодействие с клиентом<br>
+                                            ✓ Работа в Workiz
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">День 11-15: Финальная сертификация</div>
+                                            <div class="task-priority medium">ВАЖНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>Тесты знаний:</strong><br>
+                                            • Письменный тест (80+ баллов required)<br>
+                                            • Практический экзамен (реальный кейс)<br>
+                                            • Симуляция сложной ситуации<br>
+                                            <br>
+                                            <strong>После успешной сертификации:</strong><br>
+                                            → Допуск к самостоятельной работе<br>
+                                            → Первые 10 работ с проверкой качества
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="section">
+                                <div class="section-title">📹 Создание видео базы знаний (Параллельно)</div>
+                                
+                                <div class="task-list">
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Съёмка 40+ обучающих видео</div>
+                                            <div class="task-priority high">КРИТИЧНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>Категории видео:</strong><br>
+                                            <br>
+                                            <strong>Двери (15 видео):</strong><br>
+                                            • Замена петель (разные типы)<br>
+                                            • Регулировка провисающей двери<br>
+                                            • Ремонт рамы<br>
+                                            • Замена замков/ручек<br>
+                                            • Работа с металлическими дверями<br>
+                                            <br>
+                                            <strong>Окна (12 видео):</strong><br>
+                                            • Замена стекла<br>
+                                            • Ремонт механизма<br>
+                                            • Регулировка<br>
+                                            • Установка жалюзи<br>
+                                            <br>
+                                            <strong>Процессы (8 видео):</strong><br>
+                                            • Приезд на объект<br>
+                                            • Диагностика<br>
+                                            • Общение с клиентом<br>
+                                            • Работа в Workiz<br>
+                                            • Фотографирование<br>
+                                            • Приём оплаты<br>
+                                            <br>
+                                            <strong>Customer Service (5 видео):</strong><br>
+                                            • Работа с трудными клиентами<br>
+                                            • Гарантийные случаи<br>
+                                            • Апселл дополнительных услуг<br>
+                                            <br>
+                                            <strong>Формат:</strong> 5-10 минут/видео, озвучка, субтитры
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="section">
+                                <div class="section-title">🎯 Маркетинг и привлечение клиентов (Неделя 10-13)</div>
+                                
+                                <div class="task-list">
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Создание сайта</div>
+                                            <div class="task-priority high">КРИТИЧНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>Платформа:</strong> WordPress или конструктор (Wix/Squarespace)<br>
+                                            <br>
+                                            <strong>Обязательные страницы:</strong><br>
+                                            • Главная (услуги, цены, отзывы)<br>
+                                            • О нас<br>
+                                            • Услуги (детально)<br>
+                                            • Цены<br>
+                                            • Портфолио (фото до/после)<br>
+                                            • Контакты + форма заявки<br>
+                                            • FAQ<br>
+                                            <br>
+                                            <strong>SEO оптимизация:</strong><br>
+                                            • Локальные ключевые слова ("door repair [City]")<br>
+                                            • Schema markup<br>
+                                            • Мобильная версия
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Google Maps / Google Business Profile</div>
+                                            <div class="task-priority high">КРИТИЧНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>Настройка профиля:</strong><br>
+                                            • Название, адрес, телефон<br>
+                                            • Категории (Handyman, Door Repair, Window Repair)<br>
+                                            • Часы работы<br>
+                                            • Описание (300+ слов с ключевыми словами)<br>
+                                            • Загрузить 20-30 фото (работы, команда, логотип)<br>
+                                            <br>
+                                            <strong>Сбор отзывов:</strong><br>
+                                            → Автоматическая просьба об отзыве после работы<br>
+                                            → Цель: 20+ отзывов за первые 2 месяца
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Yelp, Facebook, другие платформы</div>
+                                            <div class="task-priority medium">ВАЖНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>Yelp:</strong><br>
+                                            • Создание бизнес-профиля<br>
+                                            • Загрузка фото<br>
+                                            • Получение отзывов<br>
+                                            <br>
+                                            <strong>Facebook Business:</strong><br>
+                                            • Создание страницы компании<br>
+                                            • Регулярные посты (2-3 раза/неделю)<br>
+                                            • Фото до/после<br>
+                                            • Клиентские истории
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Рекламные кампании (тесты)</div>
+                                            <div class="task-priority medium">ВАЖНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>Google Ads:</strong><br>
+                                            • Бюджет: $500-1000/мес на тесты<br>
+                                            • Search ads (ключевые слова локальные)<br>
+                                            • Local Services Ads (Google Guaranteed)<br>
+                                            <br>
+                                            <strong>Facebook/Instagram Ads:</strong><br>
+                                            • Бюджет: $300-500/мес<br>
+                                            • Таргетинг: домовладельцы 30-65 лет в радиусе 25 миль<br>
+                                            • Carousel ads с до/после фото<br>
+                                            <br>
+                                            <strong>Nextdoor:</strong><br>
+                                            • Бесплатное продвижение в локальных группах<br>
+                                            • Спонсируемые посты ($100-200/мес)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Подводные камни -->
+                            <div class="warning-box">
+                                <div class="warning-title">⚠️ Подводные камни Квартала</div>
+                                <ul class="warning-list">
+                                    <li><strong>Качество найма:</strong> Найти 5 ХОРОШИХ мастеров сложно - можно нанять 10 и отобрать 5 лучших</li>
+                                    <li><strong>Время обучения:</strong> 15 дней может быть недостаточно - некоторым нужно 20-25 дней</li>
+                                    <li><strong>Текучка кадров:</strong> 1-2 мастера могут уйти в первый месяц - закладывать буфер</li>
+                                    <li><strong>Видео база:</strong> 40 видео = огромная работа. Начать раньше, снимать параллельно с обучением</li>
+                                    <li><strong>Google Ads:</strong> Высокая конкуренция, стоимость клика $5-15. Нужен опытный специалист или агентство</li>
+                                    <li><strong>Масштабирование координации:</strong> 5 мастеров = сложная логистика. Workiz становится критичным</li>
+                                    <li><strong>Качество контроль:</strong> Обязательно проверять первые 10 работ каждого мастера</li>
+                                </ul>
+                            </div>
+
+                            <!-- Результаты -->
+                            <div class="results-box">
+                                <div class="results-title">✅ Ожидаемые результаты к 31 января 2026</div>
+                                <div class="results-list">
+                                    <div class="result-item">5 сертифицированных мастеров на линии</div>
+                                    <div class="result-item">$75,000/месяц выручки</div>
+                                    <div class="result-item">40+ обучающих видео в базе знаний</div>
+                                    <div class="result-item">Сайт создан и работает</div>
+                                    <div class="result-item">Google Maps: 20+ отзывов</div>
+                                    <div class="result-item">Рекламные кампании запущены и проанализированы</div>
+                                    <div class="result-item">AI агент работает стабильно</div>
+                                    <div class="result-item">Процессы автоматизированы и документированы</div>
+                                    <div class="result-item">Ячейка работает автономно (без Владимира)</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ГОД 1 (Месяцы 5-12) -->
+                <div class="phase">
+                    <div class="phase-marker">3</div>
+                    <div class="phase-header" onclick="togglePhase(this)">
+                        <div class="phase-title">
+                            Год 1: Оптимизация и рост
+                            <span class="toggle-indicator">▼</span>
+                        </div>
+                        <div class="phase-duration">Февраль - Декабрь 2026 (11 месяцев)</div>
+                        <div class="phase-stats">
+                            <div class="stat">
+                                <div class="stat-icon money">💰</div>
+                                <span>$150,000/мес к концу</span>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-icon team">👥</div>
+                                <span>10-15 мастеров</span>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-icon time">🎯</div>
+                                <span>3-4 ячейки</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-content">
+                        <div class="phase-content-inner">
+                            
+                            <div class="section">
+                                <div class="section-title">📊 Ключевые направления Года 1</div>
+                                
+                                <div class="task-list">
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Анализ и оптимизация процессов</div>
+                                            <div class="task-priority high">КРИТИЧНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>Ежемесячный анализ:</strong><br>
+                                            • Конверсия лидов (цель: 60-70%)<br>
+                                            • Средний чек (цель: увеличить на 15-20%)<br>
+                                            • Время обработки заявки (цель: <30 минут)<br>
+                                            • Customer satisfaction (цель: 4.5+/5)<br>
+                                            <br>
+                                            <strong>Оптимизации:</strong><br>
+                                            → Улучшение скриптов AI агента на основе реальных данных<br>
+                                            → Обновление прайс-листа (сезонность, конкуренция)<br>
+                                            → Streamlining процессов (убрать лишние шаги)<br>
+                                            → A/B тесты маркетинговых материалов
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Расширение команды до 10-15 мастеров</div>
+                                            <div class="task-priority high">КРИТИЧНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>График найма:</strong><br>
+                                            • Февраль-Март: +3 мастера (итого 8)<br>
+                                            • Апрель-Июнь: +2 мастера (итого 10)<br>
+                                            • Июль-Сентябрь: +3 мастера (итого 13)<br>
+                                            • Октябрь-Декабрь: +2 мастера (итого 15)<br>
+                                            <br>
+                                            <strong>Важно:</strong><br>
+                                            → Каждый новый мастер проходит полный 15-дневный курс<br>
+                                            → Назначение старших мастеров как наставников<br>
+                                            → Система бонусов за качество работы
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Создание дополнительных ячеек (3-4 города)</div>
+                                            <div class="task-priority medium">ВАЖНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>Стратегия расширения:</strong><br>
+                                            • Ячейка 1 (исходная): 5 мастеров<br>
+                                            • Ячейка 2 (новый район/город): 3-4 мастера<br>
+                                            • Ячейка 3: 3-4 мастера<br>
+                                            • Ячейка 4: 3-4 мастера<br>
+                                            <br>
+                                            <strong>Каждая ячейка:</strong><br>
+                                            → Свой менеджер/координатор<br>
+                                            → Локальный склад запчастей<br>
+                                            → Собственный Google Business профиль<br>
+                                            → Workiz как единая CRM для всех
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Масштабирование маркетинга</div>
+                                            <div class="task-priority high">КРИТИЧНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>Увеличение бюджета:</strong><br>
+                                            • Google Ads: $2,000-3,000/мес<br>
+                                            • Facebook/Instagram: $1,000-1,500/мес<br>
+                                            • Yelp Ads: $500/мес<br>
+                                            • Thumbtack: продолжение + оптимизация<br>
+                                            <br>
+                                            <strong>Новые каналы:</strong><br>
+                                            • Партнёрства с property management компаниями<br>
+                                            • Контракты с коммерческими заказчиками<br>
+                                            • Referral program для клиентов (10% скидка за каждого приведенного)<br>
+                                            • Email marketing (база клиентов)
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Развитие AI и автоматизации</div>
+                                            <div class="task-priority medium">ВАЖНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>Улучшения AI агента:</strong><br>
+                                            • Расширение базы знаний (100+ Q&A)<br>
+                                            • Интеграция с голосовым AI (прием звонков)<br>
+                                            • Автоматическое определение приоритета заявок<br>
+                                            • Предиктивное ценообразование на основе данных<br>
+                                            <br>
+                                            <strong>Workiz автоматизация:</strong><br>
+                                            → Автоматическое распределение заявок по мастерам<br>
+                                            → Smart scheduling (оптимизация маршрутов)<br>
+                                            → Автоматические напоминания клиентам<br>
+                                            → Интеграция с QuickBooks (бухгалтерия)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Подводные камни -->
+                            <div class="warning-box">
+                                <div class="warning-title">⚠️ Подводные камни Года 1</div>
+                                <ul class="warning-list">
+                                    <li><strong>Быстрый рост = риск потери качества:</strong> Обязательно сохранять контроль качества при масштабировании</li>
+                                    <li><strong>Управленческая сложность:</strong> 15 мастеров нужно координировать - может потребоваться Operations Manager</li>
+                                    <li><strong>Cash flow:</strong> Зарплаты мастеров растут быстрее выручки - следить за ликвидностью</li>
+                                    <li><strong>Конкуренция:</strong> Усиливается при выходе в новые районы - нужна агрессивная ценовая политика на старте</li>
+                                    <li><strong>Сезонность:</strong> Зима = спад работ по дверям/окнам. Диверсификация услуг?</li>
+                                    <li><strong>Репутация:</strong> Один плохой отзыв может убить местный бизнес - строгий контроль качества</li>
+                                </ul>
+                            </div>
+
+                            <!-- Результаты -->
+                            <div class="results-box">
+                                <div class="results-title">✅ Ожидаемые результаты к концу Года 1</div>
+                                <div class="results-list">
+                                    <div class="result-item">$150,000/месяц выручки ($1.8M годовых)</div>
+                                    <div class="result-item">10-15 обученных и сертифицированных мастеров</div>
+                                    <div class="result-item">3-4 автономные ячейки в разных локациях</div>
+                                    <div class="result-item">100+ 5-звездочных отзывов</div>
+                                    <div class="result-item">AI агент обрабатывает 70% входящих запросов</div>
+                                    <div class="result-item">Workiz полностью автоматизирован</div>
+                                    <div class="result-item">База клиентов: 500-800 человек</div>
+                                    <div class="result-item">Повторные клиенты: 30%+</div>
+                                    <div class="result-item">Процессы отточены и готовы к франшизе</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ГОД 2 -->
+                <div class="phase">
+                    <div class="phase-marker">4</div>
+                    <div class="phase-header" onclick="togglePhase(this)">
+                        <div class="phase-title">
+                            Год 2: Подготовка франшизы
+                            <span class="toggle-indicator">▼</span>
+                        </div>
+                        <div class="phase-duration">2027 (12 месяцев)</div>
+                        <div class="phase-stats">
+                            <div class="stat">
+                                <div class="stat-icon money">💰</div>
+                                <span>$300,000/мес</span>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-icon team">👥</div>
+                                <span>25-30 мастеров</span>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-icon time">📍</div>
+                                <span>8-10 ячеек</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-content">
+                        <div class="phase-content-inner">
+                            
+                            <div class="section">
+                                <div class="section-title">🏢 Создание франшизной модели</div>
+                                
+                                <div class="task-list">
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Юридическое оформление франшизы</div>
+                                            <div class="task-priority high">КРИТИЧНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>Документы:</strong><br>
+                                            • FDD (Franchise Disclosure Document)<br>
+                                            • Franchise Agreement<br>
+                                            • Operations Manual (500+ страниц)<br>
+                                            • Trademark registration<br>
+                                            <br>
+                                            <strong>Франшизный пакет:</strong><br>
+                                            • Стоимость франшизы: $30,000-50,000<br>
+                                            • Роялти: 6-8% от выручки<br>
+                                            • Marketing fee: 2% от выручки<br>
+                                            <br>
+                                            <strong>Юристы:</strong> Обязательно franchise attorney ($15,000-30,000)
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Создание полного Operations Manual</div>
+                                            <div class="task-priority high">КРИТИЧНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>Содержание (500+ страниц):</strong><br>
+                                            • Брендбук (логотип, цвета, стиль)<br>
+                                            • Полные SOP для всех процессов<br>
+                                            • Должностные инструкции (все роли)<br>
+                                            • Маркетинговые материалы<br>
+                                            • Технические протоколы<br>
+                                            • Customer service стандарты<br>
+                                            • Финансовые модели и KPI<br>
+                                            • IT системы (Workiz setup guide)<br>
+                                            • Тренинговые программы
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Франшизный тренинг-центр</div>
+                                            <div class="task-priority medium">ВАЖНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>Программа обучения франчайзи (4 недели):</strong><br>
+                                            <br>
+                                            <strong>Неделя 1:</strong> Бизнес-модель<br>
+                                            • Финансы и прогнозы<br>
+                                            • Маркетинг и продажи<br>
+                                            • Операционные процессы<br>
+                                            <br>
+                                            <strong>Неделя 2:</strong> Технические навыки<br>
+                                            • Workiz и другие системы<br>
+                                            • AI агент setup<br>
+                                            • Качество контроль<br>
+                                            <br>
+                                            <strong>Неделя 3:</strong> Найм и обучение<br>
+                                            • Как нанимать мастеров<br>
+                                            • Тренинг программы<br>
+                                            • HR и compliance<br>
+                                            <br>
+                                            <strong>Неделя 4:</strong> Запуск<br>
+                                            • Подготовка к открытию<br>
+                                            • Маркетинговая кампания<br>
+                                            • Поддержка в первый месяц
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Стандартизация всех процессов</div>
+                                            <div class="task-priority high">КРИТИЧНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>Критичные процессы для стандартизации:</strong><br>
+                                            • Lead processing (каждый шаг)<br>
+                                            • Ценообразование (прайс-лист)<br>
+                                            • Качество контроль (чек-листы)<br>
+                                            • Customer service (скрипты)<br>
+                                            • Брендирование (визуальное)<br>
+                                            • Reporting (ежедневные/месячные отчеты)<br>
+                                            <br>
+                                            <strong>Цель:</strong> Любой франчайзи может запустить идентичный бизнес за 30 дней
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Технологическая платформа для франчайзи</div>
+                                            <div class="task-priority high">КРИТИЧНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>Centralized platform:</strong><br>
+                                            • Master Workiz account (для всей сети)<br>
+                                            • Франшизный портал (документы, обучение)<br>
+                                            • AI агент (клонирование для каждого франчайзи)<br>
+                                            • Reporting dashboard (real-time метрики)<br>
+                                            • Marketing materials library<br>
+                                            <br>
+                                            <strong>IT support:</strong><br>
+                                            → Dedicated IT специалист для поддержки франчайзи<br>
+                                            → Автоматизированный onboarding (tech setup за 48 часов)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="section">
+                                <div class="section-title">📈 Рост существующего бизнеса</div>
+                                
+                                <div class="task-list">
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Удвоение операций (8-10 ячеек)</div>
+                                            <div class="task-priority high">КРИТИЧНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            • Расширение в новые города/штаты<br>
+                                            • Каждая ячейка: 3-4 мастера<br>
+                                            • Региональные менеджеры (1 на 3-4 ячейки)<br>
+                                            • Центральная служба поддержки
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Диверсификация услуг</div>
+                                            <div class="task-priority medium">ВАЖНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>Новые направления:</strong><br>
+                                            • Garage doors (высокий чек)<br>
+                                            • Security systems installation<br>
+                                            • Home maintenance contracts (recurring revenue)<br>
+                                            • Commercial contracts (офисы, магазины)<br>
+                                            <br>
+                                            <strong>Цель:</strong> Снизить сезонность, увеличить ARPU
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Подводные камни -->
+                            <div class="warning-box">
+                                <div class="warning-title">⚠️ Подводные камни Года 2</div>
+                                <ul class="warning-list">
+                                    <li><strong>Франшизное право:</strong> FDD очень сложный документ - ошибки могут стоить миллионов. ОБЯЗАТЕЛЬНО franchise attorney</li>
+                                    <li><strong>Operations Manual:</strong> 500 страниц - колоссальная работа. Начать писать в конце Года 1</li>
+                                    <li><strong>Контроль качества:</strong> С ростом сети сложнее поддерживать стандарты - нужна система mystery shopping</li>
+                                    <li><strong>Юридические различия:</strong> Каждый штат = свои законы, лицензии, требования</li>
+                                    <li><strong>Франчайзи selection:</strong> Плохой франчайзи убьет бренд - очень тщательный отбор</li>
+                                    <li><strong>Cash flow:</strong> Масштабирование требует огромных вложений - возможно нужны инвесторы</li>
+                                </ul>
+                            </div>
+
+                            <!-- Результаты -->
+                            <div class="results-box">
+                                <div class="results-title">✅ Ожидаемые результаты к концу Года 2</div>
+                                <div class="results-list">
+                                    <div class="result-item">$300,000/месяц выручки ($3.6M годовых)</div>
+                                    <div class="result-item">25-30 мастеров в команде</div>
+                                    <div class="result-item">8-10 ячеек в разных регионах</div>
+                                    <div class="result-item">Франшиза юридически оформлена (FDD готов)</div>
+                                    <div class="result-item">Operations Manual (500+ страниц)</div>
+                                    <div class="result-item">Франшизный тренинг-центр работает</div>
+                                    <div class="result-item">Технологическая платформа для франчайзи</div>
+                                    <div class="result-item">Первые 2-3 франчайзи onboarding</div>
+                                    <div class="result-item">Бренд узнаваем в регионе</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ГОД 3 -->
+                <div class="phase">
+                    <div class="phase-marker">5</div>
+                    <div class="phase-header" onclick="togglePhase(this)">
+                        <div class="phase-title">
+                            Год 3: Масштабирование франшизы
+                            <span class="toggle-indicator">▼</span>
+                        </div>
+                        <div class="phase-duration">2028 (12 месяцев)</div>
+                        <div class="phase-stats">
+                            <div class="stat">
+                                <div class="stat-icon money">💰</div>
+                                <span>$500,000/мес + роялти</span>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-icon team">👥</div>
+                                <span>10-20 франчайзи</span>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-icon time">🌎</div>
+                                <span>15-25 штатов</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="phase-content">
+                        <div class="phase-content-inner">
+                            
+                            <div class="section">
+                                <div class="section-title">🚀 Агрессивное развитие франшизы</div>
+                                
+                                <div class="task-list">
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Продажа 10-20 франшиз</div>
+                                            <div class="task-priority high">КРИТИЧНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>Маркетинг франшизы:</strong><br>
+                                            • Franchise.com, FranchiseGator<br>
+                                            • Franchise expos (национальные)<br>
+                                            • Franchise brokers (15-20% комиссии)<br>
+                                            • LinkedIn outreach<br>
+                                            • PR в franchise publications<br>
+                                            <br>
+                                            <strong>Квалификация франчайзи:</strong><br>
+                                            → Минимальный net worth: $100,000+<br>
+                                            → Бизнес опыт (предпочтительно)<br>
+                                            → Готовность следовать системе<br>
+                                            → Проверка background и credit<br>
+                                            <br>
+                                            <strong>Процесс продажи (6-12 недель):</strong><br>
+                                            1. Discovery call<br>
+                                            2. FDD передача (14-day waiting period)<br>
+                                            3. Discovery day (визит в HQ)<br>
+                                            4. Валидация (звонки другим франчайзи)<br>
+                                            5. Подписание контракта<br>
+                                            6. Обучение (4 недели)<br>
+                                            7. Запуск территории
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Франшизная поддержка и success team</div>
+                                            <div class="task-priority high">КРИТИЧНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>Команда поддержки:</strong><br>
+                                            • Franchise Development Manager<br>
+                                            • Operations Support (2-3 specialists)<br>
+                                            • Marketing Support<br>
+                                            • IT Support<br>
+                                            • Quality Control / Mystery Shopping<br>
+                                            <br>
+                                            <strong>Ongoing support:</strong><br>
+                                            → Ежемесячные check-in calls<br>
+                                            → Ежеквартальные региональные встречи<br>
+                                            → Годовая конференция франчайзи<br>
+                                            → 24/7 support hotline<br>
+                                            → Онлайн портал с ресурсами
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Национальный маркетинг</div>
+                                            <div class="task-priority medium">ВАЖНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>National marketing fund (2% от всех франчайзи):</strong><br>
+                                            • Национальная TV реклама<br>
+                                            • Digital campaigns (Google, Facebook)<br>
+                                            • PR и media relations<br>
+                                            • Brand development<br>
+                                            <br>
+                                            <strong>Локальный маркетинг:</strong><br>
+                                            → Каждый франчайзи получает готовые материалы<br>
+                                            → Co-op advertising программа<br>
+                                            → Social media guidelines<br>
+                                            → Local SEO support
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Постоянное совершенствование</div>
+                                            <div class="task-priority medium">ВАЖНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>Feedback loops:</strong><br>
+                                            • Ежемесячные опросы франчайзи<br>
+                                            • Франшизный совет (advisory council)<br>
+                                            • Сбор best practices<br>
+                                            • Обновление Operations Manual (2 раза/год)<br>
+                                            <br>
+                                            <strong>Инновации:</strong><br>
+                                            → Новые сервисы (на основе локального спроса)<br>
+                                            → Улучшение AI агента<br>
+                                            → Новые маркетинговые каналы<br>
+                                            → Оптимизация процессов
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="section">
+                                <div class="section-title">💼 Корпоративное развитие</div>
+                                
+                                <div class="task-list">
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Создание корпоративной структуры</div>
+                                            <div class="task-priority high">КРИТИЧНО</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>Головной офис:</strong><br>
+                                            • CEO / Founder<br>
+                                            • CFO (финансы всей сети)<br>
+                                            • COO (операции)<br>
+                                            • CMO (маркетинг)<br>
+                                            • CTO (технологии)<br>
+                                            • VP of Franchise Development<br>
+                                            • Legal Counsel<br>
+                                            • HR Director<br>
+                                            <br>
+                                            <strong>Команда: 15-25 человек в HQ</strong>
+                                        </div>
+                                    </div>
+
+                                    <div class="task">
+                                        <div class="task-header">
+                                            <div class="task-title">Fundraising (опционально)</div>
+                                            <div class="task-priority low">НИЗКИЙ</div>
+                                        </div>
+                                        <div class="task-description">
+                                            <strong>Если нужен капитал для ускорения:</strong><br>
+                                            • Series A: $2-5M (venture capital)<br>
+                                            • Private equity<br>
+                                            • Bank loans (SBA)<br>
+                                            <br>
+                                            <strong>Использование:</strong><br>
+                                            → Агрессивная экспансия<br>
+                                            → Маркетинг<br>
+                                            → Технологические разработки<br>
+                                            → Acquisitions (покупка конкурентов)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Подводные камни -->
+                            <div class="warning-box">
+                                <div class="warning-title">⚠️ Подводные камни Года 3</div>
+                                <ul class="warning-list">
+                                    <li><strong>Франчайзи конфликты:</strong> Неизбежно возникнут сложные франчайзи - нужна система разрешения споров</li>
+                                    <li><strong>Территориальные споры:</strong> Франчайзи будут жаловаться на конкуренцию - четкие границы территорий!</li>
+                                    <li><strong>Качество контроль:</strong> С 20 франшизами очень сложно поддерживать стандарты - нужна mystery shopping программа</li>
+                                    <li><strong>Legal compliance:</strong> 20 штатов = 20 разных законов. ОБЯЗАТЕЛЬНО compliance officer</li>
+                                    <li><strong>Brand dilution:</strong> Риск потери фокуса бренда при быстром росте</li>
+                                    <li><strong>Cash management:</strong> Роялти поступают неравномерно - нужен хороший CFO</li>
+                                    <li><strong>Franchisor fatigue:</strong> Владелец может устать от управления сетью - делегирование!</li>
+                                </ul>
+                            </div>
+
+                            <!-- Результаты -->
+                            <div class="results-box">
+                                <div class="results-title">✅ Ожидаемые результаты к концу Года 3</div>
+                                <div class="results-list">
+                                    <div class="result-item">$500,000/месяц от собственных операций</div>
+                                    <div class="result-item">$200,000-400,000/месяц от роялти (10-20 франшиз)</div>
+                                    <div class="result-item">10-20 работающих франшиз в 15-25 штатах</div>
+                                    <div class="result-item">Национальное присутствие бренда</div>
+                                    <div class="result-item">500+ мастеров в сети (включая франшизы)</div>
+                                    <div class="result-item">Корпоративная структура с C-level executives</div>
+                                    <div class="result-item">Стабильная франшизная система</div>
+                                    <div class="result-item">Возможность продажи бизнеса или IPO</div>
+                                    <div class="result-item">Оценка компании: $10-20M+</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Legend -->
+            <div class="legend">
+                <div class="legend-title">📖 Легенда приоритетов</div>
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #fee2e2;"></div>
+                        <span><strong>КРИТИЧНО</strong> - без этого не получится</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #fef3c7;"></div>
+                        <span><strong>ВАЖНО</strong> - сильно влияет на успех</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #dbeafe;"></div>
+                        <span><strong>НИЗКИЙ</strong> - можно отложить</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <div class="footer-note">
+                💡 <strong>Важно:</strong> Это живой документ. Даты и цифры ориентировочные. Реальность всегда корректирует планы - главное держать направление и адаптироваться.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function togglePhase(header) {
+            const phase = header.parentElement;
+            const allPhases = document.querySelectorAll('.phase');
+            
+            // Close all other phases
+            allPhases.forEach(p => {
+                if (p !== phase) {
+                    p.classList.remove('active');
+                }
+            });
+            
+            // Toggle current phase
+            phase.classList.toggle('active');
+        }
+
+        // Smooth scroll animation
+        document.querySelectorAll('.phase-header').forEach(header => {
+            header.addEventListener('click', function() {
+                setTimeout(() => {
+                    this.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>
