@@ -1,0 +1,719 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0" version="29.3.4" pages="2">
+  <diagram name="Page-1" id="6yMdtWggHILAfFVAP5Fl">
+    <mxGraphModel dx="1102" dy="527" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="pf4lwvXc28S1vN_BS74H" name="Page-2">
+    <mxGraphModel dx="4360" dy="2635" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="_H82A2he_MuZxcr5ALX4-1" parent="1" style="whiteSpace=wrap;strokeWidth=2;verticalAlign=top;" value="������ КЛЮЧЕВЫЕ ТОЧКИ ИНТЕГРАЦИИ" vertex="1">
+          <mxGeometry height="852" width="335" x="3021" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-2" parent="_H82A2he_MuZxcr5ALX4-1" style="whiteSpace=wrap;strokeWidth=2;" value="1️⃣ WEBHOOKS&#xa;Thumbtack → Zapier → Workiz&#xa;Real-time lead capture" vertex="1">
+          <mxGeometry height="126" width="260" x="46" y="43" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-3" parent="_H82A2he_MuZxcr5ALX4-1" style="whiteSpace=wrap;strokeWidth=2;" value="2️⃣ API&#xa;Workiz REST API&#xa;GET/POST/PATCH endpoints" vertex="1">
+          <mxGeometry height="126" width="260" x="46" y="219" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-4" parent="_H82A2he_MuZxcr5ALX4-1" style="whiteSpace=wrap;strokeWidth=2;" value="3️⃣ ZAPIER&#xa;Центральный интеграционный хаб&#xa;5000+ app connections" vertex="1">
+          <mxGeometry height="126" width="260" x="46" y="395" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-5" parent="_H82A2he_MuZxcr5ALX4-1" style="whiteSpace=wrap;strokeWidth=2;" value="4️⃣ MOBILE SYNC&#xa;Workiz Mobile ↔ Cloud&#xa;Offline-capable" vertex="1">
+          <mxGeometry height="102" width="240" x="55" y="571" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-6" parent="_H82A2he_MuZxcr5ALX4-1" style="whiteSpace=wrap;strokeWidth=2;" value="5️⃣ QUICKBOOKS&#xa;Bi-directional sync&#xa;Auto-reconciliation" vertex="1">
+          <mxGeometry height="102" width="211" x="70" y="723" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-7" parent="1" style="whiteSpace=wrap;strokeWidth=2;verticalAlign=top;" value="������ ЛЕГЕНДА ЦВЕТОВ" vertex="1">
+          <mxGeometry height="852" width="302" x="3406" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-8" parent="_H82A2he_MuZxcr5ALX4-7" style="whiteSpace=wrap;strokeWidth=2;" value="������ Источники лидов" vertex="1">
+          <mxGeometry height="54" width="227" x="46" y="43" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-9" parent="_H82A2he_MuZxcr5ALX4-7" style="whiteSpace=wrap;strokeWidth=2;" value="������ Интеграции" vertex="1">
+          <mxGeometry height="54" width="183" x="68" y="147" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-10" parent="_H82A2he_MuZxcr5ALX4-7" style="whiteSpace=wrap;strokeWidth=2;" value="������ Ядро Workiz" vertex="1">
+          <mxGeometry height="54" width="182" x="68" y="251" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-11" parent="_H82A2he_MuZxcr5ALX4-7" style="whiteSpace=wrap;strokeWidth=2;" value="������ Коммуникации" vertex="1">
+          <mxGeometry height="54" width="208" x="55" y="355" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-12" parent="_H82A2he_MuZxcr5ALX4-7" style="whiteSpace=wrap;strokeWidth=2;" value="������ Автоматизация" vertex="1">
+          <mxGeometry height="54" width="211" x="53" y="459" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-13" parent="_H82A2he_MuZxcr5ALX4-7" style="whiteSpace=wrap;strokeWidth=2;" value="������ Финансы" vertex="1">
+          <mxGeometry height="54" width="157" x="80" y="563" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-14" parent="_H82A2he_MuZxcr5ALX4-7" style="whiteSpace=wrap;strokeWidth=2;" value="⚪ Люди" vertex="1">
+          <mxGeometry height="54" width="128" x="95" y="667" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-15" parent="_H82A2he_MuZxcr5ALX4-7" style="whiteSpace=wrap;strokeWidth=2;" value="������ Фото/Медиа" vertex="1">
+          <mxGeometry height="54" width="184" x="67" y="771" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-16" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="������ THUMBTACK&#xa;Источник лидов" vertex="1">
+          <mxGeometry height="78" width="196" x="3759" y="487" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-17" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="������ GOOGLE ADS&#xa;Платная реклама" vertex="1">
+          <mxGeometry height="78" width="208" x="4005" y="487" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-18" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="������ WEBSITE&#xa;Онлайн запись" vertex="1">
+          <mxGeometry height="78" width="186" x="1193" y="1098" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-19" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="������ ВХОДЯЩИЙ ЗВОНОК&#xa;Прямое обращение" vertex="1">
+          <mxGeometry height="78" width="256" x="1429" y="1098" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-20" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="⚡ ZAPIER&#xa;Интеграционная платформа&#xa;Связывает все сервисы" vertex="1">
+          <mxGeometry height="126" width="260" x="3979" y="1074" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-21" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="������ WORKIZ CRM&#xa;━━━━━━━━━━━━━━━&#xa;ЦЕНТРАЛЬНАЯ СИСТЕМА&#xa;━━━━━━━━━━━━━━━&#xa;• Клиенты&#xa;• Лиды&#xa;• Работы&#xa;• Счета&#xa;• История" vertex="1">
+          <mxGeometry height="270" width="260" x="3756" y="1370" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-22" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="������ AI AGENT&#xa;n8n + Bland AI&#xa;Автоответчик 24/7" vertex="1">
+          <mxGeometry height="102" width="218" x="1607" y="1846" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-23" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="⚙️ WORKIZ AUTOMATIONS&#xa;Правила и триггеры&#xa;Авто-уведомления" vertex="1">
+          <mxGeometry height="126" width="260" x="3429" y="1834" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-24" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="������ OPENPHONE&#xa;или&#xa;WORKIZ PHONE&#xa;SMS + Звонки" vertex="1">
+          <mxGeometry height="126" width="187" x="2151" y="2130" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-25" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="������ EMAIL&#xa;Mailchimp&#xa;Маркетинг" vertex="1">
+          <mxGeometry height="102" width="152" x="4933" y="2142" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-26" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="������ ПОМОЩНИК&#xa;Обработка лидов&#xa;Назначение работ" vertex="1">
+          <mxGeometry height="102" width="215" x="2142" y="1846" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-27" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="������‍������ ВЛАДИМИР&#xa;Мастер-техник&#xa;Выполнение работ" vertex="1">
+          <mxGeometry height="102" width="219" x="2401" y="3084" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-28" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="������ ТЕХНИКИ 5-15&#xa;Мобильная команда" vertex="1">
+          <mxGeometry height="78" width="231" x="5630" y="2350" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-29" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="������ WORKIZ MOBILE APP&#xa;• Список работ&#xa;• GPS навигация&#xa;• Фото до/после&#xa;• Цифровые подписи&#xa;• Прием оплаты" vertex="1">
+          <mxGeometry height="174" width="248" x="5878" y="3356" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-30" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="������️ GOOGLE CALENDAR&#xa;Синхронизация&#xa;расписания" vertex="1">
+          <mxGeometry height="102" width="242" x="120" y="2836" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-31" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="������ COMPANYCAM&#xa;Фото проектов&#xa;До/После галереи" vertex="1">
+          <mxGeometry height="102" width="212" x="6432" y="3652" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-33" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="������ ZELLE&#xa;Мгновенные переводы&#xa;7205777875" vertex="1">
+          <mxGeometry height="102" width="253" x="1047" y="2836" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-34" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="������ QUICKBOOKS ONLINE&#xa;Бухгалтерия&#xa;Налоговая отчетность" vertex="1">
+          <mxGeometry height="102" width="254" x="347" y="2090" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-35" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="������ КЛИЕНТ&#xa;Получает услугу" vertex="1">
+          <mxGeometry height="78" width="201" x="3880" y="2468" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-36" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="" vertex="1">
+          <mxGeometry x="474" y="2546" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-37" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="" vertex="1">
+          <mxGeometry x="620" y="2887" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-38" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-16" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;entryDx=0;entryDy=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="1️⃣ Новая заявка&#xa;Webhook в реальном времени">
+          <mxGeometry relative="1" x="-0.0006" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="3857" y="1013" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-39" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-17" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-20" value="1️⃣ Заполнена форма&#xa;Google Ads Lead Form">
+          <mxGeometry relative="1" x="-0.0008" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-40" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-18" style="curved=1;startArrow=none;endArrow=block;exitX=0.59;exitY=1;entryX=0;entryY=0.46;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="1️⃣ Онлайн запись&#xa;Booking widget">
+          <mxGeometry relative="1" x="-0.5992" y="34" as="geometry">
+            <mxPoint x="-1" as="offset" />
+            <Array as="points">
+              <mxPoint x="1349" y="1285" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-41" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-19" style="curved=1;startArrow=none;endArrow=block;exitX=0.52;exitY=1;entryX=0;entryY=0.45;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="1️⃣ Звонок пропущен&#xa;Call tracking">
+          <mxGeometry relative="1" x="-0.0109" y="22" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1574" y="1285" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-42" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-20" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.66;entryX=0;entryY=0.36;rounded=0;labelBorderColor=default;labelBackgroundColor=default;textShadow=0;" target="_H82A2he_MuZxcr5ALX4-21" value="2️⃣ Создание лида&#xa;API POST request&#xa;Данные: имя, телефон, адрес, проблема">
+          <mxGeometry relative="1" x="0.6142" y="68" as="geometry">
+            <mxPoint x="-1" y="-1" as="offset" />
+            <Array as="points">
+              <mxPoint x="3141" y="1285" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-43" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-21" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.37;entryX=1;entryY=0.75;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-20" value="3️⃣ Webhook триггер&#xa;New Lead Created&#xa;JSON с деталями лида">
+          <mxGeometry relative="1" x="-0.2933" y="52" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="4719" y="1285" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-44" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-20" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.55;entryX=0;entryY=0.13;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-22" value="3️⃣ Уведомление&#xa;HTTP POST">
+          <mxGeometry relative="1" x="-0.0638" y="30" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1255" y="1285" />
+              <mxPoint x="1255" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-45" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-22" style="curved=1;startArrow=none;endArrow=block;exitX=0.52;exitY=0;entryX=0;entryY=0.55;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="4️⃣ Запрос в базу знаний&#xa;30-40 FAQ из SMS анализа&#xa;Проверка доступности Владимира">
+          <mxGeometry relative="1" x="-0.4329" y="-27" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1731" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-46" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-21" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.55;entryX=0.24;entryY=0;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-22" value="4️⃣ Ответ&#xa;Availability status&#xa;Price ranges">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1540" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-47" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-22" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0;entryY=0.29;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-24" value="5️⃣ Автоответ клиенту&#xa;SMS через Bland AI&#xa;&#39;Получили заявку!&#xa;Перезвоним в 15 мин&#39;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1716" y="2045" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-48" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-24" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.59;entryX=0;entryY=0.44;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-35" value="5️⃣ SMS доставка">
+          <mxGeometry relative="1" x="-0.8429" y="5" as="geometry">
+            <mxPoint x="-1" as="offset" />
+            <Array as="points">
+              <mxPoint x="769" y="2365" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-49" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-22" style="curved=1;startArrow=none;endArrow=block;exitX=0.83;exitY=0;entryX=0;entryY=0.56;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="6️⃣ Обновление лида&#xa;API PATCH&#xa;Статус: &#39;AI Responded&#39;&#xa;+ AI conversation log">
+          <mxGeometry relative="1" x="-0.7128" y="-65" as="geometry">
+            <mxPoint x="-1" as="offset" />
+            <Array as="points">
+              <mxPoint x="1944" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-50" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-21" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.56;entryX=0.35;entryY=0;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-26" value="7️⃣ Push уведомление&#xa;Dashboard alert&#xa;&#39;Новый лид ждет&#39;">
+          <mxGeometry relative="1" x="0.6005" y="43" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="2146" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-51" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-26" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.51;entryY=0;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-24" value="8️⃣ Звонок клиенту&#xa;Click-to-call&#xa;Workiz Phone">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2250" y="2045" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-52" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-24" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.6;entryX=0;entryY=0.43;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-35" value="8️⃣ Соединение">
+          <mxGeometry relative="1" x="0.4809" y="1" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="920" y="2365" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-53" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-35" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.21;entryX=1;entryY=0.54;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-24" value="9️⃣ Детали проблемы&#xa;Фото по SMS">
+          <mxGeometry relative="1" x="0.1161" y="30" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="5216" y="2365" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-54" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-24" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.1;entryX=0;entryY=0.58;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="9️⃣ MMS фото&#xa;Автосохранение">
+          <mxGeometry relative="1" x="-0.1059" y="-47" as="geometry">
+            <mxPoint x="1" as="offset" />
+            <Array as="points">
+              <mxPoint x="2520" y="2045" />
+              <mxPoint x="2520" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-55" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-26" style="curved=1;startArrow=none;endArrow=block;exitX=0.66;exitY=0;entryX=0;entryY=0.57;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="������ Создание оценки&#xa;Price Book: $250-500&#xa;Template: &#39;Door Hinge Repair&#39;&#xa;Отправка по SMS">
+          <mxGeometry relative="1" x="-0.5188" y="-40" as="geometry">
+            <mxPoint x="-1" as="offset" />
+            <Array as="points">
+              <mxPoint x="2354" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-56" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-21" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.54;entryX=0;entryY=0.43;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-35" value="������ SMS с оценкой&#xa;+ ссылка на одобрение">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1015" y="1737" />
+              <mxPoint x="1015" y="2365" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-57" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-35" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.25;entryX=1;entryY=0.58;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="1️⃣1️⃣ Одобрение&#xa;Tap &#39;Approve&#39;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="5322" y="2365" />
+              <mxPoint x="5322" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-58" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-21" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.6;entryX=0;entryY=0.29;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-23" value="1️⃣2️⃣ Триггер автоматизации&#xa;Estimate Approved">
+          <mxGeometry relative="1" x="-0.3191" y="52" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="2760" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-59" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-23" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.22;entryX=0;entryY=0.62;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="1️⃣3️⃣ Автосоздание работы&#xa;Lead → Job conversion&#xa;Статус: Scheduled">
+          <mxGeometry relative="1" x="-0.7082" y="-42" as="geometry">
+            <mxPoint x="-1" as="offset" />
+            <Array as="points">
+              <mxPoint x="2970" y="1730" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-60" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-23" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.04;entryX=0;entryY=0.66;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="1️⃣3️⃣ Автоназначение&#xa;AI Dispatcher&#xa;Логика: ближайший техник&#xa;+ skillset match">
+          <mxGeometry relative="1" x="0.0183" y="-42" as="geometry">
+            <mxPoint x="-1" as="offset" />
+            <Array as="points">
+              <mxPoint x="3200" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-61" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-21" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.53;entryX=0;entryY=0.45;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-27" value="1️⃣4️⃣ SMS уведомление&#xa;&#39;Работа назначена:&#xa;Завтра 3-4pm&#xa;123 Main St&#39;">
+          <mxGeometry relative="1" x="0.1231" y="120" as="geometry">
+            <mxPoint y="-1" as="offset" />
+            <Array as="points">
+              <mxPoint x="20" y="1737" />
+              <mxPoint x="20" y="3011" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-62" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-32" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.53;entryX=0.5;entryY=0;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-30" value="1️⃣5️⃣ CalDAV sync&#xa;Job details&#xa;Время, адрес, клиент">
+          <mxGeometry relative="1" x="0.2422" y="19" as="geometry">
+            <mxPoint y="1" as="offset" />
+            <Array as="points">
+              <mxPoint x="241" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-63" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-30" style="curved=1;startArrow=none;endArrow=block;exitX=0.35;exitY=1;entryX=0;entryY=0.44;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-27" value="1️⃣5️⃣ Синхронизация&#xa;iPhone/Android">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="151" y="3011" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-64" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-30" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.77;entryX=0;entryY=0.42;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-27" value="1️⃣6️⃣ Напоминание&#xa;15 мин до работы">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="789" y="3011" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-65" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-23" style="curved=1;startArrow=none;endArrow=block;exitX=0.28;exitY=0;entryX=0;entryY=0.74;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="1️⃣7️⃣ За 24ч до работы&#xa;Automation rule:&#xa;&#39;Send confirmation SMS&#39;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="3417" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-66" edge="1" parent="1" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.54;entryX=0;entryY=0.43;rounded=0;labelBorderColor=default;" value="1️⃣7️⃣ SMS клиенту&#xa;&#39;Подтверждаем встречу&#xa;завтра в 3pm&#39;">
+          <mxGeometry relative="1" x="-0.0001" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1230" y="1731.2" />
+              <mxPoint x="1230" y="2359.2" />
+            </Array>
+            <mxPoint x="3751" y="1510.0000000000002" as="sourcePoint" />
+            <mxPoint x="3875" y="2495.74" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-67" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-23" style="curved=1;startArrow=none;endArrow=block;exitX=0.6;exitY=0;entryX=0;entryY=0.92;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="1️⃣8️⃣ За 30 мин&#xa;&#39;Tech en route&#39; trigger">
+          <mxGeometry relative="1" x="-0.003" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="3622" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-68" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-21" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.59;entryX=0;entryY=0.37;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-35" value="1️⃣8️⃣ SMS клиенту&#xa;&#39;Владимир выехал,&#xa;прибудет через 20 мин&#39;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2640" y="1737" />
+              <mxPoint x="2640" y="2365" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-69" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-27" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.98;entryX=0;entryY=0.47;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-29" value="1️⃣9️⃣ Открытие приложения&#xa;Workiz Mobile App&#xa;iOS/Android">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2207" y="3271" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-70" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-29" style="curved=1;startArrow=none;endArrow=block;exitX=0.78;exitY=0;entryX=1;entryY=0.55;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="1️⃣9️⃣ Загрузка данных&#xa;API GET /jobs/today&#xa;Sync детали клиента">
+          <mxGeometry relative="1" x="-0.3118" y="180" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="6140" y="3271" />
+              <mxPoint x="6140" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-71" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-29" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.02;entryX=1;entryY=0.54;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-27" value="2️⃣0️⃣ GPS навигация&#xa;Tap &#39;Navigate&#39;&#xa;Google Maps integration">
+          <mxGeometry relative="1" x="-0.048" y="-11" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="6258" y="3271" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-72" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-27" style="curved=1;startArrow=none;endArrow=block;exitX=0.52;exitY=1;entryX=0;entryY=0.46;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-29" value="2️⃣1️⃣ Прибыл на место&#xa;Tap &#39;Arrived&#39;&#xa;GPS timestamp">
+          <mxGeometry relative="1" x="-0.0217" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="2522" y="3271" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-73" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-29" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.17;entryX=1;entryY=0.54;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="2️⃣1️⃣ Обновление статуса&#xa;API PATCH&#xa;Status: &#39;Technician Arrived&#39;&#xa;+ GPS coordinates">
+          <mxGeometry relative="1" x="0.1835" y="166" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="6377" y="3271" />
+              <mxPoint x="6377" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-74" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-23" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0;entryY=0.22;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-35" value="2️⃣1️⃣ Auto SMS&#xa;&#39;Владимир на месте&#39;">
+          <mxGeometry relative="1" x="-0.6912" y="41" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="3559" y="2365" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-75" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-27" style="curved=1;startArrow=none;endArrow=block;exitX=0.87;exitY=1;entryX=0;entryY=0.46;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-29" value="2️⃣2️⃣ Фото ДО ремонта&#xa;3-5 фотографий&#xa;Камера в приложении">
+          <mxGeometry relative="1" x="0.0285" y="2" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="2728" y="3271" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-76" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-29" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.28;entryX=1;entryY=0.54;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="2️⃣2️⃣ Upload&#xa;Base64 encode&#xa;API POST /photos">
+          <mxGeometry relative="1" x="0.1391" y="206" as="geometry">
+            <mxPoint x="1" as="offset" />
+            <Array as="points">
+              <mxPoint x="6565" y="3271" />
+              <mxPoint x="6565" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-77" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-29" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0;entryY=0.28;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-31" value="2️⃣3️⃣ Опционально&#xa;Интеграция&#xa;High-res backup">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="6003" y="3591" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-78" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-31" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.33;entryX=1;entryY=0.53;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="2️⃣3️⃣ Webhook&#xa;Photo URLs">
+          <mxGeometry relative="1" x="-0.2806" y="341" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="7211" y="3591" />
+              <mxPoint x="7211" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-79" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-27" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.46;entryX=1;entryY=0.7;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-35" value="2️⃣4️⃣ Выполнение ремонта&#xa;Замена петель&#xa;Регулировка двери">
+          <mxGeometry relative="1" x="0.001" y="55" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="5552" y="3011" />
+              <mxPoint x="5552" y="2727" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-80" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-27" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.86;entryX=0;entryY=0.46;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-29" value="2️⃣5️⃣ Фото ПОСЛЕ&#xa;2-3 фотографии&#xa;Результат работы">
+          <mxGeometry relative="1" x="0.0908" y="3" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="2919" y="3271" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-81" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-29" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.32;entryX=1;entryY=0.54;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="2️⃣5️⃣ Upload">
+          <mxGeometry relative="1" x="0.1337" y="203" as="geometry">
+            <mxPoint x="1" y="1" as="offset" />
+            <Array as="points">
+              <mxPoint x="6701" y="3271" />
+              <mxPoint x="6701" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-82" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-27" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.55;entryX=0;entryY=0.32;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-29" value="2️⃣6️⃣ Обновление статуса&#xa;Tap &#39;Complete Work&#39;&#xa;Job status: &#39;Done&#39;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="5339" y="3271" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-83" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-29" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.35;entryX=1;entryY=0.54;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="2️⃣6️⃣ API PATCH&#xa;Status: &#39;Completed&#39;&#xa;Photos attached">
+          <mxGeometry relative="1" x="0.1437" y="204" as="geometry">
+            <mxPoint x="-1" as="offset" />
+            <Array as="points">
+              <mxPoint x="6846" y="3271" />
+              <mxPoint x="6846" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-84" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-23" style="curved=1;startArrow=none;endArrow=block;exitX=0.88;exitY=0;entryX=0.33;entryY=1;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="2️⃣7️⃣ Trigger&#xa;Job Status = &#39;Done&#39;&#xa;Auto-create invoice">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="3808" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-85" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-27" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.55;entryX=0;entryY=0.22;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-29" value="2️⃣8️⃣ Создание счета&#xa;В мобильном приложении&#xa;Amount: $350&#xa;Template: Door Repair">
+          <mxGeometry relative="1" x="0.1037" y="-9" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="5559" y="3271" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-86" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-29" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.38;entryX=1;entryY=0.54;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="2️⃣8️⃣ API POST&#xa;Create invoice&#xa;PDF generation">
+          <mxGeometry relative="1" x="-0.2428" y="266" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="7006" y="3271" />
+              <mxPoint x="7006" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-87" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-21" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.76;entryX=0.4;entryY=0;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-35" value="2️⃣9️⃣ SMS + Email&#xa;Invoice PDF&#xa;+ Payment link&#xa;&#39;Работа завершена!&#xa;Оплатить: $350&#39;">
+          <mxGeometry relative="1" x="-0.0005" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="4310" y="1737" />
+              <mxPoint x="4310" y="2365" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-88" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-35" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.29;entryX=1;entryY=0.57;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="3️⃣0️⃣ Выбор способа оплаты&#xa;Tap payment link">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="5508" y="2365" />
+              <mxPoint x="5508" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-89" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-21" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.53;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-32" value="3️⃣1️⃣ Stripe checkout&#xa;Если оплата картой&#xa;Stripe.js iframe">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2110" y="1490" />
+            </Array>
+            <mxPoint x="1260" y="1480" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-90" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-32" style="curved=1;startArrow=none;endArrow=block;exitX=0.67;exitY=0;entryX=0;entryY=0.54;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="3️⃣2️⃣ Payment success&#xa;Webhook callback&#xa;Amount: $350&#xa;Fee: -$10.45">
+          <mxGeometry relative="1" x="-0.3128" y="95" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="727" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-91" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-35" style="curved=1;dashed=1;dashPattern=2 3;startArrow=none;endArrow=block;exitX=0;exitY=0.57;entryX=0.5;entryY=0;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-33" value="3️⃣1️⃣ Альтернатива&#xa;Zelle перевод&#xa;На номер 7205777875">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1174" y="2727" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-92" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-33" style="curved=1;dashed=1;dashPattern=2 3;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0;entryY=0.4;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-27" value="3️⃣2️⃣ Уведомление&#xa;SMS на телефон&#xa;Владимир отмечает&#xa;вручную в Workiz">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1174" y="3011" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-93" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-27" style="curved=1;dashed=1;dashPattern=2 3;startArrow=none;endArrow=block;exitX=1;exitY=0.54;entryX=0.03;entryY=0;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-29" value="3️⃣2️⃣ Подтверждение&#xa;Mark as Paid&#xa;Payment method: Zelle">
+          <mxGeometry relative="1" x="-0.1193" y="-10" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="5772" y="3271" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-94" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-29" style="curved=1;dashed=1;dashPattern=2 3;startArrow=none;endArrow=block;exitX=1;exitY=0.39;entryX=1;entryY=0.53;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="3️⃣2️⃣ Update">
+          <mxGeometry relative="1" x="0.0494" y="284" as="geometry">
+            <mxPoint x="1" as="offset" />
+            <Array as="points">
+              <mxPoint x="7136" y="3271" />
+              <mxPoint x="7136" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-95" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-21" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.53;entryX=0.14;entryY=0;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-34" value="3️⃣3️⃣ Auto-sync&#xa;QuickBooks integration&#xa;Invoice + Payment data&#xa;Каждые 15 минут">
+          <mxGeometry relative="1" x="0.4577" y="47" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="357" y="1737" />
+              <mxPoint x="357" y="2045" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-97" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-34" style="curved=1;startArrow=none;endArrow=classicThin;rounded=0;labelBorderColor=default;exitX=0.431;exitY=0.986;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;strokeColor=default;endFill=1;" target="_H82A2he_MuZxcr5ALX4-114" value="3️⃣4️⃣ Создание записей&#xa;• Invoice #1234&#xa;• Customer: John Smith&#xa;• Income: $350&#xa;• Expense: -$50 (детали)&#xa;• Net: $300">
+          <mxGeometry relative="1" x="-0.791" y="1" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="474" y="2727" />
+            </Array>
+            <mxPoint x="580" y="2420" as="sourcePoint" />
+            <mxPoint x="650" y="2460" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-99" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-32" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-34" value="3️⃣5️⃣ Payout&#xa;Через 2 рабочих дня&#xa;Bank transfer&#xa;$339.55 (после fees)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-100" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-34" style="curved=1;startArrow=none;endArrow=block;exitX=0.87;exitY=0;entryX=0;entryY=0.54;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="3️⃣6️⃣ Auto-reconciliation&#xa;Workiz Pay + QB&#xa;Match transactions&#xa;No manual entry">
+          <mxGeometry relative="1" x="-0.8458" y="44" as="geometry">
+            <mxPoint x="1" as="offset" />
+            <Array as="points">
+              <mxPoint x="895" y="2045" />
+              <mxPoint x="895" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-101" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-23" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.12;entryX=0.75;entryY=1;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="3️⃣7️⃣ Через 24 часа&#xa;Job completed + 1 day&#xa;Review request trigger">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="3998" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-102" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-21" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.68;entryX=0.62;entryY=0;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-35" value="3️⃣8️⃣ SMS запрос отзыва&#xa;&#39;Как прошел ремонт?&#xa;Оставьте отзыв:&#xa;[Google Maps link]&#39;">
+          <mxGeometry relative="1" x="0.0012" y="-42" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="4512" y="1737" />
+              <mxPoint x="4512" y="2365" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-103" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-35" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.32;entryX=1;entryY=0.56;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="3️⃣9️⃣ 5-star отзыв&#xa;Google Business Profile">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="5721" y="2365" />
+              <mxPoint x="5721" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-104" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-23" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.24;entryX=1;entryY=0.86;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-21" value="4️⃣0️⃣ Через 30 дней&#xa;Follow-up automation&#xa;&#39;Все работает?&#39;">
+          <mxGeometry relative="1" x="-0.0018" y="45" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="4196" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-105" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-21" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.64;entryX=0.82;entryY=0;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-35" value="4️⃣0️⃣ Check-in SMS">
+          <mxGeometry relative="1" x="0.1343" y="-24" as="geometry">
+            <mxPoint y="-1" as="offset" />
+            <Array as="points">
+              <mxPoint x="4704" y="1737" />
+              <mxPoint x="4704" y="2365" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-106" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-21" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.4;entryX=1;entryY=0.69;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-20" value="4️⃣1️⃣ Zapier sync&#xa;New customer data&#xa;Every hour">
+          <mxGeometry relative="1" x="-0.5169" y="17" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="4911" y="1285" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-107" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-20" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.67;entryX=0.5;entryY=0;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-25" value="4️⃣1️⃣ Add to list&#xa;MailChimp API&#xa;Segment: &#39;Past Customers&#39;">
+          <mxGeometry relative="1" x="-0.3663" y="-129" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="5009" y="1285" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-108" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-25" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=1;entryY=0.11;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-35" value="4️⃣2️⃣ Drip campaign&#xa;Месяц 2: &#39;Нужна проверка?&#39;&#xa;Месяц 6: &#39;Seasonal maintenance&#39;&#xa;Месяц 12: &#39;Warranty expiring&#39;">
+          <mxGeometry relative="1" x="-0.5804" y="-78" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="5009" y="2365" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-109" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-21" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.56;entryX=0.39;entryY=0;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-28" value="������ Year 1: Scaling&#xa;10-15 техников&#xa;Multi-user access">
+          <mxGeometry relative="1" x="0.8741" y="-41" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="5841" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-110" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-28" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.39;entryY=0;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-29" value="Массовое использование&#xa;Все через Mobile App">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="5948" y="3271" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-111" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-21" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.55;entryX=0.57;entryY=0;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-28" value="Team Management&#xa;• KPI tracking&#xa;• Timesheets&#xa;• Performance&#xa;• Route optimization">
+          <mxGeometry relative="1" x="0.8326" y="-61" as="geometry">
+            <mxPoint y="1" as="offset" />
+            <Array as="points">
+              <mxPoint x="6013" y="1737" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-112" edge="1" parent="1" source="_H82A2he_MuZxcr5ALX4-21" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.53;entryX=0.5;entryY=0;rounded=0;labelBorderColor=default;" target="_H82A2he_MuZxcr5ALX4-32" value="">
+          <mxGeometry relative="1" x="0.0625" y="221" as="geometry">
+            <mxPoint x="-1" as="offset" />
+            <Array as="points" />
+            <mxPoint x="3756" y="1513" as="sourcePoint" />
+            <mxPoint x="241" y="2836" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-32" parent="1" style="whiteSpace=wrap;strokeWidth=2;" value="������ STRIPE&#xa;Оплата картами&#xa;На месте" vertex="1">
+          <mxGeometry height="102" width="199" x="940" y="1390" as="geometry" />
+        </mxCell>
+        <mxCell id="_H82A2he_MuZxcr5ALX4-114" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="US Treasure" vertex="1">
+          <mxGeometry height="60" width="120" x="590" y="2380" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
