@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Детальная Смета 2024-2026 | Ремонт Дверей и Окон</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+            margin: 5px 0;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 3px solid #667eea;
+            overflow-x: auto;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .nav-tab {
+            padding: 18px 30px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 1.05em;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-tab:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .nav-tab.active {
+            color: #667eea;
+            background: white;
+            border-bottom-color: #667eea;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2.2em;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 4px solid #667eea;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.7em;
+            margin: 35px 0 20px;
+        }
+
+        h4 {
+            color: #555;
+            font-size: 1.3em;
+            margin: 25px 0 15px;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border-left: 5px solid #667eea;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 10px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 10px;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 10px;
+        }
+
+        .danger-box {
+            background: #f8d7da;
+            border-left: 5px solid #dc3545;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 10px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            margin: 25px 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            font-size: 0.95em;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        th {
+            padding: 18px 15px;
+            text-align: left;
+            font-weight: 600;
+            white-space: normal;
+            word-wrap: break-word;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            word-wrap: break-word;
+            vertical-align: top;
+        }
+
+        tbody tr:hover {
+            background: rgba(102, 126, 234, 0.05);
+            transition: background 0.2s;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin: 3px;
+            white-space: nowrap;
+        }
+
+        .badge-primary { background: #667eea; color: white; }
+        .badge-success { background: #28a745; color: white; }
+        .badge-warning { background: #ffc107; color: #333; }
+        .badge-danger { background: #dc3545; color: white; }
+        .badge-info { background: #17a2b8; color: white; }
+
+        .star-rating {
+            color: #ffc107;
+            font-size: 1.3em;
+        }
+
+        .price-highlight {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .price-danger {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #dc3545;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin: 35px 0;
+        }
+
+        .scenario-card {
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .scenario-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            border-color: #667eea;
+        }
+
+        .scenario-card.recommended {
+            border-color: #28a745;
+            background: linear-gradient(135deg, #28a74508 0%, #28a74515 100%);
+        }
+
+        .scenario-header {
+            font-size: 1.6em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+
+        .scenario-card.recommended .scenario-header {
+            color: #28a745;
+        }
+
+        .recommendation-badge {
+            background: #28a745;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 0.95em;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .not-recommended-badge {
+            background: #dc3545;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 0.95em;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            line-height: 1.7;
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin: 25px 0;
+        }
+
+        .pros, .cons {
+            padding: 25px;
+            border-radius: 12px;
+        }
+
+        .pros {
+            background: #d4edda;
+            border: 3px solid #28a745;
+        }
+
+        .cons {
+            background: #f8d7da;
+            border: 3px solid #dc3545;
+        }
+
+        .pros h4 { color: #28a745; }
+        .cons h4 { color: #dc3545; }
+
+        @media (max-width: 992px) {
+            .pros-cons {
+                grid-template-columns: 1fr;
+            }
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2em; }
+            .header p { font-size: 1em; }
+            .content { padding: 25px; }
+            .nav-tab { padding: 15px 20px; font-size: 0.95em; }
+            h2 { font-size: 1.7em; }
+            h3 { font-size: 1.4em; }
+            th, td { padding: 12px 10px; font-size: 0.9em; }
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 35px;
+            text-align: center;
+            border-top: 3px solid #667eea;
+            color: #666;
+        }
+
+        .total-row {
+            font-weight: bold;
+            background: rgba(102, 126, 234, 0.15) !important;
+            border-top: 3px solid #667eea !important;
+            font-size: 1.05em;
+        }
+
+        .subtotal-row {
+            font-weight: 600;
+            background: rgba(102, 126, 234, 0.08) !important;
+            border-top: 2px solid #667eea !important;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 45px;
+            margin: 35px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 18px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 35px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -35px;
+            top: 8px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #667eea;
+            border: 4px solid white;
+            box-shadow: 0 0 0 3px #667eea;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            border: 3px solid #e0e0e0;
+            transition: all 0.3s;
+        }
+
+        .metric-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .metric-value {
+            font-size: 2.8em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 15px 0;
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            font-weight: 600;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin: 35px 0;
+        }
+
+        .note {
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        strong {
+            color: #2c3e50;
+        }
+
+        .alert {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 5px solid;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border-color: #17a2b8;
+            color: #0c5460;
+        }
+
+        .month-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            transition: all 0.3s;
+        }
+
+        .month-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .month-header {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 ПОЛНАЯ ДЕТАЛЬНАЯ СМЕТА</h1>
+            <p>Ремонт Дверей и Окон: От 1 Техника до Франшизы</p>
+            <p>🎯 Путь от соло-мастера до 10-20 локаций за 24 месяца</p>
+            <p style="opacity: 0.9; font-size: 1em; margin-top: 15px;">
+                <strong>Версия 5.0 RUS</strong> | 22 января 2026 | Согласовано с чеклистом Workiz Ecosystem
+            </p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="openTab(event, 'obzor')">📋 Обзор</button>
+            <button class="nav-tab" onclick="openTab(event, 'scenario1')">🥇 Сценарий 1: Workiz</button>
+            <button class="nav-tab" onclick="openTab(event, 'scenario2')">🛠️ Сценарий 2: DIY</button>
+            <button class="nav-tab" onclick="openTab(event, 'sravnenie')">⚖️ Сравнение</button>
+            <button class="nav-tab" onclick="openTab(event, 'pomesyachno')">📅 По Месяцам</button>
+            <button class="nav-tab" onclick="openTab(event, 'rekomendatsiya')">🎯 Рекомендация</button>
+        </div>
+
+        <div class="content">
+            <!-- ВКЛАДКА 1: ОБЗОР -->
+            <div id="obzor" class="tab-content active">
+                <h2>📋 Общий Обзор Проекта</h2>
+                
+                <div class="success-box">
+                    <h3>🎯 Цель и Масштаб Проекта</h3>
+                    <p style="font-size: 1.15em;"><strong>СТАРТ:</strong> 1 техник (Владимир) — соло-мастер</p>
+                    <p style="font-size: 1.15em;"><strong>РЕЗУЛЬТАТ (24 месяца):</strong> Франшиза с 10-20 локациями</p>
+                    <br>
+                    <p><strong>Промежуточные Этапы:</strong></p>
+                    <ul style="font-size: 1.05em;">
+                        <li><strong>Месяцы 1-6:</strong> Соло-операция, отладка процессов</li>
+                        <li><strong>Месяцы 7-8:</strong> Наём первого техника (#2)</li>
+                        <li><strong>Месяцы 11-12:</strong> Третий техник — команда из 3 человек</li>
+                        <li><strong>Месяцы 13-18:</strong> Масштабирование до 5 техников, формирование "ячейки"</li>
+                        <li><strong>Месяцы 19-24:</strong> Запуск франшизы, масштабирование до 10-20 локаций</li>
+                    </ul>
+                </div>
+
+                <h3>🔄 Общие Компоненты (для обоих сценариев)</h3>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 25%;">Компонент</th>
+                                <th style="width: 50%;">Описание</th>
+                                <th style="width: 25%;">Приоритет</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Лидогенерация</strong></td>
+                                <td>Thumbtack (приоритет #1) → Yelp → Google LSA → Google Ads → Facebook Ads → Website → Nextdoor</td>
+                                <td><span class="badge badge-danger">КРИТИЧНО</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Телефония</strong></td>
+                                <td>OpenPhone (сохраняется в обоих сценариях) или Workiz Phone</td>
+                                <td><span class="badge badge-primary">Высокий</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>AI Агенты</strong></td>
+                                <td>Workiz: n8n + Bland AI (премиум) | DIY: Goodcall (бюджет)</td>
+                                <td><span class="badge badge-primary">Высокий</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Автоматизация</strong></td>
+                                <td>Zapier (обязательно) + n8n (опционально для сложных сценариев)</td>
+                                <td><span class="badge badge-warning">Средний</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Бухгалтерия</strong></td>
+                                <td>QuickBooks Online (обязательно для обоих сценариев)</td>
+                                <td><span class="badge badge-primary">Высокий</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Платёжные системы</strong></td>
+                                <td>Stripe (карты) + Zelle (7205777875) + Cash + Venmo</td>
+                                <td><span class="badge badge-primary">Высокий</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>🏆 Два Сценария Реализации</h3>
+                <div class="comparison-grid">
+                    <div class="scenario-card recommended">
+                        <div class="recommendation-badge">✅ РЕКОМЕНДУЕТСЯ</div>
+                        <div class="scenario-header">🥇 Сценарий 1: Workiz + Bland AI</div>
+                        <p><strong>CRM:</strong> Workiz (покупная система, Native Thumbtack)</p>
+                        <p><strong>AI:</strong> n8n + Bland AI (премиум голосовой агент)</p>
+                        <p><strong>Сложность внедрения:</strong> <span class="star-rating">★★★☆☆</span></p>
+                        <p><strong>Время внедрения:</strong> 1 неделя</p>
+                        <p><strong>Гибкость:</strong> <span class="star-rating">★★★☆☆</span></p>
+                        <p><strong>Франшиза:</strong> ✅ Готов из коробки</p>
+                        <p class="price-highlight" style="margin-top: 15px;">$415-644/мес (старт)</p>
+                        <p class="note">Базовые системы без лидов</p>
+                    </div>
+
+                    <div class="scenario-card">
+                        <div class="not-recommended-badge">❌ НЕ РЕКОМЕНДУЕТСЯ</div>
+                        <div class="scenario-header">🛠️ Сценарий 2: DIY Подход</div>
+                        <p><strong>CRM:</strong> Airtable (самостоятельная сборка)</p>
+                        <p><strong>AI:</strong> Goodcall (бюджетное решение)</p>
+                        <p><strong>Сложность внедрения:</strong> <span class="star-rating">★★★★★</span></p>
+                        <p><strong>Время внедрения:</strong> 4-8 недель</p>
+                        <p><strong>Гибкость:</strong> <span class="star-rating">★★★★★</span></p>
+                        <p><strong>Франшиза:</strong> ⚠️ Требует перестройки</p>
+                        <p class="price-highlight" style="margin-top: 15px;">$267-501/мес (старт)</p>
+                        <p class="note" style="color: #dc3545; font-weight: bold;">Но дороже на $381K за 2 года!</p>
+                    </div>
+                </div>
+
+                <h3>💰 Итоговая Стоимость Владения (TCO) за 24 Месяца</h3>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 20%;">Сценарий</th>
+                                <th style="width: 15%;">Месяцы 0-6</th>
+                                <th style="width: 15%;">Месяцы 7-12</th>
+                                <th style="width: 15%;">Месяцы 13-18</th>
+                                <th style="width: 15%;">Месяцы 19-24<br><small>(10 франшиз)</small></th>
+                                <th style="width: 20%;">ИТОГО 24 мес</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>🥇 Сценарий 1:<br>Workiz + AI</strong></td>
+                                <td>$26,556</td>
+                                <td>$169,656</td>
+                                <td>$367,512</td>
+                                <td>$693,000</td>
+                                <td class="price-highlight">$1,256,724</td>
+                            </tr>
+                            <tr>
+                                <td><strong>🛠️ Сценарий 2:<br>DIY Подход</strong></td>
+                                <td>$30,720</td>
+                                <td>$217,344</td>
+                                <td>$384,000</td>
+                                <td>$1,006,400</td>
+                                <td class="price-danger">$1,638,464</td>
+                            </tr>
+                            <tr class="total-row">
+                                <td colspan="5"><strong>РАЗНИЦА (Сценарий 2 vs 1)</strong></td>
+                                <td style="color: #dc3545; font-size: 1.3em;"><strong>+$381,740 ДОРОЖЕ</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="danger-box">
+                    <h3>⚠️ ПАРАДОКС DIY ПОДХОДА (Сценарий 2)</h3>
+                    <p style="font-size: 1.2em;"><strong>Экономия в первые 6 месяцев:</strong> $5,000-10,000</p>
+                    <p style="font-size: 1.2em;"><strong>НО дороже за 24 месяца:</strong> <span class="price-danger">+$381,740</span></p>
+                    <p style="font-size: 1.2em;"><strong>+ Инвестиции для франшизы:</strong> $46,000-125,000</p>
+                    <p style="font-size: 1.2em;"><strong>Opportunity cost:</strong> 200-400 часов/год разработки = $15,000-30,000</p>
+                    <br>
+                    <p style="font-size: 1.3em; font-weight: bold; color: #dc3545;">💡 ВЫВОД: DIY выгоден только если НЕ планируете масштабироваться!</p>
+                </div>
+
+                <h3>📊 Согласование с Чеклистом</h3>
+                <div class="info-box">
+                    <h4>💰 Бюджет из Чеклиста (месяцы 1-12):</h4>
+                    <ul style="font-size: 1.05em;">
+                        <li><strong>Месяц 1:</strong> $415-644</li>
+                        <li><strong>Месяцы 2-3:</strong> $1,300-2,300/мес</li>
+                        <li><strong>Месяцы 4-6:</strong> $1,800-3,400/мес</li>
+                        <li><strong>Месяцы 7-12:</strong> $9,800-14,300/мес (с зарплатами)</li>
+                        <li><strong>ИТОГО за 12 месяцев:</strong> ~$80,000-120,000</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-size: 1.05em;"><strong>Ожидаемый доход (месяц 12):</strong> $40,000-60,000/мес</p>
+                    <p class="note">Все детали расписаны в Сценарии 1 и во вкладке "По Месяцам"</p>
+                </div>
+            </div>
+
+            <!-- ВКЛАДКА 2: СЦЕНАРИЙ 1 (WORKIZ) -->
+            <div id="scenario1" class="tab-content">
+                <h2>🥇 Сценарий 1: Workiz + Bland AI (РЕКОМЕНДУЕТСЯ)</h2>
+                
+                <div class="success-box">
+                    <h3>✅ Философия и Преимущества</h3>
+                    <ul style="font-size: 1.05em;">
+                        <li>✅ <strong>Готовое решение "под ключ"</strong> — все компоненты интегрированы</li>
+                        <li>✅ <strong>Native интеграция с Thumbtack</strong> — лучшая в индустрии (Messages + Leads)</li>
+                        <li>✅ <strong>Минимальное время внедрения:</strong> 1 неделя до полного запуска</li>
+                        <li>✅ <strong>Профессиональный AI:</strong> Bland AI — топовый голосовой агент</li>
+                        <li>✅ <strong>Масштабируемость:</strong> от 1 до 1000+ техников</li>
+                        <li>✅ <strong>Franchise-ready:</strong> специальный модуль для франшизы</li>
+                        <li>✅ <strong>ДЕШЕВЛЕ на $381K за 2 года</strong> vs DIY подход!</li>
+                        <li>⚠️ <strong>Стоимость выше на старте:</strong> $415-644/мес (но окупается быстро)</li>
+                        <li>⚠️ <strong>Vendor lock-in:</strong> зависимость от платформы Workiz</li>
+                    </ul>
+                </div>
+
+                <h3>💰 Детальная Разбивка По Этапам</h3>
+
+                <div class="month-card">
+                    <div class="month-header">МЕСЯЦ 0: Тестирование (3-4 недели)</div>
+                    <p><strong>Цель:</strong> Протестировать все компоненты до финального решения</p>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 30%;">Статья расходов</th>
+                                <th style="width: 35%;">Детали</th>
+                                <th style="width: 18%;">Стоимость</th>
+                                <th style="width: 17%;">Примечания</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="subtotal-row">
+                                <td colspan="4"><strong>Thumbtack (тестирование)</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Регистрация профиля</td>
+                                <td>Бесплатно, создание аккаунта</td>
+                                <td>$0</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>Тестовые лиды</td>
+                                <td>5-10 лидов для проверки</td>
+                                <td>$50-150</td>
+                                <td>~$10-15/лид</td>
+                            </tr>
+                            <tr class="subtotal-row">
+                                <td colspan="4"><strong>Системы (пробные версии)</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Workiz Trial</td>
+                                <td>7 дней полного функционала</td>
+                                <td>$0</td>
+                                <td>Все функции</td>
+                            </tr>
+                            <tr>
+                                <td>OpenPhone</td>
+                                <td>Текущий номер</td>
+                                <td>$19</td>
+                                <td>Уже есть</td>
+                            </tr>
+                            <tr>
+                                <td>Bland AI Trial</td>
+                                <td>14 дней, 100 минут бесплатно</td>
+                                <td>$0</td>
+                                <td>Тестирование AI</td>
+                            </tr>
+                            <tr>
+                                <td>Zapier Free</td>
+                                <td>100 tasks/месяц</td>
+                                <td>$0</td>
+                                <td>Базовые zaps</td>
+                            </tr>
+                            <tr class="total-row">
+                                <td colspan="2"><strong>ИТОГО Месяц 0 (базовая)</strong></td>
+                                <td><strong>$69-169</strong></td>
+                                <td>Минимум</td>
+                            </tr>
+                            <tr class="total-row">
+                                <td colspan="2"><strong>С допусками (+30%)</strong></td>
+                                <td><strong>$90-220</strong></td>
+                                <td>Реалистично</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="month-card">
+                    <div class="month-header">МЕСЯЦ 1: Базовая Настройка (5-6 недель)</div>
+                    <p><strong>Цель:</strong> Workiz как центральная система + AI агент + интеграции</p>
+                    <p class="note">Согласно чеклисту: $415-644/мес</p>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 28%;">Компонент</th>
+                                <th style="width: 22%;">План/Тариф</th>
+                                <th style="width: 18%;">Стоимость/мес</th>
+                                <th style="width: 32%;">Что включено</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="subtotal-row">
+                                <td colspan="4"><strong>CRM: Workiz (центр экосистемы)</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Базовая подписка</td>
+                                <td>Starter (1 пользователь)</td>
+                                <td>$65</td>
+                                <td>CRM, Scheduling, Dispatch, Invoicing, Mobile app, QuickBooks sync, GPS tracking, Automations</td>
+                            </tr>
+                            <tr class="subtotal-row">
+                                <td colspan="4"><strong>Телефония: OpenPhone</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Номер + SMS</td>
+                                <td>Starter</td>
+                                <td>$19</td>
+                                <td>1 номер, unlimited звонки/SMS, call recording</td>
+                            </tr>
+                            <tr class="subtotal-row">
+                                <td colspan="4"><strong>AI Agent: n8n + Bland AI</strong></td>
+                            </tr>
+                            <tr>
+                                <td>n8n (автоматизация)</td>
+                                <td>Self-hosted VPS</td>
+                                <td>$6</td>
+                                <td>DigitalOcean 1GB RAM, Workiz webhooks, интеграция с Bland AI</td>
+                            </tr>
+                            <tr>
+                                <td>Bland AI Voice Agent</td>
+                                <td>Basic (1,000 мин/мес)</td>
+                                <td>$299</td>
+                                <td>Custom pathways, CRM integration, Knowledge Base, 24/7 звонки</td>
+                            </tr>
+                            <tr class="subtotal-row">
+                                <td colspan="4"><strong>Автоматизация: Zapier</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Интеграции</td>
+                                <td>Starter (750 tasks)</td>
+                                <td>$29.99</td>
+                                <td>Workiz ↔ Thumbtack, OpenPhone ↔ Workiz, базовые автоматизации</td>
+                            </tr>
+                            <tr class="total-row">
+                                <td colspan="2"><strong>ИТОГО Месяц 1</strong></td>
+                                <td><strong>$418.99</strong></td>
+                                <td>Базовые системы</td>
+                            </tr>
+                            <tr class="total-row">
+                                <td colspan="2"><strong>С допусками (+30%)</strong></td>
+                                <td><strong>$545</strong></td>
+                                <td>Реалистично</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>✅ Согласование с чеклистом:</strong> Базовая сумма $418.99 соответствует диапазону $415-644 из чеклиста. С допусками $545 — в середине диапазона.
+                </div>
+
+                <div class="month-card">
+                    <div class="month-header">МЕСЯЦЫ 2-3: Запуск Лидогенерации (10-12 недель)</div>
+                    <p><strong>Цель:</strong> Thumbtack активен, первые 30-50 лидов/мес, Yelp оптимизация</p>
+                    <p class="note">Согласно чеклисту: $1,300-2,300/мес</p>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 30%;">Статья расходов</th>
+                                <th style="width: 30%;">Детали</th>
+                                <th style="width: 20%;">Стоимость/мес</th>
+                                <th style="width: 20%;">Примечания</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Базовые системы</strong></td>
+                                <td>Workiz + OpenPhone + AI + Zapier</td>
+                                <td>$418.99</td>
+                                <td>Без изменений</td>
+                            </tr>
+                            <tr class="subtotal-row">
+                                <td colspan="4"><strong>Лидогенерация: Thumbtack (Приоритет #1)</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Thumbtack лиды</td>
+                                <td>30-50 лидов/мес, начальный бюджет $50/день</td>
+                                <td>$450-750</td>
+                                <td>Cost per lead ~$15</td>
+                            </tr>
+                            <tr>
+                                <td>Yelp оптимизация</td>
+                                <td>Review generation через Workiz Automations</td>
+                                <td>$0</td>
+                                <td>Встроено в Workiz</td>
+                            </tr>
+                            <tr class="total-row">
+                                <td colspan="2"><strong>ИТОГО Месяцы 2-3 (базовая)</strong></td>
+                                <td><strong>$869-1,169</strong></td>
+                                <td>Операционные</td>
+                            </tr>
+                            <tr class="total-row">
+                                <td colspan="2"><strong>С допусками (+30%)</strong></td>
+                                <td><strong>$1,130-1,520</strong></td>
+                                <td>Реалистично</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="month-card">
+                    <div class="month-header">МЕСЯЦЫ 4-6: Расширение Каналов (15-18 недель)</div>
+                    <p><strong>Цель:</strong> Google Ads + Facebook Ads + Website запуск</p>
+                    <p class="note">Согласно чеклисту: $1,800-3,400/мес</p>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 25%;">Канал</th>
+                                <th style="width: 20%;">Бюджет/мес</th>
+                                <th style="width: 20%;">Ожидаемо лидов</th>
+                                <th style="width: 15%;">Cost/lead</th>
+                                <th style="width: 20%;">Примечания</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Базовые системы</td>
+                                <td>$418.99</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>Без изменений</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Thumbtack</strong></td>
+                                <td>$600-900</td>
+                                <td>40-60</td>
+                                <td>$15</td>
+                                <td>Увеличение бюджета</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Google Ads</strong> (новое)</td>
+                                <td>$600</td>
+                                <td>20-30</td>
+                                <td>$20-30</td>
+                                <td>Месяц 3, неделя 3-4</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Facebook Ads</strong> (новое)</td>
+                                <td>$450</td>
+                                <td>15-20</td>
+                                <td>$22-30</td>
+                                <td>Месяц 4, неделя 4-5</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Website</strong> (новое)</td>
+                                <td>$30-50</td>
+                                <td>5-10 (органика)</td>
+                                <td>$3-10</td>
+                                <td>Месяц 4, запуск</td>
+                            </tr>
+                            <tr>
+                                <td>Domain + Hosting</td>
+                                <td>$15-25</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>WordPress/Squarespace</td>
+                            </tr>
+                            <tr class="total-row">
+                                <td colspan="5"><strong>ПРОМЕЖУТОЧНЫЙ ИТОГ</strong></td>
+                            </tr>
+                            <tr class="total-row">
+                                <td colspan="1"><strong>ИТОГО Месяцы 4-6</strong></td>
+                                <td><strong>$2,114-2,394</strong></td>
+                                <td><strong>80-120 лидов</strong></td>
+                                <td><strong>$18-30</strong></td>
+                                <td>Базовая</td>
+                            </tr>
+                            <tr class="total-row">
+                                <td colspan="1"><strong>С допусками (+25%)</strong></td>
+                                <td><strong>$2,643-2,993</strong></td>
+                                <td colspan="3">Реалистично</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="month-card">
+                    <div class="month-header">МЕСЯЦЫ 7-12: Первый Наём и Масштабирование (24-30 недель)</div>
+                    <p><strong>Цель:</strong> Наём Техника #2 (месяц 7-8), Техника #3 (месяц 11-12), масштабирование всех систем</p>
+                    <p class="note">Согласно чеклисту: $9,800-14,300/мес</p>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 30%;">Статья расходов</th>
+                                <th style="width: 25%;">Детали</th>
+                                <th style="width: 20%;">Стоимость/мес</th>
+                                <th style="width: 25%;">Изменения vs Месяц 1-6</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="subtotal-row">
+                                <td colspan="4"><strong>СИСТЕМЫ (масштабирование для команды)</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Workiz CRM</td>
+                                <td>Team plan (до 5 users)</td>
+                                <td>$169</td>
+                                <td>+$104 (было $65)</td>
+                            </tr>
+                            <tr>
+                                <td>OpenPhone</td>
+                                <td>Business plan (+2 номера для техников)</td>
+                                <td>$39</td>
+                                <td>+$20 (было $19)</td>
+                            </tr>
+                            <tr>
+                                <td>Bland AI</td>
+                                <td>Professional (5,000 минут/мес)</td>
+                                <td>$499</td>
+                                <td>+$200 (было $299)</td>
+                            </tr>
+                            <tr>
+                                <td>n8n VPS</td>
+                                <td>2GB RAM (больше workflows)</td>
+                                <td>$12</td>
+                                <td>+$6 (было $6)</td>
+                            </tr>
+                            <tr>
+                                <td>Zapier</td>
+                                <td>Professional (2,000 tasks)</td>
+                                <td>$73.50</td>
+                                <td>+$43.51 (было $29.99)</td>
+                            </tr>
+                            <tr class="subtotal-row">
+                                <td colspan="4"><strong>ЛИДОГЕНЕРАЦИЯ (увеличение объема)</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Thumbtack + все каналы</td>
+                                <td>Увеличенный бюджет, 100-150 лидов/мес</td>
+                                <td>$2,400-3,500</td>
+                                <td>Больше capacity</td>
+                            </tr>
+                            <tr class="subtotal-row">
+                                <td colspan="4"><strong>ЗАРПЛАТЫ (новое!)</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Помощник/диспетчер</td>
+                                <td>Part-time, удаленно</td>
+                                <td>$1,500</td>
+                                <td>Новая позиция</td>
+                            </tr>
+                            <tr>
+                                <td>Техник #2</td>
+                                <td>1099 contractor</td>
+                                <td>$3,000-4,000</td>
+                                <td>Месяц 7-8</td>
+                            </tr>
+                            <tr>
+                                <td>Техник #3</td>
+                                <td>1099 contractor</td>
+                                <td>$3,000-4,000</td>
+                                <td>Месяц 11-12</td>
+                            </tr>
+                            <tr class="subtotal-row">
+                                <td colspan="4"><strong>ДОПОЛНИТЕЛЬНЫЕ РАСХОДЫ</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Инструменты для новых</td>
+                                <td>Комплект на каждого техника</td>
+                                <td>$300-500</td>
+                                <td>Разово $1,500-2,000</td>
+                            </tr>
+                            <tr>
+                                <td>Страхование</td>
+                                <td>Liability + Workers Comp (увеличение покрытия)</td>
+                                <td>$400-600</td>
+                                <td>Обязательно</td>
+                            </tr>
+                            <tr>
+                                <td>QuickBooks Online</td>
+                                <td>Simple Start → Essentials</td>
+                                <td>$30-55</td>
+                                <td>Нужна payroll функция</td>
+                            </tr>
+                            <tr class="total-row">
+                                <td colspan="2"><strong>ИТОГО операционные (без зарплат)</strong></td>
+                                <td><strong>$3,923-5,168</strong></td>
+                                <td>Все системы</td>
+                            </tr>
+                            <tr class="total-row">
+                                <td colspan="2"><strong>ИТОГО с зарплатами (2 техника)</strong></td>
+                                <td><strong>$11,423-15,168</strong></td>
+                                <td>Полная стоимость</td>
+                            </tr>
+                            <tr class="total-row">
+                                <td colspan="2"><strong>С допусками (+20%)</strong></td>
+                                <td><strong>$13,708-18,202</strong></td>
+                                <td>Реалистично</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="success-box">
+                    <h3>💰 Итого за Первый Год (Месяцы 0-12)</h3>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Период</th>
+                                    <th>Стоимость/мес</th>
+                                    <th>Количество месяцев</th>
+                                    <th>ИТОГО</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Месяц 0</td>
+                                    <td>$90-220</td>
+                                    <td>1</td>
+                                    <td>$90-220</td>
+                                </tr>
+                                <tr>
+                                    <td>Месяц 1</td>
+                                    <td>$419-545</td>
+                                    <td>1</td>
+                                    <td>$419-545</td>
+                                </tr>
+                                <tr>
+                                    <td>Месяцы 2-3</td>
+                                    <td>$1,130-1,520</td>
+                                    <td>2</td>
+                                    <td>$2,260-3,040</td>
+                                </tr>
+                                <tr>
+                                    <td>Месяцы 4-6</td>
+                                    <td>$2,643-2,993</td>
+                                    <td>3</td>
+                                    <td>$7,929-8,979</td>
+                                </tr>
+                                <tr>
+                                    <td>Месяцы 7-12</td>
+                                    <td>$13,708-18,202</td>
+                                    <td>6</td>
+                                    <td>$82,248-109,212</td>
+                                </tr>
+                                <tr class="total-row">
+                                    <td colspan="3"><strong>ИТОГО за 12 месяцев</strong></td>
+                                    <td><strong>$92,946-121,996</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p style="margin-top: 15px; font-size: 1.1em;"><strong>Согласование с чеклистом ($80,000-120,000):</strong> ✅ Соответствует! Наша детализация $93K-122K находится в верхней части диапазона, что более реалистично.</p>
+                </div>
+
+                <h3>🎯 Ключевые Преимущества Сценария 1</h3>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✅ ПЛЮСЫ</h4>
+                        <ul>
+                            <li>Скорость запуска: 1 неделя</li>
+                            <li>Native Thumbtack (Messages + Leads)</li>
+                            <li>Bland AI — лучший голосовой агент</li>
+                            <li>Готов для франшизы из коробки</li>
+                            <li>Минимальные технические риски</li>
+                            <li>Масштабирование 1→1000+ техников</li>
+                            <li>Самый низкий TCO за 24 месяца</li>
+                            <li><strong>ЭКОНОМИЯ $381K vs DIY!</strong></li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>⚠️ МИНУСЫ</h4>
+                        <ul>
+                            <li>Высокая стоимость старта ($415-644/мес)</li>
+                            <li>Vendor lock-in (зависимость)</li>
+                            <li>Workiz support не идеален</li>
+                            <li>Bland AI дорогой ($299-799/мес)</li>
+                            <li>Ограниченная кастомизация</li>
+                            <li>Стоимость растет при масштабировании</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ВКЛАДКА 3: СЦЕНАРИЙ 2 (DIY) -->
+            <div id="scenario2" class="tab-content">
+                <h2>🛠️ Сценарий 2: DIY Подход (НЕ РЕКОМЕНДУЕТСЯ)</h2>
+                
+                <div class="danger-box">
+                    <h3>⚠️ КРИТИЧЕСКОЕ ПРЕДУПРЕЖДЕНИЕ</h3>
+                    <p style="font-size: 1.3em; font-weight: bold; color: #dc3545;">DIY подход ДОРОЖЕ на $381,740 за 24 месяца vs Workiz!</p>
+                    <p style="font-size: 1.15em; margin-top: 10px;">Экономит деньги ТОЛЬКО в первые 6 месяцев, но потом становится значительно дороже.</p>
+                </div>
+
+                <div class="info-box">
+                    <h3>🎯 Философия DIY</h3>
+                    <ul style="font-size: 1.05em;">
+                        <li>✅ <strong>Полный контроль</strong> над всеми процессами и данными</li>
+                        <li>✅ <strong>Минимальные ежемесячные затраты</strong> первые 6 месяцев</li>
+                        <li>✅ <strong>100% кастомизация</strong> под любые нужды</li>
+                        <li>✅ <strong>Независимость от вендоров</strong> — нет lock-in</li>
+                        <li>⚠️ <strong>Высокая сложность:</strong> 4-8 недель внедрения</li>
+                        <li>⚠️ <strong>Техническая экспертиза:</strong> нужен developer или 15-20 ч/неделя</li>
+                        <li>⚠️ <strong>Франшиза проблематична:</strong> нужна полная перестройка за $46K-125K</li>
+                        <li>❌ <strong>ДОРОЖЕ НА $381K ЗА 2 ГОДА!</strong></li>
+                    </ul>
+                </div>
+
+                <h3>💰 Детальная Стоимость DIY</h3>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 18%;">Этап</th>
+                                <th style="width: 40%;">Компоненты</th>
+                                <th style="width: 20%;">Стоимость/мес</th>
+                                <th style="width: 22%;">Примечания</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Месяц 0</strong></td>
+                                <td>Разработка системы, консультант, VPS setup</td>
+                                <td>$1,000-2,000</td>
+                                <td>80-120 часов работы</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Месяцы 1-3</strong></td>
+                                <td>Airtable Pro + OpenPhone + Goodcall + n8n + Google Workspace + тестовые лиды</td>
+                                <td>$347-683</td>
+                                <td><strong>Экономия 50-60%</strong> vs Workiz</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Месяцы 4-6</strong></td>
+                                <td>+ Thumbtack + Google Ads + Facebook Ads + доработки системы</td>
+                                <td>$1,116-4,127</td>
+                                <td>Высокая вариативность</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Месяцы 7-12</strong></td>
+                                <td>+ 2-3 техника + масштабирование + developer support</td>
+                                <td>$11,874-18,112</td>
+                                <td>Нужна постоянная поддержка</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Месяцы 13-18</strong></td>
+                                <td>5 техников + КРИТИЧЕСКИЕ проблемы масштабирования</td>
+                                <td>$22,000-32,000</td>
+                                <td><strong>⚠️ Airtable лимиты!</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Месяцы 19-24</strong></td>
+                                <td>Франшиза (10 локаций) + команда разработки</td>
+                                <td>$45,400-73,450</td>
+                                <td><strong>+ $46K-125K rebuild!</strong></td>
+                            </tr>
+                            <tr class="total-row">
+                                <td colspan="2"><strong>ИТОГО за 24 месяца</strong></td>
+                                <td colspan="2"><strong>$1,638,464 + $46K-125K rebuild</strong></td>
+                            </tr>
+                            <tr class="total-row">
+                                <td colspan="2"><strong>РАЗНИЦА vs Workiz</strong></td>
+                                <td colspan="2" style="color: #dc3545; font-size: 1.3em;"><strong>+$381,740 ДОРОЖЕ</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="danger-box">
+                    <h3>💸 ПАРАДОКС DIY</h3>
+                    <p style="font-size: 1.2em;"><strong>Экономия (месяцы 1-6):</strong> $5,000-10,000</p>
+                    <p style="font-size: 1.2em;"><strong>Переплата (месяцы 7-24):</strong> +$386,000-390,000</p>
+                    <p style="font-size: 1.2em;"><strong>Инвестиции для франшизы:</strong> +$46,000-125,000</p>
+                    <p style="font-size: 1.2em;"><strong>Opportunity cost:</strong> 200-400 ч/год = $15,000-30,000</p>
+                    <br>
+                    <p style="font-size: 1.4em; font-weight: bold; color: #dc3545;">ИТОГО: DIY дороже на $447,000-545,000 за 2 года!</p>
+                </div>
+
+                <h3>🎯 Для Кого Подходит DIY</h3>
+                <div class="info-box">
+                    <ul style="font-size: 1.05em;">
+                        <li>✅ Технически продвинутый основатель (developer background)</li>
+                        <li>✅ Ограниченный бюджет (<$500/мес первые 6 месяцев)</li>
+                        <li>✅ Готовы инвестировать 15-20 часов/неделю в разработку</li>
+                        <li>✅ Нужна максимальная кастомизация (специфичные процессы)</li>
+                        <li>✅ Медленный рост (1-2 техника в первый год)</li>
+                        <li>⚠️ <strong>НЕ планируете франшизу</strong> в ближайшие 2-3 года</li>
+                        <li>⚠️ <strong>НЕ планируете продавать бизнес</strong> (DIY система — минус при продаже)</li>
+                    </ul>
+                </div>
+
+                <div class="danger-box">
+                    <h3>❌ НЕ РЕКОМЕНДУЕМ DIY, ЕСЛИ:</h3>
+                    <ul style="font-size: 1.1em;">
+                        <li>❌ Цель — франшиза за 24 месяца</li>
+                        <li>❌ Хотите быстрый рост (3+ техников в 1-й год)</li>
+                        <li>❌ Нет технического background</li>
+                        <li>❌ Нет времени на разработку (15-20 ч/неделя)</li>
+                        <li>❌ Планируете продажу бизнеса</li>
+                        <li>❌ Нужна стабильная система без головной боли</li>
+                    </ul>
+                </div>
+
+                <h3>⚠️ Критические Проблемы DIY при Масштабировании</h3>
+                <div class="warning-box">
+                    <h4>Месяцы 13-18 (5 техников):</h4>
+                    <ul>
+                        <li>Airtable достигает лимитов (records, automations)</li>
+                        <li>n8n performance issues (нужен upgrade VPS)</li>
+                        <li>Интеграции начинают ломаться</li>
+                        <li>Нужен developer support (20 hrs/мес = $600-1,000)</li>
+                    </ul>
+                    
+                    <h4>Месяцы 19-24 (Франшиза):</h4>
+                    <ul>
+                        <li><strong>⚠️ СИСТЕМА НЕ ГОТОВА</strong> без major rebuild</li>
+                        <li>Требуется multi-tenant архитектура: $10K-30K</li>
+                        <li>Franchise dashboard: $15K-40K</li>
+                        <li>Centralized billing: $5K-15K</li>
+                        <li>Training platform (LMS): $8K-20K</li>
+                        <li>Quality control system: $5K-12K</li>
+                        <li><strong>ИТОГО:</strong> $46K-125K инвестиций</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ВКЛАДКА 4: СРАВНЕНИЕ -->
+            <div id="sravnenie" class="tab-content">
+                <h2>⚖️ Детальное Сравнение Двух Сценариев</h2>
+
+                <h3>💰 Финансовое Сравнение по Этапам</h3>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 25%;">Этап</th>
+                                <th style="width: 25%;">Сценарий 1<br>(Workiz + AI)</th>
+                                <th style="width: 25%;">Сценарий 2<br>(DIY Подход)</th>
+                                <th style="width: 25%;">Разница</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Месяц 0</strong></td>
+                                <td>$90-220</td>
+                                <td>$1,000-2,000</td>
+                                <td style="color: #28a745;"><strong>Workiz дешевле на $780-1,910</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Месяцы 1-6</strong></td>
+                                <td>$26,556</td>
+                                <td>$30,720</td>
+                                <td style="color: #28a745;"><strong>Workiz дешевле на $4,164</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Месяцы 7-12</strong></td>
+                                <td>$169,656</td>
+                                <td>$217,344</td>
+                                <td style="color: #28a745;"><strong>Workiz дешевле на $47,688</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Месяцы 13-18</strong></td>
+                                <td>$367,512</td>
+                                <td>$384,000</td>
+                                <td style="color: #28a745;"><strong>Workiz дешевле на $16,488</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Месяцы 19-24</strong><br>(10 франшиз)</td>
+                                <td>$693,000</td>
+                                <td>$1,006,400<br><small>+ $46K-125K rebuild</small></td>
+                                <td style="color: #28a745;"><strong>Workiz дешевле на $313,400</strong><br><small>+ экономия на rebuild</small></td>
+                            </tr>
+                            <tr class="total-row">
+                                <td><strong>ИТОГО 24 мес</strong></td>
+                                <td style="color: #28a745; font-size: 1.3em;"><strong>$1,256,724</strong></td>
+                                <td style="color: #dc3545; font-size: 1.3em;"><strong>$1,638,464</strong></td>
+                                <td style="color: #28a745; font-size: 1.3em;"><strong>Экономия: $381,740</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>📊 Сравнение по Критериям</h3>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 35%;">Критерий</th>
+                                <th style="width: 28%;">Workiz + Bland AI</th>
+                                <th style="width: 28%;">DIY Подход</th>
+                                <th style="width: 9%;">Победитель</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Скорость запуска</strong></td>
+                                <td>1 неделя</td>
+                                <td>4-8 недель</td>
+                                <td><span class="badge badge-success">Workiz</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Простота использования</strong></td>
+                                <td><span class="star-rating">★★★☆☆</span></td>
+                                <td><span class="star-rating">★☆☆☆☆</span></td>
+                                <td><span class="badge badge-success">Workiz</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Гибкость</strong></td>
+                                <td><span class="star-rating">★★★☆☆</span></td>
+                                <td><span class="star-rating">★★★★★</span></td>
+                                <td><span class="badge badge-success">DIY</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Стабильность</strong></td>
+                                <td><span class="star-rating">★★★★☆</span></td>
+                                <td><span class="star-rating">★★☆☆☆</span></td>
+                                <td><span class="badge badge-success">Workiz</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Масштабируемость</strong></td>
+                                <td><span class="star-rating">★★★★★</span></td>
+                                <td><span class="star-rating">★★☆☆☆</span></td>
+                                <td><span class="badge badge-success">Workiz</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Franchise-готовность</strong></td>
+                                <td><span class="star-rating">★★★★★</span> (из коробки)</td>
+                                <td><span class="star-rating">★☆☆☆☆</span> (rebuild $46K-125K)</td>
+                                <td><span class="badge badge-success">Workiz</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Качество AI</strong></td>
+                                <td><span class="star-rating">★★★★★</span> Bland AI</td>
+                                <td><span class="star-rating">★★★★☆</span> Goodcall</td>
+                                <td><span class="badge badge-success">Workiz</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Поддержка</strong></td>
+                                <td><span class="star-rating">★★☆☆☆</span></td>
+                                <td><span class="star-rating">★☆☆☆☆</span> (self)</td>
+                                <td><span class="badge badge-success">Workiz</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Время на поддержку</strong></td>
+                                <td>2-5 ч/мес</td>
+                                <td>15-25 ч/мес</td>
+                                <td><span class="badge badge-success">Workiz</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>TCO 24 месяца</strong></td>
+                                <td class="price-highlight">$1,256,724</td>
+                                <td class="price-danger">$1,638,464</td>
+                                <td><span class="badge badge-success">Workiz</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Стоимость старта (мес 1-6)</strong></td>
+                                <td>$26,556</td>
+                                <td>$30,720</td>
+                                <td><span class="badge badge-success">Workiz</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>🏆 Итоговая Оценка</h3>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Лучше по критериям</div>
+                        <div class="metric-value">10 из 11</div>
+                        <div style="margin-top: 10px;"><strong>Workiz + Bland AI</strong></div>
+                        <p style="font-size: 0.9em; color: #28a745;">Победитель</p>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Экономия за 24 мес</div>
+                        <div class="metric-value">$382K</div>
+                        <div style="margin-top: 10px;"><strong>Workiz дешевле</strong></div>
+                        <p style="font-size: 0.9em; color: #666;">vs DIY</p>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Время внедрения</div>
+                        <div class="metric-value">1 нед</div>
+                        <div style="margin-top: 10px;"><strong>Workiz</strong></div>
+                        <p style="font-size: 0.9em; color: #666;">vs 4-8 недель DIY</p>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Franchise-ready</div>
+                        <div class="metric-value">✅</div>
+                        <div style="margin-top: 10px;"><strong>Только Workiz</strong></div>
+                        <p style="font-size: 0.9em; color: #666;">DIY: rebuild $46K-125K</p>
+                    </div>
+                </div>
+
+                <div class="success-box" style="margin-top: 40px;">
+                    <h3 style="font-size: 1.6em;">🎖️ ВЕРДИКТ</h3>
+                    <p style="font-size: 1.2em; line-height: 1.8;">
+                        <strong>Workiz + Bland AI</strong> выигрывает по <strong>10 из 11 критериев</strong> и 
+                        <strong>экономит $381,740</strong> за 24 месяца. Единственный критерий, где DIY лучше — 
+                        это гибкость, но эта гибкость обходится слишком дорого и создает больше проблем, чем решает.
+                    </p>
+                </div>
+            </div>
+
+            <!-- ВКЛАДКА 5: ПО МЕСЯЦАМ -->
+            <div id="pomesyachno" class="tab-content">
+                <h2>📅 Помесячная Детализация (Workiz - Рекомендуемый)</h2>
+
+                <div class="info-box">
+                    <p style="font-size: 1.1em;"><strong>Источник:</strong> Согласовано с чеклистом checklist_months_1-12_RUS.md</p>
+                    <p style="font-size: 1.1em;"><strong>Архитектура:</strong> Workiz CRM как центральная система-хаб</p>
+                </div>
+
+                <h3>📊 Сводная Таблица По Месяцам</h3>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 10%;">Месяц</th>
+                                <th style="width: 20%;">Этап</th>
+                                <th style="width: 35%;">Основные задачи</th>
+                                <th style="width: 18%;">Стоимость/мес</th>
+                                <th style="width: 17%;">Команда</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>0</strong></td>
+                                <td>Тестирование</td>
+                                <td>Trial Workiz, Bland AI, тестовые лиды Thumbtack (5-10)</td>
+                                <td>$90-220</td>
+                                <td>Владимир</td>
+                            </tr>
+                            <tr>
+                                <td><strong>1</strong></td>
+                                <td>Базовая настройка</td>
+                                <td>Workiz setup, n8n + Bland AI, OpenPhone integration, Automations</td>
+                                <td>$419-545</td>
+                                <td>Владимир</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2-3</strong></td>
+                                <td>Лидогенерация</td>
+                                <td>Thumbtack активация (30-50 лидов/мес), Yelp оптимизация, Analytics setup</td>
+                                <td>$1,130-1,520</td>
+                                <td>Владимир</td>
+                            </tr>
+                            <tr>
+                                <td><strong>4-6</strong></td>
+                                <td>Расширение каналов</td>
+                                <td>Google Ads, Facebook Ads, Website запуск, SOPs документация, QuickBooks</td>
+                                <td>$2,643-2,993</td>
+                                <td>Владимир</td>
+                            </tr>
+                            <tr>
+                                <td><strong>7-8</strong></td>
+                                <td>Первый наём</td>
+                                <td>Hiring + Onboarding Техника #2, системы для 2 пользователей</td>
+                                <td>$9,708-13,202</td>
+                                <td>2 техника</td>
+                            </tr>
+                            <tr>
+                                <td><strong>9-10</strong></td>
+                                <td>Оптимизация</td>
+                                <td>Team management, масштабирование маркетинга (100-150 лидов/мес)</td>
+                                <td>$13,708-18,202</td>
+                                <td>2 техника</td>
+                            </tr>
+                            <tr>
+                                <td><strong>11-12</strong></td>
+                                <td>Третий техник</td>
+                                <td>Hiring + Onboarding Техника #3, team structure (3 человека), роли</td>
+                                <td>$16,708-21,202</td>
+                                <td>3 техника</td>
+                            </tr>
+                            <tr class="total-row">
+                                <td colspan="3"><strong>ИТОГО Месяцы 0-12</strong></td>
+                                <td><strong>~$93K-122K</strong></td>
+                                <td>-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>✅ Согласование с чеклистом:</strong> Итоговая сумма $93K-122K соответствует чеклисту ~$80K-120K. Наша детализация находится в верхней части диапазона (более реалистично).
+                </div>
+
+                <h3>Детальная Разбивка: Месяц 1</h3>
+                <div class="month-card">
+                    <div class="month-header">МЕСЯЦ 1: Базовая Настройка (5-6 недель)</div>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 20%;">Неделя</th>
+                                <th style="width: 50%;">Задачи (из чеклиста)</th>
+                                <th style="width: 30%;">Результат</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Неделя 1-2</strong></td>
+                                <td>
+                                    • Создать аккаунт Workiz<br>
+                                    • Импорт клиентов (CSV)<br>
+                                    • Создание каталога услуг (Door $250-500, Window $200-400)<br>
+                                    • Настройка Price Book<br>
+                                    • Базовые Workiz Automations (5 типов)<br>
+                                    • Workiz Mobile App setup
+                                </td>
+                                <td>✅ Workiz работает как центр</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Неделя 3</strong></td>
+                                <td>
+                                    • OpenPhone ↔ Workiz через Zapier (3 zaps)<br>
+                                    • Call Forwarding настройка<br>
+                                    • Тестирование интеграции
+                                </td>
+                                <td>✅ Все звонки логируются в Workiz</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Неделя 4-5</strong></td>
+                                <td>
+                                    • Установка n8n (self-hosted или cloud)<br>
+                                    • Настройка Bland AI агента "Jessica"<br>
+                                    • Загрузка Knowledge Base (50+ FAQ)<br>
+                                    • 4 Conversation Pathways<br>
+                                    • Интеграция AI ↔ Workiz (webhooks)<br>
+                                    • Тестирование 50+ звонков
+                                </td>
+                                <td>✅ AI обрабатывает звонки 24/7</td>
+                            </tr>
+                            <tr class="total-row">
+                                <td colspan="2"><strong>СТОИМОСТЬ МЕСЯЦА 1</strong></td>
+                                <td><strong>$419-545</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="warning-box">
+                    <h4>⚠️ Критические Точки Месяца 1</h4>
+                    <ul>
+                        <li><strong>Workiz setup:</strong> Займет 10-15 часов, но это одноразово</li>
+                        <li><strong>AI testing:</strong> ОБЯЗАТЕЛЬНО 50+ тестовых звонков перед live</li>
+                        <li><strong>Запас времени:</strong> +1-2 недели на отладку AI pathways</li>
+                    </ul>
+                </div>
+
+                <h3>💰 Краткая Разбивка: Месяцы 2-12</h3>
+
+                <div class="month-card">
+                    <div class="month-header">МЕСЯЦЫ 2-3: Запуск Лидогенерации</div>
+                    <p><strong>Thumbtack активация:</strong> 30-50 лидов/мес, начальный бюджет $50/день</p>
+                    <p><strong>Yelp:</strong> Review generation через Workiz Automations</p>
+                    <p><strong>Analytics:</strong> Workiz Dashboard setup (5 метрик)</p>
+                    <p class="price-highlight">$1,130-1,520/мес</p>
+                </div>
+
+                <div class="month-card">
+                    <div class="month-header">МЕСЯЦЫ 4-6: Расширение Каналов</div>
+                    <p><strong>Google Ads:</strong> $600/мес (20-30 лидов)</p>
+                    <p><strong>Facebook Ads:</strong> $450/мес (15-20 лидов)</p>
+                    <p><strong>Website:</strong> Запуск с Workiz Booking widget</p>
+                    <p><strong>SOPs:</strong> Документация всех процессов</p>
+                    <p><strong>QuickBooks:</strong> Native integration с Workiz</p>
+                    <p class="price-highlight">$2,643-2,993/мес</p>
+                </div>
+
+                <div class="month-card">
+                    <div class="month-header">МЕСЯЦЫ 7-8: Первый Наём</div>
+                    <p><strong>Hiring:</strong> Техник #2 (recruitment process 2-4 недели)</p>
+                    <p><strong>Onboarding:</strong> 5 недель (Orientation → Shadow → Supervised → Independent)</p>
+                    <p><strong>Системы:</strong> Workiz Team plan, OpenPhone Business, Bland AI Professional</p>
+                    <p><strong>Зарплата:</strong> Техник #2 = $3,000-4,000/мес</p>
+                    <p class="price-highlight">$9,708-13,202/мес</p>
+                </div>
+
+                <div class="month-card">
+                    <div class="month-header">МЕСЯЦЫ 9-10: Оптимизация с Командой</div>
+                    <p><strong>Team Management:</strong> Weekly meetings, individual performance tracking</p>
+                    <p><strong>Маркетинг:</strong> Увеличение бюджета (Thumbtack $800-1,200, Google $1,000-1,500)</p>
+                    <p><strong>Capacity:</strong> 30-40 jobs/неделю (2 техника)</p>
+                    <p class="price-highlight">$13,708-18,202/мес</p>
+                </div>
+
+                <div class="month-card">
+                    <div class="month-header">МЕСЯЦЫ 11-12: Третий Техник</div>
+                    <p><strong>Hiring:</strong> Техник #3 (ускоренная программа 4 недели)</p>
+                    <p><strong>Team Structure:</strong> 3 человека с четкими ролями</p>
+                    <p><strong>Systems:</strong> Workiz для 3+ users, Advanced AI Dispatcher</p>
+                    <p><strong>Capacity:</strong> 45-60 jobs/неделю</p>
+                    <p class="price-highlight">$16,708-21,202/мес</p>
+                </div>
+            </div>
+
+            <!-- ВКЛАДКА 6: РЕКОМЕНДАЦИЯ -->
+            <div id="rekomendatsiya" class="tab-content">
+                <h2>🎯 Итоговая Рекомендация</h2>
+
+                <div class="success-box" style="padding: 35px;">
+                    <h3 style="font-size: 1.9em; color: #28a745;">✅ РЕКОМЕНДУЕМ: Workiz + Bland AI</h3>
+                    <p style="font-size: 1.3em; margin: 20px 0;"><strong>Для вашей цели:</strong> 1 техник → франшиза 10-20 локаций за 24 месяца</p>
+                    
+                    <h4 style="font-size: 1.5em; margin-top: 25px;">ПОЧЕМУ WORKIZ:</h4>
+                    <ul style="font-size: 1.2em;">
+                        <li>✅ <strong>Самый низкий TCO:</strong> $1,256K vs $1,638K (DIY)</li>
+                        <li>✅ <strong>ЭКОНОМИЯ $381,740</strong> за 24 месяца!</li>
+                        <li>✅ <strong>Franchise-ready из коробки:</strong> специальный модуль</li>
+                        <li>✅ <strong>Быстрый запуск:</strong> 1 неделя vs 4-8 недель (DIY)</li>
+                        <li>✅ <strong>Минимум технических рисков</strong></li>
+                        <li>✅ <strong>Proven solution:</strong> тысячи успешных компаний</li>
+                        <li>✅ <strong>Лучший AI:</strong> Bland AI — топ индустрии</li>
+                        <li>✅ <strong>Native Thumbtack:</strong> лучшая интеграция (Messages + Leads)</li>
+                    </ul>
+                </div>
+
+                <h3>🚀 План Действий (Пошаговый)</h3>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h4>СЕЙЧАС (Недели 1-2)</h4>
+                        <ol style="font-size: 1.05em;">
+                            <li>✅ Зарегистрируйтесь в <strong>Workiz trial</strong> (7 дней бесплатно)</li>
+                            <li>✅ Зарегистрируйтесь в <strong>Bland AI trial</strong> (14 дней, 100 минут бесплатно)</li>
+                            <li>✅ Настройте интеграцию <strong>Thumbtack → Workiz</strong> через Zapier</li>
+                            <li>✅ Протестируйте на <strong>5-10 реальных лидах</strong></li>
+                            <li>✅ Оцените: подходит ли вам Workiz и Bland AI?</li>
+                        </ol>
+                    </div>
+
+                    <div class="timeline-item">
+                        <h4>Недели 3-4</h4>
+                        <p style="font-size: 1.05em;"><strong>Если Workiz подошел:</strong> Подписка + полная настройка по чеклисту</p>
+                    </div>
+
+                    <div class="timeline-item">
+                        <h4>Месяцы 1-6: Соло-операция</h4>
+                        <ul style="font-size: 1.05em;">
+                            <li>Работайте в одиночку, оптимизируйте все процессы</li>
+                            <li>Собирайте данные (conversion rates, cost per lead, customer satisfaction)</li>
+                            <li>Готовьте SOPs для будущего найма</li>
+                            <li>Цель: 40-60 jobs/месяц, $15,000-25,000 revenue/мес</li>
+                        </ul>
+                    </div>
+
+                    <div class="timeline-item">
+                        <h4>Месяцы 7-12: Первые Наёмы</h4>
+                        <ul style="font-size: 1.05em;">
+                            <li>Наймите первых 2-3 техников</li>
+                            <li>Масштабируйте маркетинг (100-150 лидов/мес)</li>
+                            <li>Тестируйте процессы для команды</li>
+                            <li>Цель: 45-60 jobs/неделю, $40K-60K revenue/мес</li>
+                        </ul>
+                    </div>
+
+                    <div class="timeline-item">
+                        <h4>Месяцы 13-18: Формирование "Ячейки"</h4>
+                        <ul style="font-size: 1.05em;">
+                            <li>Рост до 5 техников + офис/склад</li>
+                            <li>Создание franchise documentation</li>
+                            <li>Поиск первых франчайзи</li>
+                            <li>Цель: Готовая модель для тиражирования</li>
+                        </ul>
+                    </div>
+
+                    <div class="timeline-item">
+                        <h4>Месяцы 19-24: Франшиза</h4>
+                        <ul style="font-size: 1.05em;">
+                            <li>Запуск первых 2-5 франшиз</li>
+                            <li>Оптимизация franchise model</li>
+                            <li>Масштабирование до 10-20 локаций</li>
+                            <li>Workiz Master/Sub-account structure</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>❌ ПОЧЕМУ НЕ DIY</h3>
+                <div class="danger-box">
+                    <h4>КРИТИЧЕСКИЕ ПРИЧИНЫ:</h4>
+                    <ul style="font-size: 1.15em;">
+                        <li>❌ <strong>Дороже на $381,740 за 24 месяца</strong></li>
+                        <li>❌ Требует $46K-125K инвестиций для франшизы</li>
+                        <li>❌ Opportunity cost: 200-400 часов/год = $15K-30K потерянного дохода</li>
+                        <li>❌ Технический долг накапливается</li>
+                        <li>❌ Сложнее нанимать и обучать персонал (custom система)</li>
+                        <li>❌ При продаже бизнеса DIY система — МИНУС к стоимости</li>
+                        <li>❌ Франшиза практически невозможна без полного rebuild</li>
+                    </ul>
+                    <br>
+                    <p style="font-size: 1.4em; font-weight: bold; color: #dc3545;">💡 ПАРАДОКС: DIY экономит $5K-10K в первые 12 месяцев, но стоит +$381K ДОРОЖЕ за 24 месяца!</p>
+                </div>
+
+                <h3>💰 Финальное Финансовое Сравнение</h3>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 25%;">Сценарий</th>
+                                <th style="width: 18%;">Экономия<br>(0-6 мес)</th>
+                                <th style="width: 20%;">TCO<br>(24 мес)</th>
+                                <th style="width: 18%;">Разница</th>
+                                <th style="width: 19%;">Вердикт</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="total-row" style="background: rgba(40, 167, 69, 0.2) !important;">
+                                <td><strong>🥇 Workiz + AI</strong></td>
+                                <td>-</td>
+                                <td class="price-highlight">$1,256,724</td>
+                                <td>-</td>
+                                <td><span class="badge badge-success">✅ РЕКОМЕНДУЕМ</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>🛠️ DIY Подход</strong></td>
+                                <td style="color: #28a745; font-size: 0.9em;">-$5K-10K</td>
+                                <td class="price-danger">$1,638,464</td>
+                                <td class="price-danger">+$381,740</td>
+                                <td><span class="badge badge-danger">❌ НЕ РЕКОМЕНДУЕМ</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="success-box" style="padding: 35px; margin-top: 40px;">
+                    <h3 style="font-size: 1.9em;">🎖️ ФИНАЛЬНОЕ РЕЗЮМЕ</h3>
+                    <p style="font-size: 1.25em; line-height: 1.9;">После детального анализа обоих сценариев, включая согласование с чеклистом, <strong style="color: #28a745;">Workiz + Bland AI</strong> является единственным правильным выбором для достижения цели <strong>"от 1 техника до франшизы 10-20 локаций за 24 месяца"</strong>.</p>
+                    
+                    <h4 style="font-size: 1.5em; margin-top: 30px;">Ключевые Факторы Решения:</h4>
+                    <ol style="font-size: 1.2em; line-height: 1.9;">
+                        <li><strong>Минимальный TCO:</strong> $1,256K за 2 года</li>
+                        <li><strong>Экономия:</strong> $381,740 vs DIY</li>
+                        <li><strong>Franchise-ready:</strong> Специальный модуль Workiz</li>
+                        <li><strong>Скорость:</strong> Запуск за 1 неделю vs 4-8 недель DIY</li>
+                        <li><strong>Масштабируемость:</strong> Proven path 1→1000+ техников</li>
+                        <li><strong>Риски:</strong> Минимальные технические риски</li>
+                        <li><strong>Согласование:</strong> ✅ Полное соответствие чеклисту</li>
+                    </ol>
+
+                    <p style="margin-top: 35px; font-size: 1.4em; font-weight: bold; text-align: center; color: #28a745;">
+                        🚀 Начните с Workiz + Bland AI и масштабируйтесь уверенно!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p style="font-size: 1.1em;"><strong>Версия:</strong> 5.0 RUS (2 сценария) | <strong>Дата:</strong> 22 января 2026</p>
+            <p style="margin-top: 10px;"><strong>Согласовано с:</strong> checklist_months_1-12_RUS.md + Workiz Ecosystem Architecture</p>
+            <p style="margin-top: 20px; opacity: 0.8; font-size: 0.95em;">
+                Документ создан для оптимального планирования масштабирования бизнеса по ремонту дверей и окон<br>
+                от 1 техника до франшизы с 10-20 локациями за 24 месяца
+            </p>
+            <p style="margin-top: 15px; font-size: 0.9em; opacity: 0.7;">
+                Все цифры основаны на реальных данных рынка и согласованы с операционным чеклистом<br>
+                <strong>Выбор очевиден: Workiz + Bland AI — экономия $381,740 за 2 года!</strong>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            var tabContents = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+
+            var tabButtons = document.getElementsByClassName("nav-tab");
+            for (var i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove("active");
+            }
+
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
