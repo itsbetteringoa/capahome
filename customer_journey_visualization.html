@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Journey Visualization</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #0f172a, #1e293b);
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script>
+        // Icon SVGs
+        const icons = {
+            Search: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>`,
+            Phone: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`,
+            Calendar: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+            Clock: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+            MapPin: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
+            Wrench: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>`,
+            CreditCard: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>`,
+            Star: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+            Repeat: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>`,
+            MessageSquare: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`,
+            CheckCircle: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
+            AlertCircle: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+            ThumbsUp: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z"/></svg>`
+        };
+
+        const journeyStages = [
+            {
+                id: 1,
+                stage: "Awareness",
+                icon: "Search",
+                color: "blue",
+                customerFeeling: "😟 Problem! Door won't close properly",
+                customerThought: "I need to find a reliable repair service",
+                duration: "0-24 hours",
+                touchpoints: [
+                    { channel: "Google Search", action: "Searches 'door repair near me'", system: "Google Ads" },
+                    { channel: "Thumbtack", action: "Posts repair request", system: "Thumbtack" },
+                    { channel: "Facebook Ad", action: "Sees targeted ad", system: "Facebook Ads" },
+                    { channel: "Referral", action: "Friend recommends you", system: "Word of Mouth" }
+                ],
+                systemActions: [
+                    "Ad impression logged",
+                    "Lead captured in system",
+                    "Initial response triggered"
+                ],
+                customerExperience: "Discovering you exist and considering options",
+                successMetrics: ["Cost per lead", "Lead quality score", "Response time"]
+            },
+            {
+                id: 2,
+                stage: "Consideration",
+                icon: "Phone",
+                color: "green",
+                customerFeeling: "🤔 Evaluating options",
+                customerThought: "Are they reliable? What's the price?",
+                duration: "Minutes to hours",
+                touchpoints: [
+                    { channel: "Website", action: "Views services & reviews", system: "Company Website" },
+                    { channel: "Phone Call", action: "Calls business number", system: "OpenPhone" },
+                    { channel: "SMS", action: "Receives auto-response", system: "OpenPhone + Zapier" },
+                    { channel: "Reviews", action: "Checks Google/Yelp", system: "Review Sites" }
+                ],
+                systemActions: [
+                    "Call logged in Housecall Pro",
+                    "Customer profile created",
+                    "Instant SMS confirmation sent",
+                    "Trello card created for follow-up"
+                ],
+                customerExperience: "Evaluating trustworthiness and getting initial information",
+                successMetrics: ["Answer rate >90%", "Response time <15 min", "Lead-to-quote ratio"]
+            },
+            {
+                id: 3,
+                stage: "Booking",
+                icon: "Calendar",
+                color: "purple",
+                customerFeeling: "✅ Ready to schedule",
+                customerThought: "When can they come? How much will it cost?",
+                duration: "5-30 minutes",
+                touchpoints: [
+                    { channel: "Phone", action: "Discusses problem with CSR", system: "OpenPhone" },
+                    { channel: "Estimate", action: "Receives price quote", system: "Housecall Pro" },
+                    { channel: "Online Booking", action: "Books time slot", system: "Housecall Pro Portal" },
+                    { channel: "Confirmation SMS", action: "Gets booking confirmation", system: "OpenPhone Auto" }
+                ],
+                systemActions: [
+                    "Job created in Housecall Pro",
+                    "Tech assigned based on territory",
+                    "Trello card moves to 'Scheduled'",
+                    "ZippyKind ticket created",
+                    "Confirmation SMS sent immediately",
+                    "Calendar sync to tech's schedule"
+                ],
+                customerExperience: "Easy booking process with clear pricing and availability",
+                successMetrics: ["Booking conversion >40%", "Time to schedule", "Booking abandonment rate"]
+            },
+            {
+                id: 4,
+                stage: "Pre-Service",
+                icon: "Clock",
+                color: "yellow",
+                customerFeeling: "😌 Anticipating service",
+                customerThought: "Will they show up on time?",
+                duration: "1-3 days before job",
+                touchpoints: [
+                    { channel: "Reminder SMS", action: "Day before: 'Tomorrow at 2pm'", system: "Zapier Auto" },
+                    { channel: "Tech Introduction", action: "Morning of: 'Your tech is John' + photo", system: "OpenPhone" },
+                    { channel: "Prep SMS", action: "Please clear access to door/window", system: "Template" },
+                    { channel: "Call", action: "Can call anytime with questions", system: "OpenPhone" }
+                ],
+                systemActions: [
+                    "Automated reminder 24hrs before",
+                    "Tech assignment confirmed",
+                    "Route optimized in ZippyKind",
+                    "Morning-of tech intro sent",
+                    "Trello card shows 'Today's jobs'"
+                ],
+                customerExperience: "Feeling informed and prepared, reducing anxiety",
+                successMetrics: ["No-show rate <5%", "Customer preparation", "Pre-service calls"]
+            },
+            {
+                id: 5,
+                stage: "Service Day",
+                icon: "MapPin",
+                color: "cyan",
+                customerFeeling: "📍 Tracking arrival",
+                customerThought: "When will they arrive exactly?",
+                duration: "Day of service",
+                touchpoints: [
+                    { channel: "On-the-way SMS", action: "'John is on his way!'", system: "ZippyKind Auto" },
+                    { channel: "Tracking Link", action: "Live GPS tracking like Uber", system: "ZippyKind" },
+                    { channel: "ETA Updates", action: "'John is 15 minutes away'", system: "ZippyKind Auto" },
+                    { channel: "Arrival SMS", action: "'John has arrived'", system: "ZippyKind Auto" }
+                ],
+                systemActions: [
+                    "Tech starts route in ZippyKind",
+                    "GPS tracking active",
+                    "Automatic ETA updates every 5 min",
+                    "Customer gets tracking link",
+                    "Trello card: 'En route'",
+                    "Job status updated in Housecall Pro"
+                ],
+                customerExperience: "Complete transparency with real-time tracking - no waiting around",
+                successMetrics: ["On-time arrival >90%", "Customer tracking engagement", "ETA accuracy"]
+            },
+            {
+                id: 6,
+                stage: "Service Delivery",
+                icon: "Wrench",
+                color: "orange",
+                customerFeeling: "🔧 Watching repair happen",
+                customerThought: "Are they professional? Will it be done right?",
+                duration: "30-90 minutes",
+                touchpoints: [
+                    { channel: "In-Person", action: "Tech introduces, explains problem", system: "Face to Face" },
+                    { channel: "Before Photos", action: "Documents existing condition", system: "Housecall Pro App" },
+                    { channel: "Estimate Adjustment", action: "If more work needed, explains", system: "Housecall Pro" },
+                    { channel: "Work Performance", action: "Completes repair professionally", system: "Physical Work" },
+                    { channel: "After Photos", action: "Shows completed work", system: "Housecall Pro App" },
+                    { channel: "Walkthrough", action: "Tests with customer", system: "Quality Check" }
+                ],
+                systemActions: [
+                    "Job status: 'In Progress' in all systems",
+                    "Photos uploaded to Housecall Pro",
+                    "Time tracking active",
+                    "Notes logged for future reference",
+                    "GPS coordinates captured",
+                    "Before/after comparison ready"
+                ],
+                customerExperience: "Professional service with clear communication and documentation",
+                successMetrics: ["First-time fix rate >85%", "Job duration vs estimate", "Photo compliance 100%"]
+            },
+            {
+                id: 7,
+                stage: "Payment",
+                icon: "CreditCard",
+                color: "emerald",
+                customerFeeling: "💳 Ready to pay",
+                customerThought: "Easy payment process?",
+                duration: "5-10 minutes",
+                touchpoints: [
+                    { channel: "Invoice Review", action: "Reviews itemized invoice on tablet", system: "Housecall Pro" },
+                    { channel: "Payment Options", action: "Card, cash, check, or pay later", system: "Housecall Pro" },
+                    { channel: "Digital Signature", action: "Signs on tech's tablet", system: "Housecall Pro App" },
+                    { channel: "Receipt", action: "Email/SMS receipt immediately", system: "Auto-send" },
+                    { channel: "Payment Link", action: "If paying later, gets link", system: "OpenPhone SMS" }
+                ],
+                systemActions: [
+                    "Invoice created in Housecall Pro",
+                    "Payment processed immediately",
+                    "Receipt auto-sent via email/SMS",
+                    "QuickBooks sync automatic",
+                    "If unpaid, payment link sent",
+                    "Trello card: 'Completed - Paid'"
+                ],
+                customerExperience: "Multiple payment options with instant receipt and documentation",
+                successMetrics: ["Same-day payment >80%", "Payment processing time", "Receipt delivery rate"]
+            },
+            {
+                id: 8,
+                stage: "Post-Service",
+                icon: "Star",
+                color: "pink",
+                customerFeeling: "⭐ Reflecting on experience",
+                customerThought: "That went well! Should I leave a review?",
+                duration: "1-7 days after",
+                touchpoints: [
+                    { channel: "Thank You SMS", action: "1 hour later: 'Thanks for choosing us!'", system: "Zapier Auto" },
+                    { channel: "Review Request", action: "2 days later: Link to Google/Yelp", system: "OpenPhone" },
+                    { channel: "Follow-up Call", action: "3 days: 'Everything still working?'", system: "Quality Check" },
+                    { channel: "Warranty Info", action: "Email with warranty details", system: "Housecall Pro" }
+                ],
+                systemActions: [
+                    "Thank you message auto-sent",
+                    "Review request scheduled",
+                    "Trello card: 'Follow-up needed'",
+                    "Warranty registered in system",
+                    "Customer satisfaction logged",
+                    "Quality check call assigned"
+                ],
+                customerExperience: "Feeling valued and confident in service quality",
+                successMetrics: ["Review rate >30%", "Avg rating 4.8+", "Issue resolution <24hrs"]
+            },
+            {
+                id: 9,
+                stage: "Retention",
+                icon: "Repeat",
+                color: "indigo",
+                customerFeeling: "🔄 Becoming a regular",
+                customerThought: "I'll call them again when I need help",
+                duration: "Ongoing",
+                touchpoints: [
+                    { channel: "Seasonal Reminder", action: "Fall: 'Time for window checkup?'", system: "Zapier Schedule" },
+                    { channel: "Special Offer", action: "Birthday month: 15% off", system: "Email Campaign" },
+                    { channel: "Referral Incentive", action: "'Refer a friend, get $20'", system: "Housecall Pro" },
+                    { channel: "Content", action: "Home maintenance tips blog", system: "Website/Email" }
+                ],
+                systemActions: [
+                    "Customer tagged as 'Active'",
+                    "Seasonal reminders scheduled",
+                    "Birthday/anniversary tracked",
+                    "Referral program auto-enrolled",
+                    "Lifetime value calculated",
+                    "VIP status if 3+ jobs"
+                ],
+                customerExperience: "Ongoing relationship with proactive care and value",
+                successMetrics: ["Repeat rate >30%", "Referral rate >15%", "Customer lifetime value"]
+            }
+        ];
+
+        function getColorClasses(color) {
+            const colorMap = {
+                blue: 'bg-blue-600',
+                green: 'bg-green-600',
+                purple: 'bg-purple-600',
+                yellow: 'bg-yellow-600',
+                cyan: 'bg-cyan-600',
+                orange: 'bg-orange-600',
+                emerald: 'bg-emerald-600',
+                pink: 'bg-pink-600',
+                indigo: 'bg-indigo-600'
+            };
+            return colorMap[color] || 'bg-gray-600';
+        }
+
+        function getStepClasses(color) {
+            const colorMap = {
+                blue: 'bg-blue-900 border-blue-500',
+                green: 'bg-green-900 border-green-500',
+                purple: 'bg-purple-900 border-purple-500',
+                yellow: 'bg-yellow-900 border-yellow-500',
+                cyan: 'bg-cyan-900 border-cyan-500',
+                orange: 'bg-orange-900 border-orange-500',
+                emerald: 'bg-emerald-900 border-emerald-500',
+                pink: 'bg-pink-900 border-pink-500',
+                indigo: 'bg-indigo-900 border-indigo-500'
+            };
+            return colorMap[color] || 'bg-gray-900 border-gray-500';
+        }
+
+        class App {
+            constructor() {
+                this.selectedStage = null;
+                this.showTimeline = true;
+                this.render();
+            }
+
+            toggleView() {
+                this.showTimeline = !this.showTimeline;
+                this.render();
+            }
+
+            toggleStage(id) {
+                this.selectedStage = this.selectedStage === id ? null : id;
+                this.render();
+            }
+
+            render() {
+                const app = document.getElementById('app');
+                app.innerHTML = `
+                    <div class="min-h-screen p-8">
+                        <div class="max-w-7xl mx-auto">
+                            <!-- Header -->
+                            <div class="text-center mb-8">
+                                <h1 class="text-4xl font-bold text-white mb-3">
+                                    Customer Journey Visualization
+                                </h1>
+                                <p class="text-slate-300 text-lg mb-4">
+                                    From First Contact to Loyal Customer: Every Touchpoint Matters
+                                </p>
+                                <button 
+                                    onclick="app.toggleView()"
+                                    class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors"
+                                >
+                                    ${this.showTimeline ? '📊 Switch to Grid View' : '📈 Switch to Timeline View'}
+                                </button>
+                            </div>
+
+                            ${this.showTimeline ? this.renderTimeline() : this.renderGrid()}
+
+                            <!-- Key Insights -->
+                            <div class="mt-8 grid grid-cols-3 gap-6">
+                                <div class="bg-gradient-to-br from-blue-900 to-blue-800 rounded-xl p-6">
+                                    <h3 class="text-white font-bold mb-3 flex items-center">
+                                        ${icons.AlertCircle} <span class="ml-2">Critical Moments</span>
+                                    </h3>
+                                    <div class="space-y-2 text-sm text-blue-100">
+                                        <div>• First 15 minutes response = 40% conversion</div>
+                                        <div>• Real-time tracking = 95% satisfaction</div>
+                                        <div>• Same-day payment = better cash flow</div>
+                                        <div>• Review request timing = 30%+ review rate</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-gradient-to-br from-purple-900 to-purple-800 rounded-xl p-6">
+                                    <h3 class="text-white font-bold mb-3 flex items-center">
+                                        ${icons.CheckCircle} <span class="ml-2">Automation Points</span>
+                                    </h3>
+                                    <div class="space-y-2 text-sm text-purple-100">
+                                        <div>• 15+ automated SMS messages</div>
+                                        <div>• Real-time GPS tracking updates</div>
+                                        <div>• Instant invoice & payment sync</div>
+                                        <div>• Automated review requests</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-gradient-to-br from-green-900 to-green-800 rounded-xl p-6">
+                                    <h3 class="text-white font-bold mb-3 flex items-center">
+                                        ${icons.Star} <span class="ml-2">Experience Goals</span>
+                                    </h3>
+                                    <div class="space-y-2 text-sm text-green-100">
+                                        <div>• Response time: &lt;15 minutes</div>
+                                        <div>• On-time arrival: &gt;90%</div>
+                                        <div>• Customer rating: 4.8+ stars</div>
+                                        <div>• Repeat rate: &gt;30%</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- System Integration Summary -->
+                            <div class="mt-8 bg-slate-800 rounded-xl p-6">
+                                <h3 class="text-xl font-bold text-white mb-4 text-center">
+                                    Systems Powering The Journey
+                                </h3>
+                                <div class="grid grid-cols-5 gap-4 text-center">
+                                    <div>
+                                        <div class="text-3xl mb-2">📱</div>
+                                        <div class="text-white font-semibold">OpenPhone</div>
+                                        <div class="text-xs text-slate-400">20+ automated messages</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-3xl mb-2">🏢</div>
+                                        <div class="text-white font-semibold">Housecall Pro</div>
+                                        <div class="text-xs text-slate-400">Central coordination</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-3xl mb-2">📍</div>
+                                        <div class="text-white font-semibold">ZippyKind</div>
+                                        <div class="text-xs text-slate-400">Live tracking & ETA</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-3xl mb-2">⚡</div>
+                                        <div class="text-white font-semibold">Zapier</div>
+                                        <div class="text-xs text-slate-400">50+ automations</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-3xl mb-2">💳</div>
+                                        <div class="text-white font-semibold">QuickBooks</div>
+                                        <div class="text-xs text-slate-400">Instant payment sync</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Footer Stats -->
+                            <div class="mt-6 bg-gradient-to-r from-blue-900 to-purple-900 rounded-xl p-6">
+                                <div class="grid grid-cols-4 gap-4 text-center text-white">
+                                    <div>
+                                        <div class="text-3xl font-bold">9</div>
+                                        <div class="text-sm opacity-75">Journey Stages</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-3xl font-bold">35+</div>
+                                        <div class="text-sm opacity-75">Touchpoints</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-3xl font-bold">20+</div>
+                                        <div class="text-sm opacity-75">Auto-Messages</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-3xl font-bold">95%</div>
+                                        <div class="text-sm opacity-75">Satisfaction Target</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderTimeline() {
+                return `
+                    <div class="space-y-6">
+                        ${journeyStages.map((journey, index) => `
+                            <div class="relative">
+                                ${index < journeyStages.length - 1 ? `
+                                    <div class="absolute left-12 top-24 bottom-0 w-1 bg-gradient-to-b from-${journey.color}-500 to-slate-700"></div>
+                                ` : ''}
+                                
+                                <div class="bg-slate-800 rounded-xl overflow-hidden hover:shadow-2xl transition-shadow">
+                                    <!-- Stage Header -->
+                                    <div class="p-6 border-l-4 ${getStepClasses(journey.color).split(' ')[1].replace('border-', 'border-l-')}">
+                                        <div class="flex items-start justify-between">
+                                            <div class="flex items-start space-x-4 flex-1">
+                                                <div class="${getColorClasses(journey.color)} p-4 rounded-xl text-white">
+                                                    ${icons[journey.icon]}
+                                                </div>
+                                                <div class="flex-1">
+                                                    <div class="flex items-center justify-between mb-2">
+                                                        <h3 class="text-2xl font-bold text-white">
+                                                            ${index + 1}. ${journey.stage}
+                                                        </h3>
+                                                        <span class="px-3 py-1 bg-slate-700 text-slate-300 rounded-full text-sm">
+                                                            ${journey.duration}
+                                                        </span>
+                                                    </div>
+                                                    <div class="text-xl mb-2">${journey.customerFeeling}</div>
+                                                    <div class="text-slate-400 italic">"${journey.customerThought}"</div>
+                                                    <div class="mt-3 text-slate-300">${journey.customerExperience}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Detailed Information -->
+                                    <div class="p-6 bg-slate-900 border-t border-slate-700">
+                                        <div class="grid grid-cols-2 gap-6">
+                                            <div>
+                                                <h4 class="text-sm font-bold text-blue-400 mb-2 flex items-center">
+                                                    ${icons.MessageSquare} <span class="ml-1">Customer Touchpoints</span>
+                                                </h4>
+                                                <div class="space-y-2">
+                                                    ${journey.touchpoints.map(tp => `
+                                                        <div class="bg-slate-800 rounded p-2 text-sm">
+                                                            <div class="text-blue-300 font-semibold">${tp.channel}</div>
+                                                            <div class="text-slate-400 text-xs">${tp.action}</div>
+                                                            <div class="text-slate-500 text-xs mt-1">→ ${tp.system}</div>
+                                                        </div>
+                                                    `).join('')}
+                                                </div>
+                                            </div>
+                                            
+                                            <div>
+                                                <h4 class="text-sm font-bold text-purple-400 mb-2 flex items-center">
+                                                    ${icons.CheckCircle} <span class="ml-1">System Actions</span>
+                                                </h4>
+                                                <div class="space-y-2">
+                                                    ${journey.systemActions.map(action => `
+                                                        <div class="bg-slate-800 rounded p-2 text-sm flex items-start">
+                                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-green-400 mr-2 mt-0.5 flex-shrink-0">
+                                                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                                                <polyline points="22 4 12 14.01 9 11.01"/>
+                                                            </svg>
+                                                            <span class="text-slate-300">${action}</span>
+                                                        </div>
+                                                    `).join('')}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Success Metrics -->
+                                        <div class="border-t border-slate-700 pt-3 mt-3">
+                                            <h4 class="text-sm font-bold text-green-400 mb-2">Success Metrics</h4>
+                                            <div class="flex flex-wrap gap-2">
+                                                ${journey.successMetrics.map(metric => `
+                                                    <span class="px-3 py-1 bg-green-900 bg-opacity-30 text-green-300 rounded-full text-xs">
+                                                        ${metric}
+                                                    </span>
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            renderGrid() {
+                return `
+                    <div class="grid grid-cols-3 gap-6">
+                        ${journeyStages.map(journey => `
+                            <div
+                                class="bg-slate-800 rounded-xl p-6 cursor-pointer transition-all hover:scale-105 ${
+                                    this.selectedStage === journey.id ? 'ring-4 ring-blue-500' : ''
+                                }"
+                                onclick="app.toggleStage(${journey.id})"
+                            >
+                                <div class="${getColorClasses(journey.color)} p-4 rounded-xl text-white inline-block mb-4">
+                                    ${icons[journey.icon]}
+                                </div>
+                                <h3 class="text-xl font-bold text-white mb-2">${journey.stage}</h3>
+                                <p class="text-slate-400 text-sm mb-3">${journey.customerFeeling}</p>
+                                <div class="text-xs text-slate-500">
+                                    ${journey.touchpoints.length} touchpoints • ${journey.duration}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+        }
+
+        const app = new App();
+    </script>
+</body>
+</html>
