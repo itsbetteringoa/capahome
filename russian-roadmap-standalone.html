@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Russian B1 Learning Roadmap</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React and ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel Standalone for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+        
+        // Lucide icons as inline SVG components
+        const ChevronDown = ({ className, style }) => (
+            <svg className={className} style={style} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        );
+        
+        const ChevronUp = ({ className, style }) => (
+            <svg className={className} style={style} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+        );
+        
+        const BookOpen = ({ className, style }) => (
+            <svg className={className} style={style} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+            </svg>
+        );
+        
+        const MessageCircle = ({ className, style }) => (
+            <svg className={className} style={style} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+            </svg>
+        );
+        
+        const Brain = ({ className, style }) => (
+            <svg className={className} style={style} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"></path>
+                <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"></path>
+            </svg>
+        );
+        
+        const Target = ({ className, style }) => (
+            <svg className={className} style={style} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <circle cx="12" cy="12" r="6"></circle>
+                <circle cx="12" cy="12" r="2"></circle>
+            </svg>
+        );
+        
+        const Clock = ({ className, style }) => (
+            <svg className={className} style={style} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+        );
+        
+        const Award = ({ className, style }) => (
+            <svg className={className} style={style} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="8" r="7"></circle>
+                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+            </svg>
+        );
+        
+        const Zap = ({ className, style }) => (
+            <svg className={className} style={style} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+        );
+
+        function RussianLearningRoadmap() {
+          const [expandedStage, setExpandedStage] = useState(0);
+          const [selectedPillar, setSelectedPillar] = useState(null);
+
+          const stages = [
+            {
+              level: "A1",
+              title: "Foundation",
+              subtitle: "First Steps",
+              duration: "Months 1-3",
+              hours: "150-200 hours",
+              color: "#C41E3A",
+              bgGradient: "from-red-900 to-red-700",
+              vocabulary: "300-500 words",
+              goals: [
+                "Master Cyrillic alphabet completely",
+                "Conduct basic 5-minute conversations",
+                "Order food, ask directions, introduce yourself",
+                "Understand present tense and 2 basic cases"
+              ],
+              milestones: [
+                { icon: "🔤", text: "Read Cyrillic fluently", week: "Week 4" },
+                { icon: "👋", text: "First conversation in Russian", week: "Week 8" },
+                { icon: "📖", text: "500 words mastered", week: "Week 12" }
+              ],
+              anki: "Russian Core 100 + A1 Sentences",
+              textbook: "Chapters 1-6",
+              pillars: {
+                vocabulary: "40% - Basic survival words, numbers, greetings",
+                speaking: "35% - Pronunciation drills, simple Q&A",
+                grammar: "25% - Present tense, Nominative/Accusative"
+              }
+            },
+            {
+              level: "A2",
+              title: "Elementary Progress",
+              subtitle: "Building Confidence",
+              duration: "Months 4-6",
+              hours: "200-250 hours",
+              color: "#0039A6",
+              bgGradient: "from-blue-900 to-blue-700",
+              vocabulary: "700-1000 words",
+              goals: [
+                "Tell simple stories about past events",
+                "Express basic opinions and preferences",
+                "Handle common daily situations",
+                "Understand past tense and 4 cases"
+              ],
+              milestones: [
+                { icon: "📚", text: "1000 words active vocabulary", week: "Week 24" },
+                { icon: "✍️", text: "Write short paragraphs", week: "Week 20" },
+                { icon: "🎧", text: "Understand slow native speech", week: "Week 24" }
+              ],
+              anki: "Russian 3000 Most Frequent (words 300-1000)",
+              textbook: "Chapters 7-12",
+              pillars: {
+                vocabulary: "40% - Common verbs, daily life vocabulary",
+                speaking: "35% - Role-plays, storytelling in past tense",
+                grammar: "25% - Past tense, Genitive, Prepositional cases"
+              }
+            },
+            {
+              level: "A2+",
+              title: "Pre-Intermediate",
+              subtitle: "Expanding Horizons",
+              duration: "Months 7-10",
+              hours: "250-300 hours",
+              color: "#6B4423",
+              bgGradient: "from-amber-900 to-amber-700",
+              vocabulary: "1200-1500 words",
+              goals: [
+                "Navigate most everyday situations independently",
+                "Understand main ideas of TV shows (simple)",
+                "Read adapted texts with dictionary",
+                "Master all 6 cases and basic verb aspects"
+              ],
+              milestones: [
+                { icon: "🎯", text: "1500 words vocabulary", week: "Week 40" },
+                { icon: "🎬", text: "Watch Russian content with subtitles", week: "Week 36" },
+                { icon: "💬", text: "30-min conversation milestone", week: "Week 40" }
+              ],
+              anki: "Russian Core 5000 (words 1000-1500)",
+              textbook: "Complete A2 book + B1 materials",
+              pillars: {
+                vocabulary: "35% - Abstract concepts, topic-specific words",
+                speaking: "40% - Extended conversations, debates",
+                grammar: "25% - All 6 cases, verb aspects, future tense"
+              }
+            },
+            {
+              level: "B1",
+              title: "Intermediate",
+              subtitle: "Immigration Ready",
+              duration: "Months 11-16",
+              hours: "300-400 hours",
+              color: "#2E8B57",
+              bgGradient: "from-emerald-900 to-emerald-700",
+              vocabulary: "2000-2500 words",
+              goals: [
+                "Express opinions on complex topics",
+                "Understand native speech at normal speed",
+                "Read news articles and simple literature",
+                "PASS TORFL-I (B1) EXAM ✅"
+              ],
+              milestones: [
+                { icon: "🎓", text: "2500 words active vocabulary", week: "Week 60" },
+                { icon: "📰", text: "Read Russian news daily", week: "Week 52" },
+                { icon: "🏆", text: "PASS B1 EXAM", week: "Week 64-68" }
+              ],
+              anki: "Russian Core 5000 (words 1500-2500) + Phrases",
+              textbook: "B1 materials + TORFL practice tests",
+              pillars: {
+                vocabulary: "30% - Advanced vocabulary, idioms",
+                speaking: "45% - Fluency practice, presentations",
+                grammar: "25% - Complex sentences, nuanced aspects"
+              }
+            }
+          ];
+
+          const pillars = [
+            {
+              id: "vocabulary",
+              name: "Vocabulary",
+              icon: BookOpen,
+              color: "#C41E3A",
+              description: "Building your word bank through Anki SRS",
+              dailyTime: "20-30 min",
+              tools: ["Anki flashcards", "Spaced repetition", "Context sentences", "Native audio"]
+            },
+            {
+              id: "speaking",
+              name: "Speaking",
+              icon: MessageCircle,
+              color: "#0039A6",
+              description: "Active output practice and pronunciation",
+              dailyTime: "24 min/class",
+              tools: ["Role-plays", "Dialogues", "Storytelling", "Free conversation"]
+            },
+            {
+              id: "grammar",
+              name: "Grammar",
+              icon: Brain,
+              color: "#2E8B57",
+              description: "Understanding language structure",
+              dailyTime: "9 min/class",
+              tools: ["Pattern recognition", "Inductive learning", "Drills", "Applied practice"]
+            }
+          ];
+
+          return (
+            <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white p-4 md:p-8 overflow-x-hidden">
+              <style>{`
+                @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;600;700&display=swap');
+                
+                .title-font { font-family: 'Bebas Neue', sans-serif; }
+                .body-font { font-family: 'Outfit', sans-serif; }
+                
+                @keyframes fadeInUp {
+                  from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                  }
+                  to {
+                    opacity: 1;
+                    transform: translateY(0);
+                  }
+                }
+                
+                .animate-fadeInUp {
+                  animation: fadeInUp 0.6s ease-out forwards;
+                }
+                
+                .geometric-bg {
+                  background-image: 
+                    linear-gradient(45deg, rgba(196, 30, 58, 0.03) 25%, transparent 25%),
+                    linear-gradient(-45deg, rgba(0, 57, 166, 0.03) 25%, transparent 25%),
+                    linear-gradient(45deg, transparent 75%, rgba(46, 139, 87, 0.03) 75%),
+                    linear-gradient(-45deg, transparent 75%, rgba(196, 30, 58, 0.03) 75%);
+                  background-size: 60px 60px;
+                  background-position: 0 0, 0 30px, 30px -30px, -30px 0px;
+                }
+                
+                .stage-card {
+                  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                }
+                
+                .stage-card:hover {
+                  transform: translateX(8px) scale(1.02);
+                }
+                
+                .pillar-card {
+                  transition: all 0.3s ease;
+                }
+                
+                .pillar-card:hover {
+                  transform: translateY(-4px);
+                }
+              `}</style>
+
+              {/* Header */}
+              <div className="max-w-7xl mx-auto mb-12 animate-fadeInUp">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-red-600/20 via-blue-600/20 to-emerald-600/20 blur-3xl"></div>
+                  <div className="relative">
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="w-16 h-16 bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center transform -rotate-12 shadow-2xl">
+                        <span className="text-3xl">🇷🇺</span>
+                      </div>
+                      <div>
+                        <h1 className="text-6xl md:text-8xl font-bold title-font tracking-tight bg-gradient-to-r from-red-500 via-blue-500 to-emerald-500 bg-clip-text text-transparent">
+                          RUSSIAN B1
+                        </h1>
+                        <p className="text-xl md:text-2xl text-slate-400 body-font font-light tracking-wide">
+                          Your Journey to Immigration
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-8">
+                      <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur border border-slate-700/50 rounded-lg p-4">
+                        <Clock className="w-6 h-6 text-red-400 mb-2" />
+                        <div className="text-3xl font-bold title-font text-red-400">12-16</div>
+                        <div className="text-sm text-slate-400 body-font">Months to B1</div>
+                      </div>
+                      <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur border border-slate-700/50 rounded-lg p-4">
+                        <Target className="w-6 h-6 text-blue-400 mb-2" />
+                        <div className="text-3xl font-bold title-font text-blue-400">2500</div>
+                        <div className="text-sm text-slate-400 body-font">Target Vocabulary</div>
+                      </div>
+                      <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur border border-slate-700/50 rounded-lg p-4">
+                        <Zap className="w-6 h-6 text-emerald-400 mb-2" />
+                        <div className="text-3xl font-bold title-font text-emerald-400">5-7</div>
+                        <div className="text-sm text-slate-400 body-font">Hours per Week</div>
+                      </div>
+                      <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur border border-slate-700/50 rounded-lg p-4">
+                        <Award className="w-6 h-6 text-amber-400 mb-2" />
+                        <div className="text-3xl font-bold title-font text-amber-400">TORFL-I</div>
+                        <div className="text-sm text-slate-400 body-font">Final Certification</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Three Pillars */}
+              <div className="max-w-7xl mx-auto mb-16">
+                <h2 className="text-4xl font-bold title-font mb-6 text-center">THE THREE PILLARS</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {pillars.map((pillar, idx) => {
+                    const Icon = pillar.icon;
+                    return (
+                      <div
+                        key={pillar.id}
+                        className="pillar-card bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur border border-slate-700/50 rounded-2xl p-6 cursor-pointer"
+                        style={{ 
+                          animationDelay: `${idx * 0.1}s`,
+                          borderTop: `3px solid ${pillar.color}`
+                        }}
+                        onClick={() => setSelectedPillar(selectedPillar === pillar.id ? null : pillar.id)}
+                      >
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="w-14 h-14 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${pillar.color}20` }}>
+                            <Icon className="w-7 h-7" style={{ color: pillar.color }} />
+                          </div>
+                          <div className="text-right">
+                            <div className="text-2xl font-bold title-font" style={{ color: pillar.color }}>
+                              {pillar.dailyTime}
+                            </div>
+                            <div className="text-xs text-slate-500 body-font">daily</div>
+                          </div>
+                        </div>
+                        
+                        <h3 className="text-2xl font-bold title-font mb-2">{pillar.name}</h3>
+                        <p className="text-slate-400 body-font text-sm mb-4">{pillar.description}</p>
+                        
+                        {selectedPillar === pillar.id && (
+                          <div className="mt-4 pt-4 border-t border-slate-700/50 space-y-2">
+                            {pillar.tools.map((tool, i) => (
+                              <div key={i} className="flex items-center gap-2 text-sm text-slate-300 body-font">
+                                <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: pillar.color }}></div>
+                                {tool}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Learning Stages */}
+              <div className="max-w-7xl mx-auto">
+                <h2 className="text-4xl font-bold title-font mb-8 text-center">LEARNING ROADMAP</h2>
+                
+                <div className="space-y-6">
+                  {stages.map((stage, index) => (
+                    <div
+                      key={stage.level}
+                      className="stage-card relative"
+                      style={{ animationDelay: `${index * 0.15}s` }}
+                    >
+                      {index < stages.length - 1 && (
+                        <div 
+                          className="absolute left-8 top-full h-6 w-1 bg-gradient-to-b from-current to-transparent"
+                          style={{ color: stage.color, opacity: 0.3 }}
+                        ></div>
+                      )}
+                      
+                      <div
+                        className="bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur border-2 rounded-2xl overflow-hidden cursor-pointer hover:shadow-2xl"
+                        style={{ borderColor: stage.color }}
+                        onClick={() => setExpandedStage(expandedStage === index ? null : index)}
+                      >
+                        <div className={`bg-gradient-to-r ${stage.bgGradient} p-6 relative overflow-hidden`}>
+                          <div className="absolute inset-0 geometric-bg opacity-10"></div>
+                          <div className="relative flex items-center justify-between">
+                            <div className="flex items-center gap-6">
+                              <div className="w-20 h-20 bg-white/10 backdrop-blur rounded-xl flex items-center justify-center border-2 border-white/20">
+                                <span className="text-4xl font-bold title-font">{stage.level}</span>
+                              </div>
+                              <div>
+                                <h3 className="text-3xl font-bold title-font mb-1">{stage.title}</h3>
+                                <p className="text-lg text-white/80 body-font">{stage.subtitle}</p>
+                              </div>
+                            </div>
+                            
+                            <div className="flex items-center gap-6">
+                              <div className="text-right hidden md:block">
+                                <div className="text-sm text-white/70 body-font">Duration</div>
+                                <div className="text-xl font-bold title-font">{stage.duration}</div>
+                                <div className="text-xs text-white/60 body-font mt-1">{stage.hours}</div>
+                              </div>
+                              <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
+                                {expandedStage === index ? <ChevronUp /> : <ChevronDown />}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {expandedStage === index && (
+                          <div className="p-6 space-y-6 animate-fadeInUp">
+                            <div>
+                              <h4 className="text-xl font-bold title-font mb-3 flex items-center gap-2">
+                                <Target className="w-5 h-5" style={{ color: stage.color }} />
+                                Learning Goals
+                              </h4>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                {stage.goals.map((goal, i) => (
+                                  <div key={i} className="flex items-start gap-3 bg-slate-800/40 rounded-lg p-3 body-font">
+                                    <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" 
+                                         style={{ backgroundColor: `${stage.color}20`, color: stage.color }}>
+                                      {i + 1}
+                                    </div>
+                                    <span className="text-sm text-slate-300">{goal}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+
+                            <div>
+                              <h4 className="text-xl font-bold title-font mb-3 flex items-center gap-2">
+                                <Award className="w-5 h-5" style={{ color: stage.color }} />
+                                Key Milestones
+                              </h4>
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                {stage.milestones.map((milestone, i) => (
+                                  <div key={i} className="bg-gradient-to-br from-slate-800/60 to-slate-900/60 rounded-xl p-4 border border-slate-700/50">
+                                    <div className="text-3xl mb-2">{milestone.icon}</div>
+                                    <div className="text-sm font-semibold body-font text-slate-200 mb-1">{milestone.text}</div>
+                                    <div className="text-xs body-font" style={{ color: stage.color }}>{milestone.week}</div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+
+                            <div>
+                              <h4 className="text-xl font-bold title-font mb-3 flex items-center gap-2">
+                                <Brain className="w-5 h-5" style={{ color: stage.color }} />
+                                Focus Distribution
+                              </h4>
+                              <div className="space-y-3">
+                                {Object.entries(stage.pillars).map(([key, value]) => {
+                                  const pillar = pillars.find(p => p.id === key);
+                                  if (!pillar) return null;
+                                  const percentage = parseInt(value);
+                                  return (
+                                    <div key={key} className="space-y-1">
+                                      <div className="flex justify-between items-center text-sm body-font">
+                                        <span className="font-semibold">{pillar.name}</span>
+                                        <span className="text-slate-400">{value}</span>
+                                      </div>
+                                      <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                                        <div
+                                          className="h-full rounded-full transition-all duration-1000"
+                                          style={{
+                                            width: `${percentage}%`,
+                                            backgroundColor: pillar.color
+                                          }}
+                                        ></div>
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-700/50">
+                                <div className="text-xs text-slate-500 body-font mb-1">VOCABULARY TARGET</div>
+                                <div className="text-2xl font-bold title-font mb-2" style={{ color: stage.color }}>
+                                  {stage.vocabulary}
+                                </div>
+                                <div className="text-sm text-slate-400 body-font">
+                                  <div className="font-semibold mb-1">Anki Deck:</div>
+                                  <div className="text-xs">{stage.anki}</div>
+                                </div>
+                              </div>
+                              
+                              <div className="bg-slate-800/40 rounded-lg p-4 border border-slate-700/50">
+                                <div className="text-xs text-slate-500 body-font mb-1">TEXTBOOK PROGRESS</div>
+                                <div className="text-2xl font-bold title-font mb-2" style={{ color: stage.color }}>
+                                  {stage.textbook}
+                                </div>
+                                <div className="text-sm text-slate-400 body-font">
+                                  Complete structured curriculum with audio & exercises
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="max-w-7xl mx-auto mt-16 mb-8">
+                <div className="bg-gradient-to-r from-red-900/20 via-blue-900/20 to-emerald-900/20 backdrop-blur border border-slate-700/50 rounded-2xl p-8 text-center">
+                  <h3 className="text-3xl font-bold title-font mb-3">Ready to Begin?</h3>
+                  <p className="text-slate-400 body-font mb-6 max-w-2xl mx-auto">
+                    Your journey to Russian proficiency starts with a single step. With dedication and the right strategy, 
+                    you'll be speaking Russian in 12-16 months. Welcome aboard! 🚀
+                  </p>
+                  <div className="flex flex-wrap justify-center gap-4">
+                    <div className="bg-red-600 hover:bg-red-700 transition px-6 py-3 rounded-lg font-bold title-font cursor-pointer">
+                      START WEEK 1
+                    </div>
+                    <div className="bg-slate-700 hover:bg-slate-600 transition px-6 py-3 rounded-lg font-bold title-font cursor-pointer">
+                      DOWNLOAD ANKI DECKS
+                    </div>
+                    <div className="bg-slate-700 hover:bg-slate-600 transition px-6 py-3 rounded-lg font-bold title-font cursor-pointer">
+                      VIEW FULL CURRICULUM
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        // Render the app
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<RussianLearningRoadmap />);
+    </script>
+</body>
+</html>
