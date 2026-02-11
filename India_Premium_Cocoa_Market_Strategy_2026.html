@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Стратегический план: Премиальная какао масса на рынке Индии</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+  
+  :root {
+    --cocoa-900: #1a0a00;
+    --cocoa-800: #3d1c02;
+    --cocoa-700: #5c2d0e;
+    --cocoa-600: #7a3e1a;
+    --cocoa-500: #8b4513;
+    --cocoa-400: #a0522d;
+    --cocoa-300: #c4784a;
+    --cocoa-200: #d4a574;
+    --cocoa-100: #f0dcc8;
+    --cocoa-50: #faf5ef;
+    --gold-500: #c49a2a;
+    --gold-400: #d4aa3a;
+    --gold-300: #e4c060;
+    --green-600: #2d6a4f;
+    --green-500: #40916c;
+    --blue-600: #1e3a5f;
+    --red-500: #c0392b;
+    --text-primary: #1a1a2e;
+    --text-secondary: #4a4a6a;
+    --bg-light: #fefdfb;
+    --border-light: #e8e0d8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg-light);
+    color: var(--text-primary);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  .cover {
+    background: linear-gradient(135deg, var(--cocoa-900) 0%, var(--cocoa-700) 40%, var(--cocoa-500) 100%);
+    color: white;
+    padding: 80px 60px;
+    min-height: 50vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -20%;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(196,154,42,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .cover .label {
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gold-400);
+    margin-bottom: 24px;
+  }
+  .cover h1 {
+    font-size: 42px;
+    font-weight: 800;
+    line-height: 1.15;
+    max-width: 700px;
+    margin-bottom: 20px;
+  }
+  .cover .subtitle {
+    font-size: 18px;
+    font-weight: 300;
+    opacity: 0.85;
+    max-width: 600px;
+    margin-bottom: 40px;
+  }
+  .cover .meta {
+    font-size: 13px;
+    opacity: 0.6;
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 60px 40px;
+  }
+
+  .toc {
+    background: white;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 40px;
+    margin-bottom: 50px;
+  }
+  .toc h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: var(--cocoa-700);
+  }
+  .toc ol {
+    list-style: none;
+    counter-reset: section;
+  }
+  .toc ol li {
+    counter-increment: section;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 14px;
+  }
+  .toc ol li::before {
+    content: counter(section) ".";
+    font-weight: 700;
+    color: var(--cocoa-500);
+    margin-right: 12px;
+  }
+
+  .section {
+    margin-bottom: 50px;
+  }
+  .section-number {
+    display: inline-block;
+    background: var(--cocoa-500);
+    color: white;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 32px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-right: 12px;
+    vertical-align: middle;
+  }
+  h2.section-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--cocoa-800);
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid var(--cocoa-200);
+  }
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--cocoa-700);
+    margin: 28px 0 14px;
+  }
+  h4 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--cocoa-600);
+    margin: 20px 0 10px;
+  }
+  p { margin-bottom: 14px; }
+
+  .highlight-box {
+    background: linear-gradient(135deg, var(--cocoa-50), white);
+    border-left: 4px solid var(--gold-500);
+    padding: 20px 24px;
+    border-radius: 0 8px 8px 0;
+    margin: 20px 0;
+  }
+  .highlight-box .big-number {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--cocoa-700);
+    line-height: 1;
+  }
+  .highlight-box .label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .kpi-card {
+    background: white;
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+  .kpi-card .value {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--cocoa-700);
+  }
+  .kpi-card .desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+  .kpi-card .trend {
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 6px;
+  }
+  .kpi-card .trend.up { color: var(--green-600); }
+  .kpi-card .trend.down { color: var(--red-500); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 13.5px;
+  }
+  thead {
+    background: var(--cocoa-700);
+    color: white;
+  }
+  thead th {
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  tbody tr {
+    border-bottom: 1px solid var(--border-light);
+  }
+  tbody tr:nth-child(even) {
+    background: var(--cocoa-50);
+  }
+  tbody td {
+    padding: 10px 14px;
+    vertical-align: top;
+  }
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .tag-high { background: #d4edda; color: #155724; }
+  .tag-medium { background: #fff3cd; color: #856404; }
+  .tag-low { background: #f8d7da; color: #721c24; }
+  .tag-priority { background: var(--cocoa-100); color: var(--cocoa-800); }
+
+  .chart-container {
+    background: white;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+  }
+  .chart-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--cocoa-800);
+    margin-bottom: 16px;
+  }
+  canvas { max-height: 400px; }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 24px 0;
+  }
+
+  .strategy-card {
+    background: white;
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 24px;
+    margin: 16px 0;
+    position: relative;
+  }
+  .strategy-card .phase {
+    position: absolute;
+    top: -10px; left: 20px;
+    background: var(--cocoa-500);
+    color: white;
+    padding: 2px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .strategy-card h4 {
+    margin-top: 8px;
+    margin-bottom: 10px;
+  }
+
+  .timeline {
+    position: relative;
+    padding-left: 40px;
+    margin: 30px 0;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 14px; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--cocoa-200);
+    border-radius: 2px;
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 28px;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -32px; top: 6px;
+    width: 12px; height: 12px;
+    background: var(--cocoa-500);
+    border-radius: 50%;
+    border: 3px solid var(--cocoa-100);
+  }
+  .timeline-item .period {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--gold-500);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .timeline-item h4 { margin-top: 4px; }
+
+  .swot-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .swot-card {
+    padding: 20px;
+    border-radius: 10px;
+  }
+  .swot-card.strengths { background: #d4edda; border: 1px solid #b8dabd; }
+  .swot-card.weaknesses { background: #f8d7da; border: 1px solid #f0b8be; }
+  .swot-card.opportunities { background: #cce5ff; border: 1px solid #a8d4ff; }
+  .swot-card.threats { background: #fff3cd; border: 1px solid #f0e4a8; }
+  .swot-card h4 { margin-top: 0; font-size: 14px; }
+  .swot-card ul {
+    margin: 10px 0 0 18px;
+    font-size: 13px;
+  }
+  .swot-card li { margin-bottom: 6px; }
+
+  .footer-note {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-secondary);
+    padding: 40px 0;
+    border-top: 1px solid var(--border-light);
+    margin-top: 60px;
+  }
+
+  @media print {
+    .cover { min-height: auto; padding: 40px; }
+    .container { padding: 20px; }
+    .chart-container { page-break-inside: avoid; }
+    table { page-break-inside: avoid; }
+  }
+  @media (max-width: 768px) {
+    .two-col, .swot-grid { grid-template-columns: 1fr; }
+    .cover h1 { font-size: 28px; }
+    .container { padding: 30px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="label">Маркетинговый стратегический план</div>
+  <h1>Выход на рынок премиальных какао-продуктов Индии</h1>
+  <div class="subtitle">Реализация 500+ кг высококачественной какао массы (100%, 70% и другие) как сырьё для B2B-сегмента: артизанальные шоколатье, HoReCa, кондитерские и пекарни</div>
+  <div class="meta">Аналитический отчёт &mdash; Февраль 2026 &nbsp;|&nbsp; Подготовлено на основе рыночных данных 2024–2026</div>
+</div>
+
+<div class="container">
+
+<!-- TOC -->
+<div class="toc">
+  <h2>Содержание</h2>
+  <ol>
+    <li>Обзор рынка шоколада и какао Индии</li>
+    <li>Анализ премиального и артизанального сегмента</li>
+    <li>Целевые ниши и сегменты B2B</li>
+    <li>Конкурентный ландшафт: ключевые игроки</li>
+    <li>Ценообразование и ценовые диапазоны</li>
+    <li>SWOT-анализ позиционирования</li>
+    <li>Стратегический маркетинговый план</li>
+    <li>Дорожная карта (Road Map) выхода на рынок</li>
+    <li>Финансовая модель и прогноз</li>
+    <li>Рекомендации и следующие шаги</li>
+  </ol>
+</div>
+
+<!-- SECTION 1 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">1</span> Обзор рынка шоколада и какао Индии</h2>
+  
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="value">$2.9B</div>
+      <div class="desc">Рынок шоколада Индии, 2024</div>
+      <div class="trend up">↑ CAGR 7.3% → $5.5B к 2033</div>
+    </div>
+    <div class="kpi-card">
+      <div class="value">$313M</div>
+      <div class="desc">Премиальный сегмент, 2024</div>
+      <div class="trend up">↑ CAGR 8.9% → $481M к 2029</div>
+    </div>
+    <div class="kpi-card">
+      <div class="value">$220M</div>
+      <div class="desc">Артизанальный шоколад, 2024</div>
+      <div class="trend up">↑ CAGR 12% → $620M к 2033</div>
+    </div>
+    <div class="kpi-card">
+      <div class="value">$1.69B</div>
+      <div class="desc">Индустриальный шоколад, 2024</div>
+      <div class="trend up">↑ CAGR 11.6% → $4.6B к 2034</div>
+    </div>
+  </div>
+
+  <p>Индийский рынок шоколада переживает структурную трансформацию. Рост среднего класса, урбанизация и влияние западной культуры потребления формируют устойчивый спрос на премиальные продукты. Количество малых bean-to-bar производителей выросло на 40% в 2024 году. Импорт какао ликёра (массы) в Индию увеличился на 18% в 2024 году, отражая растущий спрос на качественное сырьё.</p>
+
+  <div class="chart-container">
+    <div class="chart-title">Динамика роста ключевых сегментов рынка, млн USD</div>
+    <canvas id="marketGrowthChart"></canvas>
+  </div>
+
+  <h3>Ключевые драйверы рынка</h3>
+  <p><strong>Премиумизация:</strong> Потребители переходят от массового шоколада к крафтовым и single-origin продуктам. 35% городских покупателей приобретали артизанальный шоколад за последние 6 месяцев. Рынок какао-ингредиентов Индии оценивается в $871 млн (2024) с прогнозом $1,245 млн к 2035.</p>
+  <p><strong>Здоровье и wellness:</strong> Продажи тёмного шоколада с высоким содержанием какао растут быстрее всех сегментов. Рост продаж безсахарного шоколада — 45% в 2024 г. Функциональный шоколад с пробиотиками, адаптогенами и суперфудами — 20+ новых продуктов за год.</p>
+  <p><strong>HoReCa и институциональный сегмент:</strong> Самый быстрорастущий канал дистрибуции — премиальные кафе, отели и рестораны активно используют couverture и bulk-шоколад.</p>
+</div>
+
+<!-- SECTION 2 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">2</span> Анализ премиального и артизанального сегмента</h2>
+
+  <div class="two-col">
+    <div class="chart-container">
+      <div class="chart-title">Структура рынка по типу шоколада</div>
+      <canvas id="typeChart"></canvas>
+    </div>
+    <div class="chart-container">
+      <div class="chart-title">Каналы дистрибуции</div>
+      <canvas id="channelChart"></canvas>
+    </div>
+  </div>
+
+  <h3>Профиль премиального покупателя B2B в Индии</h3>
+  <p>Артизанальные шоколатье Индии работают преимущественно в Южной Индии (45% рынка — Бангалор, Ченнаи, Хайдарабад), используют какао из Кералы, Карнатаки и Тамил Наду. Они ищут уникальный origin story, прозрачную цепочку поставок и стабильное качество ферментации. Многие готовы платить премию за single-origin продукт с историей фермеров.</p>
+
+  <p>Рынок artisan chocolate растёт на 12% в год — это самый быстрорастущий сегмент всего шоколадного рынка Индии. Salon Du Chocolat дебютирует в Мумбаи в январе 2026, что подтверждает зрелость рынка для международных поставщиков.</p>
+
+  <div class="chart-container">
+    <div class="chart-title">Региональное распределение потребления шоколада в Индии</div>
+    <canvas id="regionChart"></canvas>
+  </div>
+</div>
+
+<!-- SECTION 3 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">3</span> Целевые ниши и сегменты B2B</h2>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Сегмент</th>
+        <th>Описание</th>
+        <th>Объём закупок</th>
+        <th>Ценовой диапазон (₹/кг)</th>
+        <th>Потенциал</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Bean-to-bar шоколатье</strong></td>
+        <td>Mason & Co, Naviluna, Pascati, Manam, Soklet, Subko, Colocal, Kocoatrait и др. (40+ брендов)</td>
+        <td>50–500 кг/мес</td>
+        <td>₹800–1,800</td>
+        <td><span class="tag tag-high">Высокий</span></td>
+      </tr>
+      <tr>
+        <td><strong>Премиальные кондитерские / Patisserie</strong></td>
+        <td>SMOOR, Fantasie, Le15, Theobroma, Lavonne — используют couverture</td>
+        <td>100–1,000 кг/мес</td>
+        <td>₹600–1,400</td>
+        <td><span class="tag tag-high">Высокий</span></td>
+      </tr>
+      <tr>
+        <td><strong>HoReCa (5★ отели, рестораны)</strong></td>
+        <td>Taj, Oberoi, ITC Hotels, Marriott, Leela — десертные программы, in-house chocolatier</td>
+        <td>200–2,000 кг/мес</td>
+        <td>₹500–1,200</td>
+        <td><span class="tag tag-high">Высокий</span></td>
+      </tr>
+      <tr>
+        <td><strong>Craft кафе и specialty coffee</strong></td>
+        <td>Third Wave, Blue Tokai, Subko Coffee — шоколадные напитки, десерты из какао</td>
+        <td>20–200 кг/мес</td>
+        <td>₹700–1,500</td>
+        <td><span class="tag tag-medium">Средний</span></td>
+      </tr>
+      <tr>
+        <td><strong>D2C бренды здорового питания</strong></td>
+        <td>The Whole Truth, Yoga Bar, True Elements — high-cocoa продукты, protein bars</td>
+        <td>100–500 кг/мес</td>
+        <td>₹500–1,000</td>
+        <td><span class="tag tag-medium">Средний</span></td>
+      </tr>
+      <tr>
+        <td><strong>Премиальные пекарни</strong></td>
+        <td>Индустриальные и сетевые пекарни, использующие couverture вместо compound</td>
+        <td>500–5,000 кг/мес</td>
+        <td>₹400–900</td>
+        <td><span class="tag tag-medium">Средний</span></td>
+      </tr>
+      <tr>
+        <td><strong>Производители шоколадных конфет и подарочных наборов</strong></td>
+        <td>Корпоративные подарки, фестивальный сезон (Diwali, Raksha Bandhan)</td>
+        <td>300–3,000 кг/мес</td>
+        <td>₹500–1,200</td>
+        <td><span class="tag tag-high">Высокий</span></td>
+      </tr>
+      <tr>
+        <td><strong>Айюрведические / функциональные бренды</strong></td>
+        <td>Шоколад с куркумой, ашвагандой, суперфудами — быстрорастущий сегмент</td>
+        <td>50–300 кг/мес</td>
+        <td>₹700–1,600</td>
+        <td><span class="tag tag-medium">Средний</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="chart-container">
+    <div class="chart-title">Оценка потенциала сегментов: объём × маржинальность</div>
+    <canvas id="bubbleChart"></canvas>
+  </div>
+</div>
+
+<!-- SECTION 4 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">4</span> Конкурентный ландшафт</h2>
+
+  <h3>Ключевые поставщики какао-сырья на рынке Индии</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Поставщик</th>
+        <th>Тип</th>
+        <th>Продукция</th>
+        <th>Позиционирование</th>
+        <th>Цена (₹/кг)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Barry Callebaut</strong></td>
+        <td>Глобальный</td>
+        <td>Couverture, какао масса, порошок, масло</td>
+        <td>Индустриальный стандарт, NatureFresh для Индии</td>
+        <td>₹400–900</td>
+      </tr>
+      <tr>
+        <td><strong>Cargill / Aalst</strong></td>
+        <td>Глобальный</td>
+        <td>Cocoa liquor, couverture, compound</td>
+        <td>Масштаб, стабильность, CocoaWise™</td>
+        <td>₹350–800</td>
+      </tr>
+      <tr>
+        <td><strong>Puratos (Belcolade)</strong></td>
+        <td>Глобальный</td>
+        <td>Премиальный couverture</td>
+        <td>Для пекарен и HoReCa</td>
+        <td>₹500–1,100</td>
+      </tr>
+      <tr>
+        <td><strong>CocoaCraft (India)</strong></td>
+        <td>Локальный</td>
+        <td>Couverture 52–70%, белый, молочный</td>
+        <td>Single-origin Idukki, Kerala</td>
+        <td>₹480–700</td>
+      </tr>
+      <tr>
+        <td><strong>India Cocoa / DP Cocoa</strong></td>
+        <td>Локальный</td>
+        <td>Какао масса, порошок, масло</td>
+        <td>Объём, доступная цена</td>
+        <td>₹300–600</td>
+      </tr>
+      <tr>
+        <td><strong>Jindal Cocoa / CAMPCO</strong></td>
+        <td>Локальный</td>
+        <td>Какао бобы, масса, порошок</td>
+        <td>Кооперативная модель, сырьё</td>
+        <td>₹250–500</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--cocoa-500)">→ Ваша компания</strong></td>
+        <td><strong>Международный</strong></td>
+        <td><strong>100% какао масса, 70%+ шоколад</strong></td>
+        <td><strong>Single-origin, история фермеров, экспертность</strong></td>
+        <td><strong>₹700–1,800</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="highlight-box">
+    <p><strong>Ваше конкурентное преимущество:</strong> На рынке Индии наблюдается дефицит поставщиков какао массы с прозрачной историей origin + фермеров. Большинство глобальных игроков (Barry Callebaut, Cargill) ориентированы на масштаб и не предоставляют deep storytelling. Локальные индийские производители ограничены origin из Южной Индии. Ваш продукт закрывает нишу «международного single-origin с историей» — именно то, что ищут 40+ артизанальных брендов.</p>
+  </div>
+</div>
+
+<!-- SECTION 5 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">5</span> Ценообразование и ценовые диапазоны</h2>
+
+  <div class="chart-container">
+    <div class="chart-title">Ценовые диапазоны по продуктам (₹/кг), B2B Индия</div>
+    <canvas id="priceChart"></canvas>
+  </div>
+
+  <h3>Рекомендуемая ценовая стратегия</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Продукт</th>
+        <th>Себестоимость (ориент.)</th>
+        <th>Рекомендуемая B2B цена</th>
+        <th>Позиционирование</th>
+        <th>Валовая маржа</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>100% какао масса (Single Origin)</strong></td>
+        <td>$6–9/кг</td>
+        <td>₹900–1,500/кг ($10.5–17.5)</td>
+        <td>Premium single-origin для артизанов</td>
+        <td>~40–50%</td>
+      </tr>
+      <tr>
+        <td><strong>100% какао масса (Blend)</strong></td>
+        <td>$5–7/кг</td>
+        <td>₹700–1,000/кг ($8–12)</td>
+        <td>Профессиональный grade для HoReCa</td>
+        <td>~35–45%</td>
+      </tr>
+      <tr>
+        <td><strong>70% тёмный шоколад (couverture)</strong></td>
+        <td>$7–10/кг</td>
+        <td>₹1,000–1,600/кг ($12–19)</td>
+        <td>Ready-to-use для кондитеров</td>
+        <td>~35–45%</td>
+      </tr>
+      <tr>
+        <td><strong>85%+ Extra Dark</strong></td>
+        <td>$8–11/кг</td>
+        <td>₹1,200–1,800/кг ($14–21)</td>
+        <td>Ультра-премиум, functional, wellness</td>
+        <td>~40–50%</td>
+      </tr>
+      <tr>
+        <td><strong>Образцы / Trial Kit (1–5кг)</strong></td>
+        <td>—</td>
+        <td>₹1,500–2,500/кг</td>
+        <td>Входной продукт, знакомство</td>
+        <td>—</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="highlight-box">
+    <p><strong>Ценовой контекст:</strong> Глобальная цена какао в 2025 г. — ~$8/кг (средняя), с рекордными пиками до $10.75/кг. В Индии оптовая цена какао бобов — ~₹120/кг (локальные). Премиальный couverture от Callebaut продаётся в Индии по ₹900–1,200/кг. Ваша цена в диапазоне ₹900–1,800/кг конкурентоспособна для single-origin с историей.</p>
+  </div>
+</div>
+
+<!-- SECTION 6 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">6</span> SWOT-анализ позиционирования</h2>
+  
+  <div class="swot-grid">
+    <div class="swot-card strengths">
+      <h4>💪 СИЛЬНЫЕ СТОРОНЫ</h4>
+      <ul>
+        <li>100% какао масса + варианты — универсальность сырья</li>
+        <li>Прозрачная история фермеров и origin (уникально для Индии)</li>
+        <li>Глубокая экспертность в какао — доверие B2B</li>
+        <li>Single-origin — отвечает тренду artisanal шоколада</li>
+        <li>Гибкость по объёмам (от 500 кг) — идеально для craft-сегмента</li>
+      </ul>
+    </div>
+    <div class="swot-card weaknesses">
+      <h4>⚠️ СЛАБЫЕ СТОРОНЫ</h4>
+      <ul>
+        <li>Новый бренд на рынке Индии — нет узнаваемости</li>
+        <li>Логистика и импортные пошлины увеличивают cost</li>
+        <li>Начальный объём (500 кг) — ограничивает масштаб</li>
+        <li>Необходимость FSSAI-сертификации для импорта</li>
+        <li>Зависимость от температурного режима при транспортировке</li>
+      </ul>
+    </div>
+    <div class="swot-card opportunities">
+      <h4>🚀 ВОЗМОЖНОСТИ</h4>
+      <ul>
+        <li>Артизанальный рынок растёт на 12%/год</li>
+        <li>40+ bean-to-bar производителей ищут new origins</li>
+        <li>Salon Du Chocolat Mumbai (янв 2026) — точка входа</li>
+        <li>Сегмент wellness-шоколада с суперфудами</li>
+        <li>Корпоративные подарки — Diwali, Raksha Bandhan</li>
+        <li>E-commerce и D2C позволяют обойти традиционную дистрибуцию</li>
+      </ul>
+    </div>
+    <div class="swot-card threats">
+      <h4>🔴 УГРОЗЫ</h4>
+      <ul>
+        <li>Волатильность цен на какао (рост 2024–2025)</li>
+        <li>Сильные глобальные конкуренты (Callebaut, Cargill)</li>
+        <li>Локальные производители Kerala/Karnataka с нижней ценой</li>
+        <li>Регуляторные барьеры (FSSAI, таможня)</li>
+        <li>Климатическое влияние на цепочку поставок</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 7 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">7</span> Стратегический маркетинговый план</h2>
+
+  <h3>7.1 Позиционирование бренда</h3>
+  <div class="highlight-box">
+    <p><strong>Ключевое сообщение:</strong> «Каждый килограмм нашей какао массы — это история конкретного фермера, уникальный террор и экспертность, которая превращает ваш шоколад в произведение с характером.»</p>
+    <p style="margin-bottom:0;"><strong>Тональность:</strong> Эксперт, партнёр, рассказчик. Не просто поставщик — соавтор вашего шоколада.</p>
+  </div>
+
+  <h3>7.2 Стратегия по сегментам</h3>
+
+  <div class="strategy-card">
+    <div class="phase">Приоритет №1</div>
+    <h4>Артизанальные шоколатье (Bean-to-Bar)</h4>
+    <p><strong>Подход:</strong> Прямой outreach к 40+ брендам. Персональные sample kits с профилями вкуса и историей фермеров. QR-коды на упаковке, ведущие к фото/видео фермеров. Коллаборации на limited-edition батчи.</p>
+    <p><strong>Каналы:</strong> Instagram DM, LinkedIn, отраслевые выставки (Salon Du Chocolat Mumbai), рекомендации через coffee community (Subko, Blue Tokai).</p>
+    <p><strong>KPI:</strong> 10–15 пилотных партнёрств в первые 6 месяцев.</p>
+  </div>
+
+  <div class="strategy-card">
+    <div class="phase">Приоритет №2</div>
+    <h4>HoReCa и премиальные кондитерские</h4>
+    <p><strong>Подход:</strong> Дегустации и мастер-классы для шеф-поваров. Партнёрство с кулинарными школами (Lavonne Academy, IICA). Пробные поставки для сезонных десертных программ в 5★ отелях.</p>
+    <p><strong>Каналы:</strong> Специализированные дистрибьюторы (Simply Different, Bakindia, Raplap). Участие в food & hospitality events.</p>
+    <p><strong>KPI:</strong> 5–8 корпоративных клиентов HoReCa за 6–12 месяцев.</p>
+  </div>
+
+  <div class="strategy-card">
+    <div class="phase">Приоритет №3</div>
+    <h4>D2C и functional food бренды</h4>
+    <p><strong>Подход:</strong> B2B маркетплейсы (IndiaMART, Global Trade Plaza). White-label партнёрства с D2C брендами здорового питания. Позиционирование как «ингредиент с историей» для маркетинга конечного продукта.</p>
+    <p><strong>Каналы:</strong> B2B платформы, trade shows, partnership managers.</p>
+    <p><strong>KPI:</strong> 3–5 white-label контрактов за 12 месяцев.</p>
+  </div>
+
+  <h3>7.3 Маркетинговый инструментарий</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Инструмент</th>
+        <th>Описание</th>
+        <th>Бюджет (ориент.)</th>
+        <th>Срок</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Sample Kits</strong></td>
+        <td>Коробки по 1–3 кг с разными origin, карточки фермеров, тех.спецификации, brewing/tasting guide</td>
+        <td>$2,000–4,000</td>
+        <td>Мес. 1–2</td>
+      </tr>
+      <tr>
+        <td><strong>Landing Page (EN)</strong></td>
+        <td>Сайт с origin stories, B2B catalog, форма заказа, видео фермеров, тех.характеристики</td>
+        <td>$1,500–3,000</td>
+        <td>Мес. 1–3</td>
+      </tr>
+      <tr>
+        <td><strong>Instagram/LinkedIn</strong></td>
+        <td>Контент о процессе, фермерах, профилях вкуса. Таргетинг на индийских шоколатье и шеф-поваров</td>
+        <td>$500–1,000/мес</td>
+        <td>Постоянно</td>
+      </tr>
+      <tr>
+        <td><strong>Salon Du Chocolat Mumbai</strong></td>
+        <td>Участие в выставке (январь 2026) — стенд или co-stand с индийским партнёром</td>
+        <td>$3,000–8,000</td>
+        <td>Мес. 10–12</td>
+      </tr>
+      <tr>
+        <td><strong>Chef Collaborations</strong></td>
+        <td>Совместные рецепты, видеоконтент с индийскими шеф-кондитерами</td>
+        <td>$1,000–3,000</td>
+        <td>Мес. 3–6</td>
+      </tr>
+      <tr>
+        <td><strong>B2B маркетплейсы</strong></td>
+        <td>Листинг на IndiaMART, Global Trade Plaza, Alibaba для Indian market</td>
+        <td>$500–1,500/год</td>
+        <td>Мес. 1–2</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECTION 8 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">8</span> Дорожная карта выхода на рынок</h2>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="period">Фаза 1 — Месяцы 1–3: Подготовка</div>
+      <h4>Регуляторика и инфраструктура</h4>
+      <p>FSSAI-лицензия на импорт. Поиск логистического партнёра / холодная цепочка. Разработка B2B-каталога и sample kit. Запуск landing page. Листинг на IndiaMART и B2B платформах. Первые контакты с 20–30 артизанальными брендами.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="period">Фаза 2 — Месяцы 3–6: Пилотные продажи</div>
+      <h4>Тестирование рынка</h4>
+      <p>Отправка sample kits 30–50 потенциальным клиентам. Первые пилотные партии 50–100 кг. Сбор обратной связи. Проведение 2–3 дегустаций в Бангалоре / Мумбаи. Коллаборация с 2–3 шоколатье на limited edition.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="period">Фаза 3 — Месяцы 6–12: Масштабирование</div>
+      <h4>Рост и партнёрства</h4>
+      <p>Целевой объём продаж: 500+ кг/квартал. Контракты с 10–15 B2B клиентами. Вход в HoReCa через дистрибьютора. Участие в Salon Du Chocolat Mumbai. Расширение ассортимента (разные origins, процентности). Запуск программы «Шоколатье-амбассадор».</p>
+    </div>
+    <div class="timeline-item">
+      <div class="period">Фаза 4 — Год 2+: Укрепление</div>
+      <h4>Строительство бренда</h4>
+      <p>Целевой объём: 2,000+ кг/квартал. Собственный дистрибьютор или агент в Индии. Расширение в Дели, Хайдарабад, Пуну. Co-branding линейки с топ-шоколатье. Позиционирование как «go-to international origin supplier» для индийского craft-сегмента.</p>
+    </div>
+  </div>
+
+  <div class="chart-container">
+    <div class="chart-title">Целевая динамика продаж (кг/квартал)</div>
+    <canvas id="salesChart"></canvas>
+  </div>
+</div>
+
+<!-- SECTION 9 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">9</span> Финансовая модель и прогноз</h2>
+
+  <h3>Прогноз выручки (консервативный сценарий)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Показатель</th>
+        <th>Год 1 (Пилот)</th>
+        <th>Год 2 (Рост)</th>
+        <th>Год 3 (Масштаб)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Объём продаж (кг/год)</strong></td>
+        <td>800–1,200</td>
+        <td>3,000–5,000</td>
+        <td>8,000–15,000</td>
+      </tr>
+      <tr>
+        <td><strong>Средняя цена B2B (₹/кг)</strong></td>
+        <td>₹1,000</td>
+        <td>₹950</td>
+        <td>₹900</td>
+      </tr>
+      <tr>
+        <td><strong>Выручка (₹)</strong></td>
+        <td>₹8–12 Lakh</td>
+        <td>₹28.5–47.5 Lakh</td>
+        <td>₹72 Lakh – ₹1.35 Cr</td>
+      </tr>
+      <tr>
+        <td><strong>Выручка (USD)</strong></td>
+        <td>$9,500–14,000</td>
+        <td>$34,000–57,000</td>
+        <td>$86,000–162,000</td>
+      </tr>
+      <tr>
+        <td><strong>Количество B2B клиентов</strong></td>
+        <td>8–12</td>
+        <td>20–35</td>
+        <td>40–70</td>
+      </tr>
+      <tr>
+        <td><strong>Маркетинговые инвестиции</strong></td>
+        <td>$8,000–15,000</td>
+        <td>$10,000–20,000</td>
+        <td>$15,000–25,000</td>
+      </tr>
+      <tr>
+        <td><strong>Ожидаемая валовая маржа</strong></td>
+        <td>35–40%</td>
+        <td>38–45%</td>
+        <td>40–48%</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="chart-container">
+    <div class="chart-title">Прогноз выручки по сценариям (USD)</div>
+    <canvas id="revenueChart"></canvas>
+  </div>
+</div>
+
+<!-- SECTION 10 -->
+<div class="section">
+  <h2 class="section-title"><span class="section-number">10</span> Рекомендации и следующие шаги</h2>
+
+  <h3>Ключевые стратегические рекомендации</h3>
+
+  <div class="strategy-card">
+    <h4>1. Начните с артизанального сегмента — не с массового рынка</h4>
+    <p>Ваш продукт с историей фермеров и single-origin идеально резонирует с 40+ Indian bean-to-bar брендами. Они ценят именно то, что вы предлагаете: origin story, прозрачность, уникальный вкусовой профиль. Не конкурируйте с Callebaut на цене — выигрывайте на истории и уникальности.</p>
+  </div>
+
+  <div class="strategy-card">
+    <h4>2. Южная Индия — приоритетный регион</h4>
+    <p>45% рынка шоколада — Юг Индии. Бангалор, Ченнаи, Кочин — хабы artisan chocolate. Здесь находятся Mason & Co, Naviluna, Soklet, CocoaCraft, Paul & Mike, SMOOR. Начните с Бангалора — максимальная концентрация целевых клиентов.</p>
+  </div>
+
+  <div class="strategy-card">
+    <h4>3. Sample kit — ваш главный инструмент продаж</h4>
+    <p>Инвестируйте в профессиональные sample kits: мини-блоки разных origin/процентностей + карточки фермеров + тех.спецификации + tasting notes. Это ваша визитная карточка и конвертер лидов в клиентов.</p>
+  </div>
+
+  <div class="strategy-card">
+    <h4>4. Salon Du Chocolat Mumbai — стратегическая точка входа</h4>
+    <p>Первая в Индии международная шоколадная выставка (Jio World Convention Centre, январь 2026) — идеальная возможность для нетворкинга с десятками артизанальных брендов, шефов и байеров одновременно.</p>
+  </div>
+
+  <div class="strategy-card">
+    <h4>5. Логистика: найдите локального дистрибьютора-партнёра</h4>
+    <p>Для холодной цепочки и оперативности используйте локального дистрибьютора (Simply Different, Bakindia или нишевого партнёра). Это решит вопрос FSSAI, таможни и last-mile delivery в условиях индийского климата.</p>
+  </div>
+
+  <h3>Немедленные действия (следующие 30 дней)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Действие</th>
+        <th>Ответственный</th>
+        <th>Срок</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>Подготовить список из 40 целевых артизанальных брендов Индии</td><td>Маркетинг</td><td>Неделя 1</td></tr>
+      <tr><td>2</td><td>Разработать B2B каталог (EN) с origin stories и тех. спецификациями</td><td>Маркетинг + Продукт</td><td>Неделя 1–2</td></tr>
+      <tr><td>3</td><td>Исследовать требования FSSAI для импорта какао массы</td><td>Юридический</td><td>Неделя 1–2</td></tr>
+      <tr><td>4</td><td>Подготовить 30 sample kits (по 1–2 кг разных видов)</td><td>Производство</td><td>Неделя 2–3</td></tr>
+      <tr><td>5</td><td>Начать direct outreach к 15 приоритетным брендам (Instagram, LinkedIn, email)</td><td>Sales</td><td>Неделя 3–4</td></tr>
+      <tr><td>6</td><td>Разместить листинг на IndiaMART и Global Trade Plaza</td><td>Маркетинг</td><td>Неделя 2</td></tr>
+      <tr><td>7</td><td>Связаться с дистрибьюторами (Simply Different, Bakindia) для партнёрства</td><td>Sales</td><td>Неделя 3–4</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="footer-note">
+  Отчёт подготовлен на основе данных IMARC Group, Astute Analytica, Grand View Research, Mordor Intelligence, Prophecy Market Insights, ICCO, World Bank и открытых источников (2024–2026).<br>
+  Все прогнозные оценки носят ориентировочный характер и подлежат корректировке по мере получения обратной связи от рынка.
+</div>
+
+</div><!-- container -->
+
+<script>
+// Color palette
+const colors = {
+  cocoa: ['#5c2d0e', '#7a3e1a', '#8b4513', '#a0522d', '#c4784a', '#d4a574', '#f0dcc8'],
+  accent: ['#c49a2a', '#2d6a4f', '#1e3a5f', '#c0392b', '#6c3483', '#2980b9'],
+  chart: ['#8b4513', '#c49a2a', '#2d6a4f', '#1e3a5f', '#c0392b', '#d4a574', '#6c3483', '#2980b9']
+};
+
+// Chart defaults
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.font.size = 12;
+Chart.defaults.color = '#4a4a6a';
+
+// 1. Market Growth Chart
+new Chart(document.getElementById('marketGrowthChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Общий рынок шоколада', 'Премиальный сегмент', 'Артизанальный сегмент', 'Индустриальный шоколад'],
+    datasets: [
+      { label: '2024 (текущий)', data: [2900, 313, 220, 1690], backgroundColor: '#8b4513', borderRadius: 4 },
+      { label: 'Прогноз (2033)', data: [5500, 481, 620, 4600], backgroundColor: '#c49a2a', borderRadius: 4 }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'top' } },
+    scales: {
+      y: { title: { display: true, text: 'Млн USD' }, beginAtZero: true },
+      x: { ticks: { maxRotation: 0 } }
+    }
+  }
+});
+
+// 2. Type Chart (Doughnut)
+new Chart(document.getElementById('typeChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Молочный и белый', 'Тёмный шоколад'],
+    datasets: [{ data: [70, 30], backgroundColor: ['#d4a574', '#5c2d0e'], borderWidth: 0 }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom' },
+      subtitle: { display: true, text: 'Тёмный — самый быстрорастущий (+40% за 5 лет)', font: { size: 11 } }
+    }
+  }
+});
+
+// 3. Channel Chart (Doughnut)
+new Chart(document.getElementById('channelChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Розничные магазины', 'E-commerce', 'HoReCa / Институц.', 'Specialty stores'],
+    datasets: [{ data: [55, 20, 15, 10], backgroundColor: ['#8b4513', '#c49a2a', '#2d6a4f', '#d4a574'], borderWidth: 0 }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom' },
+      subtitle: { display: true, text: 'HoReCa — самый быстрорастущий канал', font: { size: 11 } }
+    }
+  }
+});
+
+// 4. Region Chart
+new Chart(document.getElementById('regionChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Южная Индия', 'Северная Индия', 'Западная Индия', 'Восточная Индия'],
+    datasets: [{
+      label: 'Доля рынка (%)',
+      data: [45, 25, 20, 10],
+      backgroundColor: ['#5c2d0e', '#8b4513', '#c4784a', '#d4a574'],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { title: { display: true, text: '% от рынка' }, max: 50 }
+    }
+  }
+});
+
+// 5. Bubble Chart - Segment Potential
+new Chart(document.getElementById('bubbleChart'), {
+  type: 'bubble',
+  data: {
+    datasets: [
+      { label: 'Bean-to-Bar', data: [{ x: 275, y: 85, r: 18 }], backgroundColor: 'rgba(92,45,14,0.7)' },
+      { label: 'Кондитерские', data: [{ x: 550, y: 75, r: 22 }], backgroundColor: 'rgba(196,154,42,0.7)' },
+      { label: 'HoReCa', data: [{ x: 1100, y: 65, r: 25 }], backgroundColor: 'rgba(45,106,79,0.7)' },
+      { label: 'Craft кафе', data: [{ x: 110, y: 70, r: 12 }], backgroundColor: 'rgba(30,58,95,0.7)' },
+      { label: 'D2C Health', data: [{ x: 300, y: 60, r: 15 }], backgroundColor: 'rgba(192,57,43,0.7)' },
+      { label: 'Пекарни', data: [{ x: 2750, y: 45, r: 20 }], backgroundColor: 'rgba(212,165,116,0.7)' },
+      { label: 'Подарки / Gifting', data: [{ x: 1650, y: 70, r: 22 }], backgroundColor: 'rgba(108,52,131,0.7)' },
+      { label: 'Functional / Ayurveda', data: [{ x: 175, y: 80, r: 13 }], backgroundColor: 'rgba(41,128,185,0.7)' }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'right', labels: { font: { size: 11 } } },
+      tooltip: {
+        callbacks: {
+          label: (ctx) => `${ctx.dataset.label}: объём ${ctx.raw.x} кг/мес, маржа ${ctx.raw.y}%`
+        }
+      }
+    },
+    scales: {
+      x: { title: { display: true, text: 'Средний объём закупок (кг/мес)' }, type: 'logarithmic' },
+      y: { title: { display: true, text: 'Потенциальная маржинальность (%)' }, min: 30, max: 100 }
+    }
+  }
+});
+
+// 6. Price Chart
+new Chart(document.getElementById('priceChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Compound\nшоколад', 'Индустриальная\nкакао масса', 'Couverture\n(Callebaut и др.)', 'Craft couverture\n(CocoaCraft)', 'Single-origin\nкакао масса', '100% Extra\nDark Premium'],
+    datasets: [
+      { label: 'Мин. цена (₹/кг)', data: [150, 300, 500, 480, 700, 1200], backgroundColor: '#d4a574', borderRadius: 4 },
+      { label: 'Макс. цена (₹/кг)', data: [350, 600, 1200, 700, 1500, 1800], backgroundColor: '#5c2d0e', borderRadius: 4 }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      annotation: {}
+    },
+    scales: {
+      y: { title: { display: true, text: '₹/кг' }, beginAtZero: true },
+      x: { ticks: { font: { size: 10 } } }
+    }
+  }
+});
+
+// 7. Sales Forecast Chart
+new Chart(document.getElementById('salesChart'), {
+  type: 'line',
+  data: {
+    labels: ['Q1 Год 1', 'Q2 Год 1', 'Q3 Год 1', 'Q4 Год 1', 'Q1 Год 2', 'Q2 Год 2', 'Q3 Год 2', 'Q4 Год 2', 'Q1 Год 3', 'Q2 Год 3', 'Q3 Год 3', 'Q4 Год 3'],
+    datasets: [
+      {
+        label: 'Объём продаж (кг)',
+        data: [50, 150, 300, 500, 700, 1000, 1300, 1500, 1800, 2200, 2800, 3500],
+        borderColor: '#8b4513',
+        backgroundColor: 'rgba(139,69,19,0.1)',
+        fill: true,
+        tension: 0.3,
+        pointRadius: 5,
+        pointBackgroundColor: '#8b4513'
+      },
+      {
+        label: 'Количество клиентов',
+        data: [3, 6, 10, 12, 16, 22, 28, 35, 40, 48, 58, 70],
+        borderColor: '#c49a2a',
+        backgroundColor: 'rgba(196,154,42,0.1)',
+        fill: true,
+        tension: 0.3,
+        pointRadius: 5,
+        pointBackgroundColor: '#c49a2a',
+        yAxisID: 'y2'
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: { legend: { position: 'top' } },
+    scales: {
+      y: { title: { display: true, text: 'Продажи (кг)' }, beginAtZero: true },
+      y2: { title: { display: true, text: 'Клиенты (шт)' }, position: 'right', beginAtZero: true, grid: { drawOnChartArea: false } }
+    }
+  }
+});
+
+// 8. Revenue Forecast
+new Chart(document.getElementById('revenueChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Год 1 (Пилот)', 'Год 2 (Рост)', 'Год 3 (Масштаб)'],
+    datasets: [
+      { label: 'Консервативный', data: [9500, 34000, 86000], backgroundColor: '#d4a574', borderRadius: 4 },
+      { label: 'Базовый', data: [12000, 45000, 120000], backgroundColor: '#8b4513', borderRadius: 4 },
+      { label: 'Оптимистичный', data: [14000, 57000, 162000], backgroundColor: '#c49a2a', borderRadius: 4 }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'top' } },
+    scales: {
+      y: { title: { display: true, text: 'USD' }, beginAtZero: true }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
