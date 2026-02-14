@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Haocacao — Premium 70% Dark Couverture | B2B Offer India</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0906;
+    --espresso: #1c110a;
+    --cacao: #3a1f0b;
+    --terra: #6b3a1f;
+    --amber: #c97b3a;
+    --gold: #d4a04a;
+    --cream: #faf6f0;
+    --milk: #f5efe6;
+    --warm-gray: #a89888;
+    --light-border: #e6ddd0;
+    --white: #ffffff;
+    --green-ok: #2d7a4f;
+    --red-alert: #b5382a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--espresso);
+    color: var(--cream);
+    padding: 70px 50px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: -100px; right: -80px;
+    width: 450px; height: 450px;
+    background: radial-gradient(circle, rgba(201,123,58,0.12) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-inner {
+    max-width: 920px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .brand-tag {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 28px;
+    font-weight: 400;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 46px;
+    font-weight: 900;
+    line-height: 1.12;
+    margin-bottom: 18px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .hero .lead {
+    font-size: 18px;
+    font-weight: 300;
+    opacity: 0.8;
+    max-width: 600px;
+    margin-bottom: 36px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .hero-stat .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .hero-stat .lbl {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.5;
+    margin-top: 2px;
+  }
+
+  /* MAIN */
+  .main { max-width: 920px; margin: 0 auto; padding: 50px 30px; }
+
+  /* SECTION HEADERS */
+  .sec-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 8px;
+  }
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--cacao);
+  }
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--terra);
+    margin: 28px 0 12px;
+  }
+  p { margin-bottom: 14px; font-size: 15px; }
+
+  /* SECTION CARD */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--light-border);
+    border-radius: 14px;
+    padding: 36px;
+    margin-bottom: 36px;
+  }
+  .card.highlight {
+    border: 2px solid var(--gold);
+    box-shadow: 0 8px 30px rgba(201,123,58,0.08);
+  }
+
+  /* PRODUCT */
+  .product-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .product-detail {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--light-border);
+  }
+  .product-detail .key {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--warm-gray);
+    min-width: 110px;
+  }
+  .product-detail .val {
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  /* PRICE TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+  thead { background: var(--cacao); color: var(--cream); }
+  thead th {
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  tbody tr { border-bottom: 1px solid var(--light-border); }
+  tbody tr:nth-child(even) { background: var(--milk); }
+  tbody td { padding: 12px 16px; vertical-align: top; }
+
+  .price-old {
+    text-decoration: line-through;
+    color: var(--warm-gray);
+    font-size: 13px;
+  }
+  .price-new {
+    font-weight: 700;
+    color: var(--green-ok);
+    font-size: 16px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .badge-win { background: #d4edda; color: #155724; }
+  .badge-lose { background: #f8d7da; color: #721c24; }
+  .badge-neutral { background: #fff3cd; color: #856404; }
+  .badge-hao { background: var(--cacao); color: var(--gold); }
+
+  .row-hao {
+    background: linear-gradient(90deg, rgba(212,160,74,0.06), rgba(212,160,74,0.12)) !important;
+    border-left: 4px solid var(--gold);
+  }
+
+  /* COMPARISON VISUAL */
+  .bar-compare {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 10px 0;
+  }
+  .bar-label {
+    min-width: 140px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .bar-track {
+    flex: 1;
+    height: 24px;
+    background: var(--milk);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    transition: width 0.6s ease;
+  }
+  .bar-fill.competitor { background: var(--warm-gray); }
+  .bar-fill.hao { background: var(--terra); }
+
+  /* TRUST BADGES */
+  .trust-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .trust-item {
+    text-align: center;
+    padding: 20px 12px;
+    border: 1px solid var(--light-border);
+    border-radius: 10px;
+    background: var(--white);
+  }
+  .trust-item .icon { font-size: 28px; margin-bottom: 8px; }
+  .trust-item .t-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  .trust-item .t-desc { font-size: 12px; color: var(--warm-gray); }
+
+  /* CTA */
+  .cta-section {
+    background: var(--espresso);
+    color: var(--cream);
+    border-radius: 16px;
+    padding: 44px;
+    text-align: center;
+    margin: 40px 0;
+  }
+  .cta-section h2 { color: var(--gold); margin-bottom: 12px; }
+  .cta-section p { opacity: 0.75; max-width: 500px; margin: 0 auto 24px; }
+  .cta-btn {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--espresso);
+    padding: 14px 40px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212,160,74,0.3); }
+  .cta-links {
+    margin-top: 18px;
+    font-size: 13px;
+    opacity: 0.5;
+  }
+  .cta-links a { color: var(--gold); }
+
+  /* ADVANTAGES LIST */
+  .adv-list {
+    list-style: none;
+    margin: 16px 0;
+  }
+  .adv-list li {
+    padding: 10px 0 10px 28px;
+    position: relative;
+    border-bottom: 1px solid var(--light-border);
+    font-size: 14.5px;
+  }
+  .adv-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--green-ok);
+    font-weight: 700;
+    font-size: 16px;
+  }
+
+  .footnote {
+    font-size: 12px;
+    color: var(--warm-gray);
+    font-style: italic;
+    margin-top: 12px;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--light-border);
+    margin: 40px 0;
+  }
+
+  @media (max-width: 768px) {
+    .hero { padding: 40px 24px; }
+    .hero h1 { font-size: 30px; }
+    .product-grid, .trust-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 24px; }
+    .main { padding: 30px 20px; }
+    .card { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="brand-tag">Haocacao Pvt Ltd — haocacao.com</div>
+    <h1>Premium 70% Dark Couverture<br>from Kerala, <em>at the best price</em></h1>
+    <p class="lead">Single-origin, expertly fermented, tempered and ready to use. Same tier as Barry Callebaut — at a better price, with a story and support they can't match.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="num">6</div>
+        <div class="lbl">Years of cacao expertise</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">10kg</div>
+        <div class="lbl">Min. order (1 box)</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">₹2,100</div>
+        <div class="lbl">Per kg incl. GST</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">PAN</div>
+        <div class="lbl">India fast delivery</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- PRODUCT CARD -->
+<div class="card highlight">
+  <div class="sec-label">The Product</div>
+  <h2>70% Dark Chocolate Couverture — Tempered Callets</h2>
+  <p>High-quality single-origin couverture from Kerala's finest cacao farms. Pre-tempered flat callets in 200g portions, packed in 10kg boxes. Ready for ganache, moulding, enrobing, baking, confectionery, and chocolate making.</p>
+
+  <div class="product-grid">
+    <div>
+      <div class="product-detail"><span class="key">Cocoa Content</span><span class="val">70% (cocoa mass + cocoa butter)</span></div>
+      <div class="product-detail"><span class="key">Origin</span><span class="val">Kerala, South India — Single Origin</span></div>
+      <div class="product-detail"><span class="key">Fermentation</span><span class="val">7-day controlled, top-notch quality</span></div>
+      <div class="product-detail"><span class="key">Form</span><span class="val">Tempered flat callets, 200g portions</span></div>
+      <div class="product-detail"><span class="key">Packaging</span><span class="val">10kg box (50 × 200g callets)</span></div>
+    </div>
+    <div>
+      <div class="product-detail"><span class="key">Min. Order</span><span class="val">1 box = 10 kg</span></div>
+      <div class="product-detail"><span class="key">Max. Order</span><span class="val">50 boxes = 500 kg</span></div>
+      <div class="product-detail"><span class="key">Ideal B2B</span><span class="val">20–40+ kg / month per client</span></div>
+      <div class="product-detail"><span class="key">Shelf Life</span><span class="val">12 months (cool, dry storage 16–20°C)</span></div>
+      <div class="product-detail"><span class="key">Certifications</span><span class="val">FSSAI registered. Haocacao Pvt Ltd (est. 2021)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICE COMPARISON -->
+<div class="card">
+  <div class="sec-label">Price Comparison — February 2026</div>
+  <h2>Best price for best quality. Period.</h2>
+  <p>Post-2024 cocoa crisis prices are a new reality: global cocoa beans averaged $8–10/kg in 2025 (up from $2.5–3 in 2022). Premium couverture prices in India have doubled. Here's how we compare:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Brand / Product</th>
+        <th>Type</th>
+        <th>Price per kg (₹) *</th>
+        <th>Origin</th>
+        <th>MOQ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Barry Callebaut 70-30-38</strong><br><span style="font-size:12px;color:var(--warm-gray)">70.5% Dark Couverture</span></td>
+        <td>Imported (Belgium)</td>
+        <td><strong>₹2,250/kg</strong></td>
+        <td>Blend: Ivory Coast, Ghana, Ecuador</td>
+        <td>2.5 kg</td>
+      </tr>
+      <tr>
+        <td><strong>Cacao Barry (Ocoa 70%)</strong><br><span style="font-size:12px;color:var(--warm-gray)">70% Dark Couverture</span></td>
+        <td>Imported (France)</td>
+        <td><strong>₹2,500/kg</strong></td>
+        <td>Blend: West Africa + Latin America</td>
+        <td>1 kg</td>
+      </tr>
+      <tr>
+        <td><strong>Valrhona Guanaja 70%</strong><br><span style="font-size:12px;color:var(--warm-gray)">70% Grand Cru</span></td>
+        <td>Imported (France)</td>
+        <td><strong>₹3,600/kg</strong></td>
+        <td>Blend: South America</td>
+        <td>1 kg</td>
+      </tr>
+      <tr>
+        <td><strong>CocoaCraft 70%</strong><br><span style="font-size:12px;color:var(--warm-gray)">70% Bittersweet Couverture</span></td>
+        <td>Indian</td>
+        <td><strong>₹2,100/kg</strong></td>
+        <td>Single Origin: Idukki, Kerala</td>
+        <td>210g</td>
+      </tr>
+      <tr>
+        <td><strong>Kocoatrait 70%</strong><br><span style="font-size:12px;color:var(--warm-gray)">70% Bean-to-Bar Couverture</span></td>
+        <td>Indian</td>
+        <td><strong>₹3,075/kg</strong></td>
+        <td>Single Origin: India</td>
+        <td>200g</td>
+      </tr>
+      <tr class="row-hao">
+        <td><strong style="font-size:16px;">HAOCACAO 70%</strong><br><span class="badge badge-hao">YOUR BEST CHOICE</span></td>
+        <td><strong>Indian company,<br>Kerala single origin</strong></td>
+        <td>
+          <span class="price-new" style="font-size:22px;">₹2,100/kg</span><br>
+          <span style="font-size:11px;color:var(--warm-gray);">incl. GST</span><br>
+          <span style="font-size:12px;color:var(--green-ok);font-weight:600;">7% below Callebaut</span><br>
+          <span style="font-size:12px;color:var(--green-ok);">16% below Cacao Barry</span>
+        </td>
+        <td><strong>Single Origin: Kerala</strong><br><span style="font-size:12px;">Top-notch fermentation</span></td>
+        <td><strong>10 kg</strong><br><span style="font-size:12px;">(1 box)</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="footnote">* Prices estimated based on current Indian market data (retail platforms: Bakerykart, CocoaCraft, Amazon.in, IndiaMART) and B2B distributor quotes as of Jan–Feb 2026. Post-cocoa-crisis pricing reflects global cocoa at ~$5,800–8,000/MT. Actual B2B prices may vary by order volume and relationship.</p>
+</div>
+
+<!-- VISUAL PRICE COMPARISON -->
+<div class="card">
+  <div class="sec-label">Visual Comparison</div>
+  <h2>Price per kg — 70% Dark Couverture</h2>
+
+  <div class="bar-compare">
+    <span class="bar-label">Valrhona 70%</span>
+    <div class="bar-track">
+      <div class="bar-fill competitor" style="width:95%;">₹3,600</div>
+    </div>
+  </div>
+  <div class="bar-compare">
+    <span class="bar-label">Kocoatrait 70%</span>
+    <div class="bar-track">
+      <div class="bar-fill competitor" style="width:82%;">₹3,075</div>
+    </div>
+  </div>
+  <div class="bar-compare">
+    <span class="bar-label">Cacao Barry 70%</span>
+    <div class="bar-track">
+      <div class="bar-fill competitor" style="width:67%;">₹2,500</div>
+    </div>
+  </div>
+  <div class="bar-compare">
+    <span class="bar-label">Callebaut 70%</span>
+    <div class="bar-track">
+      <div class="bar-fill competitor" style="width:60%;">₹2,250</div>
+    </div>
+  </div>
+  <div class="bar-compare">
+    <span class="bar-label">CocoaCraft 70%</span>
+    <div class="bar-track">
+      <div class="bar-fill competitor" style="width:56%;">₹2,100</div>
+    </div>
+  </div>
+  <div class="bar-compare">
+    <span class="bar-label" style="font-weight:700;color:var(--cacao);">HAOCACAO 70%</span>
+    <div class="bar-track">
+      <div class="bar-fill hao" style="width:56%;">₹2,100 incl. GST</div>
+    </div>
+  </div>
+
+  <p style="margin-top:16px; font-size:14px;"><strong>Your saving with Haocacao vs Callebaut:</strong> ₹150 per kg → on 40kg/month that's <strong>₹6,000/month saved</strong>, or <strong>₹72,000/year</strong>. Vs Cacao Barry: <strong>₹16,000/month saved</strong>.</p>
+</div>
+
+<!-- WHY HAOCACAO -->
+<div class="card">
+  <div class="sec-label">Why Haocacao</div>
+  <h2>What you get that others don't</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>Barry Callebaut</th>
+        <th>Indian brands</th>
+        <th style="background:var(--terra);">Haocacao ✓</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Single origin Kerala</td>
+        <td><span class="badge badge-lose">No</span> (multi-origin blend)</td>
+        <td><span class="badge badge-win">Some</span></td>
+        <td><span class="badge badge-win">Yes</span> — Kerala's best farms</td>
+      </tr>
+      <tr>
+        <td>Pre-tempered callets</td>
+        <td><span class="badge badge-win">Yes</span></td>
+        <td><span class="badge badge-neutral">Varies</span></td>
+        <td><span class="badge badge-win">Yes</span> — 200g flat portions</td>
+      </tr>
+      <tr>
+        <td>Expert fermentation</td>
+        <td><span class="badge badge-neutral">Standard</span></td>
+        <td><span class="badge badge-neutral">Varies</span></td>
+        <td><span class="badge badge-win">Top-notch</span> — 6 years of R&D</td>
+      </tr>
+      <tr>
+        <td>Farmer story / origin traceability</td>
+        <td><span class="badge badge-lose">Generic CSR</span></td>
+        <td><span class="badge badge-neutral">Some brands</span></td>
+        <td><span class="badge badge-win">Deep</span> — on each box + site</td>
+      </tr>
+      <tr>
+        <td>Registered Indian company</td>
+        <td><span class="badge badge-lose">No</span> (import required)</td>
+        <td><span class="badge badge-win">Yes</span></td>
+        <td><span class="badge badge-win">Yes</span> — Pvt Ltd since 2021</td>
+      </tr>
+      <tr>
+        <td>Any payment method (India)</td>
+        <td><span class="badge badge-lose">Via distributor</span></td>
+        <td><span class="badge badge-neutral">Varies</span></td>
+        <td><span class="badge badge-win">All</span> — UPI, bank, gateway</td>
+      </tr>
+      <tr>
+        <td>Fast PAN-India delivery</td>
+        <td><span class="badge badge-neutral">Via distributor</span></td>
+        <td><span class="badge badge-neutral">Varies</span></td>
+        <td><span class="badge badge-win">Direct + fast</span></td>
+      </tr>
+      <tr>
+        <td>Dedicated support</td>
+        <td><span class="badge badge-lose">Corporate</span></td>
+        <td><span class="badge badge-neutral">Varies</span></td>
+        <td><span class="badge badge-win">Personal</span> — WhatsApp + call</td>
+      </tr>
+      <tr>
+        <td>MOQ for small business</td>
+        <td><span class="badge badge-lose">High (bulk only)</span></td>
+        <td><span class="badge badge-neutral">200g–1kg</span></td>
+        <td><span class="badge badge-win">10kg</span> — perfect for small batch</td>
+      </tr>
+      <tr>
+        <td><strong>Price per kg (70%)</strong></td>
+        <td><strong>₹2,250</strong></td>
+        <td><strong>₹2,100–3,075</strong></td>
+        <td><strong class="price-new">₹2,100 incl. GST</strong></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- TRUST SECTION -->
+<div class="card">
+  <div class="sec-label">Trust & Reliability</div>
+  <h2>Your long-term partner in cacao</h2>
+  
+  <div class="trust-grid">
+    <div class="trust-item">
+      <div class="icon">🏭</div>
+      <div class="t-title">6 Years of Expertise</div>
+      <div class="t-desc">Crafting premium cacao products since 2019. Proven track record with hundreds of satisfied clients.</div>
+    </div>
+    <div class="trust-item">
+      <div class="icon">🏢</div>
+      <div class="t-title">Registered in India</div>
+      <div class="t-desc">Haocacao Pvt Ltd (est. 2021). FSSAI compliant. Registered trademark. Full legal transparency.</div>
+    </div>
+    <div class="trust-item">
+      <div class="icon">🌱</div>
+      <div class="t-title">Kerala Single Origin</div>
+      <div class="t-desc">Traceable beans from Kerala's finest farms. 7-day controlled fermentation for exceptional flavor profile.</div>
+    </div>
+    <div class="trust-item">
+      <div class="icon">📦</div>
+      <div class="t-title">Fast PAN-India Delivery</div>
+      <div class="t-desc">Temperature-controlled logistics. Quick turnaround from order to doorstep across India.</div>
+    </div>
+    <div class="trust-item">
+      <div class="icon">💬</div>
+      <div class="t-title">Caring Support</div>
+      <div class="t-desc">WhatsApp, phone, email — real humans who care about your chocolate. Every question matters.</div>
+    </div>
+    <div class="trust-item">
+      <div class="icon">🤝</div>
+      <div class="t-title">Long-term Partnership</div>
+      <div class="t-desc">Volume discounts, consistent supply, seasonal planning. We grow with you.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ORDER STRUCTURE -->
+<div class="card">
+  <div class="sec-label">How to Order</div>
+  <h2>Simple, flexible, and transparent</h2>
+
+  <ul class="adv-list">
+    <li><strong>Minimum order:</strong> 1 box = 10 kg (₹21,000 incl. GST)</li>
+    <li><strong>Sweet spot:</strong> 20–40 kg/month — ideal for artisan chocolatiers and small-batch bakeries</li>
+    <li><strong>Bulk pricing:</strong> 100+ kg/order — contact us for volume-based pricing (~5% additional discount)</li>
+    <li><strong>Maximum single order:</strong> 500 kg = 50 boxes</li>
+    <li><strong>Payment:</strong> UPI, bank transfer, credit/debit card, payment gateway — whatever works for you</li>
+    <li><strong>Delivery:</strong> Fast, insured, temperature-controlled shipping PAN-India</li>
+    <li><strong>Trial offer:</strong> First order of 10kg at standard price with FREE shipping — try before you commit</li>
+    <li><strong>Recurring supply:</strong> Monthly auto-ship available with priority processing</li>
+  </ul>
+</div>
+
+<!-- IDEAL FOR -->
+<div class="card">
+  <div class="sec-label">Ideal For</div>
+  <h2>Who this offer is for</h2>
+
+  <ul class="adv-list">
+    <li><strong>Artisan chocolatiers & bean-to-bar makers</strong> — single-origin couverture for ganache, moulding, bonbons, and truffles</li>
+    <li><strong>Premium bakeries & patisseries</strong> — rich 70% dark for cakes, pastries, brownies, and tarts</li>
+    <li><strong>Café chains & specialty coffee shops</strong> — hot chocolate, mocha, chocolate desserts with real couverture</li>
+    <li><strong>5-star hotels & fine-dining restaurants</strong> — dessert programs with traceable, premium ingredients</li>
+    <li><strong>D2C & health food brands</strong> — high-cocoa ingredient for bars, spreads, and functional products</li>
+    <li><strong>Chocolate gifting companies</strong> — Diwali, Raksha Bandhan, corporate gifting with quality couverture</li>
+    <li><strong>Home bakers scaling up</strong> — professional-grade couverture at an accessible minimum order</li>
+  </ul>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <h2>Ready to taste the difference?</h2>
+  <p>Order your first 10kg box of Haocacao 70% Dark Couverture and experience single-origin Kerala excellence at the best price on the market.</p>
+  <a href="https://haocacao.com" class="cta-btn">Visit haocacao.com →</a>
+  <div class="cta-links">
+    Or reach us directly: <a href="#">WhatsApp</a> · <a href="#">Email</a> · <a href="#">Instagram</a>
+  </div>
+</div>
+
+<!-- FINAL NOTE -->
+<div style="text-align:center; font-size:12px; color:var(--warm-gray); padding: 30px 0;">
+  <strong>Haocacao Pvt Ltd</strong> · Registered in India since 2021 · FSSAI Compliant · haocacao.com<br>
+  This B2B offer is valid for orders placed in India. Prices are indicative and may vary based on volume and market conditions.<br>
+  Competitor prices sourced from Bakerykart.com, CocoaCraft.in, Cocoatrait.com, Amazon.in, IndiaMART, Euro Foods India — February 2026.
+</div>
+
+</div><!-- main -->
+
+</body>
+</html>
