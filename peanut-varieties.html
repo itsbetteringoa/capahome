@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brazil Peanut Seed Varieties — Comprehensive Comparison</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #060d06;
+    --bg2: #0a130a;
+    --bg3: #0d1a0d;
+    --border: #1a3a1a;
+    --border2: #0d200d;
+    --green: #4caf50;
+    --green-dim: #2e7d32;
+    --green-bright: #66bb6a;
+    --green-pale: #a5d6a7;
+    --text: #c8e6c9;
+    --text-dim: #6a8a6a;
+    --gold: #ffa000;
+    --gold2: #ffcc02;
+    --gold-dim: #c8a84b;
+    --red: #ef5350;
+    --blue: #64b5f6;
+    --amber: #ffb300;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 20%, rgba(46,125,50,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 80% 80%, rgba(27,94,32,0.06) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper { position: relative; z-index: 1; padding: 36px 24px 48px; max-width: 100%; }
+
+  /* ── HEADER ── */
+  .header { text-align: center; margin-bottom: 40px; }
+
+  .header-eyebrow {
+    font-size: 10px;
+    letter-spacing: 6px;
+    color: var(--green);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    opacity: 0.8;
+  }
+
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 4vw, 48px);
+    font-weight: 900;
+    background: linear-gradient(135deg, #ffeb3b 0%, #ffa000 45%, #c8a84b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+
+  .header-sub {
+    color: #81c784;
+    font-size: 13px;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+
+  .badge {
+    display: inline-block;
+    background: rgba(102,187,106,0.08);
+    border: 1px solid var(--green-dim);
+    border-radius: 4px;
+    padding: 4px 18px;
+    font-size: 11px;
+    color: var(--green-pale);
+    letter-spacing: 1px;
+  }
+
+  /* ── CONTROLS ── */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 28px;
+  }
+
+  .ctrl-label {
+    font-size: 11px;
+    color: #4caf50;
+    letter-spacing: 2px;
+    margin-right: 4px;
+  }
+
+  .divider { width: 1px; height: 28px; background: var(--green-dim); margin: 0 6px; }
+
+  .btn {
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--green-dim);
+    background: rgba(46,125,50,0.08);
+    color: #81c784;
+    font-size: 11px;
+    cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+  }
+  .btn:hover { border-color: var(--gold); color: var(--gold); background: rgba(255,160,0,0.08); }
+  .btn.active { border-color: var(--gold); color: var(--gold); background: rgba(255,160,0,0.12); }
+  .btn.compare-btn { border-color: #3a5a7a; color: #81a8c4; }
+  .btn.compare-btn.active { border-color: var(--blue); color: var(--blue); background: rgba(100,181,246,0.1); }
+  .btn.clear-btn { border-color: #7a3a3a; color: #e57373; }
+  .btn.clear-btn:hover { border-color: var(--red); background: rgba(239,83,80,0.1); }
+
+  .compare-hint {
+    text-align: center;
+    font-size: 11px;
+    color: var(--green);
+    opacity: 0.6;
+    margin-bottom: 14px;
+    letter-spacing: 1px;
+  }
+
+  /* ── TABLE WRAPPER ── */
+  .table-outer {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--green-dim);
+    box-shadow: 0 0 60px rgba(46,125,50,0.15), 0 0 120px rgba(46,125,50,0.06);
+    margin-bottom: 32px;
+  }
+
+  table {
+    border-collapse: collapse;
+    min-width: 1500px;
+    width: 100%;
+  }
+
+  /* ── HEADER ROW ── */
+  .th-param {
+    padding: 14px 18px;
+    text-align: left;
+    font-size: 10px;
+    color: var(--green-dim);
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    left: 0;
+    background: #040b04;
+    z-index: 20;
+    min-width: 180px;
+  }
+
+  .th-variety {
+    padding: 12px 14px;
+    text-align: center;
+    border-right: 1px solid var(--border2);
+    border-bottom: 3px solid;
+    min-width: 158px;
+    cursor: default;
+    transition: background 0.2s;
+    position: relative;
+    vertical-align: top;
+  }
+
+  .th-variety.compare-mode { cursor: pointer; }
+  .th-variety.compare-mode:hover { filter: brightness(1.15); }
+
+  .th-variety .v-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.3;
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  .th-variety .v-dev {
+    font-size: 9px;
+    color: var(--green);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .check-mark {
+    position: absolute;
+    top: 5px; right: 8px;
+    color: var(--blue);
+    font-size: 12px;
+    display: none;
+  }
+  .th-variety.selected .check-mark { display: block; }
+
+  /* ── BODY ROWS ── */
+  tr.data-row td { transition: background 0.15s; }
+  tr.data-row:nth-child(even) .td-param { background: #070e07; }
+  tr.data-row:nth-child(odd)  .td-param { background: #040b04; }
+  tr.data-row:nth-child(even) .td-cell  { background: rgba(255,255,255,0.015); }
+
+  .td-param {
+    padding: 9px 18px 9px 18px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border2);
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    vertical-align: top;
+  }
+
+  .group-label {
+    font-size: 8px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+    opacity: 0.75;
+  }
+
+  .param-name {
+    font-size: 12px;
+    color: var(--green-pale);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .td-cell {
+    padding: 9px 14px;
+    border-right: 1px solid var(--border2);
+    border-bottom: 1px solid var(--border2);
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--text);
+    vertical-align: top;
+    line-height: 1.45;
+  }
+
+  /* ── LEGEND GRID ── */
+  .legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .legend-card {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    transition: border-color 0.2s;
+  }
+  .legend-card:hover { border-color: var(--green); }
+
+  .legend-icon { font-size: 20px; margin-bottom: 5px; }
+  .legend-title { font-size: 11px; font-weight: 600; color: var(--green-pale); margin-bottom: 3px; }
+  .legend-desc { font-size: 10px; color: #557055; line-height: 1.5; }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    font-size: 10px;
+    color: var(--green-dim);
+    letter-spacing: 1.5px;
+    margin-top: 10px;
+  }
+
+  /* ── FADE IN ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .header  { animation: fadeUp 0.6s ease both; }
+  .controls{ animation: fadeUp 0.6s 0.15s ease both; }
+  .table-outer { animation: fadeUp 0.6s 0.3s ease both; }
+  .legend  { animation: fadeUp 0.6s 0.45s ease both; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { height: 6px; width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--green-dim); border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-eyebrow">Brazil Agricultural Seed Intelligence</div>
+    <h1 class="header-title">Peanut Seed Variety Comparison</h1>
+    <p class="header-sub">10 Best Varieties · 19 Parameters · For 250 Hectare Planning</p>
+    <span class="badge">Sources: IAC Campinas · Embrapa · SciELO Brazil · USDA</span>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <span class="ctrl-label">FILTER:</span>
+    <button class="btn active" data-filter="All" onclick="setFilter(this)">All</button>
+    <button class="btn" data-filter="High Oleic" onclick="setFilter(this)">High Oleic</button>
+    <button class="btn" data-filter="Embrapa" onclick="setFilter(this)">Embrapa</button>
+    <button class="btn" data-filter="IAC" onclick="setFilter(this)">IAC</button>
+    <button class="btn" data-filter="Africa5" onclick="setFilter(this)">★★★★★ Africa</button>
+    <div class="divider"></div>
+    <button class="btn compare-btn" id="compareBtn" onclick="toggleCompare()">⊕ Compare Mode</button>
+    <button class="btn clear-btn" id="clearBtn" style="display:none" onclick="clearSelection()">✕ Clear</button>
+  </div>
+
+  <div class="compare-hint" id="compareHint" style="display:none">Click a variety column header to select it for comparison</div>
+
+  <!-- TABLE -->
+  <div class="table-outer">
+    <table id="mainTable">
+      <thead>
+        <tr id="headerRow">
+          <th class="th-param">Parameter</th>
+          <!-- variety headers injected by JS -->
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="legend-card"><div class="legend-icon">⭐</div><div class="legend-title">Best Overall</div><div class="legend-desc">IAC OL5 – Highest adaptability + disease tolerance</div></div>
+    <div class="legend-card"><div class="legend-icon">⭐</div><div class="legend-title">Most Resilient</div><div class="legend-desc">BRS 425 – Wild-hybrid genetics for tough conditions</div></div>
+    <div class="legend-card"><div class="legend-icon">🌍</div><div class="legend-title">Africa ★★★★★</div><div class="legend-desc">BRS 421/423/425, IAC OL5, IAC Tatu ST</div></div>
+    <div class="legend-card"><div class="legend-icon">🛢️</div><div class="legend-title">Highest Oil</div><div class="legend-desc">IAC 503/505 – ~50% oil content for extraction</div></div>
+    <div class="legend-card"><div class="legend-icon">🌱</div><div class="legend-title">Smallholder</div><div class="legend-desc">IAC Tatu ST – Short cycle, low input, erect habit</div></div>
+    <div class="legend-card"><div class="legend-icon">📦</div><div class="legend-title">Seed Need 250 ha</div><div class="legend-desc">~30–38 tonnes certified seed required</div></div>
+  </div>
+
+  <div class="footer">DATA COMPILED FROM IAC · EMBRAPA · SCIELO BRAZIL · USDA FAS · JAZAM PEANUTS</div>
+</div>
+
+<script>
+const VARIETIES = [
+  { name:"Runner IAC 886", developer:"IAC", type:"Runner", cycle:"125–130", yield:"4,500–5,500", oil:"~48%", oleic:"~50% (standard)", high_oleic:false, seed_size:"Medium-Large", testa:"Light Brown", habit:"Creeping/Spreading", disease:"Moderate", drought:"Good", aflatoxin:"Moderate", shelf:"Standard", market:"Food / Oil", technified:true, africa:"★★★★☆", status:"Most Widely Grown", notes:"Benchmark variety; base for most breeding programs", color:"#c8a84b", filterTags:["IAC"] },
+  { name:"IAC OL3",        developer:"IAC", type:"Runner", cycle:"130",     yield:"up to 7,000", oil:"~48–50%", oleic:"~80%", high_oleic:true,  seed_size:"Medium-Large", testa:"Pink",        habit:"Creeping",          disease:"Susceptible TSWV", drought:"Moderate", aflatoxin:"Low",      shelf:"Extended",  market:"Food / Export / Oil", technified:true, africa:"★★★★☆", status:"Commercial", notes:"Sister line to OL4; sugarcane rotation; reg. 2012", color:"#4caf50", filterTags:["IAC","High Oleic"] },
+  { name:"IAC OL4",        developer:"IAC", type:"Runner", cycle:"125–130", yield:"up to 7,000", oil:"~48–50%", oleic:"~80%", high_oleic:true,  seed_size:"Medium",       testa:"Pink",        habit:"Low Creeping",      disease:"Susceptible TSWV", drought:"Moderate", aflatoxin:"Low",      shelf:"Extended",  market:"Food / Export / Oil", technified:true, africa:"★★★★☆", status:"Commercial", notes:"Shorter cycle than OL3; better rotation fit; reg. 2013", color:"#66bb6a", filterTags:["IAC","High Oleic"] },
+  { name:"IAC OL5",        developer:"IAC", type:"Runner", cycle:"~130",    yield:"3,300–6,500", oil:"48–49%",  oleic:"70–80%", high_oleic:true, seed_size:"Medium (60–70g/100)", testa:"Tan",  habit:"Runner/Creeping",   disease:"Moderate (TSWV resist.)", drought:"Good",    aflatoxin:"Low",  shelf:"Extended",  market:"Food / Export / Oil", technified:true, africa:"★★★★★", status:"⭐ Best Overall", notes:"Best disease resistance of high-oleic group; top pick for Africa", color:"#2196f3", filterTags:["IAC","High Oleic","Africa5"] },
+  { name:"IAC 503",        developer:"IAC", type:"Runner (Virginia)", cycle:"140+", yield:"up to 6,500", oil:"~50%", oleic:"~80%", high_oleic:true, seed_size:"Med-Large (elongated)", testa:"Light Brown", habit:"Spreading", disease:"Moderate", drought:"Good",  aflatoxin:"Low",   shelf:"Extended",  market:"Food / Oil (premium)", technified:true, africa:"★★★★☆", status:"Long Cycle / Premium", notes:"First high-oleic runner in Brazil; ideal for dedicated peanut farms", color:"#ff9800", filterTags:["IAC","High Oleic"] },
+  { name:"IAC 505",        developer:"IAC", type:"Runner (Virginia)", cycle:"130–140", yield:"up to 6,500", oil:"~50%", oleic:"~80%", high_oleic:true, seed_size:"Medium", testa:"Light Brown", habit:"Spreading",       disease:"Moderate (leaf dis.)", drought:"Good",   aflatoxin:"Low",   shelf:"Extended",  market:"Food / Industrial Oil", technified:true, africa:"★★★★☆", status:"Premium Oil", notes:"Highest oil content ~50%; best for oil extraction projects", color:"#ff7043", filterTags:["IAC","High Oleic"] },
+  { name:"BRS 421",        developer:"Embrapa", type:"Runner", cycle:"~130", yield:"4,500–6,000", oil:"~48%", oleic:"~78–80%", high_oleic:true, seed_size:"Medium",  testa:"Tan/Pink",    habit:"Runner",            disease:"Good (partial leaf spot)", drought:"Good",    aflatoxin:"Low",    shelf:"Extended", market:"Food / Export", technified:true, africa:"★★★★★", status:"Embrapa Top Pick", notes:"Improved disease package; great for export; certified via SIN/Embrapa", color:"#9c27b0", filterTags:["Embrapa","High Oleic","Africa5"] },
+  { name:"BRS 423",        developer:"Embrapa", type:"Runner", cycle:"~130", yield:"4,500–6,200", oil:"~48%", oleic:"~78–80%", high_oleic:true, seed_size:"Medium",  testa:"Tan/Pink",    habit:"Runner",            disease:"Good",             drought:"Good",    aflatoxin:"Low",      shelf:"Extended", market:"Food / Export", technified:true, africa:"★★★★★", status:"Embrapa Top Pick", notes:"Sister to BRS 421; strong diverse environment performance", color:"#ab47bc", filterTags:["Embrapa","High Oleic","Africa5"] },
+  { name:"BRS 425",        developer:"Embrapa", type:"Runner (wild-hybrid)", cycle:"~130 (medium)", yield:"5,000–6,500", oil:"~49%", oleic:"~80%", high_oleic:true, seed_size:"Large",  testa:"Tan/Yellow fls", habit:"Runner",            disease:"Best (leaf spot+TSWV)", drought:"Very Good", aflatoxin:"Very Low", shelf:"Extended", market:"Food / Export / Oil", technified:true, africa:"★★★★★", status:"⭐ Most Resilient", notes:"Wild Arachis ancestor genetics; highest disease resist.; best for low-input Africa", color:"#00bcd4", filterTags:["Embrapa","High Oleic","Africa5"] },
+  { name:"IAC Tatu ST",    developer:"IAC", type:"Valencia", cycle:"90–100", yield:"2,500–3,500", oil:"~44%", oleic:"~50% (standard)", high_oleic:false, seed_size:"Small-Medium", testa:"Red/Pink",  habit:"Upright/Erect",    disease:"Moderate",         drought:"Very Good", aflatoxin:"Moderate", shelf:"Standard", market:"Food / Boiled / Smallholder", technified:false, africa:"★★★★★", status:"Smallholder Friendly", notes:"Earliest variety; 3–4 seeds/pod; ideal rainfed African farming", color:"#f44336", filterTags:["IAC","Africa5"] },
+];
+
+const PARAMS = [
+  { key:"developer",   label:"Developer",         group:"IDENTITY",   gc:"#1a237e" },
+  { key:"type",        label:"Type / Class",       group:"IDENTITY",   gc:"#1a237e" },
+  { key:"cycle",       label:"Cycle (Days)",       group:"AGRONOMY",   gc:"#1b5e20" },
+  { key:"yield",       label:"Yield (kg/ha)",      group:"AGRONOMY",   gc:"#1b5e20" },
+  { key:"habit",       label:"Growth Habit",       group:"AGRONOMY",   gc:"#1b5e20" },
+  { key:"seed_size",   label:"Seed Size",          group:"PHYSICAL",   gc:"#4a148c" },
+  { key:"testa",       label:"Seed (Testa) Color", group:"PHYSICAL",   gc:"#4a148c" },
+  { key:"oil",         label:"Oil Content",        group:"QUALITY",    gc:"#bf360c" },
+  { key:"oleic",       label:"Oleic Acid %",       group:"QUALITY",    gc:"#bf360c" },
+  { key:"high_oleic",  label:"High Oleic Trait",   group:"QUALITY",    gc:"#bf360c" },
+  { key:"shelf",       label:"Shelf Life",         group:"QUALITY",    gc:"#bf360c" },
+  { key:"aflatoxin",   label:"Aflatoxin Risk",     group:"QUALITY",    gc:"#bf360c" },
+  { key:"disease",     label:"Disease Resistance", group:"RESILIENCE", gc:"#006064" },
+  { key:"drought",     label:"Drought Tolerance",  group:"RESILIENCE", gc:"#006064" },
+  { key:"market",      label:"Market Use",         group:"MARKET",     gc:"#33691e" },
+  { key:"technified",  label:"Technified System",  group:"MARKET",     gc:"#33691e" },
+  { key:"africa",      label:"Africa Adaptability",group:"MARKET",     gc:"#33691e" },
+  { key:"status",      label:"Status / Rating",    group:"RATING",     gc:"#880e4f" },
+  { key:"notes",       label:"Key Notes",          group:"RATING",     gc:"#880e4f" },
+];
+
+let currentFilter = "All";
+let compareMode = false;
+let selected = new Set();
+let hoveredCol = null;
+
+function getFiltered() {
+  return VARIETIES.filter(v => {
+    if (currentFilter === "All") return true;
+    return v.filterTags.includes(currentFilter);
+  });
+}
+
+function getDisplay() {
+  const filtered = getFiltered();
+  if (compareMode && selected.size > 0) return filtered.filter(v => selected.has(v.name));
+  return filtered;
+}
+
+function formatCell(v, param) {
+  const val = v[param.key];
+  let text = String(val);
+  let style = "";
+
+  if (param.key === "high_oleic") {
+    text = val ? "✅ YES" : "❌ NO";
+    style = `color:${val ? "#66bb6a" : "#ef5350"}`;
+  } else if (param.key === "technified") {
+    text = val ? "✅ Required" : "☑ Optional";
+    style = `color:${val ? "#ffb300" : "#81c784"}`;
+  } else if (param.key === "africa") {
+    style = "color:#ffd54f; font-size:13px; letter-spacing:1px";
+  } else if (param.key === "status") {
+    style = `color:${v.color}; font-weight:700; font-size:11px`;
+  } else if (param.key === "notes") {
+    style = "color:#7a9a7a; font-size:10.5px; line-height:1.5; text-align:left; max-width:170px; white-space:normal";
+  } else if (param.key === "yield") {
+    style = "color:#a5d6a7; font-weight:600";
+  } else if (param.key === "oil" || param.key === "oleic") {
+    style = "color:#ffcc02";
+  } else if (param.key === "disease") {
+    const v2 = text.toLowerCase();
+    if (v2.includes("best") || v2.includes("good")) style = "color:#66bb6a";
+    else if (v2.includes("moderate")) style = "color:#ffb300";
+    else style = "color:#ef9a9a";
+  } else if (param.key === "drought") {
+    const v2 = text.toLowerCase();
+    if (v2.includes("very good")) style = "color:#66bb6a";
+    else if (v2.includes("good")) style = "color:#a5d6a7";
+    else style = "color:#ffb300";
+  } else if (param.key === "aflatoxin") {
+    const v2 = text.toLowerCase();
+    if (v2.includes("very low")) style = "color:#66bb6a";
+    else if (v2.includes("low")) style = "color:#a5d6a7";
+    else style = "color:#ef9a9a";
+  } else if (param.key === "shelf") {
+    style = text === "Extended" ? "color:#66bb6a" : "color:#ffb300";
+  }
+
+  return { text, style };
+}
+
+function render() {
+  const display = getDisplay();
+  const headerRow = document.getElementById("headerRow");
+  const tbody = document.getElementById("tableBody");
+
+  // Build header
+  let headerHTML = `<th class="th-param">Parameter</th>`;
+  display.forEach(v => {
+    const isSel = selected.has(v.name);
+    headerHTML += `
+      <th class="th-variety${compareMode ? " compare-mode" : ""}${isSel ? " selected" : ""}"
+          style="border-bottom-color:${v.color}; background:${isSel ? v.color+"22" : "transparent"}"
+          data-name="${v.name}"
+          onmouseenter="hoverCol('${v.name}', true)"
+          onmouseleave="hoverCol('${v.name}', false)"
+          onclick="clickHeader('${v.name}')">
+        <span class="v-name" style="color:${v.color}">${v.name}</span>
+        <span class="v-dev">${v.developer}</span>
+        <span class="check-mark">✓</span>
+      </th>`;
+  });
+  headerRow.innerHTML = headerHTML;
+
+  // Build body
+  let bodyHTML = "";
+  let lastGroup = null;
+
+  PARAMS.forEach((param, idx) => {
+    const isGroupStart = param.group !== lastGroup;
+    lastGroup = param.group;
+    bodyHTML += `<tr class="data-row">`;
+    bodyHTML += `<td class="td-param">`;
+    if (isGroupStart) {
+      bodyHTML += `<div class="group-label" style="color:${param.gc}">${param.group}</div>`;
+    }
+    bodyHTML += `<div class="param-name">${param.label}</div></td>`;
+
+    display.forEach(v => {
+      const { text, style } = formatCell(v, param);
+      const hoverBg = `${v.color}11`;
+      bodyHTML += `
+        <td class="td-cell" data-col="${v.name}"
+            style="${style}"
+            onmouseenter="hoverCol('${v.name}', true)"
+            onmouseleave="hoverCol('${v.name}', false)">
+          ${text}
+        </td>`;
+    });
+
+    bodyHTML += `</tr>`;
+  });
+
+  tbody.innerHTML = bodyHTML;
+}
+
+function hoverCol(name, enter) {
+  document.querySelectorAll(`[data-col="${name}"], [data-name="${name}"]`).forEach(el => {
+    const v = VARIETIES.find(v => v.name === name);
+    if (enter) {
+      el.style.background = `${v.color}15`;
+    } else {
+      if (!selected.has(name)) el.style.background = "";
+      else {
+        const v2 = VARIETIES.find(vv => vv.name === name);
+        el.style.background = `${v2.color}22`;
+      }
+    }
+  });
+}
+
+function clickHeader(name) {
+  if (!compareMode) return;
+  if (selected.has(name)) selected.delete(name);
+  else selected.add(name);
+  document.getElementById("clearBtn").style.display = selected.size > 0 ? "inline-block" : "none";
+  const btn = document.getElementById("compareBtn");
+  btn.textContent = selected.size > 0 ? `▶ Compare (${selected.size} selected)` : "⊕ Compare Mode";
+  render();
+}
+
+function setFilter(btn) {
+  currentFilter = btn.dataset.filter;
+  document.querySelectorAll(".btn[data-filter]").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  render();
+}
+
+function toggleCompare() {
+  compareMode = !compareMode;
+  const btn = document.getElementById("compareBtn");
+  btn.classList.toggle("active", compareMode);
+  btn.textContent = compareMode ? `▶ Compare (${selected.size} selected)` : "⊕ Compare Mode";
+  document.getElementById("compareHint").style.display = compareMode ? "block" : "none";
+  if (!compareMode) {
+    selected.clear();
+    document.getElementById("clearBtn").style.display = "none";
+  }
+  render();
+}
+
+function clearSelection() {
+  selected.clear();
+  document.getElementById("clearBtn").style.display = "none";
+  document.getElementById("compareBtn").textContent = "▶ Compare Mode";
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
