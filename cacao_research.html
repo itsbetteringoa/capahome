@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cacao Factory Research — Deep Compendium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400&family=IBM+Plex+Mono:wght@400;500&family=Lato:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #0e0d0b;
+  --bg2: #161410;
+  --bg3: #1e1c18;
+  --bg4: #252219;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #e8e2d5;
+  --text2: #a89f8c;
+  --text3: #6b6355;
+  --amber: #d4900a;
+  --amber-light: #f0b840;
+  --amber-dim: rgba(212,144,10,0.12);
+  --amber-dim2: rgba(212,144,10,0.22);
+  --red: #c0392b;
+  --red-dim: rgba(192,57,43,0.15);
+  --orange: #e07020;
+  --orange-dim: rgba(224,112,32,0.15);
+  --green: #2e7d4f;
+  --green-dim: rgba(46,125,79,0.15);
+  --green-light: #52b37a;
+  --blue: #2a6099;
+  --blue-dim: rgba(42,96,153,0.15);
+  --blue-light: #5b9bd5;
+  --teal: #1e7b6a;
+  --teal-dim: rgba(30,123,106,0.15);
+  --teal-light: #3db899;
+  --nav-w: 260px;
+  --radius: 6px;
+  --radius-lg: 10px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+  line-height: 1.75;
+  font-size: 15.5px;
+}
+
+/* ── NAV ── */
+#nav {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--nav-w);
+  height: 100vh;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 28px 0 40px;
+  z-index: 100;
+}
+#nav::-webkit-scrollbar { width: 4px; }
+#nav::-webkit-scrollbar-track { background: transparent; }
+#nav::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+.nav-logo {
+  padding: 0 22px 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 18px;
+}
+.nav-logo .mono {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--amber);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 4px;
+}
+.nav-logo .title {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.nav-section {
+  padding: 0 14px 4px;
+  margin-bottom: 2px;
+}
+.nav-section-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  color: var(--text3);
+  text-transform: uppercase;
+  padding: 10px 8px 6px;
+  display: block;
+}
+.nav-section a {
+  display: block;
+  padding: 5px 8px;
+  color: var(--text2);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 400;
+  border-radius: var(--radius);
+  line-height: 1.4;
+  transition: color 0.15s, background 0.15s;
+}
+.nav-section a:hover {
+  color: var(--text);
+  background: var(--bg3);
+}
+.nav-section a.active {
+  color: var(--amber-light);
+  background: var(--amber-dim);
+}
+
+/* ── MAIN ── */
+#main {
+  margin-left: var(--nav-w);
+  min-height: 100vh;
+}
+
+/* ── HERO ── */
+.hero {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 56px 64px 52px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -80px; right: -120px;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212,144,10,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--amber);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hero-tag::before {
+  content: '';
+  display: inline-block;
+  width: 28px; height: 1px;
+  background: var(--amber);
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 42px;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--text);
+  max-width: 680px;
+  margin-bottom: 18px;
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--amber-light);
+}
+.hero-meta {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.hero-meta span {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11.5px;
+  color: var(--text3);
+  letter-spacing: 0.06em;
+}
+.hero-meta span b {
+  color: var(--text2);
+  font-weight: 500;
+}
+
+/* ── SECTION WRAPPER ── */
+.chapter {
+  padding: 0 64px 72px;
+  border-bottom: 1px solid var(--border);
+}
+.chapter-header {
+  padding: 52px 0 32px;
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 10;
+  margin: 0 -64px;
+  padding-left: 64px;
+  padding-right: 64px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 36px;
+}
+.chapter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--amber);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.chapter-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+.chapter-header .subtitle {
+  color: var(--text2);
+  font-size: 14px;
+  margin-top: 6px;
+  max-width: 680px;
+  font-weight: 300;
+}
+
+/* ── SECTION HEADINGS ── */
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 40px 0 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  line-height: 1.3;
+}
+.sub-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--amber-light);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 28px 0 10px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* ── PROSE ── */
+p { margin-bottom: 14px; color: var(--text); }
+p:last-child { margin-bottom: 0; }
+strong { font-weight: 700; color: var(--text); }
+em { font-style: italic; }
+
+/* ── CALLOUT BOXES ── */
+.callout {
+  border-radius: var(--radius-lg);
+  padding: 18px 22px;
+  margin: 20px 0;
+  border-left: 3px solid;
+  font-size: 14.5px;
+}
+.callout-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.callout.danger {
+  background: var(--red-dim);
+  border-color: var(--red);
+}
+.callout.danger .callout-title { color: #e57373; }
+.callout.warning {
+  background: var(--orange-dim);
+  border-color: var(--orange);
+}
+.callout.warning .callout-title { color: #f09040; }
+.callout.success {
+  background: var(--green-dim);
+  border-color: var(--green);
+}
+.callout.success .callout-title { color: var(--green-light); }
+.callout.info {
+  background: var(--blue-dim);
+  border-color: var(--blue);
+}
+.callout.info .callout-title { color: var(--blue-light); }
+.callout.amber {
+  background: var(--amber-dim);
+  border-color: var(--amber);
+}
+.callout.amber .callout-title { color: var(--amber-light); }
+
+/* ── TABLES ── */
+.tbl-wrap { overflow-x: auto; margin: 20px 0; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+thead th {
+  background: var(--bg3);
+  color: var(--text2);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border2);
+}
+tbody td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  color: var(--text);
+  line-height: 1.5;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: rgba(255,255,255,0.02); }
+.td-mono {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+}
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.badge-red { background: var(--red-dim); color: #e57373; border: 1px solid rgba(192,57,43,0.3); }
+.badge-orange { background: var(--orange-dim); color: #f09040; border: 1px solid rgba(224,112,32,0.3); }
+.badge-amber { background: var(--amber-dim2); color: var(--amber-light); border: 1px solid rgba(212,144,10,0.3); }
+.badge-green { background: var(--green-dim); color: var(--green-light); border: 1px solid rgba(46,125,79,0.3); }
+.badge-blue { background: var(--blue-dim); color: var(--blue-light); border: 1px solid rgba(42,96,153,0.3); }
+.badge-gray { background: rgba(255,255,255,0.06); color: var(--text2); border: 1px solid var(--border2); }
+
+/* ── GRID CARDS ── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+  margin: 20px 0;
+}
+.card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  transition: border-color 0.2s;
+}
+.card:hover { border-color: var(--border2); }
+.card-head {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 6px;
+}
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+.card p { font-size: 13.5px; color: var(--text2); margin-bottom: 8px; }
+.card p:last-child { margin-bottom: 0; }
+.card.card-red { border-left: 3px solid var(--red); }
+.card.card-orange { border-left: 3px solid var(--orange); }
+.card.card-amber { border-left: 3px solid var(--amber); }
+.card.card-green { border-left: 3px solid var(--green); }
+.card.card-blue { border-left: 3px solid var(--blue); }
+.card.card-teal { border-left: 3px solid var(--teal); }
+
+/* ── FACT ROWS ── */
+.fact-list { margin: 14px 0; }
+.fact-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+.fact-row:last-child { border-bottom: none; }
+.fact-label {
+  min-width: 220px;
+  color: var(--text2);
+  font-weight: 300;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.fact-value { color: var(--text); font-weight: 400; }
+.fact-value.highlight { color: var(--amber-light); font-weight: 700; }
+.fact-value.danger { color: #e57373; font-weight: 700; }
+.fact-value.good { color: var(--green-light); font-weight: 700; }
+
+/* ── STEP BLOCKS ── */
+.step-list { counter-reset: steps; margin: 14px 0; }
+.step {
+  counter-increment: steps;
+  display: flex;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: flex-start;
+}
+.step:last-child { border-bottom: none; }
+.step::before {
+  content: counter(steps);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  background: var(--amber-dim2);
+  color: var(--amber-light);
+  border-radius: 50%;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.step-content { font-size: 14px; color: var(--text2); line-height: 1.6; }
+.step-content strong { color: var(--text); }
+
+/* ── CASE CARDS ── */
+.case-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin: 18px 0;
+  overflow: hidden;
+}
+.case-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 22px;
+  background: var(--bg4);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.case-header h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.3;
+  flex: 1;
+}
+.case-body { padding: 18px 22px; }
+.case-body p { font-size: 13.5px; color: var(--text2); margin-bottom: 10px; }
+.case-body p:last-child { margin-bottom: 0; }
+.case-body p strong { color: var(--text); }
+.case-year {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--text3);
+  flex-shrink: 0;
+}
+.case-verdict {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 12.5px;
+  font-weight: 700;
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: 0.04em;
+}
+
+/* ── PPM BARS ── */
+.ppm-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 0;
+  font-size: 13px;
+}
+.ppm-label { min-width: 240px; color: var(--text2); font-size: 13px; }
+.ppm-bar-wrap { flex: 1; background: var(--bg3); height: 8px; border-radius: 4px; overflow: hidden; }
+.ppm-bar { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+.ppm-num { min-width: 80px; text-align: right; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text); }
+
+/* ── DIVIDER ── */
+hr { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+
+/* ── MONO CODE ── */
+code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12.5px;
+  background: var(--bg3);
+  padding: 2px 6px;
+  border-radius: 3px;
+  color: var(--amber-light);
+}
+
+/* ── SCROLL ACTIVE NAV ── */
+.chapter-anchor { scroll-margin-top: 120px; }
+
+/* ── PRINT ── */
+@media print {
+  #nav { display: none; }
+  #main { margin-left: 0; }
+  .chapter-header { position: static; }
+  .callout, .card, .case-card { break-inside: avoid; }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  :root { --nav-w: 0px; }
+  #nav { display: none; }
+  #main { margin-left: 0; }
+  .hero, .chapter { padding-left: 24px; padding-right: 24px; }
+  .chapter-header { margin: 0 -24px; padding-left: 24px; padding-right: 24px; }
+  .hero h1 { font-size: 28px; }
+  .card-grid { grid-template-columns: 1fr; }
+  .fact-label { min-width: 140px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAVIGATION ═══ -->
+<nav id="nav">
+  <div class="nav-logo">
+    <span class="mono">Research Compendium</span>
+    <span class="title">Vietnam Cacao Factory — Deep Research</span>
+  </div>
+
+  <div class="nav-section">
+    <span class="nav-section-label">Chapter I</span>
+    <a href="#ch1">Ball Mill Wear & Metals</a>
+    <a href="#ch1-wear">Wear mechanics</a>
+    <a href="#ch1-media">Grinding media types</a>
+    <a href="#ch1-ionic">Ionic vs metallic iron</a>
+    <a href="#ch1-magnets">Magnetic separators</a>
+    <a href="#ch1-strategy">Strategy & priority</a>
+  </div>
+
+  <div class="nav-section">
+    <span class="nav-section-label">Chapter II</span>
+    <a href="#ch2">Stone Melanger Wheels</a>
+    <a href="#ch2-granite">What "granite" really means</a>
+    <a href="#ch2-black">Black granite deception</a>
+    <a href="#ch2-binders">Binder chemistry</a>
+    <a href="#ch2-composites">Composite detection</a>
+    <a href="#ch2-glue">The glue problem</a>
+    <a href="#ch2-spec">Procurement specs</a>
+  </div>
+
+  <div class="nav-section">
+    <span class="nav-section-label">Chapter III</span>
+    <a href="#ch3">Fraud & Failure Cases</a>
+    <a href="#ch3-identity">Identity fraud</a>
+    <a href="#ch3-raw">Raw chocolate hoax</a>
+    <a href="#ch3-origin">Origin mislabeling</a>
+    <a href="#ch3-contamination">Contamination cases</a>
+    <a href="#ch3-metals">Heavy metals crisis</a>
+    <a href="#ch3-supply">Supply chain fraud</a>
+    <a href="#ch3-factory">Factory implications</a>
+  </div>
+</nav>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<div id="main">
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-tag">Vietnam · 20 MT/Month Processing · Deep Research</div>
+  <h1>Cacao Factory <em>Research</em><br>Compendium</h1>
+  <div class="hero-meta">
+    <span><b>3 Research Modules</b> · Equipment, Materials, Fraud</span>
+    <span><b>Updated</b> March 2026</span>
+    <span><b>Scope</b> Vietnam + Indonesia Bean Processing</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     CHAPTER I — BALL MILL WEAR
+════════════════════════════════════════════════════ -->
+<section class="chapter" id="ch1">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter I</div>
+    <h2>Ball Mill Wear, Metal Contamination &amp; Magnetic Separators</h2>
+    <p class="subtitle">Deep research on grinding ball wear rates, all media alternatives for vertical mills (including small 100 kg/hr batches), and an honest assessment of whether inline magnetic separators actually protect product quality.</p>
+  </div>
+
+  <!-- WEAR MECHANICS -->
+  <div class="chapter-anchor" id="ch1-wear"></div>
+  <h3 class="section-title">Why vertical ball mills wear faster — the geometry problem</h3>
+
+  <p>The root cause of excessive iron contamination in vertical agitator ball mills is geometric, not metallurgical. In a vertical orientation, gravity continuously pulls the entire ball charge toward the bottom of the vessel. The result is a high-density compaction zone at the bottom where ball-on-ball and ball-on-arm grinding pressure is orders of magnitude higher than in the upper zones. Increased wear at the bottom part of the grinding vessel is a well-known, visible phenomenon in the industry.</p>
+
+  <div class="callout warning">
+    <div class="callout-title">⚠ Small-batch problem is proportionally worse</div>
+    For a 100 kg/hr machine, the ratio of product flow to ball mass is even lower than large industrial mills — meaning compaction is more severe and iron transfer per unit of product is <strong>higher</strong>, not lower. Buying a smaller vertical ball mill does not reduce contamination; it may increase it per kilo of product.
+  </div>
+
+  <p>A horizontal ball mill (Netzsch MasterRefiner architecture) orients gravity perpendicular to the product flow axis. Balls distribute evenly around the 360° drum circumference. Netzsch's own data shows a <strong>38% reduction in iron transfer</strong> versus a comparable vertical configuration. This is purely a geometry effect — no change in ball material required.</p>
+
+  <hr>
+
+  <!-- GRINDING MEDIA COMPARISON -->
+  <div class="chapter-anchor" id="ch1-media"></div>
+  <h3 class="section-title">Complete grinding media comparison — every material type</h3>
+
+  <p>The following covers all options from cheapest to cleanest. Iron values represent ppm <em>added</em> to product during grinding on top of the natural ~29 ppm Fe in raw cacao beans.</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Material</th>
+          <th>Fe added (ppm)</th>
+          <th>Other metals</th>
+          <th>Cost/kg</th>
+          <th>Service life</th>
+          <th>Suitability</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Carbon steel / Mn65</strong></td>
+          <td><span class="badge badge-red">100–280 ppm</span></td>
+          <td>Elevated Mn (Mn65) — neurotoxin risk</td>
+          <td class="td-mono">$1–3</td>
+          <td>~9 months</td>
+          <td><span class="badge badge-red">Reject for premium</span></td>
+        </tr>
+        <tr>
+          <td><strong>Stainless steel 304</strong></td>
+          <td><span class="badge badge-orange">50–120 ppm</span></td>
+          <td>Cr 5–25 ppm, Ni 3–15 ppm</td>
+          <td class="td-mono">$4–8</td>
+          <td>~12 months</td>
+          <td><span class="badge badge-orange">Acceptable commercial</span></td>
+        </tr>
+        <tr>
+          <td><strong>Stainless steel 316L</strong></td>
+          <td><span class="badge badge-orange">40–100 ppm</span></td>
+          <td>Cr lower (Mo inhibits pitting), Ni 2–12 ppm</td>
+          <td class="td-mono">$5–9</td>
+          <td>~14 months</td>
+          <td><span class="badge badge-amber">Better than 304 in acidic cocoa</span></td>
+        </tr>
+        <tr>
+          <td><strong>Chrome steel GCr15 / 52100</strong></td>
+          <td><span class="badge badge-orange">60–150 ppm</span></td>
+          <td>Cr 3–10 ppm (low bleed due to passivation)</td>
+          <td class="td-mono">$3–6</td>
+          <td>~15–18 months</td>
+          <td><span class="badge badge-amber">Professional grade — longer life</span></td>
+        </tr>
+        <tr>
+          <td><strong>Alumina 94% Al₂O₃</strong></td>
+          <td><span class="badge badge-green">2–8 ppm</span></td>
+          <td>Al trace, Si trace (from 6% impurity)</td>
+          <td class="td-mono">$8–25</td>
+          <td>3–5 years</td>
+          <td><span class="badge badge-green">Good value food-grade option</span></td>
+        </tr>
+        <tr>
+          <td><strong>Zirconia 95% YSZ</strong></td>
+          <td><span class="badge badge-green">&lt;1–3 ppm</span></td>
+          <td>Zr sub-ppm, Y sub-ppm — both inert</td>
+          <td class="td-mono">$40–120</td>
+          <td>5–10 years</td>
+          <td><span class="badge badge-green">Gold standard for food</span></td>
+        </tr>
+        <tr>
+          <td><strong>Silicon nitride Si₃N₄</strong></td>
+          <td><span class="badge badge-green">&lt;1 ppm</span></td>
+          <td>Si sub-ppm, N inert</td>
+          <td class="td-mono">$60–200</td>
+          <td>7–12 years</td>
+          <td><span class="badge badge-blue">Premium — better fracture toughness than ZrO₂</span></td>
+        </tr>
+        <tr style="background: rgba(192,57,43,0.08);">
+          <td><strong>Tungsten carbide (WC/Co)</strong></td>
+          <td><span class="badge badge-gray">Low Fe</span></td>
+          <td><span class="badge badge-red">Co EXCEEDS EU limit 8–45×</span></td>
+          <td class="td-mono">$30–80</td>
+          <td>Long</td>
+          <td><span class="badge badge-red">NEVER USE in cacao</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-title">🚫 Critical: Tungsten Carbide absolute prohibition</div>
+    WC grinding arms and balls use cobalt as a metallic binder (6–12% Co). Cobalt is a carcinogen at elevated doses. Field data from Netzsch shows cobalt limits exceeded 8–45× in commercial chocolates where WC grinding arms were used. EU Regulation 1935/2004 on food contact materials makes this a food safety violation, not just an aesthetic problem. This applies equally to WC <em>grinding arms</em> — not just balls.
+  </div>
+
+  <div class="callout amber">
+    <div class="callout-title">💰 TCO reality check — zirconia vs steel</div>
+    100 kg batch mill with <strong>200 kg steel balls @ $2/kg = $400</strong>, replaced every 9 months = <strong>$533/year</strong>. Same mill with ZrO₂ balls @ $80/kg = $16,000, replaced every 6 years = <strong>$2,667/year</strong>. ZrO₂ costs ~5× more annually — but eliminates the magnetic filter, eliminates metallic taste defects, and allows "metal-free process" marketing on fine flavour cocoa at $8,000+/MT. The economics are straightforward at premium product pricing.
+  </div>
+
+  <hr>
+
+  <!-- IONIC VS METALLIC -->
+  <div class="chapter-anchor" id="ch1-ionic"></div>
+  <h3 class="section-title">The two iron forms — why this distinction matters for taste</h3>
+
+  <p>Iron in processed cocoa mass exists in two fundamentally different states, and this is the key insight most producers miss:</p>
+
+  <div class="card-grid">
+    <div class="card card-teal">
+      <div class="card-head">Type 1</div>
+      <div class="card-title">Metallic / free iron (Fe⁰)</div>
+      <p>Solid, discrete particles freshly abraded from grinding equipment. Ferromagnetic. 5–200 µm in size. Settles in fat. Can create gritty sensation on tongue. Source: active grinding.</p>
+      <p><strong>→ Magnetic separator can capture 60–95% of these.</strong></p>
+    </div>
+    <div class="card card-red">
+      <div class="card-head">Type 2</div>
+      <div class="card-title">Ionic / dissolved iron (Fe²⁺, Fe³⁺)</div>
+      <p>Iron ions dissolved in fat matrix and adsorbed onto polyphenol complexes. Invisible. No magnetic susceptibility. Cannot be removed by any magnet. Source: oxidation of Fe⁰ over time.</p>
+      <p><strong>→ Magnetic separator is completely ineffective against these.</strong></p>
+    </div>
+  </div>
+
+  <p>Scientific peer-reviewed data confirms: typical iron in commercial chocolate liquor is approximately 250 ppm. After magnetic separation, metallic iron is reduced to just 1–9 ppm. The remaining 240+ ppm is ionic iron — already dissolved into the fat phase, complexed with cocoa polyphenols, permanently in the product.</p>
+
+  <p>The taste threshold for ferrous iron in humans is approximately <strong>0.17 mg/L population average</strong>, with sensitive individuals detecting as low as 0.045 mg/L. In a fat matrix, chocolate is somewhat less sensitive than water — but at 150–280 ppm total iron (most ionic), sensitive tasters reliably perceive metallic-astringent notes. The iron-polyphenol (epicatechin, procyanidin) complexes add astringency. Dissolved Fe²⁺ also catalyses lipid oxidation in cocoa butter, accelerating rancidity and producing aldehyde off-flavours within weeks of production.</p>
+
+  <hr>
+
+  <!-- MAGNETS -->
+  <div class="chapter-anchor" id="ch1-magnets"></div>
+  <h3 class="section-title">Magnetic separators — what they actually do</h3>
+
+  <p>The honest verdict on inline magnetic separators: they are a necessary last-resort safety net, not a solution. They catch freshly abraded metallic particles <em>before</em> those particles oxidise and dissolve into the fat phase. The critical timing window is the period between mill discharge and temperature stabilisation — if product passes through a high-gauss magnet immediately after grinding, some particles are removed before they become ionic iron.</p>
+
+  <div class="callout success">
+    <div class="callout-title">✓ What a properly specified magnet does</div>
+    Major chocolate producers in France, Germany, the Netherlands, and Belgium use double-walled magnetic filters with neodymium-iron-boron bars at <strong>10,700 gauss flux density</strong>. Hot water flows through the outer wall to keep the chocolate liquefied (maximum 140°C working temperature). These capture the smallest ferrous particles — down to 25 microns — from liquid cocoa mass. This is a genuine, measurable safety benefit.
+  </div>
+
+  <div class="fact-list">
+    <div class="fact-row">
+      <span class="fact-label">Minimum field strength required</span>
+      <span class="fact-value highlight">8,000–10,700 gauss (rare-earth neodymium)</span>
+    </div>
+    <div class="fact-row">
+      <span class="fact-label">Standard ferrite magnets (1,000–3,000 G)</span>
+      <span class="fact-value danger">Near-useless for fine iron particles</span>
+    </div>
+    <div class="fact-row">
+      <span class="fact-label">Configuration for liquid cocoa mass</span>
+      <span class="fact-value">Heated double-wall inline filter, multiple tube/bar array</span>
+    </div>
+    <div class="fact-row">
+      <span class="fact-label">Position in process</span>
+      <span class="fact-value">Immediately after ball mill discharge — no delay</span>
+    </div>
+    <div class="fact-row">
+      <span class="fact-label">Cleaning frequency (with steel balls)</span>
+      <span class="fact-value">Daily minimum</span>
+    </div>
+    <div class="fact-row">
+      <span class="fact-label">Cleaning frequency (with ZrO₂ balls)</span>
+      <span class="fact-value">Weekly sufficient</span>
+    </div>
+    <div class="fact-row">
+      <span class="fact-label">Particle detection below magnet</span>
+      <span class="fact-value">Metal detector (X-ray or induction) as final check</span>
+    </div>
+    <div class="fact-row">
+      <span class="fact-label">What magnet cannot do</span>
+      <span class="fact-value danger">Remove ionic iron already dissolved in fat</span>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- STRATEGY -->
+  <div class="chapter-anchor" id="ch1-strategy"></div>
+  <h3 class="section-title">Priority intervention stack — in order of effectiveness</h3>
+
+  <div class="step-list">
+    <div class="step">
+      <div class="step-content"><strong>Switch to zirconia (YSZ 95%) or high-purity alumina grinding media.</strong> Eliminates 95–98% of the problem at source. No other intervention approaches this impact. This is the primary solution — everything else is mitigation.</div>
+    </div>
+    <div class="step">
+      <div class="step-content"><strong>Use horizontal rather than vertical ball mill orientation.</strong> If changing equipment is an option, horizontal geometry reduces iron transfer by 38% solely through ball distribution physics. No material change required.</div>
+    </div>
+    <div class="step">
+      <div class="step-content"><strong>Install a high-gauss (10,000+ G) heated inline magnetic filter immediately after mill discharge.</strong> Catches residual free metallic particles before they can oxidise and dissolve. For liquid cocoa mass: double-wall neodymium design. For powder: rotating cleanflow magnet.</div>
+    </div>
+    <div class="step">
+      <div class="step-content"><strong>Pre-clean rigorously before the ball mill.</strong> Every stone that enters a ball mill causes disproportionate ball fracture and metal particle generation. Your destoner/cleaner upstream is your first metallic contamination defence. Properly specified cleaning → fewer grinding incidents → less wear.</div>
+    </div>
+    <div class="step">
+      <div class="step-content"><strong>Monitor total iron by ICP-OES quarterly.</strong> Not with a magnet-pass test. Only total digestion analysis reveals the true ionic iron load. A clean magnet does not mean clean product. Industry benchmark: ≤200 ppm total Fe in dark chocolate; premium buyers specify ≤150 ppm; fine flavour target ≤100 ppm.</div>
+    </div>
+    <div class="step">
+      <div class="step-content"><strong>Specify full food-grade stainless contact surfaces throughout the line, ceramic media in ball mill, and a heated double-wall neodymium filter inline.</strong> This is the specification used by top fine-flavour producers to achieve &lt;30 ppm total iron in finished liquor.</div>
+    </div>
+  </div>
+
+  <!-- PPM VISUAL -->
+  <h3 class="section-title">Iron transfer by media type — visual comparison</h3>
+  <div style="margin: 16px 0; padding: 20px; background: var(--bg3); border-radius: var(--radius-lg);">
+    <div class="ppm-row">
+      <span class="ppm-label">Carbon steel (worst case)</span>
+      <div class="ppm-bar-wrap"><div class="ppm-bar" style="width:100%; background: #c0392b;"></div></div>
+      <span class="ppm-num">280 ppm</span>
+    </div>
+    <div class="ppm-row">
+      <span class="ppm-label">Stainless steel 304</span>
+      <div class="ppm-bar-wrap"><div class="ppm-bar" style="width:43%; background: #e07020;"></div></div>
+      <span class="ppm-num">120 ppm</span>
+    </div>
+    <div class="ppm-row">
+      <span class="ppm-label">Chrome steel GCr15</span>
+      <div class="ppm-bar-wrap"><div class="ppm-bar" style="width:54%; background: #d4900a;"></div></div>
+      <span class="ppm-num">150 ppm</span>
+    </div>
+    <div class="ppm-row">
+      <span class="ppm-label">Horizontal mill (any steel)</span>
+      <div class="ppm-bar-wrap"><div class="ppm-bar" style="width:33%; background: #d4900a;"></div></div>
+      <span class="ppm-num">92 ppm</span>
+    </div>
+    <div class="ppm-row">
+      <span class="ppm-label">Alumina 94% Al₂O₃</span>
+      <div class="ppm-bar-wrap"><div class="ppm-bar" style="width:3%; background: #2e7d4f;"></div></div>
+      <span class="ppm-num">8 ppm</span>
+    </div>
+    <div class="ppm-row">
+      <span class="ppm-label">Zirconia 95% YSZ (gold standard)</span>
+      <div class="ppm-bar-wrap"><div class="ppm-bar" style="width:1%; background: #3db899;"></div></div>
+      <span class="ppm-num">&lt;3 ppm</span>
+    </div>
+    <p style="font-size:12px; color: var(--text3); margin-top: 10px; margin-bottom: 0;">Values = Fe ppm added to product above natural cacao baseline (~29 ppm). Natural baseline is pre-grinding and cannot be removed by any means.</p>
+  </div>
+
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════
+     CHAPTER II — STONE MELANGERS
+════════════════════════════════════════════════════ -->
+<section class="chapter" id="ch2">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter II</div>
+    <h2>Stone Melanger Wheels — Composite Granite, Binders &amp; Hidden Pitfalls</h2>
+    <p class="subtitle">Deep research on composite granite powder stones used in melangers: what "granite" actually means, the dangerous binders used as adhesives, how to tell real from fake, and what migrates into your chocolate.</p>
+  </div>
+
+  <!-- WHAT GRANITE MEANS -->
+  <div class="chapter-anchor" id="ch2-granite"></div>
+  <h3 class="section-title">What "granite" in a stone melanger actually is</h3>
+
+  <p>Real granite is an interlocking crystalline matrix of quartz (SiO₂, Mohs 7), feldspar (KAlSi₃O₈, Mohs 6), and mica platelets. The chemical composition is 70–77% silica by weight. The key word is <em>interlocking</em> — the crystals grow into each other during cooling from magma over millions of years, creating mechanical bonds that no adhesive can replicate. The grinding surface is self-maintaining: when a quartz grain wears away, the next crystal is already there. This is why good granite melangers last 10+ years with minimal stone loss.</p>
+
+  <p>In practice, the market contains four completely different things all sold as "granite stone wheels," and visual inspection alone cannot distinguish them.</p>
+
+  <div class="card-grid">
+    <div class="card card-teal">
+      <div class="card-head">Type 1 — Best</div>
+      <div class="card-title">True dense natural granite</div>
+      <p>Mohs 6–7. Interlocking crystals. No binder whatsoever — zero migration risk. Self-sharpening. 10+ year lifespan.</p>
+      <p><strong>Used by:</strong> Spectra, Premier, KADZAMA (dense grade), CocoaTown commercial.</p>
+      <p><span class="badge badge-green">Food-safe ✓</span></p>
+    </div>
+    <div class="card card-amber">
+      <div class="card-head">Type 2 — Warning</div>
+      <div class="card-title">Porous / low-density "granite"</div>
+      <p>Actually gabbro, diabase, or low-grade granite. Micro-pores trap cocoa and bacteria. Crumbles into the product. No artificial binder, but short lifespan and contamination risk.</p>
+      <p><strong>Common in:</strong> Cheap Indian wet grinders marketed as melangers.</p>
+      <p><span class="badge badge-orange">Reject — contamination risk</span></p>
+    </div>
+    <div class="card card-red">
+      <div class="card-head">Type 3 — Dangerous</div>
+      <div class="card-title">Composite abrasive wheel (resinoid)</div>
+      <p>Al₂O₃ or SiC grit bonded with phenolic resin (phenol-formaldehyde, Bakelite type). Not food-grade. Resin binder migrates into fat. Free formaldehyde is a Group 1 carcinogen. Looks identical to granite externally.</p>
+      <p><span class="badge badge-red">Never use in food processing</span></p>
+    </div>
+    <div class="card card-red">
+      <div class="card-head">Type 4 — Critical risk</div>
+      <div class="card-title">Epoxy / polymer composite granite</div>
+      <p>Stone dust or chips bound with epoxy resin. Marketed as "engineered granite." BPA-containing epoxy is fat-soluble (log P = 3.32). Fails structurally at 45–60°C (melanger operating temperature). Delamination releases chunks into product.</p>
+      <p><span class="badge badge-red">BPA contamination + structural failure risk</span></p>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- BLACK GRANITE DECEPTION -->
+  <div class="chapter-anchor" id="ch2-black"></div>
+  <h3 class="section-title">The "black granite" geology deception</h3>
+
+  <p>Here is a hidden pitfall that almost nobody discusses. True granite is rarely pure black — it requires quartz, which is always light-coloured. The "black granite" in virtually all melangers is actually <strong>gabbro or diabase</strong> — mafic igneous rocks dominated by pyroxene and plagioclase feldspar, with significantly more iron and magnesium than true granite. What is sold commercially as "Black Galaxy" or "Absolute Black" granite is not granite by geological definition.</p>
+
+  <p>Gabbro contains iron-rich pyroxene minerals (augite, hornblende) in higher proportions than true granite. Under intense long-duration wet grinding with acidic cocoa mass, black stones release slightly more iron-bearing mineral particles than light granite would. This is not dangerous at the quantities involved — the wear particles are non-ionic mineral silicates — but the claim "black granite = hardest, most food-safe option" is marketing rather than mineralogy.</p>
+
+  <hr>
+
+  <!-- BINDER CHEMISTRY -->
+  <div class="chapter-anchor" id="ch2-binders"></div>
+  <h3 class="section-title">Binder chemistry — what migrates into your chocolate</h3>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Binder type</th>
+          <th>Used in</th>
+          <th>Food safety</th>
+          <th>Key risk in cocoa fat</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Phenolic resin (resinoid)</strong><br><small>Phenol-formaldehyde, "Bakelite type"</small></td>
+          <td>Standard industrial abrasive wheels — dominant in India/China</td>
+          <td><span class="badge badge-red">Not food-grade anywhere</span></td>
+          <td>Free formaldehyde — Group 1 IARC carcinogen. Outgasses at elevated temps. 20–40 hr chocolate grind at 50°C = genuine food safety violation.</td>
+        </tr>
+        <tr>
+          <td><strong>Epoxy resin (BPA-based)</strong><br><small>Bisphenol A + epichlorohydrin</small></td>
+          <td>Structural glue for center pin adaptors; some composite stones</td>
+          <td><span class="badge badge-orange">Conditional only — EU 0.05 mg BPA/kg food</span></td>
+          <td>BPA log P = 3.32 → highly fat-soluble. Cocoa butter extracts BPA far more efficiently than the water-based simulants used in regulatory tests. Migration accelerates 55× at 50°C vs 20°C.</td>
+        </tr>
+        <tr>
+          <td><strong>Vitrified (ceramic glass) bond</strong><br><small>Clay/glass fired at ~1,200°C</small></td>
+          <td>Professional grain mills, some premium composite abrasives</td>
+          <td><span class="badge badge-green">Inert — no organic migration</span></td>
+          <td>Brittle — catastrophic fracture if a hard particle (stone) enters the mill. Requires very clean feed material.</td>
+        </tr>
+        <tr>
+          <td><strong>Food-grade silicone</strong><br><small>Polydimethylsiloxane</small></td>
+          <td>Gaskets and seals only — not used in stone body itself</td>
+          <td><span class="badge badge-green">Safe for food contact seals</span></td>
+          <td>Correct application: KADZAMA uses silicone gasket to seal stone-to-drum interface instead of epoxy glue. This eliminates the BPA migration vector entirely.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-title">🚫 The BPA + fat matrix problem — unique to chocolate processing</div>
+    Standard BPA migration testing is performed with aqueous simulants and alcoholic simulants, not fat simulants at 50°C. These conditions are dramatically less aggressive than actual chocolate processing conditions. Research confirms BPA migration rate is 55× higher at near-boiling temperature versus 20°C, and fat-based foods show higher extraction than water-based foods. A melanger running 8–40 hour cycles at 45–60°C with cocoa butter contact represents one of the worst-case BPA migration scenarios possible — far outside the regulatory test parameters.
+  </div>
+
+  <hr>
+
+  <!-- COMPOSITE DETECTION -->
+  <div class="chapter-anchor" id="ch2-composites"></div>
+  <h3 class="section-title">How to detect composite and substandard stones</h3>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Test</th>
+          <th>Cost</th>
+          <th>What it detects</th>
+          <th>Pass result</th>
+          <th>Fail signal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1. Visual inspection</strong></td>
+          <td><span class="badge badge-green">Free</span></td>
+          <td>Porous vs dense stone; composite texture</td>
+          <td>Large visible crystal grains interlocked, varied sizes, hard surface</td>
+          <td>Uniform fine texture, looks like compressed concrete or sandpaper disc</td>
+        </tr>
+        <tr>
+          <td><strong>2. Water drop test</strong></td>
+          <td><span class="badge badge-green">Free</span></td>
+          <td>Porosity — porous stone fails</td>
+          <td>Water beads up; no absorption in 60 seconds</td>
+          <td>Rapidly absorbs water, surface darkens → reject</td>
+        </tr>
+        <tr>
+          <td><strong>3. Steel file scratch</strong></td>
+          <td><span class="badge badge-green">~$5</span></td>
+          <td>Hardness — composite often softer</td>
+          <td>Steel file (Mohs 6.5) does NOT scratch quartz (Mohs 7)</td>
+          <td>File scratches surface easily, leaves dusty mark</td>
+        </tr>
+        <tr>
+          <td><strong>4. HCl acid drop (10%)</strong></td>
+          <td><span class="badge badge-amber">~$10</span></td>
+          <td>Carbonate rocks (limestone, chalk) passed off as granite</td>
+          <td>No reaction on granite</td>
+          <td>Fizzing (CO₂) = CaCO₃ = NOT granite → reject</td>
+        </tr>
+        <tr>
+          <td><strong>5. UV lamp 365 nm</strong></td>
+          <td><span class="badge badge-amber">~$15</span></td>
+          <td>Resin / epoxy binders — most reliable field test</td>
+          <td>Natural granite: dull or faint mineral fluorescence only</td>
+          <td>Bright uniform blue-white glow = organic binder present → reject</td>
+        </tr>
+        <tr>
+          <td><strong>6. Density calculation</strong></td>
+          <td><span class="badge badge-amber">~$20</span></td>
+          <td>Corundum/alumina composite vs real granite</td>
+          <td>Dense granite: 2.6–2.8 g/cm³</td>
+          <td>Corundum composite: 3.2–3.9 g/cm³ = wrong material entirely</td>
+        </tr>
+        <tr>
+          <td><strong>7. XRF spectrometry</strong></td>
+          <td><span class="badge badge-orange">$100–500</span></td>
+          <td>Exact mineralogy — definitive</td>
+          <td>Si, Al, K, Na, Fe in granite ratios</td>
+          <td>High Al signal = corundum; SiC signature = silicon carbide grit</td>
+        </tr>
+        <tr>
+          <td><strong>8. GC-MS fat migration test</strong></td>
+          <td><span class="badge badge-orange">$300–1,000</span></td>
+          <td>Organic migrant release — gold standard</td>
+          <td>Soak in vegetable oil at 60°C / 24h: no organic migrants detected</td>
+          <td>BPA, phenolics, formaldehyde detected = contaminated product</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <!-- THE GLUE PROBLEM -->
+  <div class="chapter-anchor" id="ch2-glue"></div>
+  <h3 class="section-title">The glue problem — a second independent contamination vector</h3>
+
+  <p>Even when the grinding stones themselves are genuine dense granite, the adhesive used to bond the roller shaft adaptor (centre pin) to the stone base is a separate contamination risk. In most melangers, this epoxy joint is submerged in cocoa mass continuously during operation.</p>
+
+  <p>CocoaTown's own FAQ explicitly states that <em>"washing the melanger drum with hot water can damage the food grade glue"</em> and <em>"heating the drum in the oven can also damage the glue connecting the granite stone and roller adaptor."</em> The same FAQ instructs repair using "food grade, high temperature, two-part epoxy glue." This is the same BPA-containing material in continuous fat contact.</p>
+
+  <div class="callout warning">
+    <div class="callout-title">⚠ Four compounding factors that make BPA migration worse in melangers</div>
+    <strong>1. Fat matrix</strong> — cocoa butter is a more aggressive BPA extractant than the water-based simulants used in regulatory testing. <strong>2. Extended contact time</strong> — a single grind cycle is 8–40 hours, far longer than any food contact test scenario. <strong>3. Temperature</strong> — 45–60°C operation falls squarely in the accelerated migration zone. <strong>4. Mechanical stress</strong> — the joint is in constant torsional stress, creating micro-cracks in cured epoxy that expose fresh, incompletely cured resin.
+  </div>
+
+  <p>The correct engineering solution — adopted by KADZAMA and a small number of premium manufacturers — is to eliminate the adhesive joint entirely and use mechanical stainless steel fastening with a food-grade silicone gasket. Silicone has no BPA, is thermally stable to 200°C+, and migrates no organic compounds into fat. This is the specification to demand.</p>
+
+  <hr>
+
+  <!-- PROCUREMENT SPECS -->
+  <div class="chapter-anchor" id="ch2-spec"></div>
+  <h3 class="section-title">Procurement specifications — what to demand in writing</h3>
+
+  <div class="callout amber">
+    <div class="callout-title">📋 Mandatory specifications for any stone melanger supplier</div>
+    <strong>Stone material:</strong> Natural quarried stone (not reconstituted, not composite, not engineered). Mineralogy: granite or quartzite. Density: 2.6–2.8 g/cm³. Water absorption: &lt;0.1% by mass (ASTM C97). Porosity: &lt;1% (EN 1925). No resin-bonded materials of any kind. Certificate of stone origin (quarry name and location).
+    <br><br>
+    <strong>Fastening/adhesive:</strong> Either mechanical SS fastening with food-grade silicone gasket (preferred), or if epoxy used: FDA 21 CFR 175.105 compliant, fully cured, with documented BPA migration test in fat simulant showing &lt;0.05 mg BPA/kg.
+    <br><br>
+    <strong>Documentation:</strong> XRF mineral analysis certificate per batch. Maximum particle size of stone wear debris: &lt;50 µm.
+  </div>
+
+  <p>For commercial-scale production (your 20 MT/month factory), purchase from KADZAMA, Premier Tilting commercial, or CocoaTown commercial-grade machines only. Do not use cheap Indian domestic wet grinders (marketed for idli/dosa batter but widely resold for chocolate) — stone grade is never specified and composite abrasive wheels are a genuine possibility.</p>
+
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════
+     CHAPTER III — FRAUD & FAILURE CASES
+════════════════════════════════════════════════════ -->
+<section class="chapter" id="ch3">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter III</div>
+    <h2>Bean-to-Bar Fraud, Raw Chocolate Hoax &amp; Contamination Cases</h2>
+    <p class="subtitle">Documented cases of identity fraud, process deception, raw labeling abuse, contamination failures (Salmonella, heavy metals, allergens), and systemic supply chain fraud affecting bean-to-bar and "artisan" chocolate producers.</p>
+  </div>
+
+  <!-- IDENTITY FRAUD -->
+  <div class="chapter-anchor" id="ch3-identity"></div>
+  <h3 class="section-title">Category 1 — Identity &amp; process fraud</h3>
+
+  <div class="case-card">
+    <div class="case-header">
+      <h4>Mast Brothers Chocolate — the defining craft chocolate fraud</h4>
+      <span class="case-year">2007–2015</span>
+      <span class="badge badge-orange">Identity fraud</span>
+      <span class="badge badge-gray">USA</span>
+    </div>
+    <div class="case-body">
+      <p>Rick and Michael Mast launched as Brooklyn's first "bean-to-bar" chocolate makers in 2007, charging $10 per bar and building a mythology around artisanal craft. A 2015 investigation by food blogger Scott Craig (DallasFood.org), later confirmed by Slate, Quartz, and the New York Times, revealed that during their first years the brothers had purchased Valrhona couverture (industrial-grade French chocolate), melted it down, repackaged it in their distinctive custom wrappers, and sold it as original bean-to-bar production.</p>
+      <p><strong>The evidence:</strong> Multiple independent expert tasters described the early bars as having "an overly refined, smooth texture that is a trademark of industrial chocolate — balanced, flavorless, dark roast, and vanilla." No small equipment available to the brothers could have produced the volumes they were selling with that texture. Emails between Mast and Valrhona were produced. A chef who asked directly in 2008 received the written response: <em>"We also receive cocoa paste from Valrhona that we will sometimes use as a base as we experiment."</em></p>
+      <p><strong>The defence:</strong> Rick Mast acknowledged couverture use in "early experimentation" but maintained the remelted bars were never sold as "bean-to-bar." The industry called this "selective amnesia." The chocolate community — reviewers, specialty retailers, chocolate educators — had long suspected the fraud and documented it among themselves before the public exposé.</p>
+      <p><strong>Quality dimension:</strong> When the brothers actually attempted to make their own chocolate (circa 2010), the transition was stark. One long-time customer described the new bars as "simply inedible, by my standards." The craft process, when actually attempted, produced inferior results because the brothers had not developed the skill during the years they claimed to have been doing it.</p>
+      <div class="case-verdict" style="color: #e57373;">Verdict: Fraud confirmed by partial admission and extensive corroborating evidence. Factory closed 2019 after sustained sales collapse. Called "the Milli Vanilli of chocolate" by the investigation. No legal action was pursued by any party.</div>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">ℹ "Remelter" vs "bean-to-bar" — the industry distinction</div>
+    Buying couverture and repackaging it is a legitimate business model (called "remelting") practiced openly by thousands of companies. The fraud is exclusively in claiming to be bean-to-bar while doing this. A product honestly labelled as "made from Valrhona couverture" carries zero fraud. The Mast case turned on the deceptive identity claim, not on the act of using couverture itself.
+  </div>
+
+  <hr>
+
+  <!-- RAW CHOCOLATE -->
+  <div class="chapter-anchor" id="ch3-raw"></div>
+  <h3 class="section-title">Category 2 — The "raw chocolate" scientific impossibility</h3>
+
+  <p>The raw chocolate movement emerged from the Paleo/raw food trend around 2009 (largely associated with Ecuadorian brand Pacari). Today it is one of the most widespread fraudulent label claims in the specialty food industry — made possible entirely by the absence of any legal definition of "raw" in food law anywhere in the world.</p>
+
+  <div class="callout danger">
+    <div class="callout-title">🚫 Raw chocolate is thermodynamically impossible by its own definition</div>
+    Raw food is defined as food not heated above 42°C (108°F) that remains capable of germination. Cacao processing violates this at <strong>every single step</strong> before the consumer ever receives the product: fermentation peaks at 50–55°C; sun-drying regularly exceeds 50°C; stone melangers running full batches reach 55–70°C; and once fermented, beans cannot germinate regardless of subsequent treatment. "Unroasted" is an honest description — "raw" is not.
+  </div>
+
+  <div class="card-grid">
+    <div class="card card-red">
+      <div class="card-head">The health claim hoax</div>
+      <div class="card-title">"Living enzymes preserved"</div>
+      <p>There are no living enzymes in dried, fermented cocoa beans. They were destroyed during fermentation regardless of any subsequent temperature management. The premise of the health claim is factually wrong at the foundational level.</p>
+    </div>
+    <div class="card card-red">
+      <div class="card-head">The taste tell</div>
+      <div class="card-title">If it tastes like chocolate, it isn't raw</div>
+      <p>Truly unheated cacao is bitter, astringent, and acidic — like licking bark. The Maillard reactions and flavour precursors that create "chocolate" flavour require heat. Any product with recognisable chocolate notes has been heated above 42°C somewhere in its production.</p>
+    </div>
+    <div class="card card-orange">
+      <div class="card-head">The food safety risk</div>
+      <div class="card-title">Skipping roasting = skipping the kill step</div>
+      <p>Roasting is the primary lethal step for Salmonella and other pathogens present on bean surfaces. Fermented beans are not sterile. "Raw" chocolate has higher pathogen risk than roasted, not lower. The "healthy" label applies to a product that is objectively more dangerous.</p>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ORIGIN MISLABELING -->
+  <div class="chapter-anchor" id="ch3-origin"></div>
+  <h3 class="section-title">Category 3 — Origin, organic &amp; certification fraud</h3>
+
+  <p>There is no legal definition of "single origin" anywhere in the world. Any chocolate can claim it. Food fraud specialists estimate that single-origin, organic, and fair-trade chocolate products are "moderately likely" to carry inaccurate claims — driven by the price premium these labels command.</p>
+
+  <div class="card-grid">
+    <div class="card card-amber">
+      <div class="card-head">Single origin fraud</div>
+      <div class="card-title">No definition, no enforcement</div>
+      <p>Beans from multiple countries are routinely blended by trading intermediaries. A broker receiving Côte d'Ivoire, Ecuador, and Peru beans in the same warehouse can attribute paperwork to the highest-value origin freely. Without DNA fingerprinting or stable isotope analysis ($200–500/test), buyers cannot verify.</p>
+    </div>
+    <div class="card card-amber">
+      <div class="card-head">The EUDR pressure effect</div>
+      <div class="card-title">New regulatory incentive for origin forgery</div>
+      <p>The EU Deforestation Regulation (2024–2025) penalises beans from recently deforested land. This creates direct financial incentive to falsify cocoa origin documentation — moving "high-risk" beans onto paperwork showing "low-risk" origins. Experts report the practice is already increasing.</p>
+    </div>
+    <div class="card card-amber">
+      <div class="card-head">The organic paradox</div>
+      <div class="card-title">Organic = higher heavy metals on average</div>
+      <p>Consumer Reports 2024 study: organic dark chocolate had consistently higher lead and cadmium levels than conventional. Phosphate fertilisers (banned in organic) suppress cadmium uptake. Organic outdoor drying without dust controls increases lead accumulation on bean surfaces.</p>
+    </div>
+    <div class="card card-amber">
+      <div class="card-head">Fair trade supply chain gaps</div>
+      <div class="card-title">3–7 intermediaries, announced audits</div>
+      <p>Fair trade premiums intended for farmers can be captured by intermediaries mid-chain. Audits are typically announced in advance, making it straightforward to comply for one day. One-time personal relationship with farmer is more reliable than certification alone.</p>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- CONTAMINATION -->
+  <div class="chapter-anchor" id="ch3-contamination"></div>
+  <h3 class="section-title">Category 4 — Salmonella &amp; microbial contamination</h3>
+
+  <div class="case-card">
+    <div class="case-header">
+      <h4>Ferrero / Kinder — global Salmonella Typhimurium outbreak</h4>
+      <span class="case-year">2022</span>
+      <span class="badge badge-red">Contamination</span>
+      <span class="badge badge-gray">Belgium → 15 countries</span>
+    </div>
+    <div class="case-body">
+      <p>In early 2022, UK Health Security Agency identified a cluster of children with Salmonella Typhimurium infections linked to Kinder products. By late March, genetic sequencing matched human isolates to non-human samples from one specific Belgian Ferrero factory. The factory was ordered closed April 8, 2022; a global recall followed two days later.</p>
+      <p><strong>Scale:</strong> ~450 people sick across 15 countries, predominantly children. Products affected: Kinder Surprise Eggs, Kinder Happy Moments, Kinder Mix — all Easter-season children's products.</p>
+      <p><strong>Root cause:</strong> Contaminated whey powder used in the milk chocolate filling was not detected by incoming quality testing. The contamination was at raw ingredient level — it passed through Ferrero's receiving process.</p>
+      <p><strong>Key lesson:</strong> Ferrero operates one of the most sophisticated food safety management systems in the world. Industrial-scale HACCP, in-house microbiology laboratories, documented incoming raw material testing — and the contamination still happened. Artisan producers operating without any of these controls face a significantly higher underlying risk.</p>
+      <div class="case-verdict" style="color: var(--blue-light);">Lesson: The roasting step — properly validated with data logging, not just oven setting — is the primary kill step for cacao processing. "Validated" means you have measured actual bean surface temperature, not just oven air temperature, which can be dramatically different.</div>
+    </div>
+  </div>
+
+  <div class="case-card">
+    <div class="case-header">
+      <h4>Clasen Quality Chocolate — 4.38 million pounds recalled</h4>
+      <span class="case-year">2024 (+ 2023)</span>
+      <span class="badge badge-red">Salmonella + Allergen</span>
+      <span class="badge badge-gray">USA — 9 states</span>
+    </div>
+    <div class="case-body">
+      <p>In May 2024, Clasen Quality Chocolate (Madison, WI) recalled over 4.38 million pounds of chocolate products — milk chocolate drops, white chocolate wafers, confectionery coatings — due to potential Salmonella contamination. Products distributed across 9 states. This was Clasen's second major recall in 14 months: in January 2023 they had recalled 2.24 million pounds for undeclared peanut residue in 12 states.</p>
+      <p><strong>Pattern significance:</strong> Two separate failure modes (pathogen + allergen) in the same facility within 14 months points to systematic food safety management failure, not isolated incidents. The allergen failure (2023) indicates inadequate allergen segregation protocols and cleaning validation. The Salmonella failure (2024) indicates inadequate incoming raw material controls.</p>
+    </div>
+  </div>
+
+  <div class="case-card">
+    <div class="case-header">
+      <h4>Spring &amp; Mulberry — voluntary Salmonella recall</h4>
+      <span class="case-year">January 2026</span>
+      <span class="badge badge-red">Salmonella</span>
+      <span class="badge badge-gray">USA — artisan producer</span>
+    </div>
+    <div class="case-body">
+      <p>Spring &amp; Mulberry (Raleigh, NC) expanded a voluntary recall to cover multiple chocolate bar flavours, including Mint Leaf, due to possible Salmonella contamination. This is a small artisan producer — not an industrial conglomerate. It demonstrates that the food safety risk is not limited to large manufacturers, and that artisan scale does not provide immunity from microbial contamination failures.</p>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- HEAVY METALS -->
+  <div class="chapter-anchor" id="ch3-metals"></div>
+  <h3 class="section-title">Category 5 — The heavy metals crisis (lead &amp; cadmium)</h3>
+
+  <p>Between 2022 and 2024, Consumer Reports and the George Washington University published a series of studies that fundamentally changed how the industry understands dark chocolate safety. The findings are not alarming for occasional consumers but are material for a producer making sourcing and processing decisions.</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Study / Date</th>
+          <th>Scope</th>
+          <th>Key finding</th>
+          <th>Brands flagged</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Consumer Reports, Dec 2022</td>
+          <td>28 dark chocolate bars</td>
+          <td>Lead and cadmium detected in all 28. Many exceed California MADL limits.</td>
+          <td>Lindt 70%, Dove 70%, Godiva 72%, Hershey's Special Dark, Trader Joe's 85%</td>
+        </tr>
+        <tr>
+          <td>Consumer Reports, Oct 2023</td>
+          <td>48 products across 7 categories</td>
+          <td>16 of 48 exceeded limits for at least one metal. 71% of dark bars above limits for lead, cadmium, or both.</td>
+          <td>Perugina (Nestlé), Evolved 72%, Sam's Choice 72% — highest metals</td>
+        </tr>
+        <tr>
+          <td>GWU / Frontiers in Nutrition, July 2024</td>
+          <td>72 products tested across 4 years (2014–2022)</td>
+          <td>43% exceeded lead MADL; 35% exceeded cadmium MADL. <strong>No improvement trend detected across 8 years.</strong></td>
+          <td>Consistent across years and brands</td>
+        </tr>
+        <tr>
+          <td>Consumer Reports, 2024 update</td>
+          <td>Expanded analysis including organic</td>
+          <td>Organic dark chocolate had <em>higher</em> heavy metals than conventional on average — a counterintuitive finding.</td>
+          <td>Organic brands generally, especially those with high cocoa content</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sub-title">Where the metals come from</div>
+
+  <div class="fact-list">
+    <div class="fact-row">
+      <span class="fact-label">Cadmium source</span>
+      <span class="fact-value">Soil — taken up by the cacao tree roots and concentrated in the bean as the tree matures. Geological — cannot be eliminated by post-harvest handling. Higher in Ecuadorian, Peruvian, Colombian origins; lower in Tanzania, Madagascar.</span>
+    </div>
+    <div class="fact-row">
+      <span class="fact-label">Lead source</span>
+      <span class="fact-value">Post-harvest contamination — lead-laden dust and dirt accumulate on bean outer shells during outdoor sun-drying. Found on shell, not inside bean. Controllable through covered drying tables and dust suppression.</span>
+    </div>
+    <div class="fact-row">
+      <span class="fact-label">Why organic is worse</span>
+      <span class="fact-value">Phosphate fertilisers (banned in organic) partially suppress cadmium uptake. Organic outdoor drying with less infrastructure = more dust contact = more lead. The certification has no effect on either metal pathway.</span>
+    </div>
+    <div class="fact-row">
+      <span class="fact-label">Craft sector advantage</span>
+      <span class="fact-value">Taza and Kokoa Kamili (Tanzania) origin bars tested clean in CR analysis. Single-origin sourcing with direct farmer relationships creates traceability that enables origin-based metal testing and blending decisions.</span>
+    </div>
+    <div class="fact-row">
+      <span class="fact-label">Health risk framing</span>
+      <span class="fact-value">California MADL is an extremely conservative limit. At moderate consumption (1–2 pieces/day), experts say risk is minimal for healthy adults. The concern is cumulative exposure, especially for children and pregnant women eating daily.</span>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- SUPPLY CHAIN FRAUD -->
+  <div class="chapter-anchor" id="ch3-supply"></div>
+  <h3 class="section-title">Category 6 — Supply chain fraud (affects honest producers)</h3>
+
+  <p>The most insidious category is fraud that propagates through a producer's supply chain without any deliberate act on their part. A producer can be entirely honest and still carry fraudulent claims inherited from upstream.</p>
+
+  <div class="card-grid">
+    <div class="card card-blue">
+      <div class="card-head">Bean-level fraud</div>
+      <div class="card-title">Weight inflation & stone addition</div>
+      <p>Adding rocks, stones, wet beans, or sticks to sacks of cocoa to increase weight at point of sale. Documented practice. More common in commodity markets but reaches craft buyers who source directly without independent weighing at receipt.</p>
+    </div>
+    <div class="card card-blue">
+      <div class="card-head">Variety substitution</div>
+      <div class="card-title">Forastero sold as fine flavour</div>
+      <p>Forastero (bulk commodity, $2,000–2,500/MT) passed off as Trinitario or Nacional (fine flavour, $4,000–8,000/MT). Without variety testing via SSR markers or SNP fingerprinting, buyers cannot verify at purchase. No sensory test reliably distinguishes unprocessed beans by variety.</p>
+    </div>
+    <div class="card card-blue">
+      <div class="card-head">Fermentation fraud</div>
+      <div class="card-title">Mislabeled fermentation grade</div>
+      <p>Bags labelled "well-fermented" but containing 30–40% slaty/unfermented beans. The cut-test (slicing 100 beans and counting colour) at receipt is the only reliable check. Frequently skipped under commercial time pressure. Slaty beans: bitter, astringent, reduced flavour — and they're in your batch.</p>
+    </div>
+    <div class="card card-blue">
+      <div class="card-head">Fat adulteration</div>
+      <div class="card-title">CBEs, lard & vegetable fat</div>
+      <p>Cocoa butter equivalents (palm oil, shea, illipe) are used to replace 5–30% of cocoa butter, sometimes undeclared. Peer-reviewed studies have detected lard adulteration in chocolate — with halal/kosher implications. Detected only by triglyceride fingerprinting (GC-FID).</p>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- FACTORY IMPLICATIONS -->
+  <div class="chapter-anchor" id="ch3-factory"></div>
+  <h3 class="section-title">Critical implications for your Vietnam factory</h3>
+
+  <div class="callout amber">
+    <div class="callout-title">🏭 The three highest-risk categories for a 20 MT/month bean-to-bar operation</div>
+    <strong>1. Heavy metals (cadmium from bean origin)</strong> — cadmium in soil is intrinsic to some Southeast Asian growing regions. Test every incoming batch by ICP-OES; maintain records by lot and origin. Blend Vietnamese Trinitario (lower risk) with Indonesian Sulawesi (audit origin carefully) to manage cadmium load. Tanzania or Madagascar origins are the gold standard for clean beans.
+    <br><br>
+    <strong>2. Salmonella</strong> — your roasting step IS the kill step. Do not compromise it. Validate actual bean surface temperature (not oven air temperature) using data-logging probes with multiple placement points. Maintain batch records. Never introduce moisture near cooled roasted nibs. Design the facility for unidirectional flow: raw beans → roasting kill step → clean zone. No backflow of material across this boundary.
+    <br><br>
+    <strong>3. Allergen cross-contamination</strong> — if you ever diversify into nut-containing products (macadamia spreads, hazelnut paste, etc.) alongside cocoa processing, establish validated allergen cleaning protocols with swab testing before any co-production. The simplest approach is complete physical segregation of allergen-containing production lines.
+  </div>
+
+  <div class="callout success">
+    <div class="callout-title">✓ Transparency as competitive protection</div>
+    The bean-to-bar fraud cases share a common failure: the gap between marketing claims and verifiable reality. The protection is simple: only make claims you can prove. Maintain: (1) verifiable chain of custody to named cooperative, (2) cut-test records for every incoming batch, (3) ICP-OES metal test certificates per lot, (4) roast validation records with temperature logs, and (5) finished product microbiological testing. These records are your defence against both regulatory scrutiny and reputational attack.
+  </div>
+
+</section>
+
+<!-- ── FOOTER ── -->
+<div style="padding: 40px 64px; background: var(--bg2); border-top: 1px solid var(--border); text-align: center;">
+  <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text3); letter-spacing: 0.1em;">
+    Vietnam Cacao Factory Research Compendium · March 2026 · 20 MT/month Processing Project
+  </p>
+  <p style="font-size: 12px; color: var(--text3); margin-top: 6px;">
+    Research compiled from peer-reviewed literature, industry investigations, regulatory filings, and expert interviews. For internal decision-making use.
+  </p>
+</div>
+
+</div><!-- /main -->
+
+<script>
+// Active nav highlighting on scroll
+const sections = document.querySelectorAll('.chapter-anchor, .chapter-header');
+const navLinks = document.querySelectorAll('#nav a');
+
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const id = entry.target.id || entry.target.closest('[id]')?.id;
+      if (id) {
+        const active = document.querySelector(`#nav a[href="#${id}"]`);
+        if (active) active.classList.add('active');
+      }
+    }
+  });
+}, { rootMargin: '-20% 0px -60% 0px' });
+
+document.querySelectorAll('[id]').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
