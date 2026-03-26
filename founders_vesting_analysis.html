@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Анализ Меморандума Основателей — Какао-проект Вьетнам</title>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,600;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0f0d;
+  --bg2: #161614;
+  --bg3: #1e1e1b;
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+  --text: #e8e6df;
+  --muted: #8a8880;
+  --accent: #c8a96e;
+  --accent2: #7eb89a;
+  --warn: #c8a050;
+  --green: #7eb89a;
+  --red: #c96e6e;
+  --mono: 'JetBrains Mono', monospace;
+  --serif: 'Spectral', Georgia, serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--serif);font-size:16px;line-height:1.75;min-height:100vh}
+::selection{background:rgba(200,169,110,0.25)}
+.page{max-width:900px;margin:0 auto;padding:0 28px 80px}
+header{padding:60px 0 48px;border-bottom:1px solid var(--border);margin-bottom:56px}
+.stamp{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:20px}
+h1{font-size:clamp(24px,4vw,38px);font-weight:300;line-height:1.25;margin-bottom:14px}
+h1 em{font-style:italic;color:var(--accent)}
+.header-meta{font-size:14px;color:var(--muted);font-style:italic;margin-bottom:20px}
+.context-box{padding:14px 18px;background:rgba(110,158,200,0.07);border:1px solid rgba(110,158,200,0.2);border-radius:8px;font-family:var(--mono);font-size:12px;color:rgba(200,220,240,0.8);line-height:1.75}
+.context-box strong{color:#9ec8e8}
+section{margin-bottom:64px}
+.section-label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+h2{font-size:22px;font-weight:300;color:var(--text);margin-bottom:20px;line-height:1.35}
+h3{font-size:13px;font-weight:400;color:var(--accent);margin:24px 0 10px;font-family:var(--mono);letter-spacing:.05em}
+p{margin-bottom:14px;color:var(--text);font-weight:300}
+strong{font-weight:600;color:var(--text)}
+.intro{font-size:14px;color:var(--muted);margin-bottom:24px}
+
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px 22px;margin-bottom:12px}
+.card.danger{border-color:rgba(201,110,110,0.3);background:rgba(201,110,110,0.04)}
+.card.warn{border-color:rgba(200,160,80,0.3);background:rgba(200,160,80,0.04)}
+.card.good{border-color:rgba(126,184,154,0.3);background:rgba(126,184,154,0.04)}
+.card.info{border-color:rgba(110,158,200,0.3);background:rgba(110,158,200,0.04)}
+.card-title{font-family:var(--mono);font-size:12px;font-weight:500;margin-bottom:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;line-height:1.5}
+.tag{display:inline-block;font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:4px;letter-spacing:.04em;flex-shrink:0}
+.tag-danger{background:rgba(201,110,110,0.18);color:#e8a0a0}
+.tag-warn{background:rgba(200,160,80,0.18);color:#e8c080}
+.tag-good{background:rgba(126,184,154,0.18);color:#9ed4b8}
+.tag-info{background:rgba(110,158,200,0.18);color:#9ec8e8}
+.card p{font-size:14px;margin-bottom:8px;color:rgba(232,230,223,0.82);line-height:1.65;font-weight:300}
+.card p:last-child{margin-bottom:0}
+.card p strong{color:var(--text);font-weight:600}
+
+.scenario-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:620px){.scenario-grid{grid-template-columns:1fr}}
+.scenario-num{font-family:var(--mono);font-size:26px;color:var(--border2);line-height:1;margin-bottom:8px}
+
+/* Calculator */
+.calc-wrap{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:22px;margin-bottom:14px}
+.person-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:18px}
+@media(max-width:540px){.person-grid{grid-template-columns:repeat(3,1fr)}}
+.pcell{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 5px;text-align:center;cursor:pointer;transition:all .15s}
+.pcell:hover{border-color:var(--border2)}
+.pcell.active{border-color:var(--accent2);background:rgba(126,184,154,0.08)}
+.pname{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--text)}
+.prole{font-size:10px;color:var(--muted);margin-top:2px}
+.ptype{font-size:10px;margin-top:4px;padding:2px 6px;border-radius:4px;display:inline-block;font-family:var(--mono)}
+.pt-op{background:rgba(126,184,154,0.14);color:#9ed4b8}
+.pt-st{background:rgba(110,158,200,0.14);color:#9ec8e8}
+.ctrl-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.ctrl-row label{font-family:var(--mono);font-size:12px;color:var(--muted);min-width:145px}
+.ctrl-val{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--accent);min-width:36px;text-align:right}
+input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
+.toggle-row{display:flex;align-items:center;gap:10px;margin-bottom:16px;cursor:pointer}
+.toggle-row label{font-family:var(--mono);font-size:11px;color:var(--muted);cursor:pointer;line-height:1.5}
+.ttrack{width:32px;height:17px;background:var(--bg3);border:1px solid var(--border2);border-radius:9px;position:relative;flex-shrink:0;transition:background .2s;cursor:pointer}
+.ttrack.on{background:var(--accent2);border-color:transparent}
+.tknob{position:absolute;top:2px;left:2px;width:11px;height:11px;background:var(--muted);border-radius:50%;transition:transform .2s}
+.ttrack.on .tknob{transform:translateX(15px);background:#fff}
+.legend{display:flex;gap:18px;margin-bottom:10px;flex-wrap:wrap}
+.leg-item{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.leg-line{width:22px;height:2px;border-radius:1px}
+.chart-wrap{position:relative;width:100%;height:200px;margin-bottom:16px}
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.res-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px 14px}
+.res-card.new-m{border-color:rgba(126,184,154,0.45)}
+.res-val{font-family:var(--mono);font-size:22px;font-weight:500;color:var(--text)}
+.res-val.green{color:var(--green)}
+.res-lbl{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:2px}
+.res-abs{font-size:11px;color:var(--muted);margin-top:6px;font-family:var(--mono)}
+.bar-wrap{height:4px;background:rgba(255,255,255,0.07);border-radius:2px;margin:8px 0;overflow:hidden}
+.bar{height:100%;border-radius:2px;transition:width .4s ease}
+.phase-pill{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:4px;margin-left:6px;vertical-align:middle;display:inline-block}
+.ph-cliff{background:rgba(201,110,110,0.18);color:#e8a0a0}
+.ph-vest{background:rgba(126,184,154,0.18);color:#9ed4b8}
+.ph-done{background:rgba(110,158,200,0.18);color:#9ec8e8}
+.ph-accel{background:rgba(200,160,80,0.18);color:#e8c080}
+.insight{font-family:var(--mono);font-size:12px;line-height:1.75;color:var(--muted);padding:12px 14px;background:var(--bg3);border-radius:8px;border-left:2px solid var(--accent)}
+.insight strong{color:var(--accent)}
+.diff-pos{color:var(--green)}
+.diff-neg{color:var(--red)}
+
+.formula{font-family:var(--mono);font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin:14px 0;line-height:2.1;color:var(--muted)}
+.formula .a{color:var(--accent)}
+.formula .g{color:var(--accent2)}
+.formula .w{color:var(--warn)}
+
+.comp-table{width:100%;border-collapse:collapse;font-size:13px;margin:14px 0}
+.comp-table th{font-family:var(--mono);font-size:10px;text-align:left;color:var(--muted);padding:8px 12px;border-bottom:1px solid var(--border);letter-spacing:.07em;text-transform:uppercase}
+.comp-table td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top;font-weight:300;line-height:1.6;font-size:13px}
+.comp-table tr:last-child td{border-bottom:none}
+.comp-table .old{color:rgba(201,110,110,0.85)}
+.comp-table .new{color:rgba(126,184,154,0.9)}
+
+.checklist{list-style:none;margin:10px 0}
+.checklist li{padding:7px 0;border-bottom:1px solid var(--border);font-size:14px;font-weight:300;display:flex;gap:10px;align-items:flex-start;line-height:1.6}
+.checklist li:last-child{border-bottom:none}
+.checklist li::before{content:'→';color:var(--accent);font-family:var(--mono);font-size:12px;flex-shrink:0;margin-top:3px}
+.checklist li.bad::before{color:var(--red);content:'✕'}
+.checklist li.ok::before{color:var(--green);content:'✓'}
+
+footer{border-top:1px solid var(--border);padding:32px 0;text-align:center;font-family:var(--mono);font-size:11px;color:var(--muted);line-height:2.2}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <div class="stamp">Внутренний анализ · Строго конфиденциально · Март 2026</div>
+  <h1>Анализ Меморандума и <em>улучшенная модель вестинга</em></h1>
+  <p class="header-meta">Проект: Переработка какао-бобов, Вьетнам · 5 основателей · FDI LLC</p>
+  <div class="context-box">
+    <strong>Контекст:</strong> Это внутреннее соглашение основателей (MOU / Term Sheet) — не Shareholders' Agreement.<br>
+    Цель: зафиксировать доли и намерения <em>до</em> привлечения инвестора, чтобы никого не выкинули после получения денег.<br>
+    Вклад всех пятерых сейчас — исключительно интеллектуальный: время, экспертиза, подготовка питча.<br>
+    <strong>Материальных ресурсов нет. Всё зависит от инвестора.</strong> Документ должен это отражать честно.
+  </div>
+</header>
+
+<!-- ═══════ 01 КАЛЬКУЛЯТОР ═══════ -->
+<section>
+  <div class="section-label">01 — Калькулятор вестинга</div>
+  <h2>Документ vs. улучшенная модель</h2>
+
+  <div class="calc-wrap">
+    <div class="person-grid" id="persons">
+      <div class="pcell active" onclick="setPerson(0,this)">
+        <div class="pname">Сергей</div><div class="prole">Chairman</div><div class="ptype pt-st">стратег</div>
+      </div>
+      <div class="pcell" onclick="setPerson(1,this)">
+        <div class="pname">Кирилл</div><div class="prole">CEO</div><div class="ptype pt-op">операц.</div>
+      </div>
+      <div class="pcell" onclick="setPerson(2,this)">
+        <div class="pname">Ксения</div><div class="prole">CTO</div><div class="ptype pt-st">стратег</div>
+      </div>
+      <div class="pcell" onclick="setPerson(3,this)">
+        <div class="pname">Дм. Б.</div><div class="prole">CMO</div><div class="ptype pt-st">стратег</div>
+      </div>
+      <div class="pcell" onclick="setPerson(4,this)">
+        <div class="pname">Дм. Я.</div><div class="prole">CPO</div><div class="ptype pt-op">операц.</div>
+      </div>
+    </div>
+
+    <div class="ctrl-row">
+      <label>Месяц выхода</label>
+      <input type="range" min="0" max="48" value="14" id="msl" oninput="go()">
+      <span class="ctrl-val" id="mout">14</span>
+    </div>
+
+    <div class="toggle-row" onclick="toggleMA()">
+      <div class="ttrack" id="tt-ma"><div class="tknob"></div></div>
+      <label>M&A: компания продана — включить double-trigger acceleration (+50% невестинговых)</label>
+    </div>
+
+    <div class="legend">
+      <div class="leg-item"><div class="leg-line" style="background:#6a6860"></div>Модель А — документ (клиф 12м, 4г)</div>
+      <div class="leg-item"><div class="leg-line" style="background:#7eb89a;height:3px"></div>Модель Б — улучшенная (клиф 6м, ролевой, M&A)</div>
+    </div>
+
+    <div class="chart-wrap"><canvas id="vc"></canvas></div>
+
+    <div class="res-grid">
+      <div class="res-card">
+        <div class="res-val" id="rv-a">—</div>
+        <div class="res-lbl">Модель А (документ)</div>
+        <div class="bar-wrap"><div class="bar" id="br-a" style="background:#6a6860;width:0%"></div></div>
+        <div class="res-abs" id="ra-abs"></div>
+      </div>
+      <div class="res-card new-m">
+        <div class="res-val green" id="rv-b">—</div>
+        <div class="res-lbl">Модель Б (улучшенная)</div>
+        <div class="bar-wrap"><div class="bar" id="br-b" style="background:#7eb89a;width:0%"></div></div>
+        <div class="res-abs" id="rb-abs"></div>
+      </div>
+    </div>
+
+    <div class="insight" id="ins"></div>
+  </div>
+
+  <div class="formula">
+    <strong class="a">Модель А (документ):</strong><br>
+    m &lt; 12 → <span class="a">0%</span> &nbsp;|&nbsp; m ≥ 12 → <span class="a">25% + (m−12) × 2.083%</span>/мес, max 100% при 48м<br><br>
+    <strong class="g">Модель Б — операционные (CEO, CPO):</strong><br>
+    m &lt; 6 → <span class="g">0%</span> &nbsp;|&nbsp; m ≥ 6 → <span class="g">25% + (m−6) × 2.5%</span>/мес, max 100% при 36м<br><br>
+    <strong class="g">Модель Б — стратегические (Chairman, CTO, CMO):</strong><br>
+    m &lt; 6 → <span class="g">0%</span> &nbsp;|&nbsp; m ≥ 6 → <span class="g">25% + (m−6) × 1.786%</span>/мес, max 100% при 48м<br><br>
+    <strong class="w">M&A double-trigger:</strong> base + (100 − base) × <span class="w">50%</span>
+  </div>
+
+  <table class="comp-table">
+    <thead>
+      <tr><th>Параметр</th><th>Модель А — документ</th><th>Модель Б — предложение</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Клиф</td>
+        <td class="old">12 месяцев жёстко по дате подписания MOU</td>
+        <td class="new">6 месяцев ИЛИ дата получения BRC Вьетнама — что наступит раньше</td>
+      </tr>
+      <tr>
+        <td>Срок полного вестинга</td>
+        <td class="old">48 мес — для всех одинаково</td>
+        <td class="new">36 мес — CEO/CPO (на заводе физически); 48 мес — остальные</td>
+      </tr>
+      <tr>
+        <td>M&A ускорение</td>
+        <td class="old">Не упомянуто</td>
+        <td class="new">Double-trigger: продажа + прекращение отношений → +50% невестинговых</td>
+      </tr>
+      <tr>
+        <td>Цена выкупа Bad Leaver</td>
+        <td class="old">«Номинальная стоимость» — не определена, риск = $0</td>
+        <td class="new">Последняя согласованная оценка × доля. При первом раунде — по оценке инвестора.</td>
+      </tr>
+      <tr>
+        <td>Определение Bad Leaver</td>
+        <td class="old">Не прописано. Голосование 4/4 — прямой конфликт интересов</td>
+        <td class="new">Исчерпывающий список: суд / письменный отказ / 30 дней молчания. Остальное = Good Leaver.</td>
+      </tr>
+      <tr>
+        <td>Срок ответа на ROFR</td>
+        <td class="old">Не указан — потенциально бесконечный блок</td>
+        <td class="new">30 календарных дней. Истёк без ответа — право теряется автоматически.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═══════ 02 ФОРС-МАЖОРЫ ═══════ -->
+<section>
+  <div class="section-label">02 — Форс-мажор и негативные сценарии</div>
+  <h2>Что может пойти не так — и что зафиксировать уже сейчас</h2>
+  <p class="intro">Все сценарии с учётом реального положения: у команды нет личных инвестиций в проект, вклад — исключительно интеллектуальный. Материальная реализация возможна только после получения внешнего финансирования.</p>
+
+  <div class="scenario-grid">
+
+    <div class="card danger">
+      <div class="scenario-num">01</div>
+      <div class="card-title"><span class="tag tag-danger">критично</span>Инвестор не даёт денег или тянет</div>
+      <p><strong>Ситуация:</strong> Питч прошёл, инвестор взял паузу на 6–12 месяцев или отказал. Компания не регистрируется, завод не строится. Единственный потраченный ресурс — время и усилия всех пятерых.</p>
+      <p><strong>Что теряет команда:</strong> Время и интеллектуальные наработки без какой-либо материальной компенсации. При отсутствии договорённостей этот вклад нигде не зафиксирован юридически.</p>
+      <p><strong>Что зафиксировать сейчас:</strong> Все наработки (питч-дек, финмодель, контакты, технологические разработки) — коллективная собственность команды. Нельзя использовать их для поиска другого инвестора в обход остальных. Если поиск инвестора затягивается более 12 месяцев — общее голосование 3/5 о продолжении или роспуске проекта. При роспуске — IP уничтожается или передаётся по соглашению.</p>
+    </div>
+
+    <div class="card danger">
+      <div class="scenario-num">02</div>
+      <div class="card-title"><span class="tag tag-danger">критично</span>Регистрация компании затягивается</div>
+      <p><strong>Ситуация:</strong> Вьетнамская бюрократия, ошибки в IRC/ERC документах, смена агента — регистрация растягивается на 12–18 месяцев. По документу вестинг идёт по дате подписания MOU, а не по факту создания компании.</p>
+      <p><strong>Риск:</strong> Клиф и вестинг тикают, но компании де-факто нет. Доли — юридическая пустышка до регистрации.</p>
+      <p><strong>Что зафиксировать сейчас:</strong> Клиф привязать к событию — получению Business Registration Certificate — а не к дате подписания MOU. Если регистрация не произошла за 18 месяцев — обязательный созыв общего собрания для решения о продолжении или роспуске проекта.</p>
+    </div>
+
+    <div class="card warn">
+      <div class="scenario-num">03</div>
+      <div class="card-title"><span class="tag tag-warn">серьёзно</span>Ужесточение регуляции для иностранцев</div>
+      <p><strong>Ситуация:</strong> Вьетнам повышает требования к FDI в пищевой промышленности — обязательная доля локального партнёра 20–51%, квоты на иностранных директоров.</p>
+      <p><strong>Риск:</strong> Принудительное размытие всех пяти основателей без их согласия. Либо невозможность вести бизнес в выбранной юрисдикции вообще.</p>
+      <p><strong>Что зафиксировать сейчас:</strong> Юрисдикционная оговорка: при невозможности ведения деятельности через Vietnamese FDI LLC — перенос холдинга в Сингапур (Pte Ltd) с сохранением всех прав и долей, решением 4/5. Зарезервировать 10% в cap table под возможного локального партнёра — до его появления эти 10% никого из основателей не размывают.</p>
+    </div>
+
+    <div class="card warn">
+      <div class="scenario-num">04</div>
+      <div class="card-title"><span class="tag tag-warn">серьёзно</span>Один участник хочет продать долю досрочно</div>
+      <p><strong>Ситуация:</strong> Личные финансовые обстоятельства — кто-то хочет выйти и продать свою часть третьему лицу ещё до регистрации компании или на ранней стадии.</p>
+      <p><strong>Риск:</strong> В документе ROFR не имеет срока ответа. Невестинговые доли вообще не регулируются с точки зрения отчуждения третьим лицам.</p>
+      <p><strong>Что зафиксировать сейчас:</strong> Unvested доли не отчуждаемы — только обратный выкуп по Bad/Good Leaver механизму. Vested доли — ROFR с 30-дневным сроком ответа. Продажа третьим лицам без письменного согласия всех пяти — ничтожна.</p>
+    </div>
+
+    <div class="card danger">
+      <div class="scenario-num">05</div>
+      <div class="card-title"><span class="tag tag-danger">критично</span>Катастрофа: завод уничтожен</div>
+      <p><strong>Ситуация:</strong> Тайфун, наводнение, пожар на уже построенном производстве. Центральный Вьетнам — зона высокого природного риска.</p>
+      <p><strong>Риск:</strong> Компания существует, вестинг идёт, операционная база уничтожена. Участники формально обязаны продолжать нести ответственность по должностям без физической возможности это делать.</p>
+      <p><strong>Что зафиксировать сейчас:</strong> Форс-мажорная оговорка: при остановке операционной деятельности на 6+ месяцев по независящим от команды причинам — вестинговые часы замораживаются. Earned shares сохраняются в полном объёме. Обязательное страхование имущества и прерывания бизнеса как conditio sine qua non при запуске завода — прописать как ответственность CEO.</p>
+    </div>
+
+    <div class="card warn">
+      <div class="scenario-num">06</div>
+      <div class="card-title"><span class="tag tag-warn">серьёзно</span>Инвестор передумал после LOI</div>
+      <p><strong>Ситуация:</strong> Инвестор подписал Letter of Intent, команда 3–4 месяца готовила due diligence, открыла контакты поставщиков и партнёров — инвестор вышел без объяснений.</p>
+      <p><strong>Риск:</strong> Конфиденциальная информация раскрыта, время потрачено. Внутри команды может начаться поиск виноватого — и удар придётся по Chairman как ответственному за фандрайзинг.</p>
+      <p><strong>Что зафиксировать сейчас:</strong> NDA с инвестором — обязательный документ до любого раскрытия информации. В MOU явно прописать: провал переговоров с конкретным инвестором не является основанием для пересмотра долей или обвинения ответственного лица в ненадлежащем исполнении.</p>
+    </div>
+
+    <div class="card warn">
+      <div class="scenario-num">07</div>
+      <div class="card-title"><span class="tag tag-warn">серьёзно</span>Разногласия при досрочной продаже компании</div>
+      <p><strong>Ситуация:</strong> Через 2 года появляется покупатель. Трое хотят продать, двое — нет. По документу стратегические решения требуют единогласия 5/5 — один человек блокирует сделку навсегда.</p>
+      <p><strong>Риск:</strong> Патовая ситуация. Покупатель уходит. Отношения в команде разрушены. Стоимость компании падает из-за управленческого кризиса.</p>
+      <p><strong>Что зафиксировать сейчас:</strong> Drag-along оговорка: при предложении выше согласованного порога оценки и согласии 4/5 основателей — все обязаны продать на тех же условиях. Несогласный сохраняет право требовать независимой оценки, но не право вето на саму сделку.</p>
+    </div>
+
+    <div class="card danger">
+      <div class="scenario-num">08</div>
+      <div class="card-title"><span class="tag tag-danger">критично</span>Болезнь или гибель участника</div>
+      <p><strong>Ситуация:</strong> Один из основателей тяжело заболел или погиб. Его доля по закону переходит к наследникам, которые ничего не знают о бизнесе и могут преследовать свои интересы.</p>
+      <p><strong>Риск:</strong> Наследник требует немедленных выплат, блокирует стратегические решения или продаёт долю третьей стороне без уведомления команды.</p>
+      <p><strong>Что зафиксировать сейчас:</strong> При смерти или потере дееспособности earned shares переходят к наследнику, но права голоса приостанавливаются на 12 месяцев. В течение этого срока остальные основатели имеют совместный опцион на выкуп доли по последней согласованной оценке. Good Leaver условия применяются автоматически.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════ 03 ЗАЩИТА МЕНЬШИНСТВА ═══════ -->
+<section>
+  <div class="section-label">03 — Защита меньшинства и риск сговора</div>
+  <h2>Базовые гарантии для MOU — без лишней сложности</h2>
+
+  <p class="intro">На этапе MOU не нужны сложные корпоративные механизмы. Но два принципа должны быть закреплены уже сейчас — они защищают каждого участника симметрично, независимо от того, кто окажется в меньшинстве.</p>
+
+  <div class="card danger">
+    <div class="card-title"><span class="tag tag-danger">главная угроза</span>Коалиционный риск при исключении</div>
+    <p>По документу: исключение до регистрации = «4 голоса из 4 оставшихся». Голосующие напрямую получают долю исключённого — это классический конфликт интересов. Трое договорились в мессенджере — четвёртый выбывает без права ответа, без объяснений, без апелляции. Доля делится между теми, кто голосовал.</p>
+  </div>
+
+  <div class="card good">
+    <div class="card-title"><span class="tag tag-good">принцип 1</span>Anti-dilution: доли основателей защищены</div>
+    <p>Без письменного согласия конкретного основателя нельзя: создать новый класс долей с другими правами, изменить соотношение долей внутри пятёрки, предоставить инвестору права, которые непропорционально ущемляют одного участника относительно других. Уже частично есть в п. 3.3 — нужно прописать как отдельную защитную статью явно.</p>
+  </div>
+
+  <div class="card good">
+    <div class="card-title"><span class="tag tag-good">принцип 2</span>Обязательная процедура перед исключением</div>
+    <p>Любое голосование об исключении участника требует трёх шагов: <strong>(1)</strong> письменное уведомление с конкретными основаниями за 14 дней, <strong>(2)</strong> письменный ответ исключаемого в течение 7 дней, <strong>(3)</strong> соответствие заявленных оснований исчерпывающему перечню Bad Leaver из MOU. Голосование без этих шагов — ничтожно. Это не арбитр и не суд — просто обязательная процедура, которая делает сговор осознанным, публичным и оспариваемым.</p>
+  </div>
+
+  <div class="card info">
+    <div class="card-title"><span class="tag tag-info">на этапе Shareholders' Agreement</span>Что добавить позже</div>
+    <p>Полноценный deadlock mechanism (медиация → Russian Roulette), независимый корпоративный арбитр, tag-along права, многоуровневая система голосования по типам решений — всё это прописывается в корпоративном договоре после регистрации компании. Для MOU достаточно двух принципов выше плюс явного запрета на изменение cap table без единогласия пятёрки.</p>
+  </div>
+</section>
+
+<!-- ═══════ 04 РОЛИ ═══════ -->
+<section>
+  <div class="section-label">04 — Роли и гибкость команды</div>
+  <h2>Ключевые нюансы, которые стоит оговорить сейчас</h2>
+
+  <p class="intro">Все пятеро — без опыта на C-level в данной отрасли и регионе. Это не проблема — проблема возникнет, если это не признано открыто и не встроен механизм адаптации без угрозы конфликта.</p>
+
+  <div class="card warn">
+    <div class="card-title"><span class="tag tag-warn">важно</span>Роль — это задача, доля — это вклад</div>
+    <p>В документе уже есть правильная формулировка в п. 5.2: «владение долей и занятие операционной должности — разные сущности». Нужно добавить одно: смена роли по решению большинства (3/5) не требует согласия самого участника и <em>не влечёт изменения его доли</em>. Это снимает ego-блок при необходимости реструктуризации команды.</p>
+  </div>
+
+  <ul class="checklist">
+    <li><strong>Пересмотр ролей каждые 6 месяцев:</strong> команда вправе инициировать перераспределение обязанностей решением 3/5 — без угрозы доле участника. Обсуждение проводится открыто, результат фиксируется письменно.</li>
+    <li><strong>Привлечение внешних советников:</strong> право команды (3/5) привлечь 1–2 ментора из пищевой промышленности или ASEAN-рынка с совещательным голосом — без доли в текущем проекте, за equity в будущей компании или символический гонорар по отдельному договору.</li>
+    <li><strong>Найм на роль вместо основателя:</strong> если основатель не справляется и не готов взять другую роль — компания нанимает внешнего специалиста. Основатель сохраняет долю, но операционные полномочия по этой функции переходят к нанятому. Решение принимается 4/5.</li>
+    <li><strong>Замена роли ≠ Bad Leaver:</strong> это должно быть явно прописано — чтобы никто не боялся признать свои ограничения раньше, чем они станут критическими для проекта.</li>
+  </ul>
+</section>
+
+<!-- ═══════ 05 ЧЕКЛИСТ ═══════ -->
+<section>
+  <div class="section-label">05 — Что добавить в текущий MOU</div>
+  <h2>Минимальный чеклист поправок для документа v2.2</h2>
+  <p class="intro">Только то, что критично именно для MOU на данном этапе — без корпоративных механизмов, которые относятся к Shareholders' Agreement.</p>
+
+  <ul class="checklist">
+    <li class="bad">Убрать: клиф 12 месяцев по дате подписания MOU</li>
+    <li class="ok">Добавить: клиф = 6 месяцев активной работы ИЛИ дата получения BRC Вьетнама — что наступит раньше</li>
+    <li class="ok">Добавить: ролевой вестинг — CEO/CPO 36 мес, остальные 48 мес (после клифа)</li>
+    <li class="ok">Добавить: M&A double-trigger acceleration (+50% невестинговых при продаже + прекращении отношений)</li>
+    <li class="bad">Убрать: «номинальная стоимость» как цена Bad Leaver выкупа</li>
+    <li class="ok">Добавить: цена выкупа = последняя согласованная оценка × доля участника</li>
+    <li class="ok">Добавить: исчерпывающий перечень Bad Leaver (суд / письменный отказ / 30 дней молчания)</li>
+    <li class="ok">Добавить: 30-дневный срок ответа на ROFR — истёк без ответа = право теряется</li>
+    <li class="ok">Добавить: обязательную процедуру перед голосованием об исключении (14 + 7 дней)</li>
+    <li class="ok">Добавить: anti-dilution оговорку как отдельную статью</li>
+    <li class="ok">Добавить: drag-along оговорку (4/5 + порог оценки)</li>
+    <li class="ok">Добавить: юрисдикционную оговорку (запасной вариант — Сингапур Pte Ltd)</li>
+    <li class="ok">Добавить: форс-мажорную оговорку с заморозкой вестинга при остановке 6+ мес</li>
+    <li class="ok">Добавить: оговорку об IP как коллективной собственности команды (питч, финмодель, контакты)</li>
+    <li class="ok">Добавить: право смены роли решением 3/5 без влияния на долю</li>
+    <li class="ok">Добавить: 10% regulatory buffer в cap table под возможного локального партнёра</li>
+    <li class="ok">Добавить: оговорку о наследовании (12 мес без голоса + совместный опцион выкупа)</li>
+    <li class="ok">Добавить: NDA с инвестором как обязательное условие до любого раскрытия информации</li>
+    <li class="ok">Добавить: таймаут 12 мес для поиска инвестора + голосование 3/5 о продолжении/роспуске</li>
+  </ul>
+</section>
+
+<footer>
+  Анализ подготовлен на основании текста Меморандума v2.2 от 18.03.2026<br>
+  Документ носит аналитический характер и не является юридической консультацией<br>
+  Передать юристу для имплементации поправок в MOU и последующей подготовки Shareholders' Agreement
+</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ── shared state ──────────────────────────────────────────────
+let person  = 0;
+let curMonth = 14;
+let curOp    = false;   // updated before every chart render
+let maEvent  = false;
+let chart    = null;
+const isOp   = [false, true, false, false, true];
+
+// ── models ────────────────────────────────────────────────────
+function modelA(m){
+  if(m < 12) return 0;
+  return Math.min(25 + (m - 12) * (75 / 36), 100);
+}
+function modelB(m, op, withMA){
+  const cliff = 6, vestM = op ? 30 : 42;
+  let base = 0;
+  if(m >= cliff){
+    base = Math.min(25 + Math.min(m - cliff, vestM) * (75 / vestM), 100);
+  }
+  if(withMA && base < 100) base = Math.min(base + (100 - base) * 0.5, 100);
+  return base;
+}
+
+// ── phase labels ──────────────────────────────────────────────
+function phaseA(m){
+  if(m < 12) return ['клиф 12м','ph-cliff'];
+  if(m >= 48) return ['100% earned','ph-done'];
+  return ['вестинг','ph-vest'];
+}
+function phaseB(m, op){
+  if(m < 6)  return ['клиф 6м','ph-cliff'];
+  if(m >= (op ? 36 : 48)) return ['100% earned','ph-done'];
+  if(maEvent) return ['M&A accel','ph-accel'];
+  return ['вестинг','ph-vest'];
+}
+
+// ── vline plugin — reads curMonth / curOp from closure ────────
+const vlinePlugin = {
+  id: 'vline',
+  afterDraw(ch){
+    const {ctx, scales:{x, y}} = ch;
+    const xPos = x.getPixelForValue(curMonth);
+    const yA   = y.getPixelForValue(modelA(curMonth));
+    const yB   = y.getPixelForValue(modelB(curMonth, curOp, maEvent));
+    ctx.save();
+    // dashed vertical line
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(200,169,110,0.4)';
+    ctx.lineWidth   = 1.5;
+    ctx.setLineDash([4,3]);
+    ctx.moveTo(xPos, y.top);
+    ctx.lineTo(xPos, y.bottom);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    // grey dot — model A
+    ctx.beginPath();
+    ctx.arc(xPos, yA, 4, 0, Math.PI*2);
+    ctx.fillStyle = '#6a6860';
+    ctx.fill();
+    // green dot — model B (always reads current curOp)
+    ctx.beginPath();
+    ctx.arc(xPos, yB, 5, 0, Math.PI*2);
+    ctx.fillStyle = '#7eb89a';
+    ctx.fill();
+    ctx.restore();
+  }
+};
+
+// ── build/rebuild chart ───────────────────────────────────────
+function buildChart(op){
+  const labels = Array.from({length:49}, (_, i) => i);
+  const dA  = labels.map(m => modelA(m));
+  const dB  = labels.map(m => modelB(m, op, false));
+  const dBm = labels.map(m => modelB(m, op, true));
+
+  const gc = 'rgba(255,255,255,0.05)', tc = '#5a5854';
+  const mf = {family:"'JetBrains Mono',monospace"};
+
+  const datasets = [
+    { label:'Модель А', data:dA,  borderColor:'#6a6860', borderWidth:1.5, pointRadius:0, tension:0, fill:false },
+    { label:'Модель Б', data:dB,  borderColor:'#7eb89a', borderWidth:2,   pointRadius:0, tension:0, fill:false,
+      borderDash: maEvent ? [5,3] : [] },
+  ];
+  if(maEvent) datasets.push(
+    { label:'Модель Б (M&A)', data:dBm, borderColor:'#c8a050', borderWidth:1.5, pointRadius:0, tension:0, fill:false }
+  );
+
+  if(chart) chart.destroy();
+  chart = new Chart(document.getElementById('vc'), {
+    type:'line', data:{labels, datasets},
+    options:{
+      responsive:true, maintainAspectRatio:false, animation:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'#1e1e1b', borderColor:'rgba(255,255,255,0.1)', borderWidth:1,
+          titleColor:'#6a6860', bodyColor:'#e8e6df',
+          titleFont:{...mf, size:11}, bodyFont:{...mf, size:11},
+          callbacks:{
+            title: c => 'Месяц ' + c[0].label,
+            label: c => c.dataset.label + ': ' + c.parsed.y.toFixed(1) + '%'
+          }
+        }
+      },
+      scales:{
+        x:{ grid:{color:gc},
+            title:{display:true, text:'месяцы', color:tc, font:{...mf, size:11}},
+            ticks:{color:tc, font:{...mf, size:10}, callback: v => [0,6,12,24,36,48].includes(v)?v:''} },
+        y:{ min:0, max:100, grid:{color:gc},
+            title:{display:true, text:'% доли заработано', color:tc, font:{...mf, size:11}},
+            ticks:{color:tc, font:{...mf, size:10}, callback: v => v+'%'} }
+      }
+    },
+    plugins:[vlinePlugin]
+  });
+}
+
+// ── update without full rebuild ───────────────────────────────
+function refreshChart(op){
+  const labels = Array.from({length:49}, (_, i) => i);
+  chart.data.datasets[0].data = labels.map(m => modelA(m));
+  chart.data.datasets[1].data = labels.map(m => modelB(m, op, false));
+  chart.data.datasets[1].borderDash = maEvent ? [5,3] : [];
+  if(maEvent){
+    const dBm = labels.map(m => modelB(m, op, true));
+    if(chart.data.datasets[2]) chart.data.datasets[2].data = dBm;
+    else chart.data.datasets.push({label:'Модель Б (M&A)', data:dBm, borderColor:'#c8a050', borderWidth:1.5, pointRadius:0, tension:0, fill:false});
+  } else {
+    if(chart.data.datasets.length > 2) chart.data.datasets.splice(2);
+  }
+  chart.update('none'); // triggers afterDraw → vlinePlugin with current curMonth/curOp
+}
+
+// ── main update fn ────────────────────────────────────────────
+function go(){
+  const m  = parseInt(document.getElementById('msl').value);
+  const op = isOp[person];
+  curMonth = m;
+  curOp    = op;   // always set before any chart draw
+
+  document.getElementById('mout').textContent = m;
+
+  const a = modelA(m), b = modelB(m, op, maEvent), SHARE = 20;
+
+  const [phA, clA] = phaseA(m);
+  document.getElementById('rv-a').innerHTML = a.toFixed(1)+'% <span class="phase-pill '+clA+'">'+phA+'</span>';
+  document.getElementById('br-a').style.width = a+'%';
+  document.getElementById('ra-abs').textContent = '→ '+(a/100*SHARE).toFixed(2)+'% компании (iron)';
+
+  const [phB, clB] = phaseB(m, op);
+  document.getElementById('rv-b').innerHTML = b.toFixed(1)+'% <span class="phase-pill '+clB+'">'+phB+'</span>';
+  document.getElementById('br-b').style.width = b+'%';
+  document.getElementById('rb-abs').textContent = '→ '+(b/100*SHARE).toFixed(2)+'% компании (iron)';
+
+  const names  = ['Сергей','Кирилл','Ксения','Дмитрий Б.','Дмитрий Я.'];
+  const roles  = ['стратег','операц.','стратег','стратег','операц.'];
+  const diff   = b - a;
+  const diffHtml = diff > 0.05
+    ? '<span class="diff-pos">+'+diff.toFixed(1)+'%</span>'
+    : diff < -0.05
+      ? '<span class="diff-neg">'+diff.toFixed(1)+'%</span>'
+      : '<span style="color:var(--muted)">≈ одинаково</span>';
+
+  let ins = '';
+  if(m < 6)
+    ins = `<strong>Месяц ${m}.</strong> Клиф не пройден ни в одной модели. До клифа по документу: ${12-m} мес. По новой: ${6-m} мес.`;
+  else if(m < 12)
+    ins = `<strong>Месяц ${m}, ${names[person]} (${roles[person]}).</strong> Новая модель: клиф пройден → <strong>${b.toFixed(1)}%</strong> уже earned (${(b/100*SHARE).toFixed(2)}% компании). Документ: клиф не пройден → 0%. Разрыв: ${diffHtml}.`;
+  else
+    ins = `<strong>Месяц ${m}, ${names[person]} (${roles[person]}).</strong> Документ: <strong>${a.toFixed(1)}%</strong> → ${(a/100*SHARE).toFixed(2)}% компании. Новая: <strong>${b.toFixed(1)}%</strong> → ${(b/100*SHARE).toFixed(2)}%. Разрыв: ${diffHtml}${maEvent?' &nbsp;<span style="color:var(--warn)">M&A ускорение активировано.</span>':''}.`;
+  document.getElementById('ins').innerHTML = ins;
+
+  if(!chart) buildChart(op);
+  else refreshChart(op);
+}
+
+function toggleMA(){
+  maEvent = !maEvent;
+  document.getElementById('tt-ma').classList.toggle('on', maEvent);
+  go();
+}
+function setPerson(i, el){
+  person = i;
+  document.querySelectorAll('.pcell').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  go();
+}
+
+// ── init ──────────────────────────────────────────────────────
+buildChart(isOp[0]);
+go();
+</script>
+</body>
+</html>
