@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B2B Lead Economics — Калькулятор воронки</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Manrope:wght@400;600;700;800&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0d14;
+    --bg2: #0d1117;
+    --surface: #111827;
+    --border: #1e293b;
+    --accent: #10b981;
+    --accent-dim: rgba(16,185,129,0.15);
+    --warn: #f59e0b;
+    --info: #38bdf8;
+    --muted: #64748b;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --danger: #ef4444;
+    --purple: #6366f1;
+    --mono: 'JetBrains Mono', 'Fira Code', monospace;
+    --sans: 'Manrope', system-ui, sans-serif;
+  }
+
+  body { background: var(--bg); color: var(--text); font-family: var(--mono); font-size: 13px; }
+
+  /* ── HEADER ── */
+  .header {
+    background: linear-gradient(135deg, #0f1420 0%, #0d1a14 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 40px 20px;
+  }
+  .header-label { font-size: 10px; color: var(--accent); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+  .header h1 { font-family: var(--sans); font-size: 22px; font-weight: 800; }
+  .header h1 span { color: var(--accent); }
+  .header-sub { font-size: 11px; color: var(--muted); margin-top: 6px; }
+  .header-sub b { color: var(--warn); }
+
+  /* ── LAYOUT ── */
+  .layout { display: grid; grid-template-columns: 360px 1fr; min-height: calc(100vh - 100px); }
+
+  /* ── LEFT PANEL (inputs) ── */
+  .left { background: var(--bg2); border-right: 1px solid var(--border); padding: 20px 16px; overflow-y: auto; }
+  .left-title { font-size: 10px; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px; }
+
+  .param-section { margin-bottom: 18px; }
+  .param-section-label {
+    font-size: 9px; color: var(--purple); letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 7px; padding-bottom: 4px; border-bottom: 1px solid var(--border);
+  }
+  .param-row { display: flex; align-items: center; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #0f172a; }
+  .param-label { font-size: 11px; color: var(--text2); flex: 1; padding-right: 8px; }
+  .param-right { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+  .param-right input {
+    width: 108px; background: #161b22; border: 1px solid #2d3748; border-radius: 4px;
+    padding: 3px 8px; color: var(--warn); font-family: var(--mono); font-size: 12px;
+    outline: none; transition: border-color .15s;
+  }
+  .param-right input:focus { border-color: var(--accent); }
+  .param-suffix { font-size: 10px; color: #4a5568; white-space: nowrap; }
+
+  /* ── RIGHT PANEL (results) ── */
+  .right { padding: 20px 28px; overflow-y: auto; }
+
+  .col-headers {
+    display: grid; grid-template-columns: 1fr 130px 130px 200px;
+    gap: 8px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
+  }
+  .col-h { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; }
+  .col-h.pess { color: var(--warn); text-align: right; }
+  .col-h.opt  { color: var(--info); text-align: right; }
+  .col-h.form { color: #475569; }
+
+  .results-table { width: 100%; border-collapse: collapse; }
+
+  .section-divider td {
+    padding-top: 18px; padding-bottom: 4px;
+  }
+  .divider-inner {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .divider-inner span { font-size: 11px; color: var(--accent); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; }
+  .divider-line { flex: 1; height: 1px; background: rgba(16,185,129,0.25); }
+
+  .result-row td { padding: 5px 4px; border-bottom: 1px solid rgba(30,41,59,0.5); vertical-align: middle; }
+  .result-row:hover td { background: rgba(255,255,255,0.02); }
+  .result-row.hl td { background: rgba(16,185,129,0.07); font-weight: 600; }
+  .result-row.hl:hover td { background: rgba(16,185,129,0.12); }
+
+  .r-label { color: var(--text2); font-size: 12px; }
+  .r-pess  { color: var(--warn); font-size: 12px; text-align: right; padding-right: 8px; }
+  .r-opt   { color: var(--info); font-size: 12px; text-align: right; padding-right: 8px; }
+  .r-form  { color: #475569; font-size: 10px; font-style: italic; max-width: 200px; }
+
+  .result-row.hl .r-label { color: var(--text); }
+  .result-row.hl .r-pess  { color: #34d399; }
+  .result-row.hl .r-opt   { color: #7dd3fc; }
+
+  /* ── ROI CARDS ── */
+  .roi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
+  .roi-card {
+    background: var(--bg2); border-radius: 10px; padding: 18px 20px;
+    border: 1px solid var(--border);
+  }
+  .roi-card-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
+  .roi-card-val { font-size: 32px; font-weight: 800; font-family: var(--sans); margin-bottom: 2px; }
+  .roi-card-sub { font-size: 11px; color: var(--muted); }
+  .roi-card-status { margin-top: 8px; font-size: 11px; }
+
+  .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 14px; }
+  .metric-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 14px; text-align: center;
+  }
+  .metric-card-label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .metric-card-val { font-size: 16px; font-weight: 700; color: var(--accent); }
+
+  /* ── scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: #2d3748; border-radius: 3px; }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .left { border-right: none; border-bottom: 1px solid var(--border); }
+    .col-headers { grid-template-columns: 1fr 100px 100px; }
+    .col-h.form, .r-form { display: none; }
+    .metric-grid { grid-template-columns: repeat(2,1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-label">▶ B2B LEAD ECONOMICS · КАЛЬКУЛЯТОР ВОРОНКИ</div>
+  <h1>Экономика лида: <span>300k номеров → сделки</span></h1>
+  <div class="header-sub">Редактируйте <b>жёлтые поля</b> слева — правые колонки пересчитываются автоматически</div>
+</div>
+
+<div class="layout">
+
+  <!-- ══════════ LEFT PANEL ══════════ -->
+  <div class="left">
+    <div class="left-title">🎛 Входные параметры (редактируемые)</div>
+
+    <div id="inputs-container"></div>
+  </div>
+
+  <!-- ══════════ RIGHT PANEL ══════════ -->
+  <div class="right">
+    <div class="col-headers">
+      <div class="col-h" style="color:var(--muted)">Показатель</div>
+      <div class="col-h pess">😟 Пессимист</div>
+      <div class="col-h opt">😊 Оптимист</div>
+      <div class="col-h form">Формула / комментарий</div>
+    </div>
+    <table class="results-table">
+      <tbody id="results-body"></tbody>
+    </table>
+
+    <div class="roi-grid" id="roi-cards"></div>
+    <div class="metric-grid" id="metric-cards"></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════
+const P = {
+  total_base: 300000,
+  pct_with_inn: 0.15,
+  avg_check: 25000,
+  margin_pct: 0.50,
+  conv_lead_deal: 0.17,
+
+  dedup_pct: 0.18,
+  invalid_format_pct: 0.07,
+
+  prog_rate_hr: 568,
+  prog_stage0_hrs: 25.2,
+  prog_stage1_hrs: 22.1,
+  prog_zvonobot_hrs: 11.0,
+  prog_other_hrs: 70.0,
+  vds_monthly: 6100,
+  vds_months: 3,
+
+  inn_active_pct: 0.62,
+  inn_target_okvd_pct: 0.52,
+  no_inn_found_on_maps_pct: 0.55,
+  no_inn_egrul_pass_pct: 0.48,
+
+  flash_call_cost: 0.20,
+  live_sim_pct: 0.62,
+
+  max_reach_pct: 0.18,
+  max_cost_msg: 5.5,
+  tg_reach_pct: 0.35,
+  wa_reach_pct: 0.14,
+  wa_cost_msg: 10,
+  msg_reply_pct_pessimist: 0.015,
+  msg_reply_pct_optimist: 0.04,
+
+  call_connect_pct: 0.46,
+  call_sec: 40,
+  zvonobot_sec_cost: 0.28,
+  zvonobot_asr_per_reply: 0.6,
+  asr_replies: 3,
+  biz_confirm_pct: 0.57,
+  call_interest_pct: 0.045,
+
+  manager_salary: 45000,
+  manager_months: 2,
+  qual_minutes: 15,
+  qual_pass_pct: 0.42,
+};
+
+// ══════════════════════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════════════════════
+const fmt  = (v, d=0) => v == null || isNaN(v) ? '—' : Number(v).toLocaleString('ru-RU', {maximumFractionDigits: d});
+const pct  = (v)      => v == null || isNaN(v) ? '—' : (v*100).toFixed(1)+'%';
+const rub  = (v)      => v == null || isNaN(v) ? '—' : fmt(v)+' ₽';
+
+// ══════════════════════════════════════════════════════
+//  CALCULATE
+// ══════════════════════════════════════════════════════
+function calc() {
+  const p = P;
+  const after_dedup   = Math.round(p.total_base * (1 - p.dedup_pct - p.invalid_format_pct));
+  const with_inn      = Math.round(after_dedup * p.pct_with_inn);
+  const no_inn        = after_dedup - with_inn;
+
+  // Stage 1
+  const inn_active    = Math.round(with_inn * p.inn_active_pct);
+  const inn_passed    = Math.round(inn_active * p.inn_target_okvd_pct);
+  const no_inn_found  = Math.round(no_inn * p.no_inn_found_on_maps_pct);
+  const no_inn_passed = Math.round(no_inn_found * p.no_inn_egrul_pass_pct);
+  const biz_total     = inn_passed + no_inn_passed;
+
+  const prog_s0 = p.prog_stage0_hrs * p.prog_rate_hr;
+  const prog_s1 = p.prog_stage1_hrs * p.prog_rate_hr;
+  const prog_s4 = p.prog_zvonobot_hrs * p.prog_rate_hr;
+  const prog_oth= p.prog_other_hrs   * p.prog_rate_hr;
+  const total_prog = prog_s0 + prog_s1 + prog_s4 + prog_oth;
+  const vds_total  = p.vds_monthly * p.vds_months;
+
+  // Stage 2
+  const live_nums  = Math.round(biz_total * p.live_sim_pct);
+  const stage2_cost= Math.round(biz_total * p.flash_call_cost);
+
+  // Stage 3
+  const max_sent = Math.round(live_nums * p.max_reach_pct);
+  const tg_sent  = Math.round(live_nums * p.tg_reach_pct);
+  const wa_sent  = Math.round(live_nums * p.wa_reach_pct);
+  const max_cost = Math.round(max_sent * p.max_cost_msg);
+  const wa_cost  = Math.round(wa_sent  * p.wa_cost_msg);
+  const stage3_cost = max_cost + wa_cost;
+
+  const all_sent = max_sent + tg_sent + wa_sent;
+  const replies_pess = Math.round(all_sent * p.msg_reply_pct_pessimist);
+  const replies_opt  = Math.round(all_sent * p.msg_reply_pct_optimist);
+
+  // Stage 4
+  const connected  = Math.round(live_nums * p.call_connect_pct);
+  const cost_1call = p.call_sec * p.zvonobot_sec_cost + p.asr_replies * p.zvonobot_asr_per_reply;
+  const s4_var     = Math.round(connected * cost_1call);
+  const stage4_cost= s4_var + prog_s4;
+  const biz_conf   = Math.round(connected * p.biz_confirm_pct);
+  const interested = Math.round(connected * p.call_interest_pct);
+
+  // Stage 5
+  const mhr  = p.manager_salary / 176;
+  const cpq  = mhr * (p.qual_minutes / 60);
+  const leads_pess = replies_pess + interested;
+  const leads_opt  = replies_opt  + interested;
+  const qual_pess  = Math.round(leads_pess * p.qual_pass_pct);
+  const qual_opt   = Math.round(leads_opt  * p.qual_pass_pct);
+  const stage5_cost= p.manager_salary * p.manager_months;
+
+  // Totals
+  const total_pess = Math.round(vds_total + total_prog + stage2_cost + stage3_cost + stage4_cost + stage5_cost);
+  const total_opt  = Math.round(vds_total + total_prog + stage2_cost +
+    Math.round(max_sent*p.max_cost_msg*2.8) + Math.round(wa_sent*p.wa_cost_msg*2.8) +
+    s4_var*2.2 + prog_s4 + stage5_cost*1.8);
+
+  // ROI
+  const deals_pess = Math.round(qual_pess * p.conv_lead_deal);
+  const deals_opt  = Math.round(qual_opt  * p.conv_lead_deal);
+  const rev_pess   = deals_pess * p.avg_check;
+  const rev_opt    = deals_opt  * p.avg_check;
+  const profit_pess= rev_pess * p.margin_pct - total_pess;
+  const profit_opt = rev_opt  * p.margin_pct - total_opt;
+  const roi_pess   = total_pess>0 ? (rev_pess * p.margin_pct / total_pess) : 0;
+  const roi_opt    = total_opt >0 ? (rev_opt  * p.margin_pct / total_opt)  : 0;
+  const cpl_pess   = qual_pess>0 ? total_pess/qual_pess : 0;
+  const cpl_opt    = qual_opt >0 ? total_opt /qual_opt  : 0;
+  const cpd_pess   = deals_pess>0? total_pess/deals_pess: 0;
+  const cpd_opt    = deals_opt >0? total_opt /deals_opt : 0;
+  const breakeven  = (p.avg_check * p.margin_pct) > 0 ? total_pess / (p.avg_check * p.margin_pct) : 0;
+
+  return {
+    after_dedup, with_inn, no_inn,
+    inn_active, inn_passed, no_inn_found, no_inn_passed, biz_total,
+    prog_s0, prog_s1, prog_s4, prog_oth, total_prog, vds_total,
+    live_nums, stage2_cost,
+    max_sent, tg_sent, wa_sent, max_cost, wa_cost, stage3_cost,
+    replies_pess, replies_opt,
+    connected, cost_1call, s4_var, stage4_cost, biz_conf, interested,
+    mhr, cpq, leads_pess, leads_opt, qual_pess, qual_opt, stage5_cost,
+    total_pess, total_opt,
+    deals_pess, deals_opt, rev_pess, rev_opt,
+    profit_pess, profit_opt, roi_pess, roi_opt,
+    cpl_pess, cpl_opt, cpd_pess, cpd_opt, breakeven,
+  };
+}
+
+// ══════════════════════════════════════════════════════
+//  BUILD INPUTS
+// ══════════════════════════════════════════════════════
+const INPUT_GROUPS = [
+  { title: 'База и бизнес', rows: [
+    { label: 'Всего номеров в базе',      key: 'total_base',      step: 1000 },
+    { label: 'Доля с ИНН (0.15 = 15%)',   key: 'pct_with_inn',    step: 0.01, suf:'доля' },
+    { label: 'Средний чек',               key: 'avg_check',       step: 1000, suf:'₽' },
+    { label: 'Маржинальность',            key: 'margin_pct',      step: 0.05, suf:'доля' },
+    { label: 'Конверсия лид→сделка',      key: 'conv_lead_deal',  step: 0.01, suf:'доля' },
+  ]},
+  { title: 'Этап 0: Нормализация', rows: [
+    { label: 'Дубли (доля)',              key: 'dedup_pct',       step: 0.01, suf:'доля' },
+    { label: 'Невалидный формат (доля)', key: 'invalid_format_pct', step: 0.01, suf:'доля' },
+  ]},
+  { title: 'Инфраструктура и программист', rows: [
+    { label: 'Ставка прогр. (₽/ч)',       key: 'prog_rate_hr',    step: 50, suf:'₽/ч' },
+    { label: 'Часов Этап 0 (+5% тест)',   key: 'prog_stage0_hrs', step: 0.5 },
+    { label: 'Часов Этап 1 (карты+DaData)',key:'prog_stage1_hrs', step: 0.5 },
+    { label: 'Часов Zvonobot+CRM',        key: 'prog_zvonobot_hrs',step: 0.5 },
+    { label: 'Часов прочие этапы',        key: 'prog_other_hrs',  step: 1 },
+    { label: 'VDS ₽/мес (все серверы)',   key: 'vds_monthly',     step: 500, suf:'₽/мес' },
+    { label: 'Месяцев аренды VDS',        key: 'vds_months',      step: 1 },
+  ]},
+  { title: 'Этап 1: B2B Фильтрация', rows: [
+    { label: 'С ИНН: активных по ЕГРЮЛ', key: 'inn_active_pct',  step: 0.01, suf:'доля' },
+    { label: 'С ИНН: целевой ОКВЭД',     key: 'inn_target_okvd_pct', step: 0.01, suf:'доля' },
+    { label: 'Без ИНН: найдено на картах',key:'no_inn_found_on_maps_pct', step: 0.01, suf:'доля' },
+    { label: 'Без ИНН: прошли ЕГРЮЛ',    key: 'no_inn_egrul_pass_pct', step: 0.01, suf:'доля' },
+  ]},
+  { title: 'Этап 2: Flash Call (проверка номера)', rows: [
+    { label: 'Flash Call ₽/попытка',      key: 'flash_call_cost', step: 0.05, suf:'₽' },
+    { label: 'Живых SIM после звонка',    key: 'live_sim_pct',    step: 0.01, suf:'доля' },
+  ]},
+  { title: 'Этап 3: Рассылки', rows: [
+    { label: 'MAX охват (доля живых)',    key: 'max_reach_pct',   step: 0.01, suf:'доля' },
+    { label: 'MAX цена/сообщение',        key: 'max_cost_msg',    step: 0.5,  suf:'₽' },
+    { label: 'Telegram охват',            key: 'tg_reach_pct',    step: 0.01, suf:'доля' },
+    { label: 'WhatsApp охват',            key: 'wa_reach_pct',    step: 0.01, suf:'доля' },
+    { label: 'WA цена/сообщение',         key: 'wa_cost_msg',     step: 1,    suf:'₽' },
+    { label: 'Ответили — пессимист',      key: 'msg_reply_pct_pessimist', step: 0.005, suf:'доля' },
+    { label: 'Ответили — оптимист',       key: 'msg_reply_pct_optimist',  step: 0.005, suf:'доля' },
+  ]},
+  { title: 'Этап 4: ИИ-обзвон (Zvonobot)', rows: [
+    { label: '% дозвона',                 key: 'call_connect_pct',step: 0.01, suf:'доля' },
+    { label: 'Длина разговора (сек)',      key: 'call_sec',        step: 5, suf:'сек' },
+    { label: 'Zvonobot ₽/сек',            key: 'zvonobot_sec_cost',step:0.01, suf:'₽/сек' },
+    { label: 'ASR ₽/реплика',             key: 'zvonobot_asr_per_reply', step:0.1, suf:'₽' },
+    { label: 'Реплик клиента за звонок',  key: 'asr_replies',     step: 1 },
+    { label: '% подтвердили: бизнес жив', key: 'biz_confirm_pct', step: 0.01, suf:'доля' },
+    { label: '% интерес + ЛПР',           key: 'call_interest_pct',step:0.005, suf:'доля' },
+  ]},
+  { title: 'Этап 5: Менеджер по квалификации', rows: [
+    { label: 'Зарплата менеджера ₽/мес',  key: 'manager_salary',  step: 5000, suf:'₽/мес' },
+    { label: 'Месяцев работы менеджера',  key: 'manager_months',  step: 1 },
+    { label: 'Минут на квалификацию',     key: 'qual_minutes',    step: 5, suf:'мин' },
+    { label: '% квалификации (BANT)',      key: 'qual_pass_pct',   step: 0.05, suf:'доля' },
+  ]},
+];
+
+function buildInputs() {
+  const container = document.getElementById('inputs-container');
+  INPUT_GROUPS.forEach(g => {
+    const sec = document.createElement('div');
+    sec.className = 'param-section';
+    sec.innerHTML = `<div class="param-section-label">${g.title}</div>`;
+    g.rows.forEach(row => {
+      const div = document.createElement('div');
+      div.className = 'param-row';
+      div.innerHTML = `
+        <div class="param-label">${row.label}</div>
+        <div class="param-right">
+          <input type="number" data-key="${row.key}" step="${row.step || 1}" value="${P[row.key]}">
+          ${row.suf ? `<span class="param-suffix">${row.suf}</span>` : ''}
+        </div>`;
+      sec.appendChild(div);
+    });
+    container.appendChild(sec);
+  });
+
+  container.addEventListener('input', e => {
+    const inp = e.target;
+    if (!inp.dataset.key) return;
+    const val = parseFloat(inp.value);
+    if (!isNaN(val)) { P[inp.dataset.key] = val; render(); }
+  });
+}
+
+// ══════════════════════════════════════════════════════
+//  RENDER RESULTS
+// ══════════════════════════════════════════════════════
+function divider(label) {
+  return `<tr class="section-divider"><td colspan="4">
+    <div class="divider-inner"><span>${label}</span><div class="divider-line"></div></div>
+  </td></tr>`;
+}
+
+function row(label, pv, ov, formula='', hl=false) {
+  return `<tr class="result-row${hl?' hl':''}">
+    <td class="r-label">${label}</td>
+    <td class="r-pess">${pv}</td>
+    <td class="r-opt">${ov}</td>
+    <td class="r-form">${formula}</td>
+  </tr>`;
+}
+
+function render() {
+  const r = calc();
+  const p = P;
+  let html = '';
+
+  // ── Этап 0 ──
+  html += divider('Этап 0 — Нормализация базы');
+  html += row('Исходная база', fmt(p.total_base), fmt(p.total_base), '= total_base');
+  html += row('После дедуп. и формат-фильтра', fmt(r.after_dedup), fmt(r.after_dedup),
+    `= total_base × (1−${pct(p.dedup_pct+p.invalid_format_pct)})`);
+  html += row('Из них: с ИНН (Тип 2 — приоритет)', fmt(r.with_inn), fmt(r.with_inn),
+    `= after_dedup × ${pct(p.pct_with_inn)}`);
+  html += row('Из них: без ИНН (Тип 1)', fmt(r.no_inn), fmt(r.no_inn), '= after_dedup − with_inn');
+  html += row('Стоимость Этапа 0 (программист)', rub(r.prog_s0), rub(r.prog_s0),
+    `= ${p.prog_stage0_hrs}ч × ${fmt(p.prog_rate_hr)}₽/ч`, true);
+
+  // ── Этап 1 ──
+  html += divider('Этап 1 — B2B Фильтрация (БЕСПЛАТНО: DaData + Яндекс dev-key)');
+  html += row('ТИП 2 | Активных по ЕГРЮЛ', fmt(r.inn_active), fmt(r.inn_active),
+    `= with_inn × ${pct(p.inn_active_pct)}`);
+  html += row('ТИП 2 | Прошли ОКВЭД + выручка >5M₽', fmt(r.inn_passed), fmt(r.inn_passed),
+    `= inn_active × ${pct(p.inn_target_okvd_pct)}`);
+  html += row('ТИП 1 | Найдено на картах по телефону', fmt(r.no_inn_found), fmt(r.no_inn_found),
+    `= no_inn × ${pct(p.no_inn_found_on_maps_pct)}`);
+  html += row('ТИП 1 | Прошли ЕГРЮЛ фильтр', fmt(r.no_inn_passed), fmt(r.no_inn_passed),
+    `= no_inn_found × ${pct(p.no_inn_egrul_pass_pct)}`);
+  html += row('🏢 Итого прошли B2B-фильтр', fmt(r.biz_total), fmt(r.biz_total),
+    '= inn_passed + no_inn_passed', true);
+  html += row('Стоимость Этапа 1 (программист)', rub(r.prog_s1), rub(r.prog_s1),
+    `= ${p.prog_stage1_hrs}ч × ${fmt(p.prog_rate_hr)}₽ (API бесплатны)`, true);
+
+  // ── Этап 2 ──
+  html += divider('Этап 2 — Проверка номеров (Flash Call)');
+  html += row('Номеров на Flash Call', fmt(r.biz_total), fmt(r.biz_total), '= biz_total');
+  html += row('Живых SIM (активных)', fmt(r.live_nums), fmt(r.live_nums),
+    `= biz_total × ${pct(p.live_sim_pct)}`);
+  html += row('Стоимость Flash Call', rub(r.stage2_cost), rub(r.stage2_cost),
+    `= biz_total × ${p.flash_call_cost}₽/попытка`, true);
+
+  // ── Этап 3 ──
+  html += divider('Этап 3 — Рассылки (MAX → Telegram → WhatsApp)');
+  html += row('MAX отправлено', fmt(r.max_sent), fmt(r.max_sent),
+    `= live_nums × ${pct(p.max_reach_pct)}`);
+  html += row('Telegram отправлено (0₽)', fmt(r.tg_sent), fmt(r.tg_sent),
+    `= live_nums × ${pct(p.tg_reach_pct)}`);
+  html += row('WhatsApp отправлено', fmt(r.wa_sent), fmt(r.wa_sent),
+    `= live_nums × ${pct(p.wa_reach_pct)}`);
+  html += row('Стоимость MAX', rub(r.max_cost), rub(r.max_cost),
+    `= max_sent × ${p.max_cost_msg}₽`);
+  html += row('Стоимость WhatsApp', rub(r.wa_cost), rub(r.wa_cost),
+    `= wa_sent × ${p.wa_cost_msg}₽`);
+  html += row('Ответили / отреагировали', fmt(r.replies_pess), fmt(r.replies_opt),
+    `всего отправлено × (${pct(p.msg_reply_pct_pessimist)} / ${pct(p.msg_reply_pct_optimist)})`);
+  html += row('Стоимость Этапа 3', rub(r.stage3_cost), rub(r.stage3_cost),
+    '= MAX_cost + WA_cost', true);
+
+  // ── Этап 4 ──
+  html += divider('Этап 4 — ИИ-обзвон (Zvonobot 0.28₽/сек)');
+  html += row('Стоимость 1 дозвона', `${fmt(r.cost_1call,1)}₽`, `${fmt(r.cost_1call,1)}₽`,
+    `= ${p.call_sec}с×${p.zvonobot_sec_cost}₽ + ${p.asr_replies}×${p.zvonobot_asr_per_reply}₽`);
+  html += row('Дозвонились', fmt(r.connected), fmt(r.connected),
+    `= live_nums × ${pct(p.call_connect_pct)}`);
+  html += row('Подтвердили: бизнес жив', fmt(r.biz_conf), fmt(r.biz_conf),
+    `= connected × ${pct(p.biz_confirm_pct)}`);
+  html += row('Интерес + ЛПР → менеджеру', fmt(r.interested), fmt(r.interested),
+    `= connected × ${pct(p.call_interest_pct)}`);
+  html += row('Переменные расходы обзвона', rub(r.s4_var), rub(r.s4_var),
+    `= connected × ${fmt(r.cost_1call,1)}₽`);
+  html += row('Стоимость Этапа 4 (итого)', rub(r.stage4_cost), rub(r.stage4_cost),
+    '= переменные + программист Zvonobot', true);
+
+  // ── Этап 5 ──
+  html += divider('Этап 5 — Квалификация менеджером (BANT)');
+  html += row('₽/час менеджера', `${fmt(r.mhr,0)}₽/ч`, `${fmt(r.mhr,0)}₽/ч`,
+    `= ${p.manager_salary}₽ / 176ч`);
+  html += row('Стоимость 1 квалификации', `${fmt(r.cpq,0)}₽`, `${fmt(r.cpq,0)}₽`,
+    `= мhr × ${p.qual_minutes}мин`);
+  html += row('Передано менеджеру (рассылки+обзвон)', fmt(r.leads_pess), fmt(r.leads_opt),
+    '= replies + interested');
+  html += row('🎯 Квалифицированных лидов', fmt(r.qual_pess), fmt(r.qual_opt),
+    `= leads × ${pct(p.qual_pass_pct)}`, true);
+  html += row('Стоимость Этапа 5', rub(r.stage5_cost), rub(r.stage5_cost),
+    `= ${p.manager_salary}₽ × ${p.manager_months} мес`, true);
+
+  // ── Итог ──
+  html += divider('💰 ИТОГ — Бюджет, сделки и ROI');
+  html += row('Инфраструктура VDS', rub(r.vds_total), rub(r.vds_total),
+    `= ${p.vds_monthly}₽ × ${p.vds_months}мес`);
+  html += row('Программист (все этапы)', rub(r.total_prog), rub(r.total_prog),
+    `= ${fmt(p.prog_stage0_hrs+p.prog_stage1_hrs+p.prog_zvonobot_hrs+p.prog_other_hrs,1)}ч × ${fmt(p.prog_rate_hr)}₽`);
+  html += row('ИТОГО ЗАТРАТЫ', rub(r.total_pess), rub(r.total_opt),
+    'сумма всех этапов', true);
+  html += row('Квалифицированных лидов', fmt(r.qual_pess), fmt(r.qual_opt), '', true);
+  html += row('Сделок', fmt(r.deals_pess), fmt(r.deals_opt),
+    `= лиды × ${pct(p.conv_lead_deal)}`, true);
+  html += row('Выручка', rub(r.rev_pess), rub(r.rev_opt),
+    `= сделки × ${fmt(p.avg_check)}₽`, true);
+  html += row(`Прибыль (маржа ${pct(p.margin_pct)})`, rub(r.profit_pess), rub(r.profit_opt),
+    `= выручка × ${pct(p.margin_pct)} − затраты`, true);
+  html += row('Стоимость 1 квал. лида', rub(r.cpl_pess), rub(r.cpl_opt),
+    '= затраты / лидов', true);
+  html += row('Стоимость 1 сделки', rub(r.cpd_pess), rub(r.cpd_opt),
+    '= затраты / сделок', true);
+  html += row('Точка безубыточности (сделок)', fmt(r.breakeven,1), fmt(r.breakeven,1),
+    `= затраты / (${fmt(p.avg_check)}₽ × ${pct(p.margin_pct)})`);
+
+  document.getElementById('results-body').innerHTML = html;
+
+  // ── ROI CARDS ──
+  const roiCards = [
+    { label: '😟 ROI — Пессимист', val: r.roi_pess, profit: r.profit_pess, total: r.total_pess },
+    { label: '😊 ROI — Оптимист',  val: r.roi_opt,  profit: r.profit_opt,  total: r.total_opt  },
+  ].map(({label, val, profit, total}) => {
+    const color = val >= 2 ? '#10b981' : val >= 1 ? '#f59e0b' : '#ef4444';
+    const status = val >= 2 ? '✅ Отличная окупаемость' : val >= 1 ? '⚠️ Окупается' : '❌ Убыток при этой марже';
+    return `<div class="roi-card" style="border-color:${color}30">
+      <div class="roi-card-label">${label}</div>
+      <div class="roi-card-val" style="color:${color}">×${fmt(val,2)}</div>
+      <div class="roi-card-sub">на вложенный рубль</div>
+      <div class="roi-card-sub" style="margin-top:4px">Прибыль: ${rub(profit)} при затратах ${rub(total)}</div>
+      <div class="roi-card-status" style="color:${color}">${status}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('roi-cards').innerHTML = roiCards;
+
+  // ── METRIC CARDS ──
+  const metrics = [
+    { label: 'Лидов (пессимист)', val: fmt(r.qual_pess) },
+    { label: 'Лидов (оптимист)',  val: fmt(r.qual_opt) },
+    { label: 'Лид-цена (пессимист)', val: rub(r.cpl_pess) },
+    { label: 'Лид-цена (оптимист)',  val: rub(r.cpl_opt) },
+    { label: 'Сделок (пессимист)', val: fmt(r.deals_pess) },
+    { label: 'Сделок (оптимист)',  val: fmt(r.deals_opt) },
+    { label: 'Выручка (пессимист)', val: rub(r.rev_pess) },
+    { label: 'Выручка (оптимист)',  val: rub(r.rev_opt) },
+  ].map(({label,val}) => `
+    <div class="metric-card">
+      <div class="metric-card-label">${label}</div>
+      <div class="metric-card-val">${val}</div>
+    </div>`).join('');
+  document.getElementById('metric-cards').innerHTML = metrics;
+}
+
+// ══════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════
+buildInputs();
+render();
+</script>
+</body>
+</html>
