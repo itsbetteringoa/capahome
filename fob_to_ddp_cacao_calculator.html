@@ -173,6 +173,18 @@ header .sub{font-size:10px;color:var(--muted);margin-top:1px;}
       <input type="checkbox" id="chk-fta" checked>
       <span>Apply FTA preferential rate (if eligible)</span>
     </div>
+    <div class="cg" id="mfn-ctrl" style="display:flex;align-items:flex-end;gap:6px;">
+      <div>
+        <label>MFN rate — non-FTA countries</label>
+        <input type="number" id="inp-mfn" value="5" step="0.5" min="0" max="100"
+          style="width:80px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--amber);padding:6px 10px;font-size:12px;font-family:var(--mono);outline:none;"
+          title="Adjust MFN duty rate for all non-FTA countries (Africa, etc.)">
+      </div>
+      <button class="hbtn" id="btn-apply-mfn" onclick="onApplyMfn()"
+        style="padding:6px 12px;border-color:#f59e0b44;color:var(--amber);margin-bottom:1px;"
+        title="Apply this MFN rate to all non-FTA countries for the current destination">Apply to all non-FTA</button>
+      <span id="mfn-stamp" style="font-size:10px;color:var(--hint);padding-bottom:6px;"></span>
+    </div>
     <div class="route-pill" id="route-pill"></div>
   </div>
 
@@ -332,10 +344,20 @@ function initRoute(src, dest) {
   const k = rk(src, dest);
   if (!routeParams[k]) {
     routeParams[k] = {
-      freight:   getDefaultFreight(src, dest),
-      dutyRate:  getDefaultDuty(src, dest),
+      freight:        getDefaultFreight(src, dest),
+      dutyRate:       getDefaultDuty(src, dest),
+      // dutySource tracks WHY the dutyRate was set:
+      //   'fta'    — FTA rate applied (fta !== null and useFta=true)
+      //   'mfn'    — MFN rate, either default or bulk-updated via "Apply MFN" button
+      //   'custom' — user typed a unique value for this specific route
+      dutySource:     hasFta(src, dest) ? 'fta' : 'mfn',
     };
   }
+}
+
+// Returns true if this source+dest pair has an FTA available
+function hasFta(src, dest) {
+  return DUTIES[dest][SRCS[src].region].fta !== null;
 }
 
 function getRParam(src, dest, key) {
@@ -349,8 +371,23 @@ function setRParam(src, dest, key, val) {
 function isCustomFreight(src, dest) {
   return getRParam(src, dest, 'freight') !== getDefaultFreight(src, dest);
 }
+// "Custom" means user typed a value specific to THIS route — not a bulk MFN update
 function isCustomDuty(src, dest) {
-  return getRParam(src, dest, 'dutyRate') !== getDefaultDuty(src, dest);
+  return getRParam(src, dest, 'dutySource') === 'custom';
+}
+
+// Apply a new MFN rate to ALL non-FTA routes for a given destination.
+// Routes with FTA applied or user-custom duty are NOT touched.
+function applyBulkMfn(dest, newMfn) {
+  Object.keys(SRCS).forEach(src => {
+    if (hasFta(src, dest)) return;           // has FTA — skip
+    const k = rk(src, dest);
+    initRoute(src, dest);
+    const ds = routeParams[k].dutySource;
+    if (ds === 'custom') return;             // user customised this route — skip
+    routeParams[k].dutyRate   = newMfn;
+    routeParams[k].dutySource = 'mfn';
+  });
 }
 
 /* ══════════════════════ COMPUTE ══════════════════════════════════
@@ -492,7 +529,11 @@ function buildBreakdown() {
   });
   const elDr = $('pi-dr');
   if (elDr) elDr.addEventListener('input', () => {
-    setRParam($('sel-src').value, $('sel-dest').value, 'dutyRate', parseFloat(elDr.value) || 0);
+    const src2  = $('sel-src').value;
+    const dest2 = $('sel-dest').value;
+    const val   = parseFloat(elDr.value) || 0;
+    setRParam(src2, dest2, 'dutyRate',   val);
+    setRParam(src2, dest2, 'dutySource', 'custom');  // mark as user-customised
     refreshAll();
   });
 
@@ -651,14 +692,15 @@ function refreshComparisonValues(dest) {
     const ce = $('cmp-cheap-' + id); if (ce) ce.style.display = cheap ? 'inline' : 'none';
     const cd = $('cmp-card-'  + id); if (cd) cd.classList.toggle('cheapest', cheap);
 
-    /* Params pill showing stored freight + duty for this source */
     const pp = $('cmp-params-' + id);
     if (pp) {
-      const fc = isCustomFreight(src, dest);
-      const dc = isCustomDuty(src, dest);
+      const fc  = isCustomFreight(src, dest);
+      const dc  = isCustomDuty(src, dest);
+      const ds  = getRParam(src, dest, 'dutySource');
+      const dutyClass = dc ? 'cust-param' : '';
       pp.innerHTML =
         `<span class="${fc?'cust-param':''}">fr: $${r.freight}/MT</span>
-         <span class="${dc?'cust-param':''}">duty: ${r.dutyRate}%</span>
+         <span class="${dutyClass}" title="${dc?'custom rate':'bulk MFN or FTA default'}">duty: ${r.dutyRate}%${dc?' ✎':''}</span>
          <span>vat: ${P.vatRate}%</span>`;
     }
 
@@ -694,6 +736,47 @@ function toggleSort() {
   buildComparisonGrid();
 }
 
+/* ══════════════════════ BULK MFN UPDATE ══════════════════════════
+   Applies new MFN rate to all non-FTA routes for the current destination.
+   Skips routes where user has typed a custom duty rate.
+   ════════════════════════════════════════════════════════════════ */
+function onApplyMfn() {
+  const dest   = $('sel-dest').value;
+  const newMfn = parseFloat($('inp-mfn').value);
+  if (isNaN(newMfn) || newMfn < 0) return;
+
+  applyBulkMfn(dest, newMfn);
+
+  // If current source is a non-FTA + non-custom route, update the breakdown input too
+  const src = $('sel-src').value;
+  if (!hasFta(src, dest) && !isCustomDuty(src, dest)) {
+    const el = $('pi-dr'); if (el) el.value = newMfn;
+  }
+
+  // Count how many routes were updated for feedback
+  let updated = 0;
+  Object.keys(SRCS).forEach(s => {
+    if (!hasFta(s, dest) && getRParam(s, dest, 'dutySource') === 'mfn') updated++;
+  });
+
+  const stamp = $('mfn-stamp');
+  stamp.textContent = `Applied to ${updated} route${updated!==1?'s':''}`;
+  setTimeout(() => { stamp.textContent = ''; }, 3000);
+
+  refreshAll();
+}
+
+/* Helper — reads current MFN from the first non-FTA, non-custom route for this dest,
+   used to pre-fill the inp-mfn field when switching destinations. */
+function inferCurrentMfn(dest) {
+  for (const src of Object.keys(SRCS)) {
+    if (!hasFta(src, dest)) {
+      return getRParam(src, dest, 'dutyRate');
+    }
+  }
+  return 5; // fallback
+}
+
 /* ══════════════════════ SOURCE/DEST CHANGE ═══════════════════════
    IMPORTANT: this function LOADS from routeParams (never overwrites stored values).
    It only initialises a route's defaults if that route has never been visited.
@@ -704,6 +787,8 @@ function onSrcDestChange() {
   initRoute(src, dest);          // sets defaults only if brand new route
   P.vatRate = VAT0[dest];        // vatRate is destination-wide, auto-update
   $('inp-fob').value = fobPrices[src];
+  // Sync MFN input to reflect current non-FTA rate for this destination
+  $('inp-mfn').value = inferCurrentMfn(dest);
   buildBreakdown();              // re-renders table with stored values for this route
   buildComparisonGrid();         // re-renders comparison with all stored per-route values
 }
@@ -725,13 +810,15 @@ $('inp-qty').addEventListener('input', e => {
 });
 $('chk-fta').addEventListener('change', e => {
   P.useFta = e.target.checked;
-  // Reset ALL per-route duty rates to new FTA/MFN defaults
+  // Reset duty rates for ALL routes, preserving user-custom ones
   Object.keys(SRCS).forEach(src => {
     ['Thailand','Vietnam'].forEach(dest => {
       const k = rk(src, dest);
-      if (routeParams[k]) {
-        routeParams[k].dutyRate = getDefaultDuty(src, dest);
-      }
+      if (!routeParams[k]) return;
+      const ds = routeParams[k].dutySource;
+      if (ds === 'custom') return;          // never overwrite user-customised routes
+      routeParams[k].dutyRate   = getDefaultDuty(src, dest);
+      routeParams[k].dutySource = hasFta(src, dest) ? 'fta' : 'mfn';
     });
   });
   onSrcDestChange();
@@ -787,7 +874,28 @@ function applyJSON() {
   // Restore state
   Object.assign(P, data.P);
   Object.assign(fobPrices, data.fobPrices);
-  if (data.routeParams) Object.assign(routeParams, data.routeParams);
+  if (data.routeParams) {
+    Object.assign(routeParams, data.routeParams);
+    // Migrate old saves that lack dutySource field
+    Object.keys(routeParams).forEach(k => {
+      if (routeParams[k].dutySource === undefined) {
+        const [src, dest] = k.split('||');
+        if (src && dest && SRCS[src] && DUTIES[dest]) {
+          const di = DUTIES[dest][SRCS[src].region];
+          const ftaRate = (P.useFta && di.fta !== null) ? di.fta : null;
+          if (ftaRate !== null && routeParams[k].dutyRate === ftaRate) {
+            routeParams[k].dutySource = 'fta';
+          } else if (routeParams[k].dutyRate === di.mfn) {
+            routeParams[k].dutySource = 'mfn';
+          } else {
+            routeParams[k].dutySource = 'custom';  // non-default → treat as custom
+          }
+        } else {
+          routeParams[k].dutySource = 'mfn';
+        }
+      }
+    });
+  }
   if (data.meta) {
     if (data.meta.src  && SRCS[data.meta.src])   $('sel-src').value  = data.meta.src;
     if (data.meta.dest && VAT0[data.meta.dest])   $('sel-dest').value = data.meta.dest;
