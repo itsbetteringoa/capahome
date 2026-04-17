@@ -5,132 +5,184 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FOB → DDP Calculator — Cocoa Beans HS 18010010</title>
 <style>
-  :root {
-    --bg:#0e1117; --surface:#161b27; --surface2:#1e2535; --surface3:#252e42;
-    --border:#2a3347; --border2:#3a4a62;
-    --text:#e2e8f5; --muted:#7a8aaa; --hint:#4a5a7a;
-    --accent:#3b82f6; --green:#22c55e; --amber:#f59e0b; --red:#ef4444;
-    --mono:'Courier New',monospace;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:13px;}
-  input[type=number]::-webkit-inner-spin-button{opacity:.3;}
-  input[type=number]{-moz-appearance:textfield;}
+:root{
+  --bg:#0e1117;--surface:#161b27;--surface2:#1e2535;--surface3:#252e42;
+  --border:#2a3347;--border2:#3a4a62;
+  --text:#e2e8f5;--muted:#7a8aaa;--hint:#4a5a7a;
+  --accent:#3b82f6;--green:#22c55e;--amber:#f59e0b;--red:#ef4444;
+  --mono:'Courier New',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:13px;display:flex;flex-direction:column;}
+input[type=number]::-webkit-inner-spin-button{opacity:.3;}
+input[type=number]{-moz-appearance:textfield;}
+select,input{font-family:inherit;}
 
-  header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
-  header h1{font-size:15px;font-weight:600;letter-spacing:.02em;}
-  header .sub{font-size:11px;color:var(--muted);margin-top:2px;}
-  .hs-tag{background:#1e3a5f;color:#60a5fa;font-size:11px;padding:3px 10px;border-radius:4px;font-weight:600;border:1px solid #2563eb44;}
+/* ── FIXED TOP PANEL ────────────────────────────────────────── */
+#top-panel{
+  flex-shrink:0;
+  background:var(--surface);
+  border-bottom:2px solid var(--border2);
+  z-index:100;
+}
+header{
+  background:#0b0f1a;border-bottom:1px solid var(--border);
+  padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
+}
+header h1{font-size:14px;font-weight:600;letter-spacing:.02em;}
+header .sub{font-size:10px;color:var(--muted);margin-top:1px;}
+.hs-tag{background:#1e3a5f;color:#60a5fa;font-size:10px;padding:2px 9px;border-radius:4px;font-weight:700;border:1px solid #2563eb44;}
 
-  .wrapper{max-width:1360px;margin:0 auto;padding:18px 18px 40px;}
+/* Controls row */
+.controls{
+  padding:10px 20px;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;
+  border-bottom:1px solid var(--border);
+}
+.cg label{display:block;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;}
+.cg select,.cg input[type=number]{
+  background:var(--surface2);border:1px solid var(--border);border-radius:6px;
+  color:var(--text);padding:6px 10px;font-size:12px;outline:none;
+}
+.cg select:focus,.cg input[type=number]:focus{border-color:var(--accent);}
+.cg select{min-width:145px;} .cg input[type=number]{width:110px;font-family:var(--mono);}
+.fta-wrap{display:flex;align-items:center;gap:7px;padding-bottom:4px;cursor:pointer;}
+.fta-wrap input{width:14px;height:14px;accent-color:var(--accent);cursor:pointer;}
+.fta-wrap span{font-size:12px;color:var(--muted);}
+.route-pill{
+  margin-left:auto;padding-bottom:4px;
+  font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px;flex-wrap:wrap;
+}
+.route-pill strong{color:var(--text);}
+.arr{color:var(--accent);font-size:13px;}
 
-  /* Controls */
-  .controls{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin-bottom:18px;display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;}
-  .cg label{display:block;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;}
-  .cg select,.cg input[type=number]{background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:7px 10px;font-size:13px;outline:none;}
-  .cg select:focus,.cg input[type=number]:focus{border-color:var(--accent);}
-  .cg select{min-width:150px;} .cg input[type=number]{width:115px;font-family:var(--mono);}
-  .fta-wrap{display:flex;align-items:center;gap:7px;padding-bottom:6px;cursor:pointer;}
-  .fta-wrap input{width:14px;height:14px;accent-color:var(--accent);cursor:pointer;}
-  .fta-wrap span{font-size:12px;color:var(--muted);}
-  .route-info{font-size:11px;color:var(--muted);display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding-bottom:6px;margin-left:auto;}
-  .route-info strong{color:var(--text);}
+/* KPI indicator row */
+.kpi-row{
+  padding:8px 20px;display:flex;flex-wrap:wrap;gap:0;
+}
+.kpi{
+  flex:1;min-width:140px;padding:6px 14px 6px 0;
+  border-right:1px solid var(--border);
+}
+.kpi:last-child{border-right:none;}
+.kpi .k-lbl{font-size:9px;font-weight:600;color:var(--hint);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;}
+.kpi .k-val{font-size:18px;font-weight:700;font-family:var(--mono);line-height:1;}
+.kpi .k-sub{font-size:10px;color:var(--muted);margin-top:3px;}
+.kpi.green .k-val{color:var(--green);}
+.kpi.amber .k-val{color:var(--amber);}
 
-  /* Summary cards */
-  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;}
-  @media(max-width:700px){.cards{grid-template-columns:repeat(2,1fr);}}
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 15px;}
-  .card .lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;}
-  .card .val{font-size:21px;font-weight:700;font-family:var(--mono);}
-  .card .sub{font-size:11px;color:var(--muted);margin-top:4px;}
-  .card.green{border-color:#22c55e33;} .card.green .val{color:var(--green);}
-  .card.amber .val{color:var(--amber);}
+/* ── SCROLLABLE CONTENT ─────────────────────────────────────── */
+#scroll-area{
+  flex:1;overflow-y:auto;
+  padding:16px 20px 40px;
+}
+#scroll-area::-webkit-scrollbar{width:6px;}
+#scroll-area::-webkit-scrollbar-track{background:var(--bg);}
+#scroll-area::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
 
-  /* Breakdown table */
-  .table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:18px;}
-  .thead{display:grid;grid-template-columns:2fr 2.2fr 115px 90px 100px;padding:8px 16px;background:var(--surface2);border-bottom:1px solid var(--border);}
-  .thead span{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;}
-  .thead span:nth-child(n+3){text-align:right;}
-  .grp-lbl{padding:7px 16px 4px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;background:var(--surface2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px;}
-  .gdot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
-  .trow{display:grid;grid-template-columns:2fr 2.2fr 115px 90px 100px;padding:5px 16px;border-bottom:1px solid var(--border);align-items:center;gap:4px;transition:background .1s;}
-  .trow:hover{background:#ffffff05;} .trow:last-child{border-bottom:none;}
-  .trow .nm{font-size:12px;color:var(--text);}
-  .trow .fm{font-size:10px;color:var(--muted);font-family:var(--mono);}
-  .trow .pm{display:flex;justify-content:flex-end;align-items:center;gap:4px;}
-  .trow .un{font-size:9px;color:var(--hint);font-family:var(--mono);min-width:28px;text-align:right;}
-  .trow .pmt{font-family:var(--mono);font-size:12px;text-align:right;color:var(--muted);}
-  .trow .tot{font-family:var(--mono);font-size:12px;font-weight:600;text-align:right;}
-  .sub-row{background:#ffffff05;border-top:1px solid var(--border2)!important;}
-  .sub-row .nm{font-weight:700;}
-  .sub-row .pmt,.sub-row .tot{color:var(--text);}
-  .ddp-row{background:#0f2d1a;border-top:2px solid var(--green)!important;}
-  .ddp-row .nm{font-weight:700;font-size:13px;color:var(--green);}
-  .ddp-row .pmt{font-size:13px;font-weight:700;color:var(--green);}
-  .ddp-row .tot{font-size:14px;font-weight:700;color:var(--green);}
-  .pinput{width:76px;text-align:right;background:var(--bg);border:1px solid var(--border2);border-radius:5px;color:var(--text);padding:3px 6px;font-size:11px;font-family:var(--mono);outline:none;}
-  .pinput:focus{border-color:var(--accent);}
-  .pinput.rate{color:var(--amber);}
-  .pinput.auto{color:#60a5fa;}
-  .flat-tag{font-size:9px;background:var(--surface3);color:var(--hint);padding:1px 4px;border-radius:3px;font-family:var(--mono);}
-  .badge{font-size:10px;padding:1px 6px;border-radius:3px;font-weight:700;margin-left:4px;vertical-align:middle;}
-  .badge-fta{background:#14532d;color:#4ade80;border:1px solid #16a34a44;}
-  .badge-mfn{background:var(--surface2);color:var(--muted);border:1px solid var(--border);}
+/* Table */
+.table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:16px;}
+.thead{display:grid;grid-template-columns:2fr 2.1fr 115px 88px 100px;padding:7px 16px;background:var(--surface2);border-bottom:1px solid var(--border);}
+.thead span{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
+.thead span:nth-child(n+3){text-align:right;}
+.grp-lbl{
+  padding:6px 16px 3px;font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;
+  background:var(--surface2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:7px;
+}
+.gdot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.trow{
+  display:grid;grid-template-columns:2fr 2.1fr 115px 88px 100px;
+  padding:5px 16px;border-bottom:1px solid var(--border);align-items:center;gap:4px;
+  transition:background .1s;
+}
+.trow:hover{background:#ffffff05;} .trow:last-child{border-bottom:none;}
+.trow .nm{font-size:12px;color:var(--text);}
+.trow .fm{font-size:10px;color:var(--muted);font-family:var(--mono);}
+.trow .pm{display:flex;justify-content:flex-end;align-items:center;gap:4px;}
+.trow .un{font-size:9px;color:var(--hint);font-family:var(--mono);min-width:26px;text-align:right;}
+.trow .pmt{font-family:var(--mono);font-size:12px;text-align:right;color:var(--muted);}
+.trow .tot{font-family:var(--mono);font-size:12px;font-weight:600;text-align:right;color:var(--text);}
+.sub-row{background:#ffffff05;border-top:1px solid var(--border2)!important;}
+.sub-row .nm{font-weight:700;}
+.sub-row .pmt{color:var(--text);}
+.ddp-row{background:#0f2d1a;border-top:2px solid var(--green)!important;}
+.ddp-row .nm{font-weight:700;font-size:13px;color:var(--green);}
+.ddp-row .pmt{font-size:13px;font-weight:700;color:var(--green);}
+.ddp-row .tot{font-size:14px;font-weight:700;color:var(--green);}
+.pinput{
+  width:74px;text-align:right;background:var(--bg);border:1px solid var(--border2);
+  border-radius:5px;color:var(--text);padding:3px 6px;font-size:11px;font-family:var(--mono);outline:none;
+}
+.pinput:focus{border-color:var(--accent);}
+.pinput.rate{color:var(--amber);}
+.pinput.auto{color:#60a5fa;}
+.flat-tag{font-size:9px;background:var(--surface3);color:var(--hint);padding:1px 3px;border-radius:2px;font-family:var(--mono);}
+.badge{font-size:10px;padding:1px 6px;border-radius:3px;font-weight:700;margin-left:4px;vertical-align:middle;}
+.badge-fta{background:#14532d;color:#4ade80;border:1px solid #16a34a44;}
+.badge-mfn{background:var(--surface2);color:var(--muted);border:1px solid var(--border);}
 
-  /* Bar chart */
-  .chart-wrap{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:15px 18px;margin-bottom:18px;}
-  .chart-wrap h3{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;}
-  .bar{display:flex;height:30px;border-radius:6px;overflow:hidden;gap:1px;margin-bottom:10px;}
-  .bar-seg{transition:flex .3s ease;}
-  .leg{display:flex;flex-wrap:wrap;gap:10px;}
-  .leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);}
-  .leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
+/* Bar chart */
+.chart-wrap{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 16px;margin-bottom:16px;}
+.chart-wrap h3{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;}
+.bar{display:flex;height:28px;border-radius:6px;overflow:hidden;gap:1px;margin-bottom:8px;}
+.bar-seg{transition:flex .25s ease;}
+.leg{display:flex;flex-wrap:wrap;gap:10px;}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);}
+.leg-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0;}
 
-  /* Comparison panel */
-  .cmp-section{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:15px 18px;margin-bottom:18px;}
-  .cmp-header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
-  .cmp-header h3{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px;}
-  .cmp-hint{font-size:11px;color:var(--hint);}
-  .sort-btn{background:var(--surface2);border:1px solid var(--border);border-radius:5px;color:var(--muted);padding:5px 11px;font-size:11px;cursor:pointer;font-family:inherit;white-space:nowrap;}
-  .sort-btn:hover{border-color:var(--accent);color:var(--text);}
-  .cmp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:10px;}
-  .cmp-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;cursor:pointer;transition:border-color .15s,background .15s;position:relative;}
-  .cmp-card:hover{border-color:var(--border2);background:var(--surface3);}
-  .cmp-card.active{border-color:var(--accent);background:#1e3a5f22;}
-  .cmp-card.cheapest{border-color:#22c55e66;}
-  .c-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;}
-  .c-country{font-size:12px;font-weight:600;color:var(--text);}
-  .c-region{font-size:10px;color:var(--hint);margin-bottom:7px;}
-  .c-fob-row{display:flex;align-items:center;gap:6px;margin-bottom:7px;}
-  .c-fob-label{font-size:10px;color:var(--muted);white-space:nowrap;}
-  .cmp-fob{width:84px;text-align:right;background:var(--bg);border:1px solid var(--border2);border-radius:4px;color:var(--text);padding:4px 7px;font-size:12px;font-family:var(--mono);outline:none;}
-  .cmp-fob:focus{border-color:var(--accent);}
-  .c-ddp{font-size:15px;font-weight:700;font-family:var(--mono);color:var(--green);margin-bottom:2px;}
-  .c-mkp{font-size:10px;color:var(--muted);margin-bottom:6px;}
-  .c-mini-bar{display:flex;height:5px;border-radius:3px;overflow:hidden;gap:1px;}
-  .cheap-badge{font-size:9px;background:#14532d;color:#4ade80;border:1px solid #16a34a44;padding:1px 5px;border-radius:3px;font-weight:700;position:absolute;top:7px;right:7px;}
+/* Comparison */
+.cmp-section{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 16px;margin-bottom:16px;}
+.cmp-hdr{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+.cmp-hdr h3{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px;}
+.cmp-hint{font-size:11px;color:var(--hint);}
+.sort-btn{background:var(--surface2);border:1px solid var(--border);border-radius:5px;color:var(--muted);padding:4px 10px;font-size:11px;cursor:pointer;font-family:inherit;}
+.sort-btn:hover{border-color:var(--accent);color:var(--text);}
+.cmp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:9px;}
+.cmp-card{
+  background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+  padding:10px 12px;cursor:pointer;transition:border-color .15s,background .15s;position:relative;
+}
+.cmp-card:hover{border-color:var(--border2);background:var(--surface3);}
+.cmp-card.active{border-color:var(--accent);background:#1e3a5f22;}
+.cmp-card.cheapest{border-color:#22c55e66;}
+.c-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;}
+.c-country{font-size:12px;font-weight:600;color:var(--text);}
+.c-region{font-size:10px;color:var(--hint);margin-bottom:6px;}
+.c-fob-row{display:flex;align-items:center;gap:6px;margin-bottom:7px;}
+.c-fob-lbl{font-size:10px;color:var(--muted);white-space:nowrap;}
+.cmp-fob{
+  width:82px;text-align:right;background:var(--bg);border:1px solid var(--border2);
+  border-radius:4px;color:var(--text);padding:3px 6px;font-size:12px;font-family:var(--mono);outline:none;
+}
+.cmp-fob:focus{border-color:var(--accent);}
+.c-ddp{font-size:15px;font-weight:700;font-family:var(--mono);color:var(--green);margin-bottom:1px;}
+.c-mkp{font-size:10px;color:var(--muted);margin-bottom:5px;}
+.c-mini-bar{display:flex;height:4px;border-radius:2px;overflow:hidden;gap:1px;}
+.cheap-badge{font-size:9px;background:#14532d;color:#4ade80;border:1px solid #16a34a44;padding:1px 5px;border-radius:3px;font-weight:700;position:absolute;top:7px;right:7px;}
 
-  /* Notes */
-  .notes{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:10px;padding:13px 16px;font-size:11px;color:var(--muted);line-height:1.8;}
-  .notes strong{color:var(--text);}
+/* Notes */
+.notes{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:10px;padding:12px 15px;font-size:11px;color:var(--muted);line-height:1.8;}
+.notes strong{color:var(--text);}
 
-  @media(max-width:900px){
-    .thead,.trow{grid-template-columns:1.6fr 0 110px 80px 90px;}
-    .thead span:nth-child(2),.trow .fm{display:none;}
-  }
+@media(max-width:900px){
+  .thead,.trow{grid-template-columns:1.6fr 0 110px 80px 90px;}
+  .thead span:nth-child(2),.trow .fm{display:none;}
+}
 </style>
 </head>
 <body>
 
-<header>
-  <div>
-    <h1>FOB → DDP Price Calculator</h1>
-    <div class="sub">Dried &amp; Fermented Cocoa Beans · 15 cost layers · Thailand &amp; Vietnam · Per-country FOB quotes · Quantity-aware flat fees</div>
-  </div>
-  <span class="hs-tag">HS 18010010</span>
-</header>
+<!-- ══ FIXED TOP PANEL ═══════════════════════════════════════════ -->
+<div id="top-panel">
 
-<div class="wrapper">
+  <header>
+    <div>
+      <h1>FOB → DDP Price Calculator</h1>
+      <div class="sub">Dried &amp; Fermented Cocoa Beans · 15 cost layers · Thailand &amp; Vietnam · Per-country FOB quotes</div>
+    </div>
+    <span class="hs-tag">HS 18010010</span>
+  </header>
 
   <div class="controls">
     <div class="cg"><label>Source country</label><select id="sel-src"></select></div>
@@ -147,10 +199,22 @@
       <input type="checkbox" id="chk-fta" checked>
       <span>Apply FTA preferential rate (if eligible)</span>
     </div>
-    <div class="route-info" id="route-info"></div>
+    <div class="route-pill" id="route-pill"></div>
   </div>
 
-  <div class="cards" id="cards"></div>
+  <div class="kpi-row">
+    <div class="kpi"><div class="k-lbl">FOB price</div><div class="k-val" id="k-fob">—</div><div class="k-sub" id="k-fob-s">—</div></div>
+    <div class="kpi"><div class="k-lbl">CIF value</div><div class="k-val" id="k-cif">—</div><div class="k-sub" id="k-cif-s">—</div></div>
+    <div class="kpi"><div class="k-lbl">Customs duty</div><div class="k-val" id="k-duty">—</div><div class="k-sub" id="k-duty-s">—</div></div>
+    <div class="kpi"><div class="k-lbl">VAT</div><div class="k-val" id="k-vat">—</div><div class="k-sub" id="k-vat-s">—</div></div>
+    <div class="kpi green"><div class="k-lbl">DDP price</div><div class="k-val" id="k-ddp">—</div><div class="k-sub" id="k-ddp-s">—</div></div>
+    <div class="kpi amber"><div class="k-lbl">Total markup over FOB</div><div class="k-val" id="k-mkp">—</div><div class="k-sub" id="k-mkp-s">—</div></div>
+  </div>
+
+</div><!-- end #top-panel -->
+
+<!-- ══ SCROLLABLE CONTENT ════════════════════════════════════════ -->
+<div id="scroll-area">
 
   <div class="table-wrap">
     <div class="thead">
@@ -170,10 +234,10 @@
   </div>
 
   <div class="cmp-section">
-    <div class="cmp-header">
+    <div class="cmp-hdr">
       <div>
         <h3>DDP comparison — all sources → <span id="cmp-dest-lbl">Thailand</span></h3>
-        <div class="cmp-hint">Enter your actual FOB quotations per country. Other costs (freight, duties, fees) load automatically. Click any card to switch the main view.</div>
+        <div class="cmp-hint">Enter your actual FOB quotations per country. Freight, duties &amp; fees load automatically. Click any card to switch the main view.</div>
       </div>
       <button class="sort-btn" id="sort-btn" onclick="toggleSort()">Sort by DDP ↕</button>
     </div>
@@ -181,25 +245,26 @@
   </div>
 
   <div class="notes" id="notes"></div>
-</div>
+
+</div><!-- end #scroll-area -->
 
 <script>
-/* ═══ DATA ══════════════════════════════════════════════════════ */
-const SRCS = {
-  'Ivory Coast': {region:'West Africa',    frTH:90,  frVN:90 },
-  'Ghana':       {region:'West Africa',    frTH:92,  frVN:92 },
-  'Cameroon':    {region:'West Africa',    frTH:95,  frVN:95 },
-  'Nigeria':     {region:'West Africa',    frTH:88,  frVN:88 },
-  'Togo':        {region:'West Africa',    frTH:90,  frVN:90 },
-  'Congo DRC':   {region:'Central Africa', frTH:108, frVN:108},
-  'CAR':         {region:'Central Africa', frTH:115, frVN:115},
-  'Uganda':      {region:'East Africa',    frTH:80,  frVN:75 },
-  'Kenya':       {region:'East Africa',    frTH:75,  frVN:70 },
-  'Madagascar':  {region:'Indian Ocean',   frTH:68,  frVN:62 },
-  'India':       {region:'South Asia',     frTH:40,  frVN:35 },
-  'Indonesia':   {region:'SE Asia',        frTH:25,  frVN:20 },
+/* ═══════════════════════ DATA ════════════════════════════════════ */
+const SRCS={
+  'Ivory Coast':{region:'West Africa',    frTH:90, frVN:90},
+  'Ghana':      {region:'West Africa',    frTH:92, frVN:92},
+  'Cameroon':   {region:'West Africa',    frTH:95, frVN:95},
+  'Nigeria':    {region:'West Africa',    frTH:88, frVN:88},
+  'Togo':       {region:'West Africa',    frTH:90, frVN:90},
+  'Congo DRC':  {region:'Central Africa', frTH:108,frVN:108},
+  'CAR':        {region:'Central Africa', frTH:115,frVN:115},
+  'Uganda':     {region:'East Africa',    frTH:80, frVN:75},
+  'Kenya':      {region:'East Africa',    frTH:75, frVN:70},
+  'Madagascar': {region:'Indian Ocean',   frTH:68, frVN:62},
+  'India':      {region:'South Asia',     frTH:40, frVN:35},
+  'Indonesia':  {region:'SE Asia',        frTH:25, frVN:20},
 };
-const DUTIES = {
+const DUTIES={
   Thailand:{
     'West Africa':   {mfn:5,fta:null,note:'MFN 5% — no FTA between Thailand and African nations'},
     'Central Africa':{mfn:5,fta:null,note:'MFN 5% — no FTA between Thailand and African nations'},
@@ -217,115 +282,119 @@ const DUTIES = {
     'SE Asia':       {mfn:0,fta:0,   note:'ATIGA (ASEAN Trade in Goods): 0% with valid Form D COO'},
   }
 };
-const VAT0   = {Thailand:7, Vietnam:5};
-const SEGS   = ['FOB price','Origin costs','Ocean freight','Insurance','Customs duty','VAT','Dest. handling'];
-const CLRS   = ['#3b82f6','#10b981','#f59e0b','#8b5cf6','#ef4444','#ec4899','#14b8a6'];
-const GCOL   = {A:'#3b82f6',B:'#f59e0b',C:'#ef4444',D:'#10b981'};
+const VAT0={Thailand:7,Vietnam:5};
+const SEGS=['FOB price','Origin costs','Ocean freight','Insurance','Customs duty','VAT','Dest. handling'];
+const CLRS=['#3b82f6','#10b981','#f59e0b','#8b5cf6','#ef4444','#ec4899','#14b8a6'];
+const GCOL={A:'#3b82f6',B:'#f59e0b',C:'#ef4444',D:'#10b981'};
 
-/* ═══ STATE ══════════════════════════════════════════════════════
-   fobPrices  — one FOB per source (from uploaded quotation tables)
-   P          — all shared cost parameters (same for all sources)
-   ════════════════════════════════════════════════════════════════ */
-let fobPrices = {
-  'Ivory Coast':3600, 'Ghana':3700,    'Cameroon':3567,
-  'Nigeria':3950,     'Togo':3300,     'Congo DRC':3200,
-  'CAR':3100,         'Uganda':9350,   'Kenya':8500,
-  'Madagascar':4275,  'India':4750,    'Indonesia':5750,
+/* ═══════════════════════ STATE ═══════════════════════════════════
+   fobPrices — one FOB per source country (from quotation tables)
+   P          — shared cost params; freight/dutyRate/vatRate are
+                AUTO-FILLED on src/dest change but REMAIN EDITABLE.
+                compute() for main breakdown always uses P values.
+   ═══════════════════════════════════════════════════════════════ */
+let fobPrices={
+  'Ivory Coast':3600,'Ghana':3700,'Cameroon':3567,
+  'Nigeria':3950,'Togo':3300,'Congo DRC':3200,
+  'CAR':3100,'Uganda':9350,'Kenya':8500,
+  'Madagascar':4275,'India':4750,'Indonesia':5750,
 };
 
-let P = {
+let P={
   qty:20, useFta:true,
-  /* ── Per-MT costs (Total $ = $/MT × qty) */
-  originInland:15,  // truck/rail to loading port
-  freight:90,       // sea freight (auto-fills per route)
-  insRate:0.35,     // % of (FOB+freight)×1.1
-  dutyRate:5,       // % of CIF (auto-fills per source/dest/FTA)
-  vatRate:7,        // % of (CIF+duty) (auto-fills per dest)
-  destTHC:10,       // terminal handling at dest port
-  inlandDel:20,     // port → warehouse drayage
-  misc:3,           // bank charges, FX, misc
-  /* ── Flat per-shipment costs: Total $ = flat (constant); $/MT = flat ÷ qty
-         → Increasing quantity LOWERS the per-MT cost → markup % decreases with qty */
-  exportClrFlat:120,  // export customs declaration
-  phytoFlat:80,       // phytosanitary cert at origin
-  coOriginFlat:60,    // certificate of origin (Form D/AI)
-  blFlat:120,         // bill of lading
-  brokerFlat:250,     // customs broker at destination
-  inspFlat:80,        // phytosanitary inspection at destination
+  /* auto-fill on src/dest change — user can then override in table */
+  freight:90, dutyRate:5, vatRate:7,
+  /* per-MT costs (total$ = $/MT × qty) */
+  originInland:15, destTHC:10, inlandDel:20, misc:3,
+  insRate:0.35,   /* % of (FOB+freight)×1.1 */
+  /* flat per-shipment costs (total$ = flat; $/MT = flat÷qty) */
+  exportClrFlat:120, phytoFlat:80, coOriginFlat:60, blFlat:120,
+  brokerFlat:250, inspFlat:80,
 };
 
-let sortByDdp = false;
+let sortByDdp=false;
 
-/* ═══ HELPERS ════════════════════════════════════════════════════ */
-const $     = id => document.getElementById(id);
-const sid   = s  => s.replace(/\s+/g,'_');
-const fm2   = v  => '$' + v.toFixed(2);
-const fmK   = v  => '$' + Math.round(v).toLocaleString('en-US');
+/* ═══════════════════════ HELPERS ═════════════════════════════════ */
+const $    = id=>document.getElementById(id);
+const sid  = s=>s.replace(/\s+/g,'_');
+const fm2  = v=>'$'+v.toFixed(2);
+const fmK  = v=>'$'+Math.round(v).toLocaleString('en-US');
 
-function getDuty(src, dest, useFta) {
-  const d = DUTIES[dest][SRCS[src].region];
-  return (useFta && d.fta !== null)
-    ? {rate:d.fta, label:'FTA', note:d.note}
-    : {rate:d.mfn, label:'MFN', note:d.note};
+function getDuty(src,dest,useFta){
+  const d=DUTIES[dest][SRCS[src].region];
+  return(useFta&&d.fta!==null)?{rate:d.fta,label:'FTA',note:d.note}:{rate:d.mfn,label:'MFN',note:d.note};
 }
 
-/* Core calculation — works for any src + fob */
-function compute(fob, src, dest) {
-  const qty  = P.qty;
-  const fr   = dest === 'Thailand' ? SRCS[src].frTH : SRCS[src].frVN;
-  const di   = getDuty(src, dest, P.useFta);
-  // Flat fees spread over quantity
-  const ec   = P.exportClrFlat / qty;
-  const ph   = P.phytoFlat     / qty;
-  const co   = P.coOriginFlat  / qty;
-  const bl   = P.blFlat        / qty;
-  const brok = P.brokerFlat    / qty;
-  const insp = P.inspFlat      / qty;
-  const os   = P.originInland + ec + ph + co + bl;
-  const ins  = (fob + fr) * 1.1 * (P.insRate / 100);
-  const cif  = fob + fr + ins;
-  const duty = cif * (di.rate / 100);
-  const vat  = (cif + duty) * (P.vatRate / 100);
-  const ds   = P.destTHC + brok + insp + P.inlandDel + P.misc;
-  const ddp  = fob + os + fr + ins + duty + vat + ds;
-  return {fob,qty,os,fr,ins,cif,duty,vat,ds,ddp,
-          ec,ph,co,bl,brok,insp,diRate:di.rate,diLabel:di.label};
+/* ── computeMain: uses P.freight, P.dutyRate, P.vatRate
+      so manual overrides in the table AND FTA-driven auto-fills
+      are both respected. ── */
+function computeMain(fob){
+  const qty=P.qty;
+  const ec=P.exportClrFlat/qty, ph=P.phytoFlat/qty,
+        co=P.coOriginFlat/qty,  bl=P.blFlat/qty,
+        brok=P.brokerFlat/qty,  insp=P.inspFlat/qty;
+  const os=P.originInland+ec+ph+co+bl;
+  const ins=(fob+P.freight)*1.1*(P.insRate/100);
+  const cif=fob+P.freight+ins;
+  const duty=cif*(P.dutyRate/100);
+  const vat=(cif+duty)*(P.vatRate/100);
+  const ds=P.destTHC+brok+insp+P.inlandDel+P.misc;
+  const ddp=fob+os+P.freight+ins+duty+vat+ds;
+  return{fob,qty,os,ins,cif,duty,vat,ds,ddp,ec,ph,co,bl,brok,insp};
 }
 
-/* ═══ BREAKDOWN TABLE ════════════════════════════════════════════ */
-function buildBreakdown() {
-  const src  = $('sel-src').value;
-  const dest = $('sel-dest').value;
-  const di   = getDuty(src, dest, P.useFta);
-  const badge = di.label === 'FTA'
-    ? '<span class="badge badge-fta">FTA</span>'
-    : '<span class="badge badge-mfn">MFN</span>';
+/* ── computeForCmp: uses per-route defaults for freight and duty
+      (not P overrides) so each source reflects its own route cost ── */
+function computeForCmp(fob,src,dest){
+  const qty=P.qty;
+  const fr=dest==='Thailand'?SRCS[src].frTH:SRCS[src].frVN;
+  const di=getDuty(src,dest,P.useFta);
+  const ec=P.exportClrFlat/qty, ph=P.phytoFlat/qty,
+        co=P.coOriginFlat/qty,  bl=P.blFlat/qty,
+        brok=P.brokerFlat/qty,  insp=P.inspFlat/qty;
+  const os=P.originInland+ec+ph+co+bl;
+  const ins=(fob+fr)*1.1*(P.insRate/100);
+  const cif=fob+fr+ins;
+  const duty=cif*(di.rate/100);
+  const vat=(cif+duty)*(P.vatRate/100);
+  const ds=P.destTHC+brok+insp+P.inlandDel+P.misc;
+  const ddp=fob+os+fr+ins+duty+vat+ds;
+  return{fob,qty,os,fr,ins,cif,duty,vat,ds,ddp};
+}
 
-  const inp = (id,val,step,cls='',title='') =>
-    `<input class="pinput ${cls}" id="${id}" type="number" value="${val}" step="${step}" title="${title}">`;
-  const row = (nm,fm,par,unit,a,b,xtra='') => `
-    <div class="trow ${xtra}">
+/* ═══════════════════════ BUILD TABLE ═════════════════════════════ */
+function buildBreakdown(){
+  const src=$('sel-src').value, dest=$('sel-dest').value;
+  const di=getDuty(src,dest,P.useFta);
+  const badge=di.label==='FTA'
+    ?'<span class="badge badge-fta">FTA</span>'
+    :'<span class="badge badge-mfn">MFN</span>';
+
+  const inp=(id,val,step,cls='')=>
+    `<input class="pinput ${cls}" id="${id}" type="number" value="${val}" step="${step}">`;
+  const row=(nm,fm,par,un,a,b,x='')=>`
+    <div class="trow ${x}">
       <div class="nm">${nm}</div><div class="fm">${fm}</div>
-      <div class="pm">${par}<span class="un">${unit}</span></div>
+      <div class="pm">${par}<span class="un">${un}</span></div>
       <div class="pmt" id="${a}">—</div><div class="tot" id="${b}">—</div>
     </div>`;
-  const sub = (nm,a,b) => `
+  const sub=(nm,a,b)=>`
     <div class="trow sub-row">
       <div class="nm">${nm}</div><div class="fm"></div><div class="pm"></div>
       <div class="pmt" id="${a}">—</div><div class="tot" id="${b}">—</div>
     </div>`;
-  const grp = (L,label) =>
+  const grp=(L,label)=>
     `<div class="grp-lbl"><span class="gdot" style="background:${GCOL[L]}"></span>
      <span style="color:${GCOL[L]}">${L}</span> — ${label}</div>`;
 
-  $('breakdown').innerHTML = `
+  $('breakdown').innerHTML=`
     ${grp('A','Origin costs at source port')}
-    ${row('FOB price','Input — or edit directly in the comparison cards below',
+    ${row('FOB price','Input — or edit in comparison cards below',
       inp('pi-fob',fobPrices[src],10,'auto'),'$/MT','v-fob-pm','v-fob-tot')}
     ${row('Origin inland haulage','$/MT × qty — truck / rail to loading port',
       inp('pi-oi',P.originInland,1),'$/MT','v-oi-pm','v-oi-tot')}
     ${row('Export customs clearance',
-      '<span class="flat-tag">flat÷qty</span> export declaration &amp; stamps — total $ fixed, $/MT falls with qty',
+      '<span class="flat-tag">flat÷qty</span> export declaration &amp; stamps',
       inp('pi-ec',P.exportClrFlat,10),'$/ship','v-ec-pm','v-ec-tot')}
     ${row('Phytosanitary certificate',
       '<span class="flat-tag">flat÷qty</span> plant authority cert at origin',
@@ -339,16 +408,16 @@ function buildBreakdown() {
     ${sub('▸ Origin subtotal','v-os-pm','v-os-tot')}
 
     ${grp('B','International freight &amp; insurance')}
-    ${row('Ocean freight (sea FCL/LCL)','$/MT × qty — route default (blue = auto-fills)',
+    ${row('Ocean freight (sea FCL/LCL)','$/MT × qty — auto-fills per route, fully editable',
       inp('pi-fr',P.freight,1,'auto'),'$/MT','v-fr-pm','v-fr-tot')}
     ${row('Marine insurance','(FOB + freight) × 1.1 × rate% — all-risk cargo',
       inp('pi-ir',P.insRate,0.05,'rate'),'%','v-ins-pm','v-ins-tot')}
     ${sub('▸ CIF value = FOB + freight + insurance','v-cif-pm','v-cif-tot')}
 
     ${grp('C','Import duties &amp; taxes at destination')}
-    ${row(`Import customs duty ${badge}`,'CIF × rate% — HS 18010010 raw cocoa beans',
+    ${row(`Import customs duty ${badge}`,`CIF × rate% — HS 18010010 — auto-fills, fully editable`,
       inp('pi-dr',P.dutyRate,0.5,'rate auto'),'%','v-du-pm','v-du-tot')}
-    ${row('VAT / GST','(CIF + duty) × rate% — on full dutiable value',
+    ${row('VAT / GST','(CIF + duty) × rate% — on dutiable value',
       inp('pi-vr',P.vatRate,0.5,'rate auto'),'%','v-vat-pm','v-vat-tot')}
 
     ${grp('D','Destination port &amp; delivery charges')}
@@ -358,304 +427,263 @@ function buildBreakdown() {
       '<span class="flat-tag">flat÷qty</span> import declaration filing fee',
       inp('pi-br',P.brokerFlat,10),'$/ship','v-br-pm','v-br-tot')}
     ${row('Phytosanitary inspection (dest.)',
-      '<span class="flat-tag">flat÷qty</span> food safety &amp; plant health at entry port',
+      '<span class="flat-tag">flat÷qty</span> food safety &amp; plant health at entry',
       inp('pi-ins',P.inspFlat,5),'$/ship','v-in-pm','v-in-tot')}
     ${row('Inland delivery to warehouse','$/MT × qty — port-to-door drayage',
       inp('pi-id',P.inlandDel,1),'$/MT','v-id-pm','v-id-tot')}
-    ${row('Misc charges (bank, FX, docs)','$/MT × qty — LC, currency conversion, other',
+    ${row('Misc charges (bank, FX, docs)','$/MT × qty — LC charges, currency conversion',
       inp('pi-mc',P.misc,0.5),'$/MT','v-mc-pm','v-mc-tot')}
     ${sub('▸ Destination subtotal','v-ds-pm','v-ds-tot')}
 
     <div class="trow ddp-row">
       <div class="nm">DDP PRICE &nbsp;(A + B + C + D)</div>
-      <div class="fm" style="font-size:10px;color:#4ade8066">FOB + all origin, freight, insurance, duties, taxes, destination costs</div>
+      <div class="fm" style="color:#4ade8055;font-size:10px">FOB + all origin, freight, insurance, duties, taxes, destination costs</div>
       <div class="pm"></div>
       <div class="pmt" id="v-ddp-pm">—</div>
       <div class="tot" id="v-ddp-tot">—</div>
     </div>`;
 
-  // ── Bind per-MT inputs
-  const bindPM = {
-    'pi-oi':'originInland','pi-fr':'freight','pi-ir':'insRate',
-    'pi-dr':'dutyRate','pi-vr':'vatRate','pi-thc':'destTHC',
-    'pi-id':'inlandDel','pi-mc':'misc'
-  };
-  Object.entries(bindPM).forEach(([id,key])=>{
-    const el=$(id); if(!el)return;
-    el.addEventListener('input',()=>{ P[key]=parseFloat(el.value)||0; refresh(); });
-  });
-  // ── Bind flat inputs
-  const bindFlat = {
-    'pi-ec':'exportClrFlat','pi-ph':'phytoFlat','pi-co':'coOriginFlat',
-    'pi-bl':'blFlat','pi-br':'brokerFlat','pi-ins':'inspFlat'
-  };
-  Object.entries(bindFlat).forEach(([id,key])=>{
-    const el=$(id); if(!el)return;
-    el.addEventListener('input',()=>{ P[key]=parseFloat(el.value)||0; refresh(); });
-  });
-  // ── FOB in main table → sync top control + comparison card
-  const piFob=$('pi-fob');
-  if(piFob) piFob.addEventListener('input',()=>{
-    const v=parseFloat(piFob.value)||0;
-    const src=$('sel-src').value;
+  /* ── Bind per-MT param inputs (update P.* then refresh cells only) */
+  function bp(id,key){ const el=$(id); if(!el)return;
+    el.addEventListener('input',()=>{P[key]=parseFloat(el.value)||0; refreshCells();}); }
+  bp('pi-oi','originInland');
+  bp('pi-fr','freight');      // FIX #2 — now stored in P.freight, computeMain uses P.freight
+  bp('pi-ir','insRate');
+  bp('pi-dr','dutyRate');     // FIX #3 — now stored in P.dutyRate, computeMain uses P.dutyRate
+  bp('pi-vr','vatRate');
+  bp('pi-thc','destTHC');
+  bp('pi-id','inlandDel');
+  bp('pi-mc','misc');
+
+  /* ── Bind flat inputs */
+  function bf(id,key){ const el=$(id); if(!el)return;
+    el.addEventListener('input',()=>{P[key]=parseFloat(el.value)||0; refreshCells();}); }
+  bf('pi-ec','exportClrFlat'); bf('pi-ph','phytoFlat');
+  bf('pi-co','coOriginFlat');  bf('pi-bl','blFlat');
+  bf('pi-br','brokerFlat');    bf('pi-ins','inspFlat');
+
+  /* ── FOB in table → sync top input + comparison card */
+  const pf=$('pi-fob'); if(pf) pf.addEventListener('input',()=>{
+    const v=parseFloat(pf.value)||0, src=$('sel-src').value;
     fobPrices[src]=v;
     $('inp-fob').value=v;
     const cf=$('cmp-fob-'+sid(src)); if(cf) cf.value=v;
-    refresh();
+    refreshCells();
   });
 
   updateNotes(src,dest,di);
-  updateCells();
+  refreshCells();
 }
 
-/* ═══ UPDATE COMPUTED CELLS ══════════════════════════════════════ */
-function updateCells() {
-  const src  = $('sel-src').value;
-  const dest = $('sel-dest').value;
-  const fob  = fobPrices[src];
-  const qty  = P.qty;
-  const r    = compute(fob, src, dest);
-  const mkp  = (r.ddp - fob) / fob * 100;
+/* ═══════════════════════ REFRESH CELLS ═══════════════════════════
+   Called on every parameter change. Does NOT rebuild DOM.
+   Uses computeMain (P-based) for the main breakdown.
+   ═══════════════════════════════════════════════════════════════ */
+function refreshCells(){
+  const src=$('sel-src').value, dest=$('sel-dest').value;
+  const fob=fobPrices[src], qty=P.qty;
+  const r=computeMain(fob);
+  const mkp=(r.ddp-fob)/fob*100;
 
-  const s = (id,v) => { const el=$(id); if(el) el.textContent=v; };
+  const s=(id,v)=>{const el=$(id);if(el)el.textContent=v;};
+  /* flat items: $/MT = flat÷qty (changes with qty); Total$ = flat (constant)
+     per-MT:     $/MT = rate;                         Total$ = rate × qty     */
+  s('v-fob-pm', fm2(fob));              s('v-fob-tot',  fmK(fob*qty));
+  s('v-oi-pm',  fm2(P.originInland));   s('v-oi-tot',   fmK(P.originInland*qty));
+  s('v-ec-pm',  fm2(r.ec));             s('v-ec-tot',   fmK(P.exportClrFlat));
+  s('v-ph-pm',  fm2(r.ph));             s('v-ph-tot',   fmK(P.phytoFlat));
+  s('v-co-pm',  fm2(r.co));             s('v-co-tot',   fmK(P.coOriginFlat));
+  s('v-bl-pm',  fm2(r.bl));             s('v-bl-tot',   fmK(P.blFlat));
+  s('v-os-pm',  fm2(r.os));             s('v-os-tot',   fmK(r.os*qty));
+  s('v-fr-pm',  fm2(P.freight));        s('v-fr-tot',   fmK(P.freight*qty));
+  s('v-ins-pm', fm2(r.ins));            s('v-ins-tot',  fmK(r.ins*qty));
+  s('v-cif-pm', fm2(r.cif));            s('v-cif-tot',  fmK(r.cif*qty));
+  s('v-du-pm',  fm2(r.duty));           s('v-du-tot',   fmK(r.duty*qty));
+  s('v-vat-pm', fm2(r.vat));            s('v-vat-tot',  fmK(r.vat*qty));
+  s('v-thc-pm', fm2(P.destTHC));        s('v-thc-tot',  fmK(P.destTHC*qty));
+  s('v-br-pm',  fm2(r.brok));           s('v-br-tot',   fmK(P.brokerFlat));
+  s('v-in-pm',  fm2(r.insp));           s('v-in-tot',   fmK(P.inspFlat));
+  s('v-id-pm',  fm2(P.inlandDel));      s('v-id-tot',   fmK(P.inlandDel*qty));
+  s('v-mc-pm',  fm2(P.misc));           s('v-mc-tot',   fmK(P.misc*qty));
+  s('v-ds-pm',  fm2(r.ds));             s('v-ds-tot',   fmK(r.ds*qty));
+  s('v-ddp-pm', fm2(r.ddp));            s('v-ddp-tot',  fmK(r.ddp*qty));
 
-  /* Per-MT column | Total $ column
-     Flat items: $/MT = flat÷qty (changes with qty)  Total = flat (constant)
-     Per-MT:     $/MT = rate (constant per unit)       Total = rate × qty       */
-  s('v-fob-pm', fm2(fob));            s('v-fob-tot', fmK(fob*qty));
-  s('v-oi-pm',  fm2(P.originInland)); s('v-oi-tot',  fmK(P.originInland*qty));
-  s('v-ec-pm',  fm2(r.ec));           s('v-ec-tot',  fmK(P.exportClrFlat));   // flat
-  s('v-ph-pm',  fm2(r.ph));           s('v-ph-tot',  fmK(P.phytoFlat));       // flat
-  s('v-co-pm',  fm2(r.co));           s('v-co-tot',  fmK(P.coOriginFlat));    // flat
-  s('v-bl-pm',  fm2(r.bl));           s('v-bl-tot',  fmK(P.blFlat));          // flat
-  s('v-os-pm',  fm2(r.os));           s('v-os-tot',  fmK(r.os*qty));
-  s('v-fr-pm',  fm2(P.freight));      s('v-fr-tot',  fmK(P.freight*qty));
-  s('v-ins-pm', fm2(r.ins));          s('v-ins-tot', fmK(r.ins*qty));
-  s('v-cif-pm', fm2(r.cif));          s('v-cif-tot', fmK(r.cif*qty));
-  s('v-du-pm',  fm2(r.duty));         s('v-du-tot',  fmK(r.duty*qty));
-  s('v-vat-pm', fm2(r.vat));          s('v-vat-tot', fmK(r.vat*qty));
-  s('v-thc-pm', fm2(P.destTHC));      s('v-thc-tot', fmK(P.destTHC*qty));
-  s('v-br-pm',  fm2(r.brok));         s('v-br-tot',  fmK(P.brokerFlat));      // flat
-  s('v-in-pm',  fm2(r.insp));         s('v-in-tot',  fmK(P.inspFlat));        // flat
-  s('v-id-pm',  fm2(P.inlandDel));    s('v-id-tot',  fmK(P.inlandDel*qty));
-  s('v-mc-pm',  fm2(P.misc));         s('v-mc-tot',  fmK(P.misc*qty));
-  s('v-ds-pm',  fm2(r.ds));           s('v-ds-tot',  fmK(r.ds*qty));
-  s('v-ddp-pm', fm2(r.ddp));          s('v-ddp-tot', fmK(r.ddp*qty));
+  /* KPI bar */
+  $('k-fob').textContent   = '$'+Math.round(fob).toLocaleString('en-US');
+  $('k-fob-s').textContent = `per MT · ${qty} MT · ${fmK(fob*qty)} total`;
+  $('k-cif').textContent   = '$'+Math.round(r.cif).toLocaleString('en-US');
+  $('k-cif-s').textContent = `+${((r.cif-fob)/fob*100).toFixed(1)}% over FOB · ${fmK(r.cif*qty)} total`;
+  $('k-duty').textContent  = fm2(r.duty);
+  $('k-duty-s').textContent= `${P.dutyRate}% of CIF · ${fmK(r.duty*qty)} total`;
+  $('k-vat').textContent   = fm2(r.vat);
+  $('k-vat-s').textContent = `${P.vatRate}% of CIF+duty · ${fmK(r.vat*qty)} total`;
+  $('k-ddp').textContent   = '$'+Math.round(r.ddp).toLocaleString('en-US');
+  $('k-ddp-s').textContent = `per MT · ${fmK(r.ddp*qty)} total for ${qty} MT`;
+  $('k-mkp').textContent   = '+'+mkp.toFixed(1)+'%';
+  $('k-mkp-s').textContent = `${fm2(r.ddp-fob)}/MT · ${fmK((r.ddp-fob)*qty)} total`;
 
-  // Summary cards
-  $('cards').innerHTML = `
-    <div class="card">
-      <div class="lbl">FOB price</div>
-      <div class="val">${fm2(fob).slice(1)}</div>
-      <div class="sub">$/MT &nbsp;·&nbsp; ${qty} MT &nbsp;·&nbsp; ${fmK(fob*qty)} total</div>
-    </div>
-    <div class="card">
-      <div class="lbl">CIF value</div>
-      <div class="val">$${Math.round(r.cif).toLocaleString('en-US')}</div>
-      <div class="sub">+${((r.cif-fob)/fob*100).toFixed(1)}% over FOB &nbsp;·&nbsp; ${fmK(r.cif*qty)} total</div>
-    </div>
-    <div class="card green">
-      <div class="lbl">DDP price</div>
-      <div class="val">$${Math.round(r.ddp).toLocaleString('en-US')}</div>
-      <div class="sub">$/MT &nbsp;·&nbsp; ${fmK(r.ddp*qty)} total for ${qty} MT</div>
-    </div>
-    <div class="card amber">
-      <div class="lbl">Total markup over FOB</div>
-      <div class="val">+${mkp.toFixed(1)}%</div>
-      <div class="sub">${fm2(r.ddp-fob)}/MT &nbsp;·&nbsp; ${fmK((r.ddp-fob)*qty)} total</div>
-    </div>`;
-
-  // Bar chart
-  const vals = [fob, r.os, P.freight, r.ins, r.duty, r.vat, r.ds];
-  $('barchart').innerHTML = vals.map((v,i)=>{
-    const p = v/r.ddp*100;
+  /* bar chart */
+  const vals=[fob,r.os,P.freight,r.ins,r.duty,r.vat,r.ds];
+  $('barchart').innerHTML=vals.map((v,i)=>{
+    const p=v/r.ddp*100;
     return `<div class="bar-seg" style="flex:${p};background:${CLRS[i]};min-width:${v>0?'2px':'0'}"
       title="${SEGS[i]}: ${fm2(v)}/MT · ${p.toFixed(1)}%"></div>`;
   }).join('');
-  $('legend').innerHTML = vals.map((v,i)=>`
+  $('legend').innerHTML=vals.map((v,i)=>`
     <span class="leg-item">
       <span class="leg-dot" style="background:${CLRS[i]}"></span>
       ${SEGS[i]} — ${(v/r.ddp*100).toFixed(1)}%
     </span>`).join('');
 
-  // Route info
-  const di = getDuty(src, dest, P.useFta);
-  $('route-info').innerHTML =
-    `<strong>${src}</strong> <span style="color:var(--accent);font-size:14px">→</span> <strong>${dest}</strong>
-     &nbsp;·&nbsp; ${SRCS[src].region}
-     &nbsp;·&nbsp; ${di.label}: ${di.rate}%
-     &nbsp;·&nbsp; Freight: ${fm2(P.freight,0)}/MT`;
+  /* route pill */
+  const di=getDuty(src,dest,P.useFta);
+  $('route-pill').innerHTML=
+    `<strong>${src}</strong><span class="arr">→</span><strong>${dest}</strong>
+     · ${SRCS[src].region} · ${di.label}: ${di.rate}% · Freight: ${fm2(P.freight,0)}/MT`;
 
   updateComparisonValues();
 }
 
-/* ═══ COMPARISON PANEL ════════════════════════════════════════════
-   buildComparisonGrid() — renders cards + FOB inputs (called on src/dest/fta change)
-   updateComparisonValues() — updates only computed DDP/markup (called every refresh)
-   ════════════════════════════════════════════════════════════════ */
-function buildComparisonGrid() {
-  const dest   = $('sel-dest').value;
-  const curSrc = $('sel-src').value;
-  $('cmp-dest-lbl').textContent = dest;
+/* ═══════════════════════ COMPARISON PANEL ════════════════════════ */
+function buildComparisonGrid(){
+  const dest=$('sel-dest').value, cur=$('sel-src').value;
+  $('cmp-dest-lbl').textContent=dest;
 
-  const keys = sortByDdp
-    ? Object.keys(SRCS).slice().sort((a,b)=>
-        compute(fobPrices[a],a,dest).ddp - compute(fobPrices[b],b,dest).ddp)
-    : Object.keys(SRCS);
+  const keys=sortByDdp
+    ?Object.keys(SRCS).slice().sort((a,b)=>computeForCmp(fobPrices[a],a,dest).ddp-computeForCmp(fobPrices[b],b,dest).ddp)
+    :Object.keys(SRCS);
 
-  $('cmp-grid').innerHTML = keys.map(src => {
-    const id   = sid(src);
-    const di   = getDuty(src, dest, P.useFta);
-    const fr   = dest === 'Thailand' ? SRCS[src].frTH : SRCS[src].frVN;
-    const badge = di.label === 'FTA'
-      ? '<span class="badge badge-fta">FTA</span>'
-      : '<span class="badge badge-mfn">MFN</span>';
+  $('cmp-grid').innerHTML=keys.map(src=>{
+    const id=sid(src), di=getDuty(src,dest,P.useFta);
+    const fr=dest==='Thailand'?SRCS[src].frTH:SRCS[src].frVN;
+    const badge=di.label==='FTA'
+      ?'<span class="badge badge-fta">FTA</span>'
+      :'<span class="badge badge-mfn">MFN</span>';
     return `
-      <div class="cmp-card ${src===curSrc?'active':''}" id="cmp-card-${id}" onclick="selectSource('${src}')">
+      <div class="cmp-card ${src===cur?'active':''}" id="cmp-card-${id}" onclick="selectSource('${src}')">
         <span class="cheap-badge" id="cmp-cheap-${id}" style="display:none">✓ cheapest</span>
         <div class="c-top"><div class="c-country">${src}</div>${badge}</div>
-        <div class="c-region">${SRCS[src].region} &nbsp;·&nbsp; $${fr}/MT freight &nbsp;·&nbsp; ${di.rate}% duty</div>
+        <div class="c-region">${SRCS[src].region} · $${fr}/MT freight · ${di.rate}% duty</div>
         <div class="c-fob-row">
-          <span class="c-fob-label">FOB $/MT</span>
+          <span class="c-fob-lbl">FOB $/MT</span>
           <input class="cmp-fob" id="cmp-fob-${id}" type="number"
             value="${fobPrices[src]}" step="10"
             onclick="event.stopPropagation()"
-            oninput="event.stopPropagation(); onCmpFob('${src}', this.value)">
+            oninput="event.stopPropagation();onCmpFob('${src}',this.value)">
         </div>
         <div class="c-ddp" id="cmp-ddp-${id}">$—</div>
         <div class="c-mkp" id="cmp-mkp-${id}">—</div>
         <div class="c-mini-bar" id="cmp-bar-${id}"></div>
       </div>`;
   }).join('');
-
   updateComparisonValues();
 }
 
-function updateComparisonValues() {
-  const dest = $('sel-dest').value;
-  const results = {};
-  Object.keys(SRCS).forEach(src => {
-    results[src] = compute(fobPrices[src], src, dest);
-  });
-  const minDdp = Math.min(...Object.values(results).map(r => r.ddp));
+function updateComparisonValues(){
+  const dest=$('sel-dest').value;
+  const res={};
+  Object.keys(SRCS).forEach(src=>{ res[src]=computeForCmp(fobPrices[src],src,dest); });
+  const minDdp=Math.min(...Object.values(res).map(r=>r.ddp));
 
-  Object.keys(SRCS).forEach(src => {
-    const id  = sid(src);
-    const r   = results[src];
-    const fob = fobPrices[src];
-    const mkp = (r.ddp - fob) / fob * 100;
-    const cheap = r.ddp <= minDdp + 0.01;
-
-    const ddpEl   = $('cmp-ddp-'  + id);
-    const mkpEl   = $('cmp-mkp-'  + id);
-    const barEl   = $('cmp-bar-'  + id);
-    const cheapEl = $('cmp-cheap-'+ id);
-    const cardEl  = $('cmp-card-' + id);
-
-    if (ddpEl)   ddpEl.textContent = '$' + Math.round(r.ddp).toLocaleString('en-US') + '/MT';
-    if (mkpEl)   mkpEl.innerHTML   = `+${mkp.toFixed(1)}% markup &nbsp;·&nbsp; ${fmK(r.ddp*P.qty)} total`;
-    if (cheapEl) cheapEl.style.display = cheap ? 'inline' : 'none';
-    if (cardEl)  cardEl.classList.toggle('cheapest', cheap);
-    if (barEl) {
-      const segs = [fob, r.os, r.fr, r.ins, r.duty, r.vat, r.ds];
-      barEl.innerHTML = segs.map((v,i)=>{
-        const p = v/r.ddp*100;
-        return `<div style="flex:${p};background:${CLRS[i]};min-width:${v>0?'1px':'0'}"></div>`;
+  Object.keys(SRCS).forEach(src=>{
+    const id=sid(src), r=res[src], fob=fobPrices[src];
+    const mkp=(r.ddp-fob)/fob*100, cheap=r.ddp<=minDdp+0.01;
+    const s=(i,v)=>{const el=$(i);if(el)el.textContent=v;};
+    const t=(i,b)=>{const el=$(i);if(el)el.classList.toggle(b,cheap);};
+    s('cmp-ddp-'+id,'$'+Math.round(r.ddp).toLocaleString('en-US')+'/MT');
+    s('cmp-mkp-'+id,`+${mkp.toFixed(1)}% · ${fmK(r.ddp*P.qty)} total`);
+    const ce=$('cmp-cheap-'+id); if(ce) ce.style.display=cheap?'inline':'none';
+    t('cmp-card-'+id,'cheapest');
+    const be=$('cmp-bar-'+id);
+    if(be){
+      const segs=[fob,r.os,r.fr,r.ins,r.duty,r.vat,r.ds];
+      be.innerHTML=segs.map((v,i)=>{const p=v/r.ddp*100;
+        return`<div style="flex:${p};background:${CLRS[i]};min-width:${v>0?'1px':'0'}"></div>`;
       }).join('');
     }
   });
 }
 
-/* ═══ COMPARISON CARD INTERACTIONS ══════════════════════════════ */
-function onCmpFob(src, val) {
-  fobPrices[src] = parseFloat(val) || 0;
-  if (src === $('sel-src').value) {
-    // Sync to main FOB input and breakdown table FOB input
-    $('inp-fob').value = fobPrices[src];
-    const pf = $('pi-fob'); if (pf) pf.value = fobPrices[src];
-    updateCells(); // full recalc of main breakdown
+/* ═══════════════════════ INTERACTIONS ═══════════════════════════ */
+function onCmpFob(src,val){
+  fobPrices[src]=parseFloat(val)||0;
+  if(src===$('sel-src').value){
+    $('inp-fob').value=fobPrices[src];
+    const pf=$('pi-fob'); if(pf) pf.value=fobPrices[src];
+    refreshCells();
   } else {
-    updateComparisonValues(); // just update comparison panel
+    updateComparisonValues();
   }
 }
 
-function selectSource(src) {
-  $('sel-src').value = src;
-  onSrcDestChange(); // triggers full rebuild with new source
+function selectSource(src){
+  $('sel-src').value=src;
+  onSrcDestChange();
 }
 
-function toggleSort() {
-  sortByDdp = !sortByDdp;
-  $('sort-btn').textContent = sortByDdp ? 'Sorted: cheapest first ✓' : 'Sort by DDP ↕';
+function toggleSort(){
+  sortByDdp=!sortByDdp;
+  $('sort-btn').textContent=sortByDdp?'Sorted: cheapest first ✓':'Sort by DDP ↕';
   buildComparisonGrid();
 }
 
-/* ═══ MAIN CHANGE HANDLER ════════════════════════════════════════ */
-function onSrcDestChange() {
-  const src  = $('sel-src').value;
-  const dest = $('sel-dest').value;
-  // Auto-fill route defaults (user can still override in table)
-  P.freight  = dest === 'Thailand' ? SRCS[src].frTH : SRCS[src].frVN;
-  const di   = getDuty(src, dest, P.useFta);
+/* ═══════════════════════ MAIN CHANGE HANDLER ════════════════════
+   Auto-fills P.freight, P.dutyRate, P.vatRate from route defaults.
+   User edits after this point are respected because computeMain()
+   uses P values (not recalculated from source tables).
+   FIX #1: FTA toggle calls this → P.dutyRate always updated correctly.
+   ═══════════════════════════════════════════════════════════════ */
+function onSrcDestChange(){
+  const src=$('sel-src').value, dest=$('sel-dest').value;
+  P.freight  = dest==='Thailand'?SRCS[src].frTH:SRCS[src].frVN;
+  const di   = getDuty(src, dest, P.useFta);     // respects current P.useFta
   P.dutyRate = di.rate;
   P.vatRate  = VAT0[dest];
-  // Sync main FOB control from per-country price store
   $('inp-fob').value = fobPrices[src];
-  buildBreakdown();       // re-renders table inputs with current P
-  buildComparisonGrid();  // re-renders comparison cards with FOB inputs
+  buildBreakdown();       // re-renders table inputs with fresh P values
+  buildComparisonGrid();
 }
 
-function refresh() {
-  // Called only by param inputs in the breakdown table.
-  // Does NOT rebuild DOM (no destroyed inputs, no focus loss).
-  updateCells();
-}
-
-/* ═══ TOP-LEVEL CONTROL LISTENERS ════════════════════════════════ */
+/* Top-level event listeners */
 $('sel-src').addEventListener('change', onSrcDestChange);
 $('sel-dest').addEventListener('change', onSrcDestChange);
-$('inp-fob').addEventListener('input', e => {
-  const v = parseFloat(e.target.value) || 0;
-  const src = $('sel-src').value;
-  fobPrices[src] = v;
-  const pf = $('pi-fob'); if (pf) pf.value = v;
-  const cf = $('cmp-fob-'+sid(src)); if (cf) cf.value = v;
-  updateCells();
+$('inp-fob').addEventListener('input', e=>{
+  const v=parseFloat(e.target.value)||0, src=$('sel-src').value;
+  fobPrices[src]=v;
+  const pf=$('pi-fob'); if(pf) pf.value=v;
+  const cf=$('cmp-fob-'+sid(src)); if(cf) cf.value=v;
+  refreshCells();
 });
-$('inp-qty').addEventListener('input', e => {
-  P.qty = Math.max(1, parseFloat(e.target.value) || 1);
-  // Flat fees ÷ qty changes → per-MT cost changes → markup % changes
-  updateCells();
+$('inp-qty').addEventListener('input', e=>{
+  P.qty=Math.max(1,parseFloat(e.target.value)||1);
+  refreshCells(); // flat fee ÷ qty changes $/MT → markup % changes
 });
-$('chk-fta').addEventListener('change', e => {
-  P.useFta = e.target.checked;
+/* FIX #1: FTA toggle — update P.useFta then onSrcDestChange
+   resets P.dutyRate via getDuty(... P.useFta) and rebuilds table */
+$('chk-fta').addEventListener('change', e=>{
+  P.useFta=e.target.checked;
   onSrcDestChange();
 });
 
-/* ═══ NOTES ══════════════════════════════════════════════════════ */
-function updateNotes(src, dest, di) {
-  const vn = dest === 'Vietnam';
-  $('notes').innerHTML = `
-    <strong>HS 18010010 — Dried &amp; fermented cocoa beans</strong> &nbsp;·&nbsp;
-    <strong>${src}</strong> (${SRCS[src].region}) → <strong>${dest}</strong> &nbsp;·&nbsp;
-    Duty: ${di.note}<br>
+/* Notes */
+function updateNotes(src,dest,di){
+  const vn=dest==='Vietnam';
+  $('notes').innerHTML=`
+    <strong>HS 18010010 — Dried &amp; fermented cocoa beans</strong> ·
+    <strong>${src}</strong> (${SRCS[src].region}) → <strong>${dest}</strong> · ${di.note}<br>
     ${vn
-      ? 'Vietnam VAT: 5% for raw agricultural inputs (cocoa beans). Standard rate 10%; 2% reduction applies to qualifying goods through Dec 31, 2026.'
-      : 'Thailand VAT: 7% (reduced from standard 10%, extended to Sep 30, 2026). Applied on CIF + customs duty base.'
-    } &nbsp;·&nbsp;
-    <strong>Flat fees</strong> (tagged $/ship): export clearance, phytosanitary certs, COO, B/L, customs broker, dest. inspection.
-    These are fixed per-shipment costs — their Total $ does not scale with quantity, but their $/MT contribution falls as qty rises.
-    This is why the markup % <em>decreases with larger quantities</em>.
-    Per-MT fees (origin haulage, freight, THC, delivery, misc) scale linearly with qty. &nbsp;·&nbsp;
-    <strong>Blue inputs</strong> auto-fill when you change source or destination. All values are editable.
-    ICCO spot reference: ~$3,646/MT (April 2026). Confirm all rates with your freight forwarder and customs broker.`;
+      ?'Vietnam VAT: 5% for raw agricultural inputs. Standard 10%; 2% reduction through Dec 31, 2026.'
+      :'Thailand VAT: 7% (reduced from 10%, extended to Sep 30, 2026). Applied on CIF + duty base.'
+    } ·
+    <strong>Blue inputs</strong> (freight, duty, VAT) auto-fill on source/destination change but are fully editable — your changes are respected.
+    <strong>Flat fees</strong> ($/ship): fixed per-shipment costs; their $/MT contribution falls as qty rises, lowering the markup % on larger orders.
+    ICCO spot ~$3,646/MT (Apr 2026). All figures indicative — verify with your freight forwarder &amp; customs broker.`;
 }
 
-/* ═══ INIT ════════════════════════════════════════════════════════ */
-const selSrc = $('sel-src');
-Object.keys(SRCS).forEach(k => {
-  const o = document.createElement('option');
-  o.value = k; o.textContent = k; selSrc.appendChild(o);
+/* ═══════════════════════ INIT ════════════════════════════════════ */
+const selSrc=$('sel-src');
+Object.keys(SRCS).forEach(k=>{
+  const o=document.createElement('option'); o.value=k; o.textContent=k; selSrc.appendChild(o);
 });
 onSrcDestChange();
 </script>
