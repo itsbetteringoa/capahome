@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Cacao Villa Bahia - Investment Opportunity</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a1a1a;
+            --accent: #FFB800;
+            --accent-dark: #CC9300;
+            --light: #f8f8f8;
+            --gray: #666;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--primary);
+            color: var(--light);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 80px;
+            position: relative;
+            padding: 40px 0;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 56px;
+            font-weight: 900;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, var(--accent) 0%, #FFD700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .tagline {
+            font-size: 18px;
+            color: var(--gray);
+            font-weight: 300;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            font-size: 22px;
+            color: var(--accent);
+            margin-top: 20px;
+            font-weight: 600;
+        }
+
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        /* Block Styles */
+        .block {
+            background: rgba(255, 184, 0, 0.03);
+            border: 2px solid rgba(255, 184, 0, 0.2);
+            padding: 35px;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: var(--accent);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .block:hover::before {
+            transform: scaleY(1);
+        }
+
+        .block:hover {
+            border-color: var(--accent);
+            background: rgba(255, 184, 0, 0.06);
+            transform: translateY(-5px);
+        }
+
+        .block-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .icon {
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .block-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 1px;
+        }
+
+        .block-content {
+            color: var(--light);
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .block-content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .block-content li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .block-content li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Highlight numbers */
+        .highlight {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 110%;
+        }
+
+        /* Full width blocks */
+        .full-block {
+            grid-column: 1 / -1;
+        }
+
+        /* Key metrics */
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .metric {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, rgba(255, 184, 0, 0.1) 0%, rgba(255, 184, 0, 0.02) 100%);
+            border: 2px solid rgba(255, 184, 0, 0.3);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .metric:hover {
+            transform: scale(1.05);
+            border-color: var(--accent);
+        }
+
+        .metric-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .metric-label {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gray);
+            font-weight: 600;
+        }
+
+        /* Team section */
+        .team {
+            margin-top: 80px;
+            padding-top: 60px;
+            border-top: 2px solid rgba(255, 184, 0, 0.2);
+        }
+
+        .team-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            text-align: center;
+            color: var(--accent);
+            margin-bottom: 50px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .team-member {
+            text-align: center;
+        }
+
+        .team-photo {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            border: 4px solid var(--accent);
+            background: var(--gray);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .team-member:hover .team-photo {
+            transform: scale(1.1);
+            border-color: #FFD700;
+        }
+
+        .team-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .team-name {
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--light);
+            margin-bottom: 5px;
+        }
+
+        .team-role {
+            font-size: 12px;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* CTA Section */
+        .cta {
+            text-align: center;
+            margin: 60px 0 40px;
+            padding: 50px;
+            background: linear-gradient(135deg, rgba(255, 184, 0, 0.15) 0%, rgba(255, 184, 0, 0.05) 100%);
+            border: 3px solid var(--accent);
+            border-radius: 3px;
+        }
+
+        .cta-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            color: var(--accent);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .cta-text {
+            font-size: 16px;
+            color: var(--light);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .team-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">LUXURY CACAO VILLA</div>
+            <div class="tagline">Bahia, Brazil</div>
+            <div class="subtitle">Pre-Seed Investment Opportunity US$300,000</div>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="metrics">
+            <div class="metric">
+                <div class="metric-value">280%</div>
+                <div class="metric-label">ROI за 3 года</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">$85K</div>
+                <div class="metric-label">Цена участка</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">2 га</div>
+                <div class="metric-label">Участок с какао</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">20 га</div>
+                <div class="metric-label">Общая площадь</div>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="grid">
+            <!-- Problem/Opportunity -->
+            <div class="block">
+                <div class="block-header">
+                    <div class="icon">🎯</div>
+                    <div class="block-title">Возможность</div>
+                </div>
+                <div class="block-content">
+                    <p>Европейские пенсионеры и lifestyle-инвесторы ищут уникальные экологичные активы с пассивным доходом в экзотических локациях.</p>
+                    <br>
+                    <p><span class="highlight">Проблема:</span> Конкуренты предлагают только пустые участки без инфраструктуры за $35K-70K.</p>
+                </div>
+            </div>
+
+            <!-- Solution -->
+            <div class="block">
+                <div class="block-header">
+                    <div class="icon">💎</div>
+                    <div class="block-title">Решение</div>
+                </div>
+                <div class="block-content">
+                    <p><strong>"Собственная какао вилла на 2 га"</strong></p>
+                    <ul>
+                        <li>Готовый эко-дом 80м² с солнечными панелями</li>
+                        <li>2 га плантация (сады) с взрослыми какао деревьями (1200+ деревьев)</li>
+                        <li>Годовой доход примерно <span class="highlight">$3,600</span> с урожаев какао</li>
+                        <li>Bean-to-bar возможности производства на нашей мануфактуре</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Business Model -->
+            <div class="block">
+                <div class="block-header">
+                    <div class="icon">📊</div>
+                    <div class="block-title">Бизнес-модель</div>
+                </div>
+                <div class="block-content">
+                    <p><strong>Фаза 1 (Год 1):</strong> $300K бюджет</p>
+                    <ul>
+                        <li>Покупка 20 га в Canavieras, BA: $32K</li>
+                        <li>3 эко-дома: $82K</li>
+                        <li>Инфраструктура: $36K</li>
+                        <li>Маркетинг: $25K</li>
+                        <li>Резерв: $110K</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Market -->
+            <div class="block">
+                <div class="block-header">
+                    <div class="icon">🌍</div>
+                    <div class="block-title">Рынок</div>
+                </div>
+                <div class="block-content">
+                    <p><strong>Целевая аудитория:</strong></p>
+                    <ul>
+                        <li>Европейские пенсионеры 50-70 лет (доход €3K+/мес)</li>
+                        <li>Цифровые номады 35-55 лет (доход $80K+/год)</li>
+                        <li>Покупательная способность: €70K-150K</li>
+                    </ul>
+                    <br>
+                    <p><span class="highlight">Цены на какао - прогнозируемый CAGR +8-13% к 2030</span></p>
+                </div>
+            </div>
+
+            <!-- Competitive Advantage -->
+            <div class="block full-block">
+                <div class="block-header">
+                    <div class="icon">⭐</div>
+                    <div class="block-title">Конкурентные преимущества</div>
+                </div>
+                <div class="block-content">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                        <div>
+                            <p><strong>Ценовое преимущество:</strong></p>
+                            <ul>
+                                <li>Gaiana Ecovillage: $35K-70K БЕЗ дома</li>
+                                <li><span class="highlight">Наше предложение: $85K С ДОМОМ</span></li>
+                                <li>Экономия покупателя: $40K+ на строительстве</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><strong>Локация:</strong></p>
+                            <ul>
+                                <li>Canavieras - 25-30% дешевле Ilheus</li>
+                                <li>3-4 км до океана</li>
+                                <li>Дорога BA-001 (отличная инфраструктура)</li>
+                                <li>Активное развитие туризма в регионе</li>
+                                <li>Средний рост цен на землю в регионе от 8 до 15% в зависимости от локации</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Financial Projections -->
+            <div class="block">
+                <div class="block-header">
+                    <div class="icon">💰</div>
+                    <div class="block-title">Финансы</div>
+                </div>
+                <div class="block-content">
+                    <p><strong>3-летний план:</strong></p>
+                    <ul>
+                        <li><strong>Год 1:</strong> Продажа 3 участков = $255K</li>
+                        <li><strong>Год 2:</strong> Продажа 4 участков = $360K, прибыль $146K</li>
+                        <li><strong>Год 3:</strong> Финальная прибыль <span class="highlight">$426K</span></li>
+                    </ul>
+                    <br>
+                    <p><span class="highlight" style="font-size: 120%;">ОБЩИЙ ROI: 280% за 3 года</span></p>
+                </div>
+            </div>
+
+            <!-- Buyer Income -->
+            <div class="block">
+                <div class="block-header">
+                    <div class="icon">🌱</div>
+                    <div class="block-title">Доход покупателя</div>
+                </div>
+                <div class="block-content">
+                    <p><strong>Потенциальный годовой доход (2 га участок):</strong></p>
+                    <ul>
+                        <li>Продажа какао-продуктов: $4000/год</li>
+                        <li>Эко-туризм / хоспиталити: $3,000/год</li>
+                        <li>Шоколадные мастер-классы: $3,000/год</li>
+                        <li>Органические продукты: $1,000/год</li>
+                    </ul>
+                    <br>
+                    <p><span class="highlight">Общий доход: от $11000/год</span></p>
+                    <p>Окупаемость покупки: 7-8 лет (без учета инфляции и роста стоимости земли)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="cta">
+            <div class="cta-title">Почему сейчас идеальное время?</div>
+            <div class="cta-text">
+                Земля в штате Баия все еще доступна по цене и многие места еще недооценены (особенно заброшенные большие фазенды). 
+                Уникальная ниша какао-микроплантаций свободна. Timing идеален для входа в проект с максимальной маржинальностью.
+            </div>
+        </div>
+
+        <!-- Team -->
+        <div class="team">
+            <div class="team-title">КОМАНДА</div>
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="team-photo">
+                        <img src="https://img2link.com/images/2026/04/25/ed602008d62a7016ee06680f020ed207.png xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Crect fill='%23444' width='140' height='140'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='48' fill='%23FFB800'%3EDY%3C/text%3E%3C/svg%3E" alt="Дмитрий Я.">
+
+                    </div>
+                    <div class="team-name">Дмитрий Я.</div>
+                    <div class="team-role">Какао-эксперт</div>
+                </div>
+                <div class="team-member">
+                    <div class="team-photo">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Crect fill='%23444' width='140' height='140'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='48' fill='%23FFB800'%3EMG%3C/text%3E%3C/svg%3E" alt="Максим Г.">
+                    </div>
+                    <div class="team-name">Максим Г.</div>
+                    <div class="team-role">Крипто-эксперт</div>
+                </div>
+                <div class="team-member">
+                    <div class="team-photo">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Crect fill='%23444' width='140' height='140'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='48' fill='%23FFB800'%3EHK%3C/text%3E%3C/svg%3E" alt="Хемант К.">
+                    </div>
+                    <div class="team-name">Хемант К.</div>
+                    <div class="team-role">Корпоративный адвокат</div>
+                </div>
+                <div class="team-member">
+                    <div class="team-photo">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Crect fill='%23444' width='140' height='140'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='48' fill='%23FFB800'%3ERR%3C/text%3E%3C/svg%3E" alt="Роман Р.">
+                    </div>
+                    <div class="team-name">Роман Р.</div>
+                    <div class="team-role">Юр-кий-эксперт</div>
+                </div>
+                <div class="team-member">
+                    <div class="team-photo">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Crect fill='%23444' width='140' height='140'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='48' fill='%23FFB800'%3EVI%3C/text%3E%3C/svg%3E" alt="Виктор И.">
+                    </div>
+                    <div class="team-name">Виктор И.</div>
+                    <div class="team-role">PR-эксперт</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
