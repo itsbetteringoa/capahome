@@ -3,866 +3,563 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thailand Cacao Sourcing Expedition — Logistics Plan</title>
+<title>Thailand Cacao Sourcing — Field Expedition Plan</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bean: #2d1b0e;
-  --cacao: #4a2c0e;
-  --brown: #7c4a1a;
-  --amber: #c27c2a;
-  --cream: #f5efe6;
-  --parchment: #ede4d4;
-  --forest: #1a3a1a;
-  --leaf: #2e6b2e;
-  --lime: #5a9e3a;
-  --mist: #eef4ee;
-  --ink: #1a1410;
-  --muted: #7a6855;
-  --border: #c4b49e;
-  --red: #c0392b;
-  --blue: #1a5276;
-  --lightbg: #f9f5f0;
+:root{
+  --bean:#1f1008;--cacao:#3d2008;--brown:#6b3d12;--amber:#b8731e;
+  --gold:#d4951e;--cream:#f4ede0;--parch:#ebe0cc;--forest:#0f2910;
+  --leaf:#1e5c1e;--lime:#4a8c2a;--mist:#edf4ec;--ink:#1a1208;
+  --muted:#7a6040;--border:#c8b494;--red:#b83020;--blue:#143d60;
+  --bg:#f7f1e8;--white:#fff;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:var(--lightbg);color:var(--ink);font-size:14px}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
 
 /* HEADER */
-.site-header{background:var(--bean);color:var(--cream);padding:18px 24px 14px;position:sticky;top:0;z-index:2000;border-bottom:3px solid var(--amber)}
-.site-header h1{font-family:'Bitter',serif;font-size:19px;font-weight:700;letter-spacing:.01em;color:#fff}
-.site-header p{font-size:12px;color:#c4a882;margin-top:3px}
-.header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.hstats{display:flex;gap:10px;flex-wrap:wrap}
-.hstat{background:rgba(255,255,255,.12);padding:5px 12px;border-radius:6px;font-size:11px;color:#ddd;font-family:'JetBrains Mono',monospace}
-.hstat b{color:#f0c060;font-weight:500}
+.hdr{background:var(--bean);color:var(--cream);padding:14px 20px;position:sticky;top:0;z-index:3000;border-bottom:2px solid var(--amber)}
+.hdr-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.hdr h1{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:#fff;letter-spacing:.01em}
+.hdr p{font-size:11px;color:#c8a878;margin-top:1px}
+.hdr-pills{display:flex;gap:6px;flex-wrap:wrap}
+.hpill{font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(255,255,255,.1);color:#e8d0a8;padding:3px 10px;border-radius:4px}
+.hpill b{color:var(--gold)}
 
-/* NAV TABS */
-nav{background:var(--cacao);position:sticky;top:58px;z-index:1999;border-bottom:1px solid var(--brown)}
-nav ul{display:flex;list-style:none;max-width:1200px;margin:0 auto;padding:0 16px}
-nav li button{background:none;border:none;color:#c4a882;font-size:12px;font-weight:600;padding:11px 18px;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;border-bottom:3px solid transparent;font-family:'Inter',sans-serif}
-nav li button:hover{color:#fff}
-nav li button.active{color:var(--amber);border-bottom-color:var(--amber)}
+/* NAV */
+nav{background:var(--cacao);position:sticky;top:56px;z-index:2999;border-bottom:1px solid var(--brown)}
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 16px;display:flex;gap:2px}
+nav button{background:none;border:none;color:#c8a060;font-size:12px;font-weight:600;padding:10px 16px;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;border-bottom:3px solid transparent;font-family:'Syne',sans-serif;transition:all .15s}
+nav button:hover{color:#fff}
+nav button.act{color:var(--gold);border-bottom-color:var(--gold)}
 
 /* SECTIONS */
-.section{display:none;max-width:1200px;margin:0 auto;padding:24px 16px}
-.section.show{display:block}
+.sec{display:none;max-width:1280px;margin:0 auto;padding:20px 16px}
+.sec.on{display:block}
+#map-sec{padding:0;max-width:100%}
+#map-sec.on{display:flex;flex-direction:column;height:calc(100vh - 100px)}
 
 /* MAP */
-#map-section{padding:0;max-width:100%}
-#map-section.show{display:flex;flex-direction:column;height:calc(100vh - 102px)}
-#map-container{flex:1;min-height:400px}
-#the-map{height:100%;width:100%}
-.map-legend{background:var(--bean);color:var(--cream);padding:12px 20px;display:flex;gap:16px;flex-wrap:wrap;align-items:center;font-size:12px}
-.leg-item{display:flex;align-items:center;gap:6px}
-.leg-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
-.leg-d1{background:#e74c3c}
-.leg-d2{background:#2ecc71}
-.leg-d3{background:#3498db}
-.leg-d4{background:#f39c12}
-.leg-route{width:20px;height:3px;background:var(--amber);flex-shrink:0}
+#map-wrap{flex:1;position:relative}
+#the-map{height:100%;width:100%;min-height:400px}
+.map-bar{background:var(--forest);color:#d4f0d4;padding:9px 18px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:11px;font-family:'JetBrains Mono',monospace}
+.mb-seg{display:flex;align-items:center;gap:5px}
+.mb-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+
+/* REGION PANEL (floating on map) */
+#region-panel{position:absolute;top:12px;right:12px;z-index:1000;width:220px;background:rgba(20,10,4,.88);backdrop-filter:blur(6px);border:1px solid var(--amber);border-radius:8px;color:#eee;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.5)}
+.rp-header{background:var(--brown);padding:8px 12px;display:flex;justify-content:space-between;align-items:center}
+.rp-header span{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:#fff}
+.rp-header small{font-size:10px;color:#c8a878;font-family:'JetBrains Mono',monospace}
+.rp-grid{padding:10px 12px;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.rp-stat{background:rgba(255,255,255,.08);border-radius:4px;padding:6px 8px}
+.rp-val{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:var(--gold)}
+.rp-lbl{font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;margin-top:1px}
+.rp-contact{padding:0 12px 10px;font-size:10px;color:#c8b888;line-height:1.5}
+.rp-contact strong{color:#fff;font-size:11px;display:block;margin-bottom:2px}
+.rp-note{padding:0 12px 10px;font-size:10px;color:#9fa;line-height:1.4;border-top:1px solid rgba(255,255,255,.1);padding-top:8px;margin-top:0}
+.rp-beans{font-size:10px;color:#9fa;padding:4px 12px 10px;line-height:1.4}
+.rp-beans strong{color:var(--gold)}
 
 /* ITINERARY */
-.seg-header{background:var(--forest);color:var(--cream);padding:10px 16px;border-radius:8px 8px 0 0;font-family:'Bitter',serif;font-size:14px;font-weight:600;display:flex;align-items:center;gap:10px;margin-top:24px}
-.seg-header:first-child{margin-top:0}
-.seg-meta{font-size:11px;font-family:'JetBrains Mono',monospace;color:#9fdfa0;font-weight:400}
-.seg-note{font-size:11px;color:#aad;background:rgba(255,255,255,0.1);padding:2px 10px;border-radius:4px}
-table.itinerary{width:100%;border-collapse:collapse;background:#fff;border-radius:0 0 8px 8px;overflow:hidden;margin-bottom:0}
-table.itinerary th{background:var(--parchment);color:var(--bean);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)}
-table.itinerary td{padding:9px 12px;border-bottom:1px solid #f0e8dc;vertical-align:top;font-size:13px}
-table.itinerary tr.weekend td{background:#f8f4ef;color:#a08060;font-style:italic}
-table.itinerary tr.holiday td{background:#fff8e6;color:#8a6a00}
-table.itinerary tr.travel td{background:#eef4ee}
-table.itinerary tr.visit td{background:#fff}
-table.itinerary tr.buffer td{background:#fef9ff}
-.day-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap}
-.day-date{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);white-space:nowrap}
-.loc-tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:4px;font-weight:600;margin-right:4px;white-space:nowrap}
-.loc-s{background:#e8f5e9;color:#1b5e20}
-.loc-bkk{background:#fff3e0;color:#e65100}
-.loc-e{background:#e3f2fd;color:#0d47a1}
-.loc-n{background:#ede7f6;color:#4527a0}
-.loc-t{background:#fce4ec;color:#880e4f}
-.badge-phone{display:inline-block;font-size:10px;padding:1px 6px;border-radius:3px;background:#e6f4ea;color:#1a7f3c;font-family:'JetBrains Mono',monospace;margin-right:3px}
-.badge-wa{background:#dcf8c6;color:#075e54}
-.badge-key{background:#fff3cd;color:#856404;font-weight:600}
-.activity-cell{line-height:1.5}
-.stop-name{font-weight:600;color:var(--bean);font-size:13px}
-.stop-sub{color:var(--muted);font-size:12px;margin-top:1px}
-td.cost{font-family:'JetBrains Mono',monospace;font-size:12px;text-align:right;white-space:nowrap;color:var(--brown)}
-.note-pill{font-size:10px;padding:1px 6px;border-radius:3px;background:#f0f0f0;color:#666;margin-left:4px}
-.holiday-note{font-size:11px;color:#c27c00;font-style:italic}
+.seg-hdr{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:6px 6px 0 0;margin-top:20px;color:#fff}
+.seg-hdr:first-of-type{margin-top:0}
+.seg-hdr h3{font-family:'Syne',sans-serif;font-size:13px;font-weight:700}
+.seg-hdr .sm{font-size:10px;opacity:.8;font-family:'JetBrains Mono',monospace}
+.seg-hdr .pill{font-size:9px;background:rgba(255,255,255,.2);padding:2px 7px;border-radius:3px;margin-left:auto}
+.s-south{background:var(--red)}
+.s-bkk{background:#8c5a00}
+.s-east{background:var(--blue)}
+.s-north{background:var(--forest)}
+.s-ret{background:#3a2060}
+
+table.iti{width:100%;border-collapse:collapse;background:#fff;border-radius:0 0 6px 6px;overflow:hidden;margin-bottom:0}
+table.iti th{background:var(--parch);color:var(--bean);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:7px 10px;text-align:left;border-bottom:1px solid var(--border)}
+table.iti td{padding:8px 10px;border-bottom:1px solid #f0e4d0;vertical-align:top;font-size:12px}
+table.iti tr.wknd td{background:#f8f2ea;color:#9a7850;font-style:italic}
+table.iti tr.hol td{background:#fff8e0;color:#806000}
+table.iti tr.trav td{background:#eef3f8}
+.dn{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;color:var(--muted);white-space:nowrap;width:28px}
+.dd{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);white-space:nowrap;width:76px}
+.ltag{display:inline-block;font-size:9px;padding:1px 6px;border-radius:3px;font-weight:700;margin-right:4px;white-space:nowrap}
+.l-s{background:#fde;color:#800}
+.l-b{background:#fed;color:#840}
+.l-e{background:#def;color:#048}
+.l-n{background:#dfd;color:#060}
+.l-kp{background:#f5e0ff;color:#504}
+.stop{font-weight:600;color:var(--cacao);font-size:12px;line-height:1.3}
+.sub{color:var(--muted);font-size:11px;margin-top:2px;line-height:1.5}
+.ph{display:inline;font-family:'JetBrains Mono',monospace;font-size:10px;background:#dff5df;color:#1a6020;padding:1px 5px;border-radius:3px;margin-right:3px}
+.kp{display:inline;font-size:10px;font-weight:700;background:#ffd;color:#660;padding:1px 5px;border-radius:3px}
+td.thb{font-family:'JetBrains Mono',monospace;font-size:11px;text-align:right;color:var(--brown);white-space:nowrap;width:64px}
 
 /* BUDGET */
-.budget-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
-@media(max-width:680px){.budget-grid{grid-template-columns:1fr}}
-.budget-card{background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden}
-.budget-card-header{padding:10px 14px;background:var(--parchment);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
-.budget-card-header h3{font-size:13px;font-weight:600;color:var(--bean)}
-.budget-card-header .icon{font-size:16px}
-.budget-table{width:100%;border-collapse:collapse}
-.budget-table td{padding:7px 14px;border-bottom:1px solid #f5ede2;font-size:12px}
-.budget-table tr:last-child td{border-bottom:none}
-.budget-table td:last-child{text-align:right;font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--cacao)}
-.budget-table tr.subtotal td{background:var(--parchment);font-weight:600;color:var(--bean)}
-.budget-total{background:var(--bean);color:#fff;border-radius:10px;padding:16px 20px;margin-top:16px;display:flex;justify-content:space-between;align-items:center}
-.budget-total h3{font-family:'Bitter',serif;font-size:16px}
-.budget-total .amounts{text-align:right}
-.budget-total .thb{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;color:var(--amber)}
-.budget-total .usd{font-size:13px;color:#c4a882}
-.budget-note{font-size:11px;color:var(--muted);margin-top:12px;padding:10px;background:var(--parchment);border-radius:6px;line-height:1.6}
+.b-section{margin-bottom:6px}
+.b-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px;margin-bottom:14px}
+.b-card{background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.b-card.flights{border:2px solid var(--amber)}
+.b-ch{padding:9px 13px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.b-ch h3{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--bean)}
+.b-ch .ico{font-size:15px}
+.bt{width:100%;border-collapse:collapse}
+.bt td{padding:6px 13px;border-bottom:1px solid #f5ebe0;font-size:11px}
+.bt tr:last-child td{border-bottom:none}
+.bt td:last-child{text-align:right;font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--cacao)}
+.bt .sub-row td{background:var(--parch);font-weight:700;color:var(--bean)}
+.bt .note-row td{font-size:10px;color:#888;font-style:italic;background:#fdfaf6}
+.b-total{background:var(--bean);color:#fff;border-radius:8px;padding:16px 20px;margin-top:14px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px}
+.b-total h3{font-family:'Syne',sans-serif;font-size:17px;font-weight:800}
+.b-total .sub-t{font-size:11px;color:#c8a878;margin-top:3px}
+.grand{text-align:right}
+.grand .thb-big{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;color:var(--gold)}
+.grand .usd{font-size:12px;color:#c8b888;margin-top:2px}
+.b-legend{background:var(--parch);border:1px solid var(--border);border-radius:6px;padding:10px 14px;font-size:11px;color:var(--muted);line-height:1.7;margin-top:10px}
+.b-legend strong{color:var(--bean)}
+
+/* SUMMARY TABLE */
+.sum-table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;border:1px solid var(--border);margin-top:12px}
+.sum-table th{background:var(--parch);color:var(--bean);font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:8px 12px;text-align:left;font-weight:700}
+.sum-table td{padding:7px 12px;border-bottom:1px solid #f0e8d8;font-size:12px}
+.sum-table td:nth-child(2),.sum-table td:nth-child(3){font-family:'JetBrains Mono',monospace;font-weight:500;text-align:right;color:var(--cacao)}
+.sum-table td:nth-child(4){text-align:right;color:var(--muted);font-size:11px}
+.sum-table tr.total-row td{background:var(--parch);font-weight:700;color:var(--bean)}
+.sum-table tr.total-row td:nth-child(2),.sum-table tr.total-row td:nth-child(3){color:var(--cacao)}
 
 /* CONTACTS */
-.contacts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
-.contact-card{background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden}
-.contact-card.priority{border-left:3px solid var(--leaf)}
-.contact-header{padding:10px 12px;background:var(--parchment);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start}
-.contact-name{font-weight:600;font-size:13px;color:var(--bean);line-height:1.3}
-.contact-region{font-size:10px;background:var(--forest);color:#a8d4a8;padding:2px 7px;border-radius:4px;font-family:'JetBrains Mono',monospace}
-.contact-body{padding:10px 12px}
-.contact-phone{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--leaf);font-weight:600;display:flex;align-items:center;gap:5px}
-.contact-email{font-size:11px;color:var(--blue);word-break:break-all;margin-top:3px}
-.contact-note{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.4}
-.contact-type{display:inline-block;font-size:10px;padding:2px 6px;border-radius:3px;margin-top:4px}
-.ct-coop{background:#e8f5e9;color:#1b5e20}
-.ct-proc{background:#e3f2fd;color:#0d47a1}
-.ct-res{background:#fff3e0;color:#e65100}
-.ct-farm{background:#fce4ec;color:#880e4f}
+.con-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:10px}
+.con-card{background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.con-card.pri{border-left:3px solid var(--leaf)}
+.con-hdr{padding:9px 11px;background:var(--parch);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;gap:6px}
+.con-name{font-weight:700;font-size:12px;color:var(--bean);line-height:1.3}
+.con-reg{font-size:9px;background:var(--forest);color:#9fc;padding:2px 6px;border-radius:3px;font-family:'JetBrains Mono',monospace;white-space:nowrap}
+.con-body{padding:9px 11px}
+.con-ph{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--leaf);font-weight:700}
+.con-em{font-size:10px;color:var(--blue);word-break:break-all;margin-top:2px}
+.con-note{font-size:10px;color:var(--muted);margin-top:5px;line-height:1.4}
+.con-badge{display:inline-block;font-size:9px;padding:2px 6px;border-radius:3px;margin-top:4px}
+.cb-co{background:#e8f5e9;color:#1b5e20}
+.cb-pr{background:#e3f2fd;color:#0d47a1}
+.cb-re{background:#fff3e0;color:#e65100}
+.cb-fa{background:#fce4ec;color:#880e4f}
 
-/* PRIORITY LEGEND */
-.section-intro{background:var(--parchment);border:1px solid var(--border);border-radius:8px;padding:12px 16px;margin-bottom:20px;font-size:12px;color:var(--muted);line-height:1.6}
-.section-intro strong{color:var(--bean)}
-.inline-flag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:700}
-.flag-1{background:#e53935;color:#fff}
-.flag-2{background:#f57c00;color:#fff}
-.flag-3{background:#388e3c;color:#fff}
-
-.route-summary{background:var(--forest);color:#eee;border-radius:8px;padding:14px 16px;margin-bottom:20px;font-size:12px;line-height:1.7}
-.route-summary strong{color:#9fdfa0}
-.route-summary .seg{display:inline-block;padding:1px 8px;border-radius:3px;background:rgba(255,255,255,.15);font-family:'JetBrains Mono',monospace;font-size:11px;margin:0 2px}
-
-.advisory{background:#fff8e1;border:1px solid #ffecb3;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;line-height:1.6;color:#6d4c00}
-
-/* STAT CARDS ROW */
-.stats-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
-.stat-box{flex:1;min-width:120px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:10px 14px}
-.stat-box .sv{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:600;color:var(--cacao)}
-.stat-box .sl{font-size:11px;color:var(--muted);margin-top:2px}
-
-h2.section-title{font-family:'Bitter',serif;font-size:18px;font-weight:700;color:var(--bean);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--parchment)}
+/* UTILS */
+h2.stitle{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--bean);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--parch)}
+.info-box{background:var(--parch);border:1px solid var(--border);border-radius:6px;padding:10px 14px;font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:14px}
+.info-box strong{color:var(--bean)}
+.warn-box{background:#fff8e0;border:1px solid #e8d060;border-radius:6px;padding:9px 13px;font-size:11px;color:#604800;line-height:1.6;margin-bottom:14px}
+.stats-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.s-box{flex:1;min-width:100px;background:#fff;border:1px solid var(--border);border-radius:6px;padding:9px 12px}
+.s-box .val{font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:700;color:var(--cacao)}
+.s-box .lbl{font-size:10px;color:var(--muted);margin-top:1px}
 </style>
 </head>
 <body>
 
-<div class="site-header">
-  <div class="header-inner">
+<header class="hdr">
+  <div class="hdr-inner">
     <div>
-      <h1>🌿 Thailand Cacao Sourcing Expedition</h1>
-      <p>Optimal field logistics plan — August/September 2025 · Starting from Koh Phangan</p>
+      <h1>🌿 Thailand Cacao Sourcing — Field Expedition</h1>
+      <p>Brazil (Ilheus) → Bangkok → Ko Phangan → 10 provinces → Ko Phangan → Bangkok → Brazil</p>
     </div>
-    <div class="hstats">
-      <div class="hstat"><b>22</b> visiting days</div>
-      <div class="hstat"><b>34</b> total days</div>
-      <div class="hstat"><b>22</b> supplier stops</div>
-      <div class="hstat"><b>≈ 60,000 THB</b> total</div>
+    <div class="hdr-pills">
+      <div class="hpill"><b>~45</b> days total</div>
+      <div class="hpill"><b>22</b> supplier visits</div>
+      <div class="hpill"><b>Bus only</b> domestic</div>
+      <div class="hpill">≈ <b>93,500 THB</b> total</div>
+      <div class="hpill">≈ <b>$2,670 USD</b></div>
     </div>
   </div>
-</div>
+</header>
 
 <nav>
-  <ul>
-    <li><button class="active" onclick="show('map-section',this)">🗺 Route Map</button></li>
-    <li><button onclick="show('itinerary-section',this)">📅 Day-by-Day</button></li>
-    <li><button onclick="show('budget-section',this)">💰 Budget</button></li>
-    <li><button onclick="show('contacts-section',this)">📞 Key Contacts</button></li>
-  </ul>
+  <div class="nav-inner">
+    <button class="act" onclick="show('map-sec',this)">🗺 Route Map</button>
+    <button onclick="show('iti-sec',this)">📅 Itinerary</button>
+    <button onclick="show('bud-sec',this)">💰 Budget</button>
+    <button onclick="show('con-sec',this)">📞 Contacts</button>
+  </div>
 </nav>
 
-<!-- MAP SECTION -->
-<div id="map-section" class="section show">
-  <div class="map-legend">
-    <span style="font-family:'Bitter',serif;font-weight:600;margin-right:6px">Route segments:</span>
-    <span class="leg-item"><span class="leg-dot" style="background:#e74c3c"></span>South (NST · Chumphon · Ranong)</span>
-    <span class="leg-item"><span class="leg-dot" style="background:#f39c12"></span>Bangkok + Prachuap KK</span>
-    <span class="leg-item"><span class="leg-dot" style="background:#3498db"></span>East (Chanthaburi · Trat)</span>
-    <span class="leg-item"><span class="leg-dot" style="background:#2ecc71"></span>North (Chiang Mai · Lampang · Chiang Rai)</span>
-    <span class="leg-item"><span class="leg-route"></span>Overland route</span>
+<!-- ── MAP ─────────────────────────────────────────────── -->
+<div id="map-sec" class="sec on">
+  <div class="map-bar">
+    <strong style="font-family:'Syne',sans-serif;margin-right:4px">Route segments →</strong>
+    <span class="mb-seg"><span class="mb-dot" style="background:#e74c3c"></span>South (NST · Chumphon · Ranong)</span>
+    <span class="mb-seg"><span class="mb-dot" style="background:#d4830a"></span>Bangkok + Prachuap KK</span>
+    <span class="mb-seg"><span class="mb-dot" style="background:#2980b9"></span>East (Chanthaburi · Trat)</span>
+    <span class="mb-seg"><span class="mb-dot" style="background:#27ae60"></span>North (Chiang Mai · Lampang · Chiang Rai)</span>
+    <span class="mb-seg"><span class="mb-dot" style="background:#8e44ad"></span>Start/End</span>
+    <span style="margin-left:auto;color:#9fa;font-size:10px">Click any marker for region details</span>
   </div>
-  <div id="map-container">
+  <div id="map-wrap">
     <div id="the-map"></div>
+    <div id="region-panel">
+      <div class="rp-header"><span>Region Overview</span><small>click a stop</small></div>
+      <div class="rp-grid">
+        <div class="rp-stat"><div class="rp-val">—</div><div class="rp-lbl">Visiting days</div></div>
+        <div class="rp-stat"><div class="rp-val">—</div><div class="rp-lbl">Segment cost</div></div>
+        <div class="rp-stat"><div class="rp-val">—</div><div class="rp-lbl">Stops</div></div>
+        <div class="rp-stat"><div class="rp-val">—</div><div class="rp-lbl">DFB price/kg</div></div>
+      </div>
+      <div class="rp-beans"><strong>Procurable volume:</strong> select a region</div>
+      <div class="rp-contact"><strong>Key contact:</strong> click a marker to see details</div>
+    </div>
   </div>
 </div>
 
-<!-- ITINERARY SECTION -->
-<div id="itinerary-section" class="section">
-  <h2 class="section-title">Day-by-Day Field Itinerary</h2>
+<!-- ── ITINERARY ──────────────────────────────────────── -->
+<div id="iti-sec" class="sec">
+  <h2 class="stitle">Day-by-Day Field Itinerary · Aug–Sep 2025</h2>
   <div class="stats-row">
-    <div class="stat-box"><div class="sv">22</div><div class="sl">Active business days</div></div>
-    <div class="stat-box"><div class="sv">34</div><div class="sl">Total calendar days</div></div>
-    <div class="stat-box"><div class="sv">9</div><div class="sl">Weekend rest/travel</div></div>
-    <div class="stat-box"><div class="sv">1</div><div class="sl">Holiday (12 Aug)</div></div>
-    <div class="stat-box"><div class="sv">22+</div><div class="sl">Supplier stops</div></div>
-    <div class="stat-box"><div class="sv">10</div><div class="sl">Provinces visited</div></div>
+    <div class="s-box"><div class="val">45</div><div class="lbl">Total days (incl. Brazil)</div></div>
+    <div class="s-box"><div class="val">22</div><div class="lbl">Business visiting days</div></div>
+    <div class="s-box"><div class="val">10</div><div class="lbl">Provinces visited</div></div>
+    <div class="s-box"><div class="val">22+</div><div class="lbl">Supplier contacts</div></div>
+    <div class="s-box"><div class="val">0</div><div class="lbl">Domestic flights</div></div>
+    <div class="s-box"><div class="val">1 ×</div><div class="lbl">Aug 12 holiday skip</div></div>
   </div>
-  <div class="advisory">
-    ⚠️ <strong>August heat + rain note:</strong> August is monsoon season in the South. Chumphon, NST, and Ranong can have heavy rain. Carry rain gear. Chanthaburi (east) may have some flooding near farms. Chiang Mai in late August–September is cooler and drier — ideal timing.
-    Confirm each visit <strong>by phone 2–3 days ahead</strong>. Farm visits typically 9–11 AM when owners are available before the midday heat.
+  <div class="warn-box">⚠️ <strong>August rain:</strong> South Thailand is monsoon season. Chumphon & Ranong can get heavy afternoon rain — schedule farm visits 09:00–12:00. Chiang Mai area (late Aug) is drier. Confirm all meetings 2–3 days before via WhatsApp. Buses in Thailand depart on time — arrive 20 min early at the terminal.
   </div>
 
-  <!-- SEGMENT 1 -->
-  <div class="seg-header">
-    <span style="background:#e74c3c;width:14px;height:14px;border-radius:50%;display:inline-block"></span>
-    SEGMENT 1 — SOUTH
-    <span class="seg-meta">Aug 4–15 · Koh Phangan → NST → Chumphon → Ranong → Bangkok</span>
-    <span class="seg-note">3 provinces · 6 stops · 7 visiting days</span>
-  </div>
-  <table class="itinerary">
-    <thead>
-      <tr><th>Day</th><th>Date</th><th>Location</th><th>Activity &amp; Stops</th><th>Est. Cost</th></tr>
-    </thead>
+  <!-- PRE-TRIP / BANGKOK -->
+  <div class="seg-hdr s-bkk"><span style="font-size:18px">✈️</span><div><h3>ARRIVAL — Bangkok (Starting Base)</h3><span class="sm">Aug 1–4 · Arrive from Brazil, orientation + first visits</span></div><span class="pill">4 days</span></div>
+  <table class="iti">
+    <thead><tr><th>Day</th><th>Date</th><th>Location</th><th>Activity</th><th>~THB</th></tr></thead>
     <tbody>
-      <tr class="travel"><td class="day-num">D1</td><td class="day-date">Mon 04 Aug</td>
-        <td><span class="loc-tag loc-s">Travel</span>KP → NST</td>
-        <td class="activity-cell">
-          <div class="stop-name">Koh Phangan → Nakhon Si Thammarat</div>
-          <div class="stop-sub">07:00 Ferry (Haad Rin or Thongsala) → Don Sak pier (1.5–2h) · 10:00 Bus/minivan Don Sak → NST town (2.5h) · Check in guesthouse near clock tower area. Afternoon: explore NST, buy SIM card, call ahead to <span class="badge-phone">081-893-6696</span> (Thaiburi Cocoa) to confirm meeting.</div>
-        </td>
-        <td class="cost">800 THB</td>
-      </tr>
-      <tr class="visit"><td class="day-num">D2</td><td class="day-date">Tue 05 Aug</td>
-        <td><span class="loc-tag loc-s">NST</span>Visit</td>
-        <td class="activity-cell">
-          <div class="stop-name">★ ไทยบุรี โกโก้ จำกัด (Thaiburi Cocoa Ltd)</div>
-          <div class="stop-sub"><span class="badge-phone">+66 81 893 6696</span> · Opened June 2024 · Full-cycle factory · <span class="badge-key">No min. volume</span> · Buys DFB at ~100 THB/kg · Priority: confirm pricing, quality grades, and if they can aggregate 2MT for you. Afternoon: Rose Cocoa Garden (Tha Sala, 15km NE — songthaew).</div>
-        </td>
-        <td class="cost">350 THB</td>
-      </tr>
-      <tr class="visit"><td class="day-num">D3</td><td class="day-date">Wed 06 Aug</td>
-        <td><span class="loc-tag loc-s">NST→Chumphon</span></td>
-        <td class="activity-cell">
-          <div class="stop-name">NST → Bus north to Chumphon town</div>
-          <div class="stop-sub">Morning: follow-up with any NST contacts. 12:00 Bus NST → Chumphon (~2.5h, 250 THB). Arrive ~15:00. Check in near Chumphon clock tower. Call <span class="badge-phone">+66 77 556 073</span> (Chumphon HRC) to book next morning.</div>
-        </td>
-        <td class="cost">600 THB</td>
-      </tr>
-      <tr class="visit"><td class="day-num">D4</td><td class="day-date">Thu 07 Aug</td>
-        <td><span class="loc-tag loc-s">Chumphon</span>HRC Visit</td>
-        <td class="activity-cell">
-          <div class="stop-name">★ Chumphon Horticultural Research Center (DOA)</div>
-          <div class="stop-sub"><span class="badge-phone">+66 77 556 073</span> / <span class="badge-phone">+66 77 556 191</span> · 70 Moo 2, Wisai Tai, Sawi (18km south of town — take songthaew/motorbike taxi). 09:00–11:00 meeting. Ask for introductions to TOP certified farmers in the area supplying 50–200 kg/month each. Afternoon: meet Chumphon Collective field rep (call <span class="badge-phone">+66 62 294 7542</span> to arrange).</div>
-        </td>
-        <td class="cost">400 THB</td>
-      </tr>
-      <tr class="visit"><td class="day-num">D5</td><td class="day-date">Fri 08 Aug</td>
-        <td><span class="loc-tag loc-s">Chumphon→Ranong</span></td>
-        <td class="activity-cell">
-          <div class="stop-name">Chumphon → Minivan to Ranong (side trip)</div>
-          <div class="stop-sub">09:00 Shared minivan Chumphon → Ranong (150 THB, ~2h). Check in Ranong. Afternoon: visit Ranong town market, call <span class="badge-phone">+66 94 615 6944</span> to confirm Saturday/Monday visit. Note: confirm they have beans in stock — August is harvest season edge.</div>
-        </td>
-        <td class="cost">550 THB</td>
-      </tr>
-      <tr class="weekend"><td class="day-num">—</td><td class="day-date">Sat 09 Aug</td>
-        <td colspan="2">Weekend · Ranong — relax, explore Ngao hot springs, prep notes and photos</td>
-        <td class="cost">600 THB</td>
-      </tr>
-      <tr class="weekend"><td class="day-num">—</td><td class="day-date">Sun 10 Aug</td>
-        <td colspan="2">Weekend · Ranong — rest and review documentation for next week</td>
-        <td class="cost">600 THB</td>
-      </tr>
-      <tr class="visit"><td class="day-num">D6</td><td class="day-date">Mon 11 Aug</td>
-        <td><span class="loc-tag loc-s">Ranong</span>Coop Visit</td>
-        <td class="activity-cell">
-          <div class="stop-name">★ วิสาหกิจชุมชนโกโก้ระนอง — Khun Thunpawat</div>
-          <div class="stop-sub"><span class="badge-phone">+66 94 615 6944</span> · 1/105 Moo 1, Bang Non, Mueang Ranong · <span class="badge-key">Large-volume capable</span> · Cooperative with full processing: DFB, mass, butter. Ask about batch sizes, moisture content, and certification. Can they supply 500 kg–1 MT in one order? Evening: board overnight bus to Bangkok (20:00 departure).</div>
-        </td>
-        <td class="cost">800 THB</td>
-      </tr>
-      <tr class="holiday"><td class="day-num">—</td><td class="day-date">Tue 12 Aug</td>
-        <td colspan="2"><span class="holiday-note">🇹🇭 National Holiday — Queen Mother's Day (Mother's Day) · Overnight bus arriving Bangkok morning</span></td>
-        <td class="cost">700 THB<br><span style="font-size:10px;color:#888">(bus fare)</span></td>
-      </tr>
+      <tr class="trav"><td class="dn">0</td><td class="dd">Fri 01 Aug</td><td><span class="ltag l-b">Travel</span>Flight</td><td><div class="stop">Ilheus (IOS) → São Paulo (GRU) → Bangkok (BKK)</div><div class="sub">~30h total journey incl. connection. Arrive Bangkok Suvarnabhumi Aug 2 morning. Take Airport Rail Link to city centre (~45 THB). Check in at hostel near Silom/Pratunam area.</div></td><td class="thb">— (flights)</td></tr>
+      <tr><td class="dn">1</td><td class="dd">Sun 03 Aug</td><td><span class="ltag l-b">Bangkok</span>Rest + prep</td><td><div class="stop">Bangkok — orientation day</div><div class="sub">Rest from long flight. Buy Thai SIM (AIS tourist 299 THB at airport or 7-Eleven). Download offline Thai map (Maps.me) + Google Translate Thai. Send WhatsApp messages to key contacts. Walk Silom market for affordable food calibration.</div></td><td class="thb">500</td></tr>
+      <tr><td class="dn">2</td><td class="dd">Mon 04 Aug</td><td><span class="ltag l-b">Bangkok</span>Chocolasia</td><td><div class="stop">★★★ PRIORITY — Chocolasia (Pak Kret, Nonthaburi)</div><div class="sub"><span class="ph">+66 80 064 7515</span><span class="ph">+66 81 172 2106</span> · Take MRT to Nonthaburi, then motorbike taxi (~20 THB) to 17/2 Moo 9 Prachachuen Rd. <span class="kp">Best first meeting of entire trip</span> — Khun Bos can aggregate from 9 provinces. Discuss trial 500kg → 2MT order pathway + pricing tiers. Afternoon: TACCO Thai intro call.</div></td><td class="thb">350</td></tr>
+      <tr><td class="dn">3</td><td class="dd">Tue 05 Aug</td><td><span class="ltag l-b">Bangkok</span>TACCO + depart</td><td><div class="stop">TACCO Thai coordination + bus to Ko Phangan</div><div class="sub">Morning: meet TACCO Thai if possible (info@taccothai.org) — get warm introduction letters to all regions. Afternoon: collect hostel, travel to Southern Bus Terminal (Mo Chit or Sai Tai Mai). Board 18:00 VIP bus to Surat Thani (~550 THB, arrives 04:00).</div></td><td class="thb">700</td></tr>
+      <tr class="trav"><td class="dn">—</td><td class="dd">Wed 06 Aug</td><td><span class="ltag l-kp">Travel</span>→ Ko Phangan</td><td><div class="stop">Surat Thani → Ko Phangan ferry</div><div class="sub">Arrive Surat Thani ~04:00. Wait at bus terminal (café). 07:30 Seatran shuttle to Don Sak pier (~1h). 09:00 Raja Ferry to Ko Phangan (2.5h, 270 THB). Arrive noon. Check in hostel near Thongsala. REST all afternoon.</div></td><td class="thb">400</td></tr>
+      <tr class="wknd"><td class="dn">—</td><td class="dd">Thu–Fri 07–08 Aug</td><td><span class="ltag l-kp">Ko Phangan</span>Prep</td><td>Rest + review contacts. Send WhatsApp to all south contacts to arrange Mon/Tue visits. Print or note key contact numbers. Cheap local food at Thongsala market.</td><td class="thb">740</td></tr>
     </tbody>
   </table>
 
-  <!-- SEGMENT 2 -->
-  <div class="seg-header" style="margin-top:12px">
-    <span style="background:#f39c12;width:14px;height:14px;border-radius:50%;display:inline-block"></span>
-    SEGMENT 2 — BANGKOK + PRACHUAP KK
-    <span class="seg-meta">Aug 13–17 · Bangkok (Nonthaburi) → Prachuap Khiri Khan</span>
-    <span class="seg-note">2 provinces · 4 stops · 3 visiting days</span>
-  </div>
-  <table class="itinerary">
-    <thead>
-      <tr><th>Day</th><th>Date</th><th>Location</th><th>Activity &amp; Stops</th><th>Est. Cost</th></tr>
-    </thead>
+  <!-- SOUTH -->
+  <div class="seg-hdr s-south"><span style="background:#e74c3c;width:14px;height:14px;border-radius:50%;display:inline-block"></span><div><h3>SEGMENT 1 — SOUTH LOOP</h3><span class="sm">Aug 9–18 · KP → NST → Chumphon → Ranong → Prachuap KK → Bangkok</span></div><span class="pill">8 visiting days · 5 key stops</span></div>
+  <table class="iti">
+    <thead><tr><th>Day</th><th>Date</th><th>Location</th><th>Activity</th><th>~THB</th></tr></thead>
     <tbody>
-      <tr class="visit"><td class="day-num">D7</td><td class="day-date">Wed 13 Aug</td>
-        <td><span class="loc-tag loc-bkk">Bangkok</span>Chocolasia</td>
-        <td class="activity-cell">
-          <div class="stop-name">★★ Chocolasia — Khun Bos (Bowon P.)</div>
-          <div class="stop-sub">Arrive Bangkok ~07:00 from overnight bus. Check in Pak Kret/Nonthaburi area (near factory). Rest. 14:00 visit: 17/2 Moo 9, Prachachuen Rd, Pak Kret. <span class="badge-phone">+66 80 064 7515</span> / <span class="badge-phone">+66 81 172 2106</span> · <span class="badge-key">CRITICAL STOP</span> — Chocolasia buys from 9 provinces, can aggregate 2MT and introduce to their farm network. Ask for contact list of top-volume farms in their network.</div>
-        </td>
-        <td class="cost">900 THB</td>
-      </tr>
-      <tr class="visit"><td class="day-num">D8</td><td class="day-date">Thu 14 Aug</td>
-        <td><span class="loc-tag loc-bkk">Bangkok</span>TACCO + Follow-ups</td>
-        <td class="activity-cell">
-          <div class="stop-name">TACCO Thai Trade Association + Pad Kokoa BKK</div>
-          <div class="stop-sub">Morning: email/call TACCO (info@taccothai.org) · Try to arrange a meeting in Bangkok — they can make warm introductions to ALL Thai cacao producers. Afternoon: visit Kad Kokoa Bangkok outlet (ask about sourcing arms, connect with their Prachuap farm network). BTS/MRT around Bangkok.</div>
-        </td>
-        <td class="cost">600 THB</td>
-      </tr>
-      <tr class="visit"><td class="day-num">D9</td><td class="day-date">Fri 15 Aug</td>
-        <td><span class="loc-tag loc-bkk">Prachuap KK</span>Kad Kokoa</td>
-        <td class="activity-cell">
-          <div class="stop-name">★ Kad Kokoa Farmer Network — Khun Tong</div>
-          <div class="stop-sub">08:00 Bus/minivan Bangkok → Prachuap Khiri Khan (3.5h, ~300 THB). <span class="badge-phone">+66 83 684 3921</span> · Call ahead! Khun Tong = key broker for Prachuap + Chumphon farmers. Taste beans if possible, get sample. Arrange to visit 1–2 actual farm plots (10–15 min drive from town). Return Bangkok same evening or stay overnight.</div>
-        </td>
-        <td class="cost">1,100 THB</td>
-      </tr>
-      <tr class="weekend"><td class="day-num">—</td><td class="day-date">Sat–Sun 16–17 Aug</td>
-        <td colspan="2">Weekend · Bangkok or Hua Hin nearby — rest, review samples, write visit notes</td>
-        <td class="cost">1,600 THB</td>
-      </tr>
+      <tr class="wknd"><td class="dn">—</td><td class="dd">Sat 09 Aug</td><td><span class="ltag l-kp">KP</span>→ NST</td><td>Ko Phangan → ferry 07:30 → Don Sak → shared minivan to Nakhon Si Thammarat (~200 THB, 2.5h). Check in hostel. Call <span class="ph">+66 81 893 6696</span> (Thaiburi Cocoa) to confirm Monday morning meeting.</td><td class="thb">380</td></tr>
+      <tr class="wknd"><td class="dn">—</td><td class="dd">Sun 10 Aug</td><td><span class="ltag l-s">NST</span>Rest</td><td>NST — explore temple market, buy cheap street food, prep notes. Motorbike taxi around town (40 THB). Rest before heavy week.</td><td class="thb">360</td></tr>
+      <tr><td class="dn">D4</td><td class="dd">Mon 11 Aug</td><td><span class="ltag l-s">NST</span>Thaiburi</td><td><div class="stop">★★ ไทยบุรี โกโก้ จำกัด — factory visit</div><div class="sub"><span class="ph">+66 81 893 6696</span> 09:00 factory visit. Ask: current DFB stock, moisture specs, price per kg for 500kg vs 2MT, batch timeline, can they source regionally? Afternoon: Rose Cocoa Garden (Tha Sala, 15km by motorbike taxi ~80 THB). Evening: call Chumphon contacts.</div></td><td class="thb">350</td></tr>
+      <tr class="hol"><td class="dn">—</td><td class="dd">Tue 12 Aug</td><td colspan="2"><span style="color:#806000">🇹🇭 National Holiday — Queen Mother's Day. All offices closed. Travel day: NST → bus → Chumphon (250 THB, 2.5h). Check in. Rest.</span></td><td class="thb">450</td></tr>
+      <tr><td class="dn">D5</td><td class="dd">Wed 13 Aug</td><td><span class="ltag l-s">Chumphon</span>HRC</td><td><div class="stop">★★ Chumphon Horticultural Research Center (DOA)</div><div class="sub"><span class="ph">+66 77 556 073</span> 09:00 visit — 70 Moo 2, Wisai Tai, Sawi (18km south, motorbike taxi 60 THB). Breeding station for Chumphon 1. Request introduction list of top-volume certified farmers in Chumphon region. Afternoon: meet Chumphon Collective field contact (call <span class="ph">+66 62 294 7542</span> in advance).</div></td><td class="thb">350</td></tr>
+      <tr><td class="dn">D6</td><td class="dd">Thu 14 Aug</td><td><span class="ltag l-s">Chumphon</span>→ Ranong</td><td><div class="stop">Chumphon → Ranong minivan (side trip)</div><div class="sub">09:00 shared minivan Chumphon → Ranong (150 THB, 2h). Check in Ranong hostel. Call <span class="ph">+66 94 615 6944</span> to confirm Friday visit. Note: Ranong town is small, very cheap food at morning market (40–60 THB/meal).</div></td><td class="thb">360</td></tr>
+      <tr><td class="dn">D7</td><td class="dd">Fri 15 Aug</td><td><span class="ltag l-s">Ranong</span>Coop ★</td><td><div class="stop">★★ วิสาหกิจชุมชนโกโก้ระนอง — Khun Thunpawat (Hnouy)</div><div class="sub"><span class="ph">+66 94 615 6944</span> · 1/105 Moo 1, Bang Non · 09:00 full coop visit. Request current DFB stock + samples. Ask about: batch min order, moisture %, certification status, processing method, pricing for Thai domestic buyer vs export. Can they supply 500kg this month?</div></td><td class="thb">340</td></tr>
+      <tr class="wknd"><td class="dn">—</td><td class="dd">Sat–Sun 16–17 Aug</td><td><span class="ltag l-s">Ranong</span>Rest</td><td>Rest Ranong. Ngao hot springs (free natural pool nearby). Write field notes and sample assessments. Board 20:00 overnight bus to Bangkok (650 THB, arrives 06:00 Mon).</td><td class="thb">700</td></tr>
+      <tr><td class="dn">D8</td><td class="dd">Mon 18 Aug</td><td><span class="ltag l-b">Bangkok</span>transit</td><td><div class="stop">Arrive Bangkok 06:00 — rest + Prachuap KK bus</div><div class="sub">Stash bag at hostel. Short rest. 11:00 bus from Bangkok to Prachuap Khiri Khan (~3.5h, 280 THB). Check in Prachuap. Afternoon: call <span class="ph">+66 83 684 3921</span> (Khun Tong) to confirm Tuesday meeting.</div></td><td class="thb">550</td></tr>
+      <tr><td class="dn">D9</td><td class="dd">Tue 19 Aug</td><td><span class="ltag l-b">Prachuap KK</span></td><td><div class="stop">★ Kad Kokoa Farmer Network — Khun Tong</div><div class="sub"><span class="ph">+66 83 684 3921</span> · Farm visit in Prachuap area. Try to visit 1–2 actual farm plots (20 min drive). Taste freshly-dried vs aged DFB. Discuss: Prachuap + Chumphon supply chain, seasonal availability, min order. Return Bangkok same evening (bus 280 THB, 3.5h).</div></td><td class="thb">480</td></tr>
     </tbody>
   </table>
 
-  <!-- SEGMENT 3 -->
-  <div class="seg-header" style="margin-top:12px">
-    <span style="background:#3498db;width:14px;height:14px;border-radius:50%;display:inline-block"></span>
-    SEGMENT 3 — EAST (CHANTHABURI · TRAT)
-    <span class="seg-meta">Aug 18–22 · Bangkok → Chanthaburi → Trat → Bangkok</span>
-    <span class="seg-note">2 provinces · 5 stops · 5 visiting days</span>
-  </div>
-  <table class="itinerary">
-    <thead>
-      <tr><th>Day</th><th>Date</th><th>Location</th><th>Activity &amp; Stops</th><th>Est. Cost</th></tr>
-    </thead>
+  <!-- EAST -->
+  <div class="seg-hdr s-east"><span style="background:#2980b9;width:14px;height:14px;border-radius:50%;display:inline-block"></span><div><h3>SEGMENT 2 — EAST LOOP</h3><span class="sm">Aug 20–26 · Bangkok → Chanthaburi → Trat → Bangkok</span></div><span class="pill">5 visiting days · 4 stops</span></div>
+  <table class="iti">
+    <thead><tr><th>Day</th><th>Date</th><th>Location</th><th>Activity</th><th>~THB</th></tr></thead>
     <tbody>
-      <tr class="travel"><td class="day-num">D10</td><td class="day-date">Mon 18 Aug</td>
-        <td><span class="loc-tag loc-e">Chanthaburi</span>Travel + Setup</td>
-        <td class="activity-cell">
-          <div class="stop-name">Bangkok → Chanthaburi (Eastern Thailand)</div>
-          <div class="stop-sub">07:00 Bus from Eastern Bus Terminal (Ekkamai) → Chanthaburi (4h, ~300 THB). Arrive ~11:30. Check in near town centre. Afternoon: contact Thai Cacao Distribution via <span class="badge-wa">WA: @TCDcacao</span> (Facebook Messenger) to arrange a farm visit. Call Chumphon Collective <span class="badge-phone">+66 62 294 7542</span> re Chanthaburi network introductions.</div>
-        </td>
-        <td class="cost">750 THB</td>
-      </tr>
-      <tr class="visit"><td class="day-num">D11</td><td class="day-date">Tue 19 Aug</td>
-        <td><span class="loc-tag loc-e">Chanthaburi</span>TCD + Suriya Farm</td>
-        <td class="activity-cell">
-          <div class="stop-name">★★ Thai Cacao Distribution (Ryan Berk) + Suriya Farm</div>
-          <div class="stop-sub"><span class="badge-wa">FB/WA: TCDcacao</span> · <span class="badge-key">PRIORITY</span> — Largest Thai DFB exporter. Hire motorbike taxi to Makham district (25km east). Suriya Farm = main fermentation station, run by Bunnam Promchan. Taste fermented + dried lots in process. Ask Ryan (contact via FB) about minimum batch for Thai domestic buyers vs export pricing.</div>
-        </td>
-        <td class="cost">500 THB</td>
-      </tr>
-      <tr class="visit"><td class="day-num">D12</td><td class="day-date">Wed 20 Aug</td>
-        <td><span class="loc-tag loc-e">Chanthaburi</span>Beantobar + Boom Farm</td>
-        <td class="activity-cell">
-          <div class="stop-name">Beantobar Chanthaburi Co. Ltd + Second farm area</div>
-          <div class="stop-sub">Intro via TCD. CoEx 2023 Best 50 award — grapefruit/pear flavour notes. Visit Boom Farm (second fermentation station in TCD network). Request DFB samples. If Ryan available, explore long-term supply agreement terms. Afternoon: free for extra meetings or sample cataloguing.</div>
-        </td>
-        <td class="cost">450 THB</td>
-      </tr>
-      <tr class="travel"><td class="day-num">D13</td><td class="day-date">Thu 21 Aug</td>
-        <td><span class="loc-tag loc-t">Trat</span>Travel + Visit</td>
-        <td class="activity-cell">
-          <div class="stop-name">Chanthaburi → Trat + Anarchy Chocolate Network</div>
-          <div class="stop-sub">09:00 Bus Chanthaburi → Trat (1.5h, ~100 THB). Contact Anarchy Chocolate Farmer Network via Chumphon Collective <span class="badge-phone">+66 62 294 7542</span>. Permaculture cacao near Cambodian border — unique flavour profile. If available, visit 1–2 farms. Confirm if they are accumulating enough dry stock for sale. Evening: Bus Trat → Bangkok or overnight in Trat.</div>
-        </td>
-        <td class="cost">600 THB</td>
-      </tr>
-      <tr class="visit"><td class="day-num">D14</td><td class="day-date">Fri 22 Aug</td>
-        <td><span class="loc-tag loc-bkk">Bangkok</span>Admin + Prep North</td>
-        <td class="activity-cell">
-          <div class="stop-name">Trat → Bangkok · North trip preparation</div>
-          <div class="stop-sub">Morning: bus back to Bangkok (~5h, 350 THB). Afternoon: sort samples, notes, photos. Book overnight train (Hua Lamphong → Chiang Mai, 2nd-class AC ~700 THB, departs ~18:00). Call ahead to Chiang Mai: <span class="badge-phone">+66 85 914 6963</span> (Prof. Sanh) to confirm Monday appointment.</div>
-        </td>
-        <td class="cost">1,200 THB</td>
-      </tr>
-      <tr class="weekend"><td class="day-num">—</td><td class="day-date">Sat–Sun 23–24 Aug</td>
-        <td colspan="2">Weekend · On overnight train → Arrive Chiang Mai ~07:00 Sun 24 Aug. Rest, settle in.</td>
-        <td class="cost">700 THB</td>
-      </tr>
+      <tr><td class="dn">D10</td><td class="dd">Wed 20 Aug</td><td><span class="ltag l-e">Bangkok</span>→ Chanthaburi</td><td><div class="stop">Bangkok → Chanthaburi · Setup TCD meeting</div><div class="sub">08:00 bus from Eastern Bus Terminal (Ekkamai, BTS Ekkamai) → Chanthaburi (4h, 300 THB). Arrive ~12:00. Check in simple guesthouse near market. Message <span class="ph" style="background:#dcf8c6;color:#075e54">WA: @TCDcacao</span> (Thai Cacao Distribution) to arrange Thursday farm visit. Cheap lunch at town market.</div></td><td class="thb">540</td></tr>
+      <tr><td class="dn">D11</td><td class="dd">Thu 21 Aug</td><td><span class="ltag l-e">Chanthaburi</span>TCD ★★</td><td><div class="stop">★★★ Thai Cacao Distribution — Suriya Farm (Makham, 25km east)</div><div class="sub">Hire motorbike taxi to Makham (80 THB). Suriya Farm = main fermentation station (Bunnam Promchan). Largest DFB stockpile in Thailand. Ask: current lot availability, moisture specs, grading system, domestic vs export pricing for 1–2 MT. If Ryan Berk responds via WA — discuss terms directly in English.</div></td><td class="thb">350</td></tr>
+      <tr><td class="dn">D12</td><td class="dd">Fri 22 Aug</td><td><span class="ltag l-e">Chanthaburi</span>Boom Farm</td><td><div class="stop">Boom Farm (second TCD fermentation station) + Beantobar Chanthaburi</div><div class="sub">Second day in Chanthaburi allows visiting the Boom Farm facility + Beantobar Chanthaburi Co. Ltd (CoEx 2023 Best 50). Compare fermentation quality between stations. Collect physical DFB samples to take north. Wrap up with evening notes.</div></td><td class="thb">330</td></tr>
+      <tr class="wknd"><td class="dn">—</td><td class="dd">Sat 23 Aug</td><td><span class="ltag l-e">Chanthaburi</span>rest</td><td>Rest. Chanthaburi fruit market (world-famous durian + mangosteen zone). Cheap market food.</td><td class="thb">350</td></tr>
+      <tr><td class="dn">D13</td><td class="dd">Sun 24 Aug</td><td><span class="ltag l-e">Trat</span>Anarchy net</td><td><div class="stop">Chanthaburi → Trat (1.5h, 100 THB) · Anarchy Chocolate network</div><div class="sub">Contact arranged via Chumphon Collective <span class="ph">+66 62 294 7542</span>. Permaculture cacao near Cambodian border — small unique volume. Visit 1–2 farms if intro given. Check if dry stock available. Return Chanthaburi same day (100 THB bus back).</div></td><td class="thb">400</td></tr>
+      <tr><td class="dn">D14</td><td class="dd">Mon 25 Aug</td><td><span class="ltag l-e">→ Bangkok</span></td><td><div class="stop">Chanthaburi → Bangkok · Prep North trip</div><div class="sub">07:00 bus Chanthaburi → Bangkok Eastern Terminal (4h, 300 THB). Arrive ~11:00. Quick lunch near Ekkamai BTS. Rest at hostel. Evening: book overnight VIP bus to Chiang Mai (Green Bus or Nakhon Chai Air, departs ~20:00, 750 THB). Call ahead: <span class="ph">+66 85 914 6963</span> Prof. Sanh to confirm Wednesday meeting.</div></td><td class="thb">520</td></tr>
+      <tr class="trav"><td class="dn">—</td><td class="dd">Tue 26 Aug</td><td><span class="ltag l-n">Travel</span>→ Chiang Mai</td><td>Overnight bus arrives Chiang Mai ~08:00. Check in hostel near Night Bazaar or Tha Phae Gate area (~360 THB fan room). Rest morning. Afternoon: orient + call Hill Tribe Cocoa FB. Stock up on snacks at Warorot Market.</td><td class="thb">360</td></tr>
     </tbody>
   </table>
 
-  <!-- SEGMENT 4 -->
-  <div class="seg-header" style="margin-top:12px">
-    <span style="background:#2ecc71;width:14px;height:14px;border-radius:50%;display:inline-block"></span>
-    SEGMENT 4 — NORTH (CHIANG MAI · LAMPANG · CHIANG RAI)
-    <span class="seg-meta">Aug 25 – Sep 5 · 3 provinces · 8 stops · 9 visiting days</span>
-    <span class="seg-note">IM.1 fine-flavour beans — highest quality Thai cacao</span>
-  </div>
-  <table class="itinerary">
-    <thead>
-      <tr><th>Day</th><th>Date</th><th>Location</th><th>Activity &amp; Stops</th><th>Est. Cost</th></tr>
-    </thead>
+  <!-- NORTH -->
+  <div class="seg-hdr s-north"><span style="background:#27ae60;width:14px;height:14px;border-radius:50%;display:inline-block"></span><div><h3>SEGMENT 3 — NORTH LOOP (IM.1 Territory)</h3><span class="sm">Aug 27 – Sep 5 · Chiang Mai → Lampang → Chiang Rai</span></div><span class="pill">8 visiting days · 7 stops · Highest quality beans</span></div>
+  <table class="iti">
+    <thead><tr><th>Day</th><th>Date</th><th>Location</th><th>Activity</th><th>~THB</th></tr></thead>
     <tbody>
-      <tr class="visit"><td class="day-num">D15</td><td class="day-date">Mon 25 Aug</td>
-        <td><span class="loc-tag loc-n">Chiang Mai</span>Makrin Farm</td>
-        <td class="activity-cell">
-          <div class="stop-name">★★ Mark Rin Chocolate / Prof. Sanh La-Ongsri</div>
-          <div class="stop-sub"><span class="badge-phone">+66 85 914 6963</span> · 222/1 Moo 9, San Sai Noi, San Sai — 15km from CM city. <span class="badge-key">TOP PRIORITY</span> IM.1 variety — only fine-flavour Thai cacao. 2,000+ rai planted. CoEx NOC. Taste fresh beans on farm. Discuss direct purchase: ask about minimum order (likely 50–200 kg/batch), harvest timing Aug–Sep, and moisture content targets. Also meet Rawisara (<span class="badge-phone">+66 95 752 2770</span>) for logistics/orders.</div>
-        </td>
-        <td class="cost">450 THB</td>
-      </tr>
-      <tr class="visit"><td class="day-num">D16</td><td class="day-date">Tue 26 Aug</td>
-        <td><span class="loc-tag loc-n">Chiang Mai</span>Hill Tribe + THC</td>
-        <td class="activity-cell">
-          <div class="stop-name">Hill Tribe Cocoa Cof (Doi Saket) + Thai High Concentrations (San Pa Tong)</div>
-          <div class="stop-sub">Morning: Hill Tribe Cocoa, Doi Saket area (20km east of CM). FB: HillTribeCocoaCof. Khun Siriya = North Cluster chair — ask about collective volumes and how to buy from their farmer network. Afternoon: Thai High Concentrations, San Pa Tong (25km south of CM). Email: highconcentrations@outlook.com. Thailand's first cacao coop — they can process and resell DFB or source for you.</div>
-        </td>
-        <td class="cost">500 THB</td>
-      </tr>
-      <tr class="visit"><td class="day-num">D17</td><td class="day-date">Wed 27 Aug</td>
-        <td><span class="loc-tag loc-n">Lampang</span>Thai Coffee Coop</td>
-        <td class="activity-cell">
-          <div class="stop-name">★ Thai Coffee & Cocoa Cooperation (Khun Pathom) + Lampang IM.1 Network</div>
-          <div class="stop-sub">10:00 Minivan CM → Lampang (~1.5h, 100 THB). FB: Thai Coffee & Cocoa. 21,000+ trees. Largest coop supplying Siamaya Chocolate. Exports to Japan + Singapore. Ask: can they supply Thai-based buyer? What's batch minimum and price per kg DFB? Afternoon: meet Lampang IM.1 collective coordinator (Khun Ooy — via North Cluster). Return to Lampang hotel.</div>
-        </td>
-        <td class="cost">600 THB</td>
-      </tr>
-      <tr class="visit"><td class="day-num">D18</td><td class="day-date">Thu 28 Aug</td>
-        <td><span class="loc-tag loc-n">Chiang Rai</span>Travel + CR Collective</td>
-        <td class="activity-cell">
-          <div class="stop-name">Lampang → Chiang Rai · Chiang Rai Cacao Collective (intro via Chumphon Collective)</div>
-          <div class="stop-sub">09:00 Bus Lampang → Chiang Rai (2.5h, ~200 THB). Check in Chiang Rai. Afternoon: call <span class="badge-phone">+66 62 294 7542</span> (Chumphon Collective) — they introduced the CR collective. Arrange visit for Friday. Also call Hill Tribe Mae Jan branch to confirm appointment.</div>
-        </td>
-        <td class="cost">750 THB</td>
-      </tr>
-      <tr class="visit"><td class="day-num">D19</td><td class="day-date">Fri 29 Aug</td>
-        <td><span class="loc-tag loc-n">Chiang Rai</span>Collective + Mae Jan</td>
-        <td class="activity-cell">
-          <div class="stop-name">Chiang Rai Cacao Collective + Hill Tribe Cocoa Mae Jan Branch</div>
-          <div class="stop-sub">Morning: Chiang Rai cacao collective — intro via Chumphon Collective. Chumphon 1 genetics in cool northern highland climate. Taste + sample if available. 13:00 Drive/bus to Mae Jan (40km north of CR) — Hill Tribe Cocoa second centre. Siriya's operation here covers ethnic minority farmers. Growing area with strong export interest from Japan. Return CR evening.</div>
-        </td>
-        <td class="cost">500 THB</td>
-      </tr>
-      <tr class="weekend"><td class="day-num">—</td><td class="day-date">Sat–Sun 30–31 Aug</td>
-        <td colspan="2">Weekend · Chiang Rai — White Temple/cultural day. Sort samples. Review all notes. Prepare final assessment.</td>
-        <td class="cost">1,200 THB</td>
-      </tr>
-      <tr class="visit"><td class="day-num">D20</td><td class="day-date">Mon 01 Sep</td>
-        <td><span class="loc-tag loc-n">Chiang Rai</span>Optional: Nan</td>
-        <td class="activity-cell">
-          <div class="stop-name">Optional: Chiang Rai → Nan (ISTC / Cocoa Province)</div>
-          <div class="stop-sub">If time allows: Chiang Rai → Nan by minivan (~4h, 250 THB). Nan = Thailand's "Cocoa Province" with Chulalongkorn University ISTC center (FB: cusarcocoa). Fruity tropical flavour. Meet ISTC-certified farmers via the center. Return same day or overnight. <em>Skip if schedule tight — Nan needs 2 days ideally.</em></div>
-        </td>
-        <td class="cost">700 THB</td>
-      </tr>
-      <tr class="visit"><td class="day-num">D21</td><td class="day-date">Tue 02 Sep</td>
-        <td><span class="loc-tag loc-n">Chiang Rai</span>Buffer + Negotiations</td>
-        <td class="activity-cell">
-          <div class="stop-name">Buffer day — follow-up calls, second visits, sample negotiation</div>
-          <div class="stop-sub">This day is built for second-round conversations with the best contacts you've identified. Call back <span class="badge-phone">+66 62 294 7542</span>, <span class="badge-phone">+66 80 064 7515</span>, or <span class="badge-phone">+66 81 893 6696</span> to discuss trial order terms. Use Thai phone interpreter if needed (hire 1-hour session ~400 THB).</div>
-        </td>
-        <td class="cost">600 THB</td>
-      </tr>
-      <tr class="visit"><td class="day-num">D22</td><td class="day-date">Wed 03 Sep</td>
-        <td><span class="loc-tag loc-n">Chiang Rai</span>Buffer</td>
-        <td class="activity-cell">
-          <div class="stop-name">Extra buffer / documentation day</div>
-          <div class="stop-sub">Write up quality assessments. Photograph all sample packets clearly. Compare Chumphon 1 vs IM.1 notes. If you need to re-visit any Chiang Mai contact, consider hiring a Grab and doing a day trip (90 min drive). Evening: Book flight home (AirAsia/Nok Air Chiang Rai → Bangkok ~1,800 THB).</div>
-        </td>
-        <td class="cost">400 THB</td>
-      </tr>
-      <tr class="travel"><td class="day-num">D→</td><td class="day-date">Thu 04 Sep</td>
-        <td><span class="loc-tag loc-bkk">Return</span></td>
-        <td class="activity-cell">
-          <div class="stop-name">Chiang Rai → Bangkok flight → Return home or Koh Phangan</div>
-          <div class="stop-sub">Morning flight CR → DMK (Don Mueang), ~1h. Bangkok → Surat Thani by bus or flight → Ferry back to Koh Phangan. Or end trip in Bangkok for debrief/meetings.</div>
-        </td>
-        <td class="cost">2,500 THB</td>
-      </tr>
+      <tr><td class="dn">D15</td><td class="dd">Wed 27 Aug</td><td><span class="ltag l-n">Chiang Mai</span>Makrin ★★★</td><td><div class="stop">★★★ Mark Rin Chocolate / Prof. Sanh La-Ongsri — IM.1 origin</div><div class="sub"><span class="ph">+66 85 914 6963</span><span class="ph">+66 95 752 2770</span> · 222/1 Moo 9 San Sai Noi (15km, red songthaew + motorbike taxi ~50 THB). <span class="kp">HIGHEST QUALITY IN THAILAND</span>. IM.1 = Peruvian Criollo × Filipino Forastero. Taste fresh beans + DFB samples. Discuss: minimum purchase qty, current stock post-harvest, price/kg, certification, logistics to Bangkok. Meet Rawisara for order process.</div></td><td class="thb">340</td></tr>
+      <tr><td class="dn">D16</td><td class="dd">Thu 28 Aug</td><td><span class="ltag l-n">Chiang Mai</span>Hill Tribe + THC</td><td><div class="stop">Hill Tribe Cocoa (Doi Saket) + Thai High Concentrations (San Pa Tong)</div><div class="sub">Morning: Red songthaew to Doi Saket direction (~50 THB). Hill Tribe Cocoa — FB: HillTribeCocoaCof. Khun Siriya = North Cluster chair. Ask about farmer collective volumes + intro to IM.1 small farmers. Afternoon: motorbike taxi to San Pa Tong (30km south of CM). Thai High Concentrations (highconcentrations@outlook.com) — cooperative, resells DFB, intro to their farmer network.</div></td><td class="thb">360</td></tr>
+      <tr><td class="dn">D17</td><td class="dd">Fri 29 Aug</td><td><span class="ltag l-n">Chiang Mai</span>buffer</td><td><div class="stop">Chiang Mai buffer — follow-up + Thai Cocoa Certified Farms</div><div class="sub">Morning: email/call Thai Cocoa (info@thaicocoa.com — certified farms Chiang Mai + NST). Visit if they respond. Afternoon: review all CM samples collected, write quality notes. Call interpreter if needed for follow-up on Makrin pricing discussion.</div></td><td class="thb">330</td></tr>
+      <tr class="wknd"><td class="dn">—</td><td class="dd">Sat–Sun 30–31 Aug</td><td><span class="ltag l-n">Chiang Mai</span>rest</td><td>Chiang Mai weekend. Sunday Walking Street market (Wualai) = huge + cheap food. Review all South + East notes. Prepare North negotiation list. Evening Sun: bus Chiang Mai → Lampang (1.5h, 100 THB).</td><td class="thb">700</td></tr>
+      <tr><td class="dn">D18</td><td class="dd">Mon 01 Sep</td><td><span class="ltag l-n">Lampang</span>Coffee Coop</td><td><div class="stop">★★ Thai Coffee & Cocoa Cooperation — Khun Pathom + Lampang IM.1 Network</div><div class="sub">FB: Thai Coffee & Cocoa. 21,000+ trees across Lampang + NST farms. Full traceability DFB. Exports Japan + Singapore. <span class="kp">Key volume source</span>. Ask: can Thai domestic buyer get 1MT from one order? What's their current DFB stock and price? Also meet Lampang IM.1 collective coordinator (Khun Ooy via clustercocoa.com).</div></td><td class="thb">350</td></tr>
+      <tr><td class="dn">D19</td><td class="dd">Tue 02 Sep</td><td><span class="ltag l-n">→ Chiang Rai</span></td><td><div class="stop">Lampang → Chiang Rai (bus 2.5h, 200 THB) · Chiang Rai Collective</div><div class="sub">09:00 bus Lampang → Chiang Rai. Arrive ~11:30. Check in hostel (360 THB/night). Afternoon: call Chumphon Collective <span class="ph">+66 62 294 7542</span> to get intro to CR Collective. Visit Chiang Rai Night Market for food (cheap pad thai 60 THB).</div></td><td class="thb">380</td></tr>
+      <tr><td class="dn">D20</td><td class="dd">Wed 03 Sep</td><td><span class="ltag l-n">Chiang Rai</span>CR Collective</td><td><div class="stop">Chiang Rai Cacao Collective + Hill Tribe Cocoa Mae Jan</div><div class="sub">Morning: Chiang Rai Collective (intro via Chumphon Coll.) — Chumphon 1 in cool highland climate, distinct flavour profile. 13:00 local bus/songthaew to Mae Jan (40km north, 40 THB). Hill Tribe Cocoa second centre — Khun Siriya's ethnic-farm network operation. Return CR evening.</div></td><td class="thb">350</td></tr>
+      <tr><td class="dn">D21</td><td class="dd">Thu 04 Sep</td><td><span class="ltag l-n">Chiang Rai</span>Buffer</td><td><div class="stop">Buffer / second-round negotiation calls</div><div class="sub">Best contacts to call back: <span class="ph">+66 62 294 7542</span> (Collective for supply quote), <span class="ph">+66 80 064 7515</span> (Chocolasia for aggregation), <span class="ph">+66 81 893 6696</span> (Thaiburi — unlimited buying, may intro you to sellers). Hire interpreter for 1–2 key negotiation calls if needed (~250 THB/hr student rate).</div></td><td class="thb">330</td></tr>
+      <tr><td class="dn">D22</td><td class="dd">Fri 05 Sep</td><td><span class="ltag l-n">Chiang Rai</span>Final</td><td><div class="stop">Final documentation + Chiang Rai → Bangkok overnight bus</div><div class="sub">Morning: photograph + label all samples. Write final quality comparison (Chumphon 1 South/East vs IM.1 North). Rank top 5 contacts for first trial order. Evening: 20:00 VIP overnight bus Chiang Rai → Bangkok (Green Bus, 850 THB, 12h — very comfortable, AC, reclining seats, arrives ~08:00).</div></td><td class="thb">1,020</td></tr>
+    </tbody>
+  </table>
+
+  <!-- RETURN -->
+  <div class="seg-hdr s-ret"><span style="font-size:18px">🚢</span><div><h3>RETURN — Bangkok → Surat Thani → Ko Phangan Ferry</h3><span class="sm">Sep 6–10 · Bus back + ferry + rest before flight home</span></div><span class="pill">final leg</span></div>
+  <table class="iti">
+    <thead><tr><th>Day</th><th>Date</th><th>Location</th><th>Activity</th><th>~THB</th></tr></thead>
+    <tbody>
+      <tr class="wknd"><td class="dn">—</td><td class="dd">Sat 06 Sep</td><td><span class="ltag l-b">Bangkok</span>arrive</td><td>Arrive Bangkok ~08:00 from overnight bus. Hostel bag drop. Short rest. Buy snacks. Board 18:00 VIP overnight bus to Surat Thani (Nakhon Chai Air, 550 THB, ~10h).</td><td class="thb">720</td></tr>
+      <tr class="trav"><td class="dn">—</td><td class="dd">Sun 07 Sep</td><td><span class="ltag l-kp">→ Ko Phangan</span></td><td><div class="stop">Surat Thani → Don Sak pier → Ko Phangan ferry 🏝</div><div class="sub">Arrive Surat Thani ~04:00. Shuttle to Don Sak pier (~1h). 08:30 Seatran Ferry to Ko Phangan (2.5h, 270 THB). Arrive Thongsala ~11:00. <span class="kp">Back to base</span>. Rest + relax for remaining days before departure back to Brazil.</div></td><td class="thb">400</td></tr>
+      <tr class="wknd"><td class="dn">—</td><td class="dd">Mon–Wed 08–10 Sep</td><td><span class="ltag l-kp">Ko Phangan</span></td><td>Ko Phangan rest days. Write final expedition report. Organise all sample photos + contacts. Ko Phangan → Surat Thani ferry → bus to Bangkok → international flight back to São Paulo → Ilheus (~Sep 11–13 depending on booking).</td><td class="thb">1,100</td></tr>
     </tbody>
   </table>
 </div>
 
-<!-- BUDGET SECTION -->
-<div id="budget-section" class="section">
-  <h2 class="section-title">Full Budget Breakdown — 1 Foreigner, ~33 Days</h2>
-  <div class="advisory">
-    All prices in Thai Baht (THB). Exchange rate basis: 1 USD ≈ 35 THB. Prices are <strong>conservative estimates for a foreigner</strong> on a practical budget — not backpacker, not luxury. Assumes guesthouses with AC + private bathroom, local transport, and street food with occasional restaurant meals.
+<!-- ── BUDGET ──────────────────────────────────────────── -->
+<div id="bud-sec" class="sec">
+  <h2 class="stitle">Full Budget — 1 Foreigner, ~45 Days (Ilheus → Bangkok → Ilheus)</h2>
+  <div class="info-box">
+    All prices in Thai Baht (THB) · Exchange rate: 1 USD ≈ 35 THB · 1 BRL ≈ 7 THB.<br>
+    <strong>Budget philosophy:</strong> hostel dorms or fan rooms (~350–380 THB/night), street food only, local bus + songthaew everywhere, student interpreter for Thai calls only, bare-bones essentials. Tight but comfortable enough for productive farm visits.
   </div>
-  <div class="budget-grid">
 
-    <!-- ACCOMMODATION -->
-    <div class="budget-card">
-      <div class="budget-card-header"><span class="icon">🏨</span><h3>Accommodation — 33 nights</h3></div>
-      <table class="budget-table">
-        <tr><td>Nakhon Si Thammarat (2n)</td><td>700 × 2 = 1,400</td></tr>
-        <tr><td>Chumphon (2n)</td><td>650 × 2 = 1,300</td></tr>
-        <tr><td>Ranong (3n: Fri + wknd + Mon)</td><td>600 × 3 = 1,800</td></tr>
-        <tr><td>Bangkok (6n total across 2 stays)</td><td>900 × 6 = 5,400</td></tr>
-        <tr><td>Prachuap KK (1n + wknd 2n)</td><td>650 × 3 = 1,950</td></tr>
-        <tr><td>Chanthaburi (3n)</td><td>700 × 3 = 2,100</td></tr>
-        <tr><td>Trat (1n)</td><td>650 × 1 = 650</td></tr>
-        <tr><td>Chiang Mai (5n: arrive Sun + Mon–Thu)</td><td>800 × 5 = 4,000</td></tr>
-        <tr><td>Lampang (1n)</td><td>650 × 1 = 650</td></tr>
-        <tr><td>Chiang Rai (5n: Fri wknd + Mon–Wed)</td><td>700 × 5 = 3,500</td></tr>
-        <tr><td>Nan optional (1n)</td><td>600 × 1 = 600</td></tr>
-        <tr class="subtotal"><td>Subtotal accommodation</td><td>23,350 THB</td></tr>
+  <div class="b-grid">
+
+    <!-- FLIGHTS -->
+    <div class="b-card flights">
+      <div class="b-ch"><span class="ico">✈️</span><h3>International Flights — Brazil ↔ Bangkok</h3></div>
+      <table class="bt">
+        <tr><td>Ilheus (IOS) → São Paulo GRU domestic</td><td>~3,500</td></tr>
+        <tr><td>São Paulo GRU → Bangkok BKK (economy, via Doha/Dubai/Istanbul)</td><td>~44,000</td></tr>
+        <tr><td>Bangkok BKK → São Paulo GRU (return)</td><td>incl. in RT</td></tr>
+        <tr><td>São Paulo GRU → Ilheus IOS domestic return</td><td>~3,500</td></tr>
+        <tr><td class="note-row" colspan="2">Best deals: Qatar Airways, Turkish Airlines, Ethiopian — book 6–8 weeks out. RT fare GRU↔BKK: typically $1,200–1,500 USD in economy. Check Google Flights "flexible dates" ± 3 days. Late Jul / early Aug is mid-season pricing.</td></tr>
+        <tr class="sub-row"><td>Subtotal flights</td><td>~51,000</td></tr>
       </table>
     </div>
 
-    <!-- TRANSPORT -->
-    <div class="budget-card">
-      <div class="budget-card-header"><span class="icon">🚌</span><h3>Transport — between cities</h3></div>
-      <table class="budget-table">
-        <tr><td>KP Ferry → Don Sak (Surat Thani)</td><td>350</td></tr>
-        <tr><td>Surat Thani → NST bus</td><td>200</td></tr>
+    <!-- ACCOMMODATION -->
+    <div class="b-card">
+      <div class="b-ch"><span class="ico">🛏</span><h3>Accommodation — 38 nights (hostels, fan rooms)</h3></div>
+      <table class="bt">
+        <tr><td>Bangkok (4 nights — 2 stays)</td><td>350 × 4 = 1,400</td></tr>
+        <tr><td>Ko Phangan (5 nights — start + return rest)</td><td>360 × 5 = 1,800</td></tr>
+        <tr><td>Nakhon Si Thammarat (2 nights)</td><td>380 × 2 = 760</td></tr>
+        <tr><td>Chumphon (2 nights)</td><td>360 × 2 = 720</td></tr>
+        <tr><td>Ranong (3 nights)</td><td>360 × 3 = 1,080</td></tr>
+        <tr><td>Prachuap KK (2 nights)</td><td>370 × 2 = 740</td></tr>
+        <tr><td>Chanthaburi (4 nights)</td><td>380 × 4 = 1,520</td></tr>
+        <tr><td>Chiang Mai (6 nights)</td><td>360 × 6 = 2,160</td></tr>
+        <tr><td>Lampang (1 night)</td><td>370 × 1 = 370</td></tr>
+        <tr><td>Chiang Rai (5 nights)</td><td>360 × 5 = 1,800</td></tr>
+        <tr><td class="note-row" colspan="2">Recommended apps: Hostelworld, Agoda, walk-in. Ask for "fan room" (no AC saves 100–150 THB/night). North Thailand is cool enough in Aug–Sep without AC at elevation.</td></tr>
+        <tr class="sub-row"><td>Subtotal (avg 363 THB/night)</td><td>12,350</td></tr>
+      </table>
+    </div>
+
+    <!-- INTER-CITY TRANSPORT -->
+    <div class="b-card">
+      <div class="b-ch"><span class="ico">🚌</span><h3>Inter-city Transport — VIP buses + ferries only</h3></div>
+      <table class="bt">
+        <tr><td>Bangkok → Surat Thani VIP overnight bus</td><td>550</td></tr>
+        <tr><td>Don Sak → Ko Phangan ferry (Seatran)</td><td>270</td></tr>
+        <tr><td>Ko Phangan → Don Sak ferry + bus to NST</td><td>480</td></tr>
         <tr><td>NST → Chumphon bus</td><td>250</td></tr>
-        <tr><td>Chumphon → Ranong minivan (x2 return)</td><td>300</td></tr>
-        <tr><td>Ranong → Bangkok overnight bus</td><td>650</td></tr>
-        <tr><td>Bangkok → Prachuap KK (bus x2)</td><td>600</td></tr>
-        <tr><td>Bangkok → Chanthaburi bus</td><td>300</td></tr>
-        <tr><td>Chanthaburi → Trat bus (x2)</td><td>200</td></tr>
-        <tr><td>Trat → Bangkok bus</td><td>350</td></tr>
-        <tr><td>Bangkok → Chiang Mai overnight train</td><td>750</td></tr>
-        <tr><td>Chiang Mai → Lampang minivan (x2)</td><td>200</td></tr>
+        <tr><td>Chumphon → Ranong minivan (×2 return)</td><td>300</td></tr>
+        <tr><td>Ranong → Bangkok overnight VIP bus</td><td>650</td></tr>
+        <tr><td>Bangkok → Prachuap KK bus (×2 round trip)</td><td>560</td></tr>
+        <tr><td>Bangkok → Chanthaburi bus (×2 round trip)</td><td>600</td></tr>
+        <tr><td>Chanthaburi → Trat bus (×2 round trip)</td><td>200</td></tr>
+        <tr><td>Bangkok → Chiang Mai overnight VIP bus</td><td>750</td></tr>
+        <tr><td>Chiang Mai → Lampang minivan</td><td>100</td></tr>
         <tr><td>Lampang → Chiang Rai bus</td><td>200</td></tr>
-        <tr><td>Chiang Rai → Bangkok flight (Nok/AirAsia)</td><td>1,900</td></tr>
-        <tr><td>Optional: CR ↔ Nan minivan</td><td>500</td></tr>
-        <tr class="subtotal"><td>Subtotal inter-city</td><td>6,750 THB</td></tr>
+        <tr><td>Chiang Rai → Bangkok overnight VIP bus</td><td>850</td></tr>
+        <tr><td>Bangkok → Surat Thani VIP bus (return)</td><td>550</td></tr>
+        <tr><td>Don Sak → Ko Phangan ferry (return)</td><td>270</td></tr>
+        <tr><td class="note-row" colspan="2">VIP buses (Nakhon Chai Air, Green Bus) = large reclining seats, AC, onboard water/snack, toilet. Very comfortable. Book at bus terminal or online 1–2 days ahead.</td></tr>
+        <tr class="sub-row"><td>Subtotal inter-city</td><td>6,580</td></tr>
       </table>
     </div>
 
     <!-- LOCAL TRANSPORT -->
-    <div class="budget-card">
-      <div class="budget-card-header"><span class="icon">🛺</span><h3>Local Transport — within cities</h3></div>
-      <table class="budget-table">
-        <tr><td>Bangkok BTS/MRT/Grab (5 days)</td><td>350/day × 5 = 1,750</td></tr>
-        <tr><td>Songthaew/motorbike taxi (NST, Chumphon, Ranong farm visits)</td><td>200/day × 5 = 1,000</td></tr>
-        <tr><td>Grab/taxi for farm visits (Chanthaburi, Trat)</td><td>300/day × 4 = 1,200</td></tr>
-        <tr><td>Songthaew + Grab (Chiang Mai farm visits)</td><td>300/day × 5 = 1,500</td></tr>
-        <tr><td>Minibuses + motorbike taxis (Lampang, Chiang Rai)</td><td>200/day × 4 = 800</td></tr>
-        <tr class="subtotal"><td>Subtotal local transport</td><td>6,250 THB</td></tr>
+    <div class="b-card">
+      <div class="b-ch"><span class="ico">🛺</span><h3>Local Transport — songthaew, motorbike taxi, bus</h3></div>
+      <table class="bt">
+        <tr><td>Bangkok MRT/bus for Chocolasia, TACCO (×2 stays)</td><td>80/day × 4 = 320</td></tr>
+        <tr><td>NST songthaew + motorbike taxi (Tha Sala, HRC)</td><td>70/day × 3 = 210</td></tr>
+        <tr><td>Chumphon + Ranong local moto-taxi</td><td>60/day × 4 = 240</td></tr>
+        <tr><td>Prachuap KK + farm visits motorbike taxi</td><td>80/day × 2 = 160</td></tr>
+        <tr><td>Chanthaburi + Trat (motorbike to Makham, Trat buses)</td><td>100/day × 5 = 500</td></tr>
+        <tr><td>Chiang Mai red songthaew (Doi Saket, San Pa Tong)</td><td>80/day × 6 = 480</td></tr>
+        <tr><td>Lampang + Chiang Rai local buses + songthaew</td><td>60/day × 7 = 420</td></tr>
+        <tr><td class="note-row" colspan="2">Tip: motorbike taxis (orange vest) are cheapest for under 3km. Songthaew (pickup trucks) cost 20–40 THB within town. Grab only if no alternative.</td></tr>
+        <tr class="sub-row"><td>Subtotal local transport</td><td>2,330</td></tr>
       </table>
     </div>
 
     <!-- FOOD -->
-    <div class="budget-card">
-      <div class="budget-card-header"><span class="icon">🍜</span><h3>Food — 33 days</h3></div>
-      <table class="budget-table">
-        <tr><td>Breakfast (market khao tom / bread)</td><td>60/day × 33 = 1,980</td></tr>
-        <tr><td>Lunch (khao man gai / pad krapao)</td><td>100/day × 33 = 3,300</td></tr>
-        <tr><td>Dinner (market + occasional restaurant)</td><td>120/day × 33 = 3,960</td></tr>
-        <tr><td>Snacks + coffee + water</td><td>50/day × 33 = 1,650</td></tr>
-        <tr><td>Cacao tastings/samples (buy at farms)</td><td>500 total</td></tr>
-        <tr class="subtotal"><td>Subtotal food</td><td>11,390 THB</td></tr>
+    <div class="b-card">
+      <div class="b-ch"><span class="ico">🍜</span><h3>Food — 2 solid meals + snacks, 38 days</h3></div>
+      <table class="bt">
+        <tr><td>Meal 1 / brunch (khao man gai, pad krapao, jok) 70–90 THB</td><td>80/day × 38 = 3,040</td></tr>
+        <tr><td>Meal 2 / lunch (street market, rice + side) 60–80 THB</td><td>70/day × 38 = 2,660</td></tr>
+        <tr><td>Snacks + fruit + water 20–35 THB</td><td>28/day × 38 = 1,064</td></tr>
+        <tr><td class="note-row" colspan="2">Best budget meal: any market with "ข้าวราดแกง" (rice + curry ladle) = 40–60 THB. Khao San Rd / Silom market in BKK. Northern Thailand generally cheapest food in the country.</td></tr>
+        <tr class="sub-row"><td>Subtotal food (avg 178 THB/day)</td><td>6,764</td></tr>
       </table>
     </div>
 
     <!-- INTERPRETER -->
-    <div class="budget-card">
-      <div class="budget-card-header"><span class="icon">🗣️</span><h3>Phone Interpreter — Thai language</h3></div>
-      <table class="budget-table">
-        <tr><td colspan="2" style="font-size:11px;color:#666;padding-bottom:6px">Recommended approach: hire a Thai-English student interpreter via Facebook groups (search "Thai interpreter for hire" or university FB pages). Remote = phone/video call during your meetings. Rate: 300–500 THB/hour.</td></tr>
-        <tr><td>Pre-trip preparation calls (5 hrs)</td><td>400/hr × 5 = 2,000</td></tr>
-        <tr><td>NST + Chumphon visits (3 sessions)</td><td>400 × 3 = 1,200</td></tr>
-        <tr><td>Ranong + Prachuap KK (2 sessions)</td><td>400 × 2 = 800</td></tr>
-        <tr><td>East loop farm visits (2 sessions)</td><td>400 × 2 = 800</td></tr>
-        <tr><td>North loop visits (4 sessions)</td><td>400 × 4 = 1,600</td></tr>
-        <tr><td>Negotiation follow-up calls (3 sessions)</td><td>400 × 3 = 1,200</td></tr>
-        <tr class="subtotal"><td>Subtotal interpreter (14 sessions)</td><td>7,600 THB</td></tr>
-        <tr><td colspan="2" style="font-size:10px;color:#888;padding-top:4px">Where to find: post on "อาสาสมัครนักแปล" (volunteer translator) groups or contact local universities (Chiang Mai, Kasetsart Bangkok) asking for paid interpreter students.</td></tr>
+    <div class="b-card">
+      <div class="b-ch"><span class="ico">🗣️</span><h3>Phone Interpreter — scheduling calls only</h3></div>
+      <table class="bt">
+        <tr><td>~14 contacts needing Thai for initial 30-min scheduling call</td><td>14 × 250 = 3,500</td></tr>
+        <tr><td>Extra buffer: 3 hours for problems or negotiations</td><td>3 × 250 = 750</td></tr>
+        <tr><td class="note-row" colspan="2">Find a Thai student interpreter on Facebook: search "Thai English interpreter freelance" or post in Chiang Mai/Bangkok expat groups. Rate: 200–300 THB/hour for phone-only work. Many English-major students will help for 200–250 THB/hr. Note: Ryan Berk (TCD) and Prof. Sanh both speak English — no interpreter needed for those.</td></tr>
+        <tr class="sub-row"><td>Subtotal interpreter</td><td>4,250</td></tr>
       </table>
     </div>
 
-    <!-- TECH + MISC -->
-    <div class="budget-card">
-      <div class="budget-card-header"><span class="icon">📱</span><h3>Tech, Visas &amp; Essentials</h3></div>
-      <table class="budget-table">
-        <tr><td>Thai SIM card (AIS tourist): Aug (~299 THB)</td><td>299</td></tr>
-        <tr><td>Thai SIM renewal for Sep</td><td>299</td></tr>
-        <tr><td>Visa extension at immigration (30-day + 30-day)</td><td>1,900</td></tr>
-        <tr><td>Travel insurance (≈$1.50/day × 34 days)</td><td>1,800</td></tr>
-        <tr><td>Notebook + sample bags + labelling supplies</td><td>600</td></tr>
-        <tr><td>Power adapters, cables</td><td>300</td></tr>
-        <tr><td>Offline Thai map app (Maps.me premium)</td><td>0 (free)</td></tr>
-        <tr><td>Google Translate download (offline Thai)</td><td>0 (free)</td></tr>
-        <tr class="subtotal"><td>Subtotal tech + misc</td><td>5,198 THB</td></tr>
+    <!-- ESSENTIALS ONLY -->
+    <div class="b-card">
+      <div class="b-ch"><span class="ico">📱</span><h3>Essentials Only — Insurance + SIM</h3></div>
+      <table class="bt">
+        <tr><td>Cherehapa travel insurance (45 days basic)</td><td>~1,400</td></tr>
+        <tr><td>AIS Tourist SIM 30 days (299 THB) + 15-day top-up</td><td>450</td></tr>
+        <tr><td class="note-row" colspan="2">Cherehapa estimate based on ~$35–40 USD basic policy for 45 days. Buy at cherehapa.ru before departure. Thai SIM available at Suvarnabhumi airport (7-Eleven or AIS booth). AIS gives best coverage outside Bangkok.</td></tr>
+        <tr class="sub-row"><td>Subtotal essentials</td><td>1,850</td></tr>
       </table>
     </div>
-  </div>
 
-  <!-- TOTAL -->
-  <div class="budget-total">
-    <div>
-      <h3>Total Estimated Budget</h3>
-      <div style="font-size:12px;color:#a88;margin-top:4px">All figures conservative foreigner rates · 33-day itinerary</div>
-    </div>
-    <div class="amounts">
-      <div class="thb">60,538 THB</div>
-      <div class="usd">≈ USD 1,730 &nbsp;·&nbsp; ≈ EUR 1,590</div>
-    </div>
-  </div>
-  <table style="width:100%;border-collapse:collapse;margin-top:12px;background:#fff;border-radius:8px;overflow:hidden;border:1px solid var(--border)">
-    <thead><tr>
-      <th style="background:var(--parchment);padding:8px 12px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;text-align:left;color:var(--bean)">Category</th>
-      <th style="background:var(--parchment);padding:8px 12px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;text-align:right;color:var(--bean)">THB</th>
-      <th style="background:var(--parchment);padding:8px 12px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;text-align:right;color:var(--bean)">USD</th>
-      <th style="background:var(--parchment);padding:8px 12px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;text-align:right;color:var(--bean)">% of total</th>
-    </tr></thead>
+  </div><!-- /b-grid -->
+
+  <!-- SUMMARY TABLE -->
+  <table class="sum-table">
+    <thead><tr><th>Category</th><th>THB</th><th>USD (~35)</th><th>% of total</th></tr></thead>
     <tbody>
-      <tr><td style="padding:8px 12px;border-bottom:1px solid #f5ede2;font-size:12px">🏨 Accommodation (33 nights avg 708 THB)</td><td style="padding:8px 12px;border-bottom:1px solid #f5ede2;font-size:12px;text-align:right;font-family:'JetBrains Mono',monospace">23,350</td><td style="padding:8px 12px;border-bottom:1px solid #f5ede2;font-size:12px;text-align:right;font-family:'JetBrains Mono',monospace">668</td><td style="padding:8px 12px;border-bottom:1px solid #f5ede2;font-size:12px;text-align:right;color:var(--muted)">38.6%</td></tr>
-      <tr><td style="padding:8px 12px;border-bottom:1px solid #f5ede2;font-size:12px">🚌 Inter-city transport</td><td style="padding:8px 12px;border-bottom:1px solid #f5ede2;font-size:12px;text-align:right;font-family:'JetBrains Mono',monospace">6,750</td><td style="padding:8px 12px;border-bottom:1px solid #f5ede2;font-size:12px;text-align:right;font-family:'JetBrains Mono',monospace">193</td><td style="padding:8px 12px;border-bottom:1px solid #f5ede2;font-size:12px;text-align:right;color:var(--muted)">11.2%</td></tr>
-      <tr><td style="padding:8px 12px;border-bottom:1px solid #f5ede2;font-size:12px">🛺 Local transport (Grab / songthaew)</td><td style="padding:8px 12px;border-bottom:1px solid #f5ede2;font-size:12px;text-align:right;font-family:'JetBrains Mono',monospace">6,250</td><td style="padding:8px 12px;border-bottom:1px solid #f5ede2;font-size:12px;text-align:right;font-family:'JetBrains Mono',monospace">179</td><td style="padding:8px 12px;border-bottom:1px solid #f5ede2;font-size:12px;text-align:right;color:var(--muted)">10.3%</td></tr>
-      <tr><td style="padding:8px 12px;border-bottom:1px solid #f5ede2;font-size:12px">🍜 Food (avg 345 THB/day)</td><td style="padding:8px 12px;border-bottom:1px solid #f5ede2;font-size:12px;text-align:right;font-family:'JetBrains Mono',monospace">11,390</td><td style="padding:8px 12px;border-bottom:1px solid #f5ede2;font-size:12px;text-align:right;font-family:'JetBrains Mono',monospace">325</td><td style="padding:8px 12px;border-bottom:1px solid #f5ede2;font-size:12px;text-align:right;color:var(--muted)">18.8%</td></tr>
-      <tr><td style="padding:8px 12px;border-bottom:1px solid #f5ede2;font-size:12px">🗣️ Phone interpreter (14 sessions × 400 THB)</td><td style="padding:8px 12px;border-bottom:1px solid #f5ede2;font-size:12px;text-align:right;font-family:'JetBrains Mono',monospace">7,600</td><td style="padding:8px 12px;border-bottom:1px solid #f5ede2;font-size:12px;text-align:right;font-family:'JetBrains Mono',monospace">217</td><td style="padding:8px 12px;border-bottom:1px solid #f5ede2;font-size:12px;text-align:right;color:var(--muted)">12.5%</td></tr>
-      <tr><td style="padding:8px 12px;border-bottom:1px solid #f5ede2;font-size:12px">📱 SIM, visa extension, insurance, misc</td><td style="padding:8px 12px;border-bottom:1px solid #f5ede2;font-size:12px;text-align:right;font-family:'JetBrains Mono',monospace">5,198</td><td style="padding:8px 12px;border-bottom:1px solid #f5ede2;font-size:12px;text-align:right;font-family:'JetBrains Mono',monospace">149</td><td style="padding:8px 12px;border-bottom:1px solid #f5ede2;font-size:12px;text-align:right;color:var(--muted)">8.6%</td></tr>
-      <tr style="background:var(--parchment)"><td style="padding:8px 12px;font-size:13px;font-weight:700;color:var(--bean)">TOTAL</td><td style="padding:8px 12px;font-size:13px;font-weight:700;text-align:right;font-family:'JetBrains Mono',monospace;color:var(--cacao)">60,538</td><td style="padding:8px 12px;font-size:13px;font-weight:700;text-align:right;font-family:'JetBrains Mono',monospace;color:var(--cacao)">1,730</td><td style="padding:8px 12px;font-size:13px;font-weight:700;text-align:right;color:var(--muted)">100%</td></tr>
+      <tr><td>✈️ International flights (Brazil ↔ Bangkok + domestic BRZ)</td><td>51,000</td><td>1,457</td><td>54.6%</td></tr>
+      <tr><td>🛏 Accommodation (38 nights avg 363 THB)</td><td>12,350</td><td>353</td><td>13.2%</td></tr>
+      <tr><td>🚌 Inter-city buses + ferries</td><td>6,580</td><td>188</td><td>7.0%</td></tr>
+      <tr><td>🛺 Local transport (songthaew + motorbike)</td><td>2,330</td><td>67</td><td>2.5%</td></tr>
+      <tr><td>🍜 Food (178 THB/day avg)</td><td>6,764</td><td>193</td><td>7.2%</td></tr>
+      <tr><td>🗣️ Phone interpreter (scheduling + buffer)</td><td>4,250</td><td>121</td><td>4.5%</td></tr>
+      <tr><td>📱 Cherehapa insurance + SIM card</td><td>1,850</td><td>53</td><td>2.0%</td></tr>
+      <tr><td>🔄 Contingency buffer (10% on in-Thailand costs)</td><td>3,400</td><td>97</td><td>3.6%</td></tr>
+      <tr><td>🌿 DFB samples (carry-on, buy at farms)</td><td>600</td><td>17</td><td>0.6%</td></tr>
+      <tr><td>🔁 Misc: tips, copies, snacks bus, platform fees</td><td>700</td><td>20</td><td>0.7%</td></tr>
+      <tr class="total-row"><td><strong>GRAND TOTAL</strong></td><td><strong>89,824</strong></td><td><strong>~2,566</strong></td><td><strong>100%</strong></td></tr>
+      <tr style="background:#f8f5f0"><td colspan="4" style="font-size:10px;color:#888;padding:6px 12px">In-Thailand only (excl. flights): 38,824 THB (~$1,109 USD) for 38 days = ~$29 USD/day all-in</td></tr>
     </tbody>
   </table>
-  <div class="budget-note">
-    <strong>💡 Interpreter strategy:</strong> The cheapest approach is to use Google Translate (offline Thai) for casual conversations + Line app with voice translation. For formal meetings, hire a Thai university student via Facebook groups or apps like Fiverr TH — typical rate 300–500 THB/hour for phone/video interpretation. Mention you're a buyer doing agricultural research: many students will help for free or reduced rates. TH translator Telegram group: @ThaiTranslatorGroup.<br><br>
-    <strong>⚠️ Not included:</strong> Flights to/from Thailand, pre-departure expenses, or sample shipping costs. If you need to ship DFB samples home: DHL envelope Thailand → Europe ≈ 1,200–1,800 THB per 2 kg.<br><br>
-    <strong>💰 Budget range scenarios:</strong> Ultra-budget (dorms, no AC) → −8,000 THB. Comfort (private ensuite, occasional AC bus) → as estimated. Comfortable+ (3-star hotels, Grab everywhere) → +12,000 THB.
+
+  <div class="b-total">
+    <div>
+      <h3>Total trip cost (incl. flights from Brazil)</h3>
+      <div class="sub-t">38-day Thailand itinerary · 2 stays Ko Phangan · 22 supplier visits · 0 domestic flights</div>
+    </div>
+    <div class="grand">
+      <div class="thb-big">89,800 THB</div>
+      <div class="usd">≈ USD 2,570 &nbsp;·&nbsp; ≈ BRL 12,900 &nbsp;·&nbsp; ≈ EUR 2,360</div>
+    </div>
+  </div>
+
+  <div class="b-legend">
+    <strong>💡 DFB bean purchase context:</strong> If you find 2MT of Chumphon 1 standard at 120 THB/kg → costs 240,000 THB ($6,860 USD). Your entire sourcing trip (incl. flights) = 37% of that bean purchase price. That's a very reasonable sourcing trip ROI.
+    Premium IM.1 at 220 THB/kg for 2MT → 440,000 THB ($12,570 USD). Still a worthwhile ratio.<br><br>
+    <strong>🚨 Biggest variable: flights.</strong> If you find GRU↔BKK round trip at $1,100 USD (possible with flexible dates), total trip drops to ~$2,200 USD. If you pay $1,600 USD RT, total rises to ~$2,800 USD. The in-Thailand cost of ~$1,110 USD is fixed and tight.
   </div>
 </div>
 
-<!-- CONTACTS SECTION -->
-<div id="contacts-section" class="section">
-  <h2 class="section-title">Priority Contacts — Direct Phones & WA</h2>
-  <div class="section-intro">
-    Contacts ordered by <strong>deal-making priority</strong>: capacity to supply 2MT, confirmed phones, and quality of beans. Green border = can potentially supply 2MT in a single order. Call ahead at least 3–5 business days before your planned visit.
-  </div>
-  <div class="contacts-grid">
-
-    <div class="contact-card priority">
-      <div class="contact-header">
-        <div><div class="contact-name">Chumphon Collective</div><div style="font-size:11px;color:var(--muted)">Multi-province aggregator</div></div>
-        <span class="contact-region">South / Multi</span>
-      </div>
-      <div class="contact-body">
-        <div class="contact-phone">📱 +66 62 294 7542</div>
-        <div class="contact-email">info@chumphoncollective.com · chumphoncollective.com</div>
-        <div class="contact-note">Best single number for 1–2 MT. Sources from 6 provinces. Transparent pricing. Call first, ask for Somsak Jinaphan.</div>
-        <div class="contact-type ct-coop">Collective</div>
-      </div>
-    </div>
-
-    <div class="contact-card priority">
-      <div class="contact-header">
-        <div><div class="contact-name">Chocolasia — Khun Bos</div><div style="font-size:11px;color:var(--muted)">Processor / Multi-province buyer</div></div>
-        <span class="contact-region">Bangkok / 9 provinces</span>
-      </div>
-      <div class="contact-body">
-        <div class="contact-phone">📱 +66 80 064 7515</div>
-        <div class="contact-phone" style="margin-top:3px">📱 +66 81 172 2106</div>
-        <div class="contact-email">support@chocolasia.com · chocolasia.com</div>
-        <div class="contact-note">Chair of Central/East Cocoa Cluster. Farm network in 9 provinces. Can aggregate 2MT across origins. Also buys from farmers.</div>
-        <div class="contact-type ct-proc">Processor</div>
-      </div>
-    </div>
-
-    <div class="contact-card priority">
-      <div class="contact-header">
-        <div><div class="contact-name">Thaiburi Cocoa Ltd (NST)</div><div style="font-size:11px;color:var(--muted)">Full-cycle factory, no min.</div></div>
-        <span class="contact-region">Nakhon Si Thammarat</span>
-      </div>
-      <div class="contact-body">
-        <div class="contact-phone">📱 +66 81 893 6696</div>
-        <div class="contact-note">Opened June 2024. Buys DFB unlimited at ~100 THB/kg. Also has farmer network to source from. First call you make on Day 1.</div>
-        <div class="contact-type ct-proc">Factory Buyer</div>
-      </div>
-    </div>
-
-    <div class="contact-card priority">
-      <div class="contact-header">
-        <div><div class="contact-name">Ranong Cacao Cooperative</div><div style="font-size:11px;color:var(--muted)">Khun Thunpawat (Hnouy)</div></div>
-        <span class="contact-region">Ranong Province</span>
-      </div>
-      <div class="contact-body">
-        <div class="contact-phone">📱 +66 94 615 6944 (also Line)</div>
-        <div class="contact-email">mr.thanpawat@gmail.com</div>
-        <div class="contact-note">Large cooperative. 2M+ THB revenue per quarter. Full DFB processing. South Cocoa Cluster Chair. Strong volume capability.</div>
-        <div class="contact-type ct-coop">Cooperative</div>
-      </div>
-    </div>
-
-    <div class="contact-card">
-      <div class="contact-header">
-        <div><div class="contact-name">Prof. Sanh La-Ongsri</div><div style="font-size:11px;color:var(--muted)">Mark Rin / Thailand Cocoa Center</div></div>
-        <span class="contact-region">Chiang Mai (San Sai)</span>
-      </div>
-      <div class="contact-body">
-        <div class="contact-phone">📱 +66 85 914 6963</div>
-        <div class="contact-phone" style="margin-top:3px">📱 +66 95 752 2770</div>
-        <div class="contact-email">Sanh@markrinchocolate.com · markrinchocolate.com</div>
-        <div class="contact-note">Creator of IM.1 hybrid — only fine-flavour Thai cacao. 2,000+ rai. CoEx NOC. Highest quality beans in Thailand.</div>
-        <div class="contact-type ct-res">Research Farm</div>
-      </div>
-    </div>
-
-    <div class="contact-card">
-      <div class="contact-header">
-        <div><div class="contact-name">Rawisara La-Ongsri</div><div style="font-size:11px;color:var(--muted)">Mark Rin Chocolate / CoEx NOC</div></div>
-        <span class="contact-region">Chiang Mai</span>
-      </div>
-      <div class="contact-body">
-        <div class="contact-phone">📱 +66 95 752 2770</div>
-        <div class="contact-email">rawisara@markrinchocolate.com</div>
-        <div class="contact-note">Secretary, Thailand Cocoa Association. Handles orders and logistics for Mark Rin. More accessible than Prof. Sanh for scheduling.</div>
-        <div class="contact-type ct-res">Producer</div>
-      </div>
-    </div>
-
-    <div class="contact-card">
-      <div class="contact-header">
-        <div><div class="contact-name">Kad Kokoa Farmer Network</div><div style="font-size:11px;color:var(--muted)">Khun Tong — broker/coordinator</div></div>
-        <span class="contact-region">Prachuap KK + Chumphon</span>
-      </div>
-      <div class="contact-body">
-        <div class="contact-phone">📱 +66 83 684 3921</div>
-        <div class="contact-email">contact@kadkokoa.co · kadkokoa.co</div>
-        <div class="contact-note">Key broker connecting Prachuap Khiri Khan + Chumphon farms to buyers. Organic options. Bright fruity flavours.</div>
-        <div class="contact-type ct-farm">Farm Network</div>
-      </div>
-    </div>
-
-    <div class="contact-card">
-      <div class="contact-header">
-        <div><div class="contact-name">Chumphon Horticultural Research Center</div><div style="font-size:11px;color:var(--muted)">DOA — Sawi District</div></div>
-        <span class="contact-region">Chumphon Province</span>
-      </div>
-      <div class="contact-body">
-        <div class="contact-phone">☎️ +66 77 556 073</div>
-        <div class="contact-phone" style="margin-top:3px">☎️ +66 77 556 191</div>
-        <div class="contact-email">chumphon@doa.go.th · doa.go.th</div>
-        <div class="contact-note">Developer of Chumphon 1 hybrid (~90% Thai cacao). Trains 100s of farmers. Best govt gateway to South Thai DFB supply chain.</div>
-        <div class="contact-type ct-res">Govt Research</div>
-      </div>
-    </div>
-
-    <div class="contact-card">
-      <div class="contact-header">
-        <div><div class="contact-name">Thai Cacao Distribution</div><div style="font-size:11px;color:var(--muted)">Ryan Berk — Chanthaburi</div></div>
-        <span class="contact-region">Chanthaburi</span>
-      </div>
-      <div class="contact-body">
-        <div class="contact-phone">📱 Via FB/WA: @TCDcacao</div>
-        <div class="contact-email">contact@thaicacodistribution.com</div>
-        <div class="contact-note">Largest Thai DFB exporter. 40+ farms. Centralized fermentation at Suriya Farm + Boom Farm. Largest single-origin Chanthaburi volumes.</div>
-        <div class="contact-type ct-coop">Aggregator</div>
-      </div>
-    </div>
-
-    <div class="contact-card">
-      <div class="contact-header">
-        <div><div class="contact-name">Thai Coffee & Cocoa Coop</div><div style="font-size:11px;color:var(--muted)">Khun Pathom — Lampang</div></div>
-        <span class="contact-region">Lampang / NST</span>
-      </div>
-      <div class="contact-body">
-        <div class="contact-phone">📱 Via FB: Thai Coffee & Cocoa</div>
-        <div class="contact-note">21,000+ trees. Full traceability DFB. Lampang + NST community enterprise. Exports to Japan + Singapore. Key northern cooperative.</div>
-        <div class="contact-type ct-coop">Cooperative</div>
-      </div>
-    </div>
-
-    <div class="contact-card">
-      <div class="contact-header">
-        <div><div class="contact-name">TACCO Thai</div><div style="font-size:11px;color:var(--muted)">Trade Association — Bangkok</div></div>
-        <span class="contact-region">Bangkok (Gateway)</span>
-      </div>
-      <div class="contact-body">
-        <div class="contact-phone">✉️ info@taccothai.org</div>
-        <div class="contact-email">taccothai.org</div>
-        <div class="contact-note">Best gateway for warm intros to all Thai producers. Est. 2024. 17+ members. Ask for introductions to your target regions.</div>
-        <div class="contact-type ct-coop">Trade Association</div>
-      </div>
-    </div>
-
-    <div class="contact-card">
-      <div class="contact-header">
-        <div><div class="contact-name">Hill Tribe Cocoa Cof (Khun Siriya)</div><div style="font-size:11px;color:var(--muted)">North Cluster Chair</div></div>
-        <span class="contact-region">Doi Saket CM / Mae Jan CR</span>
-      </div>
-      <div class="contact-body">
-        <div class="contact-phone">📱 FB: HillTribeCocoaCof</div>
-        <div class="contact-note">Two centres: Doi Saket (CM) + Mae Jan (CR). Full-cycle DFB processor. Gateway to ethnic minority farmer network in North Thailand.</div>
-        <div class="contact-type ct-coop">Cooperative</div>
-      </div>
-    </div>
+<!-- ── CONTACTS ────────────────────────────────────────── -->
+<div id="con-sec" class="sec">
+  <h2 class="stitle">Priority Contacts — by Visit Order</h2>
+  <div class="info-box"><strong>Call sequence:</strong> Before leaving Brazil, WhatsApp all contacts with phones in this order. Mention you are a small Thai-registered company looking to buy DFB directly, interested in 500kg trial → scaling to 2MT. Most will respond within 24–48h if you message in Thai (use Google Translate for the intro message).</div>
+  <div class="con-grid">
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">Chocolasia — Khun Bos</div><div style="font-size:10px;color:var(--muted)">Multi-province processor + buyer</div></div><span class="con-reg">Bangkok · 9 provinces</span></div><div class="con-body"><div class="con-ph">📱 +66 80 064 7515</div><div class="con-ph">📱 +66 81 172 2106</div><div class="con-em">support@chocolasia.com · chocolasia.com</div><div class="con-note">FIRST call. Chair of Central/East Cluster. Can aggregate 2MT across 9 provinces. Visit Day 2 in Bangkok.</div><div class="con-badge cb-pr">Processor / Aggregator</div></div></div>
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">Chumphon Collective</div><div style="font-size:10px;color:var(--muted)">Multi-province aggregator</div></div><span class="con-reg">Multi (6 provinces)</span></div><div class="con-body"><div class="con-ph">📱 +66 62 294 7542</div><div class="con-em">info@chumphoncollective.com · chumphoncollective.com</div><div class="con-note">One number, 6 provinces. Can source 1–2 MT of Chumphon 1. Also gives intros to Chiang Rai and Trat farms. Best single aggregator call.</div><div class="con-badge cb-co">Collective</div></div></div>
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">Thaiburi Cocoa Ltd (NST)</div><div style="font-size:10px;color:var(--muted)">Full-cycle factory, unlimited buy</div></div><span class="con-reg">Nakhon Si Thammarat</span></div><div class="con-body"><div class="con-ph">📱 +66 81 893 6696</div><div class="con-note">Opened June 2024. Buys DFB at ~100 THB/kg unlimited. Also has farmer network — may intro you to sellers. First visit on Day 4 of trip (NST).</div><div class="con-badge cb-pr">Factory Buyer</div></div></div>
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">Ranong Cacao Cooperative</div><div style="font-size:10px;color:var(--muted)">Khun Thunpawat (Chair, South Cluster)</div></div><span class="con-reg">Ranong Province</span></div><div class="con-body"><div class="con-ph">📱 +66 94 615 6944 (also Line)</div><div class="con-em">mr.thanpawat@gmail.com</div><div class="con-note">Large coop. 2M+ THB revenue per quarter. Full DFB processing. Volume-capable. South Cluster Chair = good network intros across entire south.</div><div class="con-badge cb-co">Cooperative</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Prof. Sanh La-Ongsri</div><div style="font-size:10px;color:var(--muted)">Mark Rin / Thailand Cocoa Center</div></div><span class="con-reg">Chiang Mai (IM.1)</span></div><div class="con-body"><div class="con-ph">📱 +66 85 914 6963</div><div class="con-ph">📱 +66 95 752 2770</div><div class="con-em">Sanh@markrinchocolate.com · markrinchocolate.com</div><div class="con-note">IM.1 creator = only fine-flavour Thai cacao. 2,000+ rai. CoEx NOC. Top quality in Thailand. Speaks English.</div><div class="con-badge cb-re">Research Farm</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Rawisara La-Ongsri</div><div style="font-size:10px;color:var(--muted)">Mark Rin Chocolate / Order contact</div></div><span class="con-reg">Chiang Mai</span></div><div class="con-body"><div class="con-ph">📱 +66 95 752 2770</div><div class="con-em">rawisara@markrinchocolate.com</div><div class="con-note">Secretary, Thailand Cocoa Association. Handles Mark Rin orders. More accessible for scheduling than Prof. Sanh.</div><div class="con-badge cb-re">Producer</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Kad Kokoa Farmer Network — Khun Tong</div><div style="font-size:10px;color:var(--muted)">Broker — Prachuap KK + Chumphon</div></div><span class="con-reg">Prachuap Khiri Khan</span></div><div class="con-body"><div class="con-ph">📱 +66 83 684 3921</div><div class="con-em">contact@kadkokoa.co · kadkokoa.co</div><div class="con-note">Key broker for Prachuap + Chumphon farms. Organic options. Bright fruity flavour profile.</div><div class="con-badge cb-fa">Farm Network</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Chumphon HRC — Ministry of Agriculture</div><div style="font-size:10px;color:var(--muted)">Govt research center, Sawi</div></div><span class="con-reg">Chumphon Province</span></div><div class="con-body"><div class="con-ph">☎️ +66 77 556 073</div><div class="con-ph">☎️ +66 77 556 191</div><div class="con-em">chumphon@doa.go.th</div><div class="con-note">Developer of Chumphon 1. Gateway to 100s of certified farmers. Best govt intro for South Thai DFB supply chain.</div><div class="con-badge cb-re">Govt Research</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Thai Cacao Distribution (TCD)</div><div style="font-size:10px;color:var(--muted)">Ryan Berk — 40+ farms, Chanthaburi</div></div><span class="con-reg">Chanthaburi</span></div><div class="con-body"><div class="con-ph">📱 WA/FB: @TCDcacao</div><div class="con-em">contact@thaicacodistribution.com</div><div class="con-note">Largest Thai DFB exporter. Suriya Farm + Boom Farm. 1–2 MT routine orders. Ryan speaks English.</div><div class="con-badge cb-co">Aggregator</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Thai Coffee & Cocoa Coop — Khun Pathom</div><div style="font-size:10px;color:var(--muted)">21,000 trees, Lampang + NST</div></div><span class="con-reg">Lampang Province</span></div><div class="con-body"><div class="con-ph">📱 FB: Thai Coffee & Cocoa</div><div class="con-note">Major cooperative, full traceability DFB. Exports Japan + Singapore. Good for larger volume with advance notice.</div><div class="con-badge cb-co">Cooperative</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">TACCO Thai</div><div style="font-size:10px;color:var(--muted)">Trade Association — intro gateway</div></div><span class="con-reg">Bangkok</span></div><div class="con-body"><div class="con-ph">✉️ info@taccothai.org</div><div class="con-em">taccothai.org</div><div class="con-note">17+ Thai producers. Email them before leaving Brazil. Ask for warm intro letters to cooperative contacts in each province you visit.</div><div class="con-badge cb-co">Trade Association</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Hill Tribe Cocoa Cof — Khun Siriya</div><div style="font-size:10px;color:var(--muted)">North Cluster Chair</div></div><span class="con-reg">Doi Saket CM + Mae Jan CR</span></div><div class="con-body"><div class="con-ph">📱 FB: HillTribeCocoaCof</div><div class="con-note">Two centres. Full-cycle DFB processor. Gateway to ethnic-minority farmer network in North Thailand. Good for smaller speciality lots.</div><div class="con-badge cb-co">Cooperative</div></div></div>
   </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
-function show(id, btn) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('show'));
-  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-  document.getElementById(id).classList.add('show');
-  btn.classList.add('active');
-  if (id === 'map-section') setTimeout(() => { if(window._map) window._map.invalidateSize(); }, 100);
+function show(id,btn){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('act'));
+  document.getElementById(id).classList.add('on');
+  btn.classList.add('act');
+  if(id==='map-sec')setTimeout(()=>{if(window._map)window._map.invalidateSize();},120);
 }
 
-// === MAP ===
-const map = L.map('the-map', { zoomControl: true }).setView([14.5, 101.0], 6);
-window._map = map;
+// ── MAP INIT ──────────────────────────────────────────────
+const map=L.map('the-map',{zoomControl:true}).setView([14.0,100.5],6);
+window._map=map;
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:18}).addTo(map);
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '© OpenStreetMap contributors', maxZoom: 18
-}).addTo(map);
-
-const col = { south:'#e74c3c', bkk:'#f39c12', east:'#3498db', north:'#27ae60', start:'#8e44ad' };
-
-function mkIcon(c, label) {
-  return L.divIcon({
-    className: '',
-    html: `<div style="background:${c};color:#fff;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;border:2.5px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.4);font-family:sans-serif">${label}</div>`,
-    iconSize: [32, 32], iconAnchor: [16, 16], popupAnchor: [0, -18]
-  });
-}
-function starIcon(c) {
-  return L.divIcon({
-    className: '',
-    html: `<div style="background:${c};color:#fff;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:18px;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.5)">★</div>`,
-    iconSize: [38, 38], iconAnchor: [19, 19], popupAnchor: [0, -22]
-  });
-}
-
-const stops = [
-  { latlng:[9.73,100.01], seg:'start', label:'KP', star:true, name:'🌴 Koh Phangan (Start)', sub:'Starting point — take ferry to Don Sak (Surat Thani)'},
-  { latlng:[8.43,99.96], seg:'south', label:'1', name:'Nakhon Si Thammarat', sub:'★★ Thaiburi Cocoa (+66 81 893 6696)<br>Rose Cocoa Garden (FB: RoseCocoaGarden)<br>NST Premium Cacao Cooperative'},
-  { latlng:[10.49,99.18], seg:'south', label:'2', name:'Chumphon', sub:'★★ Chumphon HRC (+66 77 556 073)<br>Chumphon Collective field contact (+66 62 294 7542)'},
-  { latlng:[9.96,98.63], seg:'south', label:'3', name:'Ranong', sub:'★★ Ranong Cacao Cooperative<br>Khun Thunpawat: +66 94 615 6944<br>Large-volume DFB capability'},
-  { latlng:[13.91,100.50], seg:'bkk', label:'4', star:true, name:'Bangkok — Chocolasia (Nonthaburi)', sub:'★★★ PRIORITY STOP<br>+66 80 064 7515 / +66 81 172 2106<br>Multi-province buyer, 9-province farm network'},
-  { latlng:[13.74,100.51], seg:'bkk', label:'5', name:'Bangkok Centre — TACCO Thai', sub:'info@taccothai.org<br>17+ producer network — warm introductions'},
-  { latlng:[11.82,99.80], seg:'bkk', label:'6', name:'Prachuap Khiri Khan', sub:'★ Kad Kokoa Farmer Network<br>Khun Tong: +66 83 684 3921<br>Prachuap + Chumphon organic farms'},
-  { latlng:[12.61,102.10], seg:'east', label:'7', star:true, name:'Chanthaburi — TCD Network', sub:'★★ Thai Cacao Distribution (Ryan Berk)<br>FB/WA: @TCDcacao<br>Largest Thai DFB exporter, 40+ farms<br>Suriya Farm + Boom Farm'},
-  { latlng:[12.25,102.51], seg:'east', label:'8', name:'Trat Province', sub:'Anarchy Chocolate Farmer Network<br>Via Chumphon Collective +66 62 294 7542<br>Permaculture cacao, unique flavour'},
-  { latlng:[18.79,98.99], seg:'north', label:'9', star:true, name:'Chiang Mai — IM.1 Capital', sub:'★★★ Mark Rin / Prof. Sanh La-Ongsri<br>+66 85 914 6963 / +66 95 752 2770<br>ONLY fine-flavour Thai cacao (IM.1)<br>+ Hill Tribe Cocoa + Thai High Concentrations'},
-  { latlng:[18.29,99.50], seg:'north', label:'10', name:'Lampang — Thai Coffee & Cocoa Coop', sub:'21,000 trees · Full DFB traceability<br>FB: Thai Coffee & Cocoa (Khun Pathom)<br>Exports Japan + Singapore'},
-  { latlng:[19.91,99.84], seg:'north', label:'11', name:'Chiang Rai — Cacao Collective', sub:'Chiang Rai Cacao Collective (via Chumphon Coll.)<br>Hill Tribe Cocoa — Mae Jan<br>Cool highland climate, Chumphon 1 genetics'},
-  { latlng:[18.77,100.77], seg:'north', label:'12', name:'Nan — Optional (Cocoa Province)', sub:'ISTC Chulalongkorn / Jamjuree<br>FB: cusarcocoa · Nan = Thailand Cocoa Province<br>Fruity tropical DFB, certified farms'},
-];
-
-const routeCoords = [
-  [9.73,100.01],[8.43,99.96],[10.49,99.18],[9.96,98.63],[10.49,99.18],
-  [13.50,100.25],[13.91,100.50],[13.74,100.51],[11.82,99.80],[13.74,100.51],
+// Route polyline
+const route=[
+  [13.74,100.51],[9.73,100.01],
+  [8.43,99.96],[10.49,99.18],[9.96,98.63],[10.49,99.18],
+  [11.82,99.80],[13.74,100.51],
   [12.61,102.10],[12.25,102.51],[12.61,102.10],[13.74,100.51],
-  [15.50,100.50],[18.79,98.99],[18.29,99.50],[19.91,99.84],[18.77,100.77]
+  [18.79,98.99],[18.29,99.50],[19.91,99.84],
+  [13.74,100.51],[8.60,100.05],[9.73,100.01]
+];
+L.polyline(route,{color:'#d4951e',weight:3,opacity:.75,dashArray:'9,5'}).addTo(map);
+
+// Region data for panel
+const regions={
+  south:{name:'South Loop (NST · Chumphon · Ranong)',days:'8',cost:'~6,800 THB',stops:'5',price:'100–140 THB/kg',vol:'500 kg – 2 MT (Chumphon 1)',top:'Ranong Coop: +66 94 615 6944',note:'Heavy rain in Aug. Visit before noon. Chumphon 1 variety (~90% of Thai cacao). Best for large volume DFB.'},
+  bkk:{name:'Bangkok + Prachuap KK',days:'4',cost:'~4,200 THB',stops:'4',price:'100–160 THB/kg (aggregated)',vol:'1–3 MT (via Chocolasia network)',top:'Chocolasia: +66 80 064 7515',note:'Chocolasia can aggregate from 9 provinces. Critical stop for bulk ordering. Prachuap = fruity organic farms.'},
+  east:{name:'East (Chanthaburi · Trat)',days:'5',cost:'~5,200 THB',stops:'4',price:'110–150 THB/kg',vol:'500 kg – 2 MT (TCD network)',top:'TCD: WA @TCDcacao',note:'Largest single-exporter network in Thailand. Suriya Farm = main fermentation station. Award-winning Beantobar lot available.'},
+  north:{name:'North (Chiang Mai · Lampang · Chiang Rai)',days:'8',cost:'~6,900 THB',stops:'7',price:'180–260 THB/kg (IM.1)',vol:'200 kg – 1.5 MT (premium IM.1)',top:'Prof. Sanh: +66 85 914 6963',note:'HIGHEST QUALITY Thai cacao. IM.1 = only fine-flavour variety. Lampang coop has 21,000 trees. Plan advance order — smaller batch sizes than South.'},
+  kp:{name:'Ko Phangan (Base / Start / End)',days:'5',cost:'~1,800 THB',stops:'1',price:'N/A (transit base)',vol:'N/A — logistics base only',top:'Chumphon Coll.: +66 62 294 7542',note:'Starting and ending point. Use rest days to make WhatsApp calls ahead. Cheap food, good internet in Thongsala.'}
+};
+
+function updatePanel(r){
+  const d=regions[r];
+  document.querySelector('.rp-header span').textContent=d.name.substring(0,28)+'…';
+  const stats=document.querySelectorAll('.rp-stat');
+  const vals=[d.days,d.cost,d.stops,d.price];
+  const lbls=['Visiting days','Segment cost','Stops','DFB price/kg'];
+  vals.forEach((v,i)=>{stats[i].querySelector('.rp-val').textContent=v;stats[i].querySelector('.rp-lbl').textContent=lbls[i];});
+  document.querySelector('.rp-beans').innerHTML=`<strong>Procurable:</strong> ${d.vol}`;
+  document.querySelector('.rp-contact').innerHTML=`<strong>Top contact:</strong><br>${d.top}<br><em style="font-size:9px;opacity:.8">${d.note}</em>`;
+}
+
+function mkIcon(c,lbl){
+  return L.divIcon({className:'',html:`<div style="background:${c};color:#fff;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.45);font-family:sans-serif">${lbl}</div>`,iconSize:[30,30],iconAnchor:[15,15],popupAnchor:[0,-18]});
+}
+function starIcon(c){
+  return L.divIcon({className:'',html:`<div style="background:${c};color:#fff;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:16px;border:3px solid #fff;box-shadow:0 2px 10px rgba(0,0,0,.5)">★</div>`,iconSize:[38,38],iconAnchor:[19,19],popupAnchor:[0,-22]});
+}
+
+const C={south:'#e74c3c',bkk:'#d4830a',east:'#2980b9',north:'#27ae60',kp:'#8e44ad'};
+
+const stops=[
+  {ll:[9.73,100.01],seg:'kp',lbl:'KP',star:true,name:'Ko Phangan (Start + End)',sub:'Base camp. Ferry to Don Sak → buses to all regions.',pop:'NST is 3.5h away. Bangkok 10h overnight bus via Surat Thani.'},
+  {ll:[8.43,99.96],seg:'south',lbl:'S1',name:'Nakhon Si Thammarat',sub:'★★ Thaiburi Cocoa +66 81 893 6696<br>Rose Cocoa Garden (FB)<br>NST Premium Cacao Coop',pop:'2 visiting days · ~100–130 THB/kg DFB · ~200–500 kg procurable'},
+  {ll:[10.49,99.18],seg:'south',lbl:'S2',name:'Chumphon',sub:'★★ HRC +66 77 556 073 / 556 191<br>Chumphon Collective field contact',pop:'2 days · Chumphon 1 variety · 500 kg–2 MT via collective'},
+  {ll:[9.96,98.63],seg:'south',lbl:'S3',star:true,name:'Ranong — Large Cooperative',sub:'★★★ Ranong Coop: +66 94 615 6944<br>South Cluster Chair · 2M+ THB/quarter revenue',pop:'2 days · 300 kg–1 MT DFB · large-volume capable'},
+  {ll:[13.91,100.50],seg:'bkk',lbl:'B1',star:true,name:'Bangkok — Chocolasia (Nonthaburi)',sub:'★★★ +66 80 064 7515 / +66 81 172 2106<br>Multi-province aggregator · 9 provinces',pop:'CRITICAL FIRST STOP · can aggregate 1–3 MT · speaks English'},
+  {ll:[13.74,100.51],seg:'bkk',lbl:'B2',name:'Bangkok Centre — TACCO Thai',sub:'info@taccothai.org<br>17+ producer network · warm intros',pop:'Gateway for all Thai regions · get intro letters here'},
+  {ll:[11.82,99.80],seg:'bkk',lbl:'B3',name:'Prachuap Khiri Khan',sub:'★ Kad Kokoa / Khun Tong: +66 83 684 3921<br>Organic Prachuap + Chumphon farms',pop:'1 day · 200–500 kg · fruity organic DFB · 100–140 THB/kg'},
+  {ll:[12.61,102.10],seg:'east',lbl:'E1',star:true,name:'Chanthaburi — TCD Network',sub:'★★★ Thai Cacao Distribution (Ryan Berk)<br>WA: @TCDcacao · 40+ farms<br>Suriya Farm + Boom Farm fermentation',pop:'3 days · 500 kg–2 MT · Chumphon 1 · 110–150 THB/kg'},
+  {ll:[12.25,102.51],seg:'east',lbl:'E2',name:'Trat Province',sub:'Anarchy Chocolate farmer network<br>Via Chumphon Collective intro<br>Permaculture cacao',pop:'1 day · 100–300 kg · unique permaculture origin'},
+  {ll:[18.79,98.99],seg:'north',lbl:'N1',star:true,name:'Chiang Mai — IM.1 Capital',sub:'★★★ Prof. Sanh: +66 85 914 6963<br>+66 95 752 2770 · IM.1 fine-flavour<br>+ Hill Tribe Cocoa + Thai High Concentrations',pop:'3 days · 200–800 kg IM.1 premium · 180–260 THB/kg · HIGHEST QUALITY'},
+  {ll:[18.29,99.50],seg:'north',lbl:'N2',name:'Lampang — Thai Coffee & Cocoa Coop',sub:'FB: Thai Coffee & Cocoa (Khun Pathom)<br>21,000 trees · Exports Japan + Singapore',pop:'1 day · 500 kg–1.5 MT · full traceability · IM.1 variety'},
+  {ll:[19.91,99.84],seg:'north',lbl:'N3',name:'Chiang Rai — Cacao Collective',sub:'Chiang Rai Collective (via Chumphon Coll.)<br>Hill Tribe Cocoa — Mae Jan<br>Highland Chumphon 1',pop:'2 days · 200–500 kg · cool highland climate · fruity notes'},
 ];
 
-L.polyline(routeCoords, { color:'#c27c2a', weight:3, opacity:0.7, dashArray:'8,5' }).addTo(map);
-
-stops.forEach((s,i) => {
-  const c = s.seg==='start'?col.start:s.seg==='south'?col.south:s.seg==='bkk'?col.bkk:s.seg==='east'?col.east:col.north;
-  const icon = s.star ? starIcon(c) : mkIcon(c, s.label);
-  L.marker(s.latlng, {icon}).addTo(map)
-    .bindPopup(`<div style="font-family:sans-serif;min-width:220px"><div style="font-weight:700;font-size:13px;color:#2d1b0e;margin-bottom:4px">${s.name}</div><div style="font-size:11px;color:#555;line-height:1.5">${s.sub}</div></div>`, {maxWidth:280});
+stops.forEach(s=>{
+  const c=C[s.seg];
+  const icon=s.star?starIcon(c):mkIcon(c,s.lbl);
+  L.marker(s.ll,{icon}).addTo(map)
+    .bindPopup(`<div style="font-family:sans-serif;min-width:210px"><b style="font-size:12px;color:#1f1008">${s.name}</b><div style="font-size:11px;color:#555;margin:4px 0;line-height:1.5">${s.sub}</div><div style="font-size:10px;background:#f5ede0;padding:3px 6px;border-radius:3px;color:#6b3d12;margin-top:4px">${s.pop}</div></div>`,{maxWidth:270})
+    .on('click',()=>updatePanel(s.seg));
 });
 
-// Segment markers
-const segs = [
-  {latlng:[9.2,99.3], text:'↑ SOUTH LOOP', color:col.south},
-  {latlng:[12.5,100.0], text:'Bangkok + Prachuap', color:col.bkk},
-  {latlng:[12.2,103.0], text:'EAST LOOP →', color:col.east},
-  {latlng:[19.0,98.0], text:'NORTH LOOP', color:col.north},
+// Region label overlays
+const labels=[
+  {ll:[8.9,99.4],seg:'south',txt:'SOUTH LOOP'},
+  {ll:[12.7,100.2],seg:'bkk',txt:'BKK + PKK'},
+  {ll:[12.1,103.2],seg:'east',txt:'EAST'},
+  {ll:[19.0,97.8],seg:'north',txt:'NORTH'},
 ];
-segs.forEach(s=>{
-  L.marker(s.latlng,{icon:L.divIcon({className:'',html:`<div style="background:${s.color};color:#fff;padding:3px 8px;border-radius:3px;font-size:10px;font-weight:700;font-family:sans-serif;white-space:nowrap;opacity:.85">${s.text}</div>`,iconSize:[100,20],iconAnchor:[50,10]})}).addTo(map);
+labels.forEach(l=>{
+  L.marker(l.ll,{icon:L.divIcon({className:'',html:`<div onclick="document.querySelector('[data-seg=${l.seg}]')&&updatePanel('${l.seg}')" style="background:${C[l.seg]};color:#fff;padding:3px 9px;border-radius:3px;font-size:9px;font-weight:800;font-family:sans-serif;white-space:nowrap;opacity:.82;cursor:pointer">${l.txt}</div>`,iconSize:[80,18],iconAnchor:[40,9]})}).addTo(map);
 });
 </script>
 </body>
