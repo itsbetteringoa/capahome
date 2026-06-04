@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Таиланд — Экспедиция по закупке какао v2</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bean:#1f1008;--cacao:#3d2008;--brown:#6b3d12;--amber:#b8731e;--gold:#d4951e;--cream:#f4ede0;--parch:#ebe0cc;--forest:#0f2910;--leaf:#1e5c1e;--ink:#1a1208;--muted:#7a6040;--border:#c8b494;--red:#b83020;--blue:#143d60;--bg:#f7f1e8;}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
+.hdr{background:var(--bean);color:var(--cream);padding:12px 18px;position:sticky;top:0;z-index:3000;border-bottom:2px solid var(--amber)}
+.hdr-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.hdr h1{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:#fff}
+.hdr p{font-size:11px;color:#c8a878;margin-top:1px}
+.hpills{display:flex;gap:5px;flex-wrap:wrap}
+.hp{font-family:'JetBrains Mono',monospace;font-size:10px;background:rgba(255,255,255,.1);color:#e8d0a8;padding:3px 9px;border-radius:4px}
+.hp b{color:var(--gold)}
+nav{background:var(--cacao);position:sticky;top:52px;z-index:2999;border-bottom:1px solid var(--brown)}
+.nav-inner{max-width:1400px;margin:0 auto;padding:0 14px;display:flex;gap:0}
+nav button{background:none;border:none;color:#c8a060;font-size:11px;font-weight:700;padding:9px 14px;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;border-bottom:3px solid transparent;font-family:'Syne',sans-serif}
+nav button:hover{color:#fff}
+nav button.act{color:var(--gold);border-bottom-color:var(--gold)}
+.sec{display:none;max-width:1400px;margin:0 auto;padding:18px 14px}
+.sec.on{display:block}
+#map-sec{padding:0;max-width:100%}
+#map-sec.on{display:flex;flex-direction:column;height:calc(100vh - 96px)}
+#map-wrap{flex:1;position:relative}
+#the-map{height:100%;width:100%;min-height:400px}
+.map-bar{background:var(--forest);color:#d4f0d4;padding:8px 16px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;font-size:10px;font-family:'JetBrains Mono',monospace}
+.mb-seg{display:flex;align-items:center;gap:4px}
+.mb-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+#rp{position:absolute;top:10px;right:10px;z-index:1000;width:230px;background:rgba(18,8,2,.9);backdrop-filter:blur(5px);border:1px solid var(--amber);border-radius:8px;color:#eee;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.5)}
+.rph{background:var(--brown);padding:7px 11px;display:flex;justify-content:space-between;align-items:center}
+.rph span{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:#fff}
+.rph small{font-size:9px;color:#c8a878;font-family:'JetBrains Mono',monospace}
+.rpg{padding:8px 11px;display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.rps{background:rgba(255,255,255,.08);border-radius:4px;padding:5px 7px}
+.rpv{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--gold)}
+.rpl{font-size:8px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;margin-top:1px}
+.rpb{font-size:10px;color:#9fa;padding:3px 11px 8px;line-height:1.4}
+.rpb strong{color:var(--gold)}
+.rpc{padding:0 11px 9px;font-size:10px;color:#c8b888;line-height:1.5}
+.rpc strong{color:#fff;font-size:10px;display:block;margin-bottom:2px}
+.seg-hdr{display:flex;align-items:center;gap:7px;padding:9px 12px;border-radius:6px 6px 0 0;margin-top:18px;color:#fff}
+.seg-hdr:first-of-type{margin-top:0}
+.seg-hdr h3{font-family:'Syne',sans-serif;font-size:12px;font-weight:700}
+.seg-hdr .sm{font-size:9px;opacity:.8;font-family:'JetBrains Mono',monospace}
+.seg-hdr .pill{font-size:8px;background:rgba(255,255,255,.2);padding:2px 6px;border-radius:3px;margin-left:auto;white-space:nowrap}
+.s-s{background:var(--red)}.s-b{background:#8c5a00}.s-i{background:#5a1a7a}.s-e{background:var(--blue)}.s-n{background:var(--forest)}.s-r{background:#3a2060}
+table.iti{width:100%;border-collapse:collapse;background:#fff;border-radius:0 0 6px 6px;overflow:hidden;margin-bottom:0}
+table.iti th{background:var(--parch);color:var(--bean);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:6px 9px;text-align:left;border-bottom:1px solid var(--border)}
+table.iti td{padding:7px 9px;border-bottom:1px solid #f0e4d0;vertical-align:top;font-size:11px}
+table.iti tr.wknd td{background:#f8f2ea;color:#9a7850;font-style:italic}
+table.iti tr.hol td{background:#fff8e0;color:#806000}
+table.iti tr.trav td{background:#eef3f8}
+.dn{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;color:var(--muted);white-space:nowrap;width:24px}
+.dd{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);white-space:nowrap;width:68px}
+.ltag{display:inline-block;font-size:8px;padding:1px 5px;border-radius:3px;font-weight:700;margin-right:3px;white-space:nowrap}
+.l-s{background:#fde;color:#800}.l-b{background:#fed;color:#840}.l-e{background:#def;color:#048}.l-n{background:#dfd;color:#060}.l-i{background:#edf;color:#408}.l-ks{background:#f5e0ff;color:#504}
+.stop{font-weight:600;color:var(--cacao);font-size:11px;line-height:1.3}
+.sub{color:var(--muted);font-size:10px;margin-top:2px;line-height:1.5}
+.ph{display:inline;font-family:'JetBrains Mono',monospace;font-size:9px;background:#dff5df;color:#1a6020;padding:1px 4px;border-radius:3px;margin-right:2px}
+.kp{display:inline;font-size:9px;font-weight:700;background:#ffd;color:#660;padding:1px 4px;border-radius:3px}
+td.thb{font-family:'JetBrains Mono',monospace;font-size:10px;text-align:right;color:var(--brown);white-space:nowrap;width:58px}
+.b-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-bottom:12px}
+.b-card{background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.b-card.fl{border:2px solid var(--amber)}
+.b-ch{padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px}
+.b-ch h3{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--bean)}
+.bt{width:100%;border-collapse:collapse}
+.bt td{padding:5px 12px;border-bottom:1px solid #f5ebe0;font-size:11px}
+.bt tr:last-child td{border-bottom:none}
+.bt td:last-child{text-align:right;font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--cacao)}
+.bt .sr td{background:var(--parch);font-weight:700;color:var(--bean)}
+.bt .nr td{font-size:10px;color:#888;font-style:italic;background:#fdfaf6}
+.b-total{background:var(--bean);color:#fff;border-radius:8px;padding:14px 18px;margin-top:12px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px}
+.b-total h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:800}
+.grand{text-align:right}
+.grand .tb{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;color:var(--gold)}
+.grand .us{font-size:11px;color:#c8b888;margin-top:2px}
+.st{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;border:1px solid var(--border);margin-top:10px}
+.st th{background:var(--parch);color:var(--bean);font-size:9px;text-transform:uppercase;letter-spacing:.06em;padding:7px 11px;text-align:left;font-weight:700}
+.st td{padding:6px 11px;border-bottom:1px solid #f0e8d8;font-size:11px}
+.st td:nth-child(2),.st td:nth-child(3){font-family:'JetBrains Mono',monospace;font-weight:500;text-align:right;color:var(--cacao)}
+.st td:nth-child(4){text-align:right;color:var(--muted);font-size:10px}
+.st tr.tr td{background:var(--parch);font-weight:700;color:var(--bean)}
+.con-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:9px}
+.con-card{background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.con-card.pri{border-left:3px solid var(--leaf)}
+.con-hdr{padding:8px 10px;background:var(--parch);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;gap:5px}
+.con-name{font-weight:700;font-size:11px;color:var(--bean);line-height:1.3}
+.con-reg{font-size:8px;background:var(--forest);color:#9fc;padding:2px 5px;border-radius:3px;font-family:'JetBrains Mono',monospace;white-space:nowrap}
+.con-body{padding:8px 10px}
+.con-ph{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--leaf);font-weight:700}
+.con-note{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.4}
+.con-badge{display:inline-block;font-size:9px;padding:2px 5px;border-radius:3px;margin-top:3px}
+.cb-co{background:#e8f5e9;color:#1b5e20}.cb-pr{background:#e3f2fd;color:#0d47a1}.cb-re{background:#fff3e0;color:#e65100}.cb-fa{background:#fce4ec;color:#880e4f}
+h2.stitle{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--bean);margin-bottom:12px;padding-bottom:7px;border-bottom:2px solid var(--parch)}
+.info-box{background:var(--parch);border:1px solid var(--border);border-radius:6px;padding:9px 13px;font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:12px}
+.info-box strong{color:var(--bean)}
+.warn-box{background:#fff8e0;border:1px solid #e8d060;border-radius:6px;padding:8px 12px;font-size:11px;color:#604800;line-height:1.6;margin-bottom:12px}
+.stats-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.s-box{flex:1;min-width:90px;background:#fff;border:1px solid var(--border);border-radius:6px;padding:8px 11px}
+.s-box .val{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--cacao)}
+.s-box .lbl{font-size:9px;color:var(--muted);margin-top:1px}
+.bl{background:var(--parch);border:1px solid var(--border);border-radius:6px;padding:9px 13px;font-size:11px;color:var(--muted);line-height:1.7;margin-top:9px}
+.bl strong{color:var(--bean)}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <div class="hdr-inner">
+    <div>
+      <h1>🌿 Таиланд — Закупочная экспедиция какао · v2 Расширенная</h1>
+      <p>Бразилия → Бангкок → Ко Самуи → 22 города → 35+ поставщиков → Ко Самуи → Бангкок → Бразилия</p>
+    </div>
+    <div class="hpills">
+      <div class="hp">~<b>49</b> дней</div>
+      <div class="hp"><b>35+</b> визитов</div>
+      <div class="hp"><b>22</b> города</div>
+      <div class="hp"><b>0</b> внутр. рейсов</div>
+      <div class="hp">≈ <b>97 500 ฿</b></div>
+      <div class="hp">≈ <b>$2 786 USD</b></div>
+    </div>
+  </div>
+</header>
+<nav>
+  <div class="nav-inner">
+    <button class="act" onclick="show('map-sec',this)">🗺 Карта маршрута</button>
+    <button onclick="show('iti-sec',this)">📅 По дням</button>
+    <button onclick="show('bud-sec',this)">💰 Бюджет</button>
+    <button onclick="show('con-sec',this)">📞 Контакты</button>
+  </div>
+</nav>
+
+<!-- КАРТА -->
+<div id="map-sec" class="sec on">
+  <div class="map-bar">
+    <strong style="font-family:'Syne',sans-serif;margin-right:3px">Сегменты →</strong>
+    <span class="mb-seg"><span class="mb-dot" style="background:#e74c3c"></span>Юг (КС · СТ · ФНГ · НСТ · ТРГ · ЧМФ · РНГ)</span>
+    <span class="mb-seg"><span class="mb-dot" style="background:#d4830a"></span>БКК + Прачуап</span>
+    <span class="mb-seg"><span class="mb-dot" style="background:#8e44ad"></span>Исаан (КРТ · ЧПМ · УДТ · НКХ)</span>
+    <span class="mb-seg"><span class="mb-dot" style="background:#2980b9"></span>Восток (ЧЛБ · РЯГ · ЧНТ · ТРТ)</span>
+    <span class="mb-seg"><span class="mb-dot" style="background:#27ae60"></span>Север (ПЧБ · НАН · ЧМ · ЛПГ · ЧР)</span>
+    <span class="mb-seg"><span class="mb-dot" style="background:#8e44ad"></span>Старт/Финиш КС</span>
+    <span style="margin-left:auto;color:#9fa;font-size:10px">Нажмите маркер для деталей региона</span>
+  </div>
+  <div id="map-wrap">
+    <div id="the-map"></div>
+    <div id="rp">
+      <div class="rph"><span>Сводка региона</span><small>нажмите точку</small></div>
+      <div class="rpg">
+        <div class="rps"><div class="rpv">—</div><div class="rpl">Раб. дней</div></div>
+        <div class="rps"><div class="rpv">—</div><div class="rpl">Расходы</div></div>
+        <div class="rps"><div class="rpv">—</div><div class="rpl">Точек</div></div>
+        <div class="rps"><div class="rpv">—</div><div class="rpl">Цена/кг</div></div>
+      </div>
+      <div class="rpb"><strong>Объём:</strong> выберите регион</div>
+      <div class="rpc"><strong>Ключевой контакт:</strong><br>нажмите маркер</div>
+    </div>
+  </div>
+</div>
+
+<!-- МАРШРУТ ПО ДНЯМ -->
+<div id="iti-sec" class="sec">
+  <h2 class="stitle">Маршрут по дням · ~49 календарных дней</h2>
+  <div class="stats-row">
+    <div class="s-box"><div class="val">49</div><div class="lbl">Кал. дней</div></div>
+    <div class="s-box"><div class="val">30</div><div class="lbl">Рабочих визитов</div></div>
+    <div class="s-box"><div class="val">22</div><div class="lbl">Городов/провинций</div></div>
+    <div class="s-box"><div class="val">35+</div><div class="lbl">Поставщиков</div></div>
+    <div class="s-box"><div class="val">6</div><div class="lbl">Сегментов</div></div>
+    <div class="s-box"><div class="val">0</div><div class="lbl">Внутр. рейсов</div></div>
+  </div>
+  <div class="warn-box">⚠️ <strong>Август — сезон дождей:</strong> Юг (Чумпхон, НСТ, Ранонг, Пханг-Нга) — тропические ливни во второй половине дня. Встречи 09:00–12:00. Ко Самуи — паром Дон-Сак (1 ч), удобнее чем Ко Панган. Все встречи подтверждать за 2–3 дня по WhatsApp. VIP-автобусы — кресла раскладываются, кондиционер, приходить за 20 мин.</div>
+
+  <!-- СЕГМЕНТ 0 -->
+  <div class="seg-hdr s-b"><span style="font-size:16px">✈️</span><div><h3>ПРИБЫТИЕ — Бангкок</h3><span class="sm">Дни 1–3 · Прилёт из Бразилии · Ключевые встречи · Отъезд на Ко Самуи</span></div><span class="pill">3 дня</span></div>
+  <table class="iti"><thead><tr><th>День</th><th>Дата</th><th>Локация</th><th>Активность</th><th>~฿</th></tr></thead><tbody>
+    <tr class="trav"><td class="dn">0</td><td class="dd">прилёт</td><td><span class="ltag l-b">Рейс</span></td><td><div class="stop">Илеус → Сан-Паулу → Бангкок (~30 ч)</div><div class="sub">Прибытие в Суварнабхуми. Airport Rail Link до центра. Хостел Силом/Пратунам. Купить SIM AIS.</div></td><td class="thb">—</td></tr>
+    <tr><td class="dn">1</td><td class="dd">пн</td><td><span class="ltag l-b">Бангкок</span></td><td><div class="stop">★★★ Chocolasia + YellowChocolate + TACCO</div><div class="sub"><span class="ph">+66 80 064 7515</span> Chocolasia Нонтхабури (MRT + мотобайк). <span class="ph">+66 86 565 1005</span> YellowChocolate (председатель Центр./Восточного Кластера). info@taccothai.org — рекомендательные письма для всех регионов. <span class="kp">Приоритет: обсудить агрегацию 2т</span></div></td><td class="thb">370</td></tr>
+    <tr><td class="dn">2</td><td class="dd">вт</td><td><span class="ltag l-b">БКК</span>→ КС</td><td><div class="stop">Бангкок → Ко Самуи (overnight VIP + паром)</div><div class="sub">Mahapan Mai Нонтхабури утром <span class="ph">+66 98 351 6564</span> (DFB + саженцы). Вечер: VIP-автобус до Сурат-Тани (~700 ฿, отправление 18:00). Паром Дон-Сак → Ко Самуи утром следующего дня.</div></td><td class="thb">900</td></tr>
+    <tr class="trav"><td class="dn">3</td><td class="dd">ср</td><td><span class="ltag l-ks">Ко Самуи</span></td><td><div class="stop">Прибытие на Ко Самуи · База отдыха</div><div class="sub">Паром Дон-Сак → Ко Самуи (1 ч, 270 ฿). Заселение у Натхон/Тхавехон. Отдых. Записать и выслать WhatsApp всем южным контактам для согласования встреч.</div></td><td class="thb">360</td></tr>
+  </tbody></table>
+
+  <!-- СЕГМЕНТ 1 — ЮГ -->
+  <div class="seg-hdr s-s"><span style="background:#e74c3c;width:12px;height:12px;border-radius:50%;display:inline-block"></span><div><h3>СЕГМЕНТ 1 — ЮГ РАСШИРЕННЫЙ</h3><span class="sm">~14 дней · КС → СТ → ФНГ → НСТ → ТРГ → ЧМФ → РНГ → Прачуап → БКК</span></div><span class="pill">10 рабочих дней · 15 точек</span></div>
+  <table class="iti"><thead><tr><th>День</th><th>Дата</th><th>Локация</th><th>Активность</th><th>~฿</th></tr></thead><tbody>
+    <tr><td class="dn">4</td><td class="dd">чт</td><td><span class="ltag l-s">КС → СТ</span></td><td><div class="stop">Ко Самуи → паром → Сурат-Тани · Southern Thai Cocoa + Suan Namo Panno</div><div class="sub">07:30 паром до Дон-Сак. Маршрутка → Сурат-Тани. <span class="ph">+66 92 556 5192</span> Khun New (Southern Thai Cocoa) — агрегатор нескольких южных провинций. Виенг-Са (1 ч восток): <span class="ph">+66 94 407 2801</span> Suan Namo Panno (Чумпхон 1 DFB). Ночь Сурат-Тани.</div></td><td class="thb">380</td></tr>
+    <tr><td class="dn">5</td><td class="dd">пт</td><td><span class="ltag l-s">→ Пханг-Нга</span></td><td><div class="stop">Сурат-Тани → Пханг-Нга (2,5 ч) · IM.1 Сорт</div><div class="sub">Автобус до Пханг-Нга (<span class="ph">+66 89 993 5023</span> Khun Ram). IM.1 в Тай-Мыанге — уникальный климат западного побережья. Единственный IM.1 на юге Таиланда. Дегустация + образцы. Вечер: автобус обратно в Сурат-Тани или Накхон-Си-Тхаммарат.</div></td><td class="thb">520</td></tr>
+    <tr class="wknd"><td class="dn">—</td><td class="dd">сб–вс</td><td><span class="ltag l-s">НСТ</span></td><td>Переезд НСТ. Отдых. Звонки вперёд на понедельник. Рынок и дешёвая еда.</td><td class="thb">720</td></tr>
+    <tr><td class="dn">6</td><td class="dd">пн</td><td><span class="ltag l-s">НСТ</span></td><td><div class="stop">★★ Thaiburi Cocoa + Rose Cocoa Garden + NST Premium Coop</div><div class="sub"><span class="ph">+66 81 893 6696</span> Thaiburi Cocoa (завод 2024, без мин. объёма, ≈100 ฿/кг). Та-Сала (15 км): Rose Cocoa Garden (FB: RoseCocoaGarden) + วิสาหกิจโกโก้พรีเมียมท่าศาลา. 3 встречи за день.</div></td><td class="thb">350</td></tr>
+    <tr><td class="dn">7</td><td class="dd">вт</td><td><span class="ltag l-s">НСТ→ТРГ</span></td><td><div class="stop">НСТ → Транг (1,5 ч) · Phayom Thong Cooperative</div><div class="sub">Автобус до Хуай-Йот, Тран (150 ฿). วิสาหกิจชุมชนพะยอมทอง — Khun Phayom Warinsa-ard (22 члена, 400+ деревьев, 2 т/15 дней, продаёт по 160 ฿/кг). Важная южная кооперация, только растущая. Через АгроМинистерство или <span class="ph">+66 92 556 5192</span> Southern Thai Cocoa для введения.</div></td><td class="thb">360</td></tr>
+    <tr><td class="dn">8</td><td class="dd">ср</td><td><span class="ltag l-s">ТРГ→ЧМФ</span></td><td><div class="stop">Транг → Чумпхон (4,5 ч прямым автобусом)</div><div class="sub">Утро: последние встречи Тран. 11:00 автобус до Чумпхона (300 ฿). Вечер: звонок <span class="ph">+66 77 556 073</span> (HRC DOA) — бронь на утро. Звонок <span class="ph">+66 62 294 7542</span> (Chumphon Collective) для полевого контакта.</div></td><td class="thb">600</td></tr>
+    <tr><td class="dn">9</td><td class="dd">чт</td><td><span class="ltag l-s">Чумпхон</span></td><td><div class="stop">★★ Chumphon HRC DOA + Chumphon Collective полевой контакт</div><div class="sub"><span class="ph">+66 77 556 073</span> Исследовательский центр (70 Moo 2, Сави — мотобайк 60 ฿). Создатели сорта Чумпхон 1. Запросить список сертифицированных фермеров района. После полудня: полевой контакт Chumphon Collective.</div></td><td class="thb">350</td></tr>
+    <tr><td class="dn">10</td><td class="dd">пт</td><td><span class="ltag l-s">→Ранонг</span></td><td><div class="stop">Чумпхон → Ранонг маршруткой · Вечер: звонки</div><div class="sub">09:00 маршрутка Чумпхон → Ранонг (150 ฿, 2 ч). Хостел. Позвонить <span class="ph">+66 94 615 6944</span> — подтвердить понедельник (или пятницу если есть время). Ранонг — маленький тихий город, дешёвая еда на рынке.</div></td><td class="thb">360</td></tr>
+    <tr class="wknd"><td class="dn">—</td><td class="dd">сб–вс</td><td><span class="ltag l-s">Ранонг</span></td><td>Горячие источники Нгао (бесплатно). Написать полевые заметки. Ночной автобус воскресенье: Ранонг → Бангкок (650 ฿, 9 ч) — с остановкой в Прачуапе.</td><td class="thb">700</td></tr>
+    <tr><td class="dn">11</td><td class="dd">пн</td><td><span class="ltag l-s">Ранонг</span></td><td><div class="stop">★★ วิสาหกิจชุมชนโกโก้ระนอง — Khun Thunpawat</div><div class="sub"><span class="ph">+66 94 615 6944</span> · 1/105 Moo 1, Банг-Нон · 09:00 полный визит. Крупный кооператив (2М+ ฿/квартал). Полный цикл переработки. Председатель Южного Кластера = введения по всему Югу. Образцы + переговоры об объёмах.</div></td><td class="thb">340</td></tr>
+    <tr class="hol"><td class="dn">—</td><td class="dd">12 авг</td><td colspan="2"><span style="color:#806000">🇹🇭 Праздник — День Матери (День рождения Королевы-матери). Переезд: Ранонг → Прачуап-Кхири-Кхан (через Чумпхон, ~7 ч автобусом). Или: переезд в Бангкок.</span></td><td class="thb">450</td></tr>
+    <tr><td class="dn">12</td><td class="dd">ср</td><td><span class="ltag l-b">Прачуап</span></td><td><div class="stop">★ Kad Kokoa — Khun Tong (брокер Прачуап + Чумпхон)</div><div class="sub"><span class="ph">+66 83 684 3921</span> · Посещение ферм в районе Прачуапа. Попробовать 1–2 фермерских участка (20 мин). Дегустация DFB: свежесушёный vs выдержанный. Вечер: автобус в Бангкок (280 ฿, 3,5 ч).</div></td><td class="thb">460</td></tr>
+    <tr><td class="dn">13</td><td class="dd">чт</td><td><span class="ltag l-b">Бангкок</span></td><td><div class="stop">Бангкок — отдых, TACCO Thai, подготовка Исаана</div><div class="sub">Прибытие утром. Краткая встреча TACCO Thai (info@taccothai.org). Отдых. Вечер: VIP-автобус до Коратa (Накхон-Ратчасима, 180 ฿, 2,5 ч).</div></td><td class="thb">500</td></tr>
+  </tbody></table>
+
+  <!-- СЕГМЕНТ 2 — ИСААН -->
+  <div class="seg-hdr s-i"><span style="background:#8e44ad;width:12px;height:12px;border-radius:50%;display:inline-block"></span><div><h3>СЕГМЕНТ 2 — ИСААН (СЕВЕРО-ВОСТОК) — НОВЫЙ!</h3><span class="sm">~7 дней · Корат → Чайяпхум → Удон-Тхани → Нонгкхай → Бангкок</span></div><span class="pill">4 рабочих дня · 4 новых точки</span></div>
+  <table class="iti"><thead><tr><th>День</th><th>Дата</th><th>Локация</th><th>Активность</th><th>~฿</th></tr></thead><tbody>
+    <tr><td class="dn">14</td><td class="dd">пт</td><td><span class="ltag l-i">Корат</span></td><td><div class="stop">★ PCF Tech Farm — Khun Wattananaphat</div><div class="sub"><span class="ph">+66 93 456 6992</span> · <span class="ph">+66 44 071 126</span> · 5/20 Пиямсук Плаза, Пак-Тхонг-Чай · Покупатель + переработчик какао в Накхон-Ратчасима. Договорная схема с фермерами. Уникальное исаанское происхождение. Вечер: автобус до Чайяпхума (2 ч).</div></td><td class="thb">450</td></tr>
+    <tr class="wknd"><td class="dn">—</td><td class="dd">сб–вс</td><td><span class="ltag l-i">Чайяпхум</span></td><td>Выходные в Чайяпхуме. Отдых. Воскресенье: звонки вперёд Удон-Тхани/Нонгкхай.</td><td class="thb">720</td></tr>
+    <tr><td class="dn">15</td><td class="dd">пн</td><td><span class="ltag l-i">Чайяпхум</span></td><td><div class="stop">★★ ไร่คิมสวนวายุ — Khun Wirat Saokamut (Исаан Кластер)</div><div class="sub"><span class="ph">+66 83 082 4936</span> · 28 Moo 2, Хуай-Яе, Нонг-Буа-Равей, Чайяпхум · Председатель Исаанского какао-кластера. Работает с TCD + Chocotoss. Уникальное исаанское DFB. Вечер: автобус до Удон-Тхани (4 ч, 250 ฿).</div></td><td class="thb">400</td></tr>
+    <tr><td class="dn">16</td><td class="dd">вт</td><td><span class="ltag l-i">Удон-Тхани</span></td><td><div class="stop">★ Khun Pisit Chaiyakositrut — Удон-Тхани Кластер</div><div class="sub"><span class="ph">+66 92 892 8789</span> · 130 Moo 7, Сам-Прао, Муанг, Удон-Тхани · 5 лет опыта переработки и ферментации. Уникальное северо-восточное происхождение. Вечер: переезд в Нонгкхай (1 ч, 60 ฿).</div></td><td class="thb">390</td></tr>
+    <tr><td class="dn">17</td><td class="dd">ср</td><td><span class="ltag l-i">Нонгкхай</span></td><td><div class="stop">★ Khun Jakkrit Kanbutr (Аун) — Нонгкхай (река Меконг)</div><div class="sub"><span class="ph">+66 95 986 8303</span> · 49 Moo 4, Санг-Хом, Нонгкхай · Ферментация + переработка 2 года. Уникальный микроклимат реки Меконг. Образцы. Вечер: ночной автобус Нонгкхай → Бангкок (6 ч, 450 ฿).</div></td><td class="thb">1020</td></tr>
+    <tr class="trav"><td class="dn">—</td><td class="dd">чт утро</td><td><span class="ltag l-b">Бангкок</span></td><td>Прибытие ранним утром. Хостел, отдых. Подготовка восточной петли. Звонки вперёд: PK Chocolate <span class="ph">+66 80 642 9499</span>, Infinite Cacao (FB), TCD Чантабури.</td><td class="thb">500</td></tr>
+  </tbody></table>
+
+  <!-- СЕГМЕНТ 3 — ВОСТОК -->
+  <div class="seg-hdr s-e"><span style="background:#2980b9;width:12px;height:12px;border-radius:50%;display:inline-block"></span><div><h3>СЕГМЕНТ 3 — ВОСТОЧНАЯ ПЕТЛЯ — РАСШИРЕНА</h3><span class="sm">~7 дней · Чонбури → Районг → Чантабури → Трат → Бангкок</span></div><span class="pill">5 рабочих дней · 6 точек</span></div>
+  <table class="iti"><thead><tr><th>День</th><th>Дата</th><th>Локация</th><th>Активность</th><th>~฿</th></tr></thead><tbody>
+    <tr><td class="dn">18</td><td class="dd">пт</td><td><span class="ltag l-e">Чонбури</span></td><td><div class="stop">★ PK Chocolate / วิสาหกิจโกโก้ชลบุรี — Khun Keng</div><div class="sub"><span class="ph">+66 80 642 9499</span> · 189 Moo 3, Кхао-Сок, Нонг-Яй, Чонбури · Фермер + переработчик + экспортёр DFB. Продаёт оборудование для переработки. Центр обучения. Образцы восточного Таиланда. Вечер: автобус до Районга (1 ч, 80 ฿).</div></td><td class="thb">420</td></tr>
+    <tr class="wknd"><td class="dn">—</td><td class="dd">сб–вс</td><td><span class="ltag l-e">Районг</span></td><td>Выходные Районг — Infinite Cacao (если FB ответили). Сбор образцов восточных ферм. Нотации по качеству.</td><td class="thb">720</td></tr>
+    <tr><td class="dn">19</td><td class="dd">пн</td><td><span class="ltag l-e">Районг</span></td><td><div class="stop">★ Infinite Cacao / วิสาหกิจชุมชนโกโก้ระยอง — Khun Arm</div><div class="sub">Ул. Тхангкхыан, Амфоэ Клэнг, Районг · FB: @infinitecacao · Золото ICA 2026, Чемпион Чокориста 2022. Первое крупное кустарное производство восточного Таиланда. Кооп + ферма + переработка. Дегустация. Вечер: автобус Чантабури (1,5 ч, 100 ฿).</div></td><td class="thb">340</td></tr>
+    <tr><td class="dn">20</td><td class="dd">вт</td><td><span class="ltag l-e">Чантабури</span></td><td><div class="stop">★★★ Thai Cacao Distribution — Ферма Сурия (Макхам)</div><div class="sub">WA: @TCDcacao · contact@thaicacodistribution.com · Мотобайк до Макхама (80 ฿). Ферма Сурия — главная ферментационная станция Таиланда. Буннам Промчан. 1–2 т рутинно. Ryan Berk говорит по-английски.</div></td><td class="thb">350</td></tr>
+    <tr><td class="dn">21</td><td class="dd">ср</td><td><span class="ltag l-e">Чантабури</span></td><td><div class="stop">Ферма Бум + Beantobar Chanthaburi (CoEx 2023 Best 50)</div><div class="sub">Второй центр ферментации TCD + Beantobar — лауреат CoEx 2023 (грейпфрут, груша, тёмное дерево). Сбор физических образцов. Переговоры о пробной поставке. Вечер: автобус Трат (1,5 ч, 100 ฿).</div></td><td class="thb">340</td></tr>
+    <tr><td class="dn">22</td><td class="dd">чт</td><td><span class="ltag l-e">Трат</span></td><td><div class="stop">Anarchy Chocolate — пермакультурная сеть ферм (через Chumphon Collective)</div><div class="sub">Через <span class="ph">+66 62 294 7542</span>. Уникальное пермакультурное какао у камбоджийской границы. 100–300 кг. Вечер: автобус Бангкок (5 ч, 350 ฿). Ночь в BKK.</div></td><td class="thb">530</td></tr>
+    <tr><td class="dn">23</td><td class="dd">пт</td><td><span class="ltag l-b">Бангкок</span></td><td><div class="stop">Бангкок — итоговые встречи + подготовка Севера</div><div class="sub">Утро: прибытие автобусом. Обзвон лучших контактов по итогам South+East. Вечер: бронь ночного VIP-автобуса Бангкок → Пхетчабун (600 ฿, 5 ч, отправление 22:00).</div></td><td class="thb">500</td></tr>
+  </tbody></table>
+
+  <!-- СЕГМЕНТ 4 — СЕВЕР -->
+  <div class="seg-hdr s-n"><span style="background:#27ae60;width:12px;height:12px;border-radius:50%;display:inline-block"></span><div><h3>СЕГМЕНТ 4 — СЕВЕР РАСШИРЕННЫЙ (IM.1 + Нан 133)</h3><span class="sm">~12 дней · Пхетчабун → Нан → Чиангмай → Фанг → Лампанг → Чианграй → Бангкок</span></div><span class="pill">9 рабочих дней · 12 точек</span></div>
+  <table class="iti"><thead><tr><th>День</th><th>Дата</th><th>Локация</th><th>Активность</th><th>~฿</th></tr></thead><tbody>
+    <tr><td class="dn">24</td><td class="dd">сб утро</td><td><span class="ltag l-n">Пхетчабун</span></td><td><div class="stop">★ วิสาหกิจชุมชนกลุ่มโกโก้นางั่ว — Khun Ton Prasert Kainork</div><div class="sub"><span class="ph">+66 87 056 3308</span> · 38/1 Moo 9, Нан-гуа, Муанг, Пхетчабун · Председатель кооператива Нан-гуа. 2 года посадки + ферментация. Уникальное происхождение центрального горного Таиланда. Вечер: автобус Нан (4 ч, 200 ฿).</div></td><td class="thb">440</td></tr>
+    <tr class="wknd"><td class="dn">—</td><td class="dd">вс</td><td><span class="ltag l-n">Нан</span></td><td>Нан — отдых. Исторический город с великолепными храмами. «Провинция какао Таиланда». Утром — встреча с ISTC Chulalongkorn (FB: cusarcocoa).</td><td class="thb">360</td></tr>
+    <tr><td class="dn">25</td><td class="dd">пн</td><td><span class="ltag l-n">Нан</span></td><td><div class="stop">★★ Cocoa Valley Resort — Khun Manu Thanawang (Нан 133)</div><div class="sub"><span class="ph">+66 63 791 1619</span> / <span class="ph">+66 97 186 6116</span> · 339 Moo 8, Пуа, Нан · Создатель сорта Нан 133 (зарегистрирован). Сеть 400+ семей. Международная золотая медаль. Полный цикл farm-to-cafe. Обсудить: могут ли поставить DFB Нан 133? Объём? Цена?</div></td><td class="thb">360</td></tr>
+    <tr><td class="dn">26</td><td class="dd">вт</td><td><span class="ltag l-n">→ Чиангмай</span></td><td><div class="stop">Нан → Чиангмай (3,5 ч автобус, 200 ฿) · Хостел, настройка</div><div class="sub">Прибытие ~15:00. Хостел у Та-Пхэ-Гейт (~360 ฿). Звонок <span class="ph">+66 85 914 6963</span> Проф. Сан — подтвердить среду. Звонок <span class="ph">+66 61 304 9399</span> Khun Siriya (Hill Tribe Cocoa).</div></td><td class="thb">540</td></tr>
+    <tr><td class="dn">27</td><td class="dd">ср</td><td><span class="ltag l-n">Чиангмай</span></td><td><div class="stop">★★★ Mark Rin Chocolate / Проф. Сан Ла-Онгсри — IM.1</div><div class="sub"><span class="ph">+66 85 914 6963</span> <span class="ph">+66 95 752 2770</span> · Сан-Сай-Ной, 15 км восток ЧМ. <span class="kp">ВЫСШЕЕ КАЧЕСТВО В ТАИЛАНДЕ</span>. IM.1 (Перуанский Криолло × Филиппинский Форастеро). 2 000+ рай. Дегустация DFB. Переговоры о прямой покупке. Говорит по-английски.</div></td><td class="thb">340</td></tr>
+    <tr><td class="dn">28</td><td class="dd">чт</td><td><span class="ltag l-n">Чиангмай</span></td><td><div class="stop">Rawisara La-Ongsri + Hill Tribe Cocoa (Дой-Сакет) + Thai High Concentrations</div><div class="sub"><span class="ph">+66 95 752 2770</span> Рависара (заказы Mark Rin). Дой-Сакет (20 км): <span class="ph">+66 61 304 9399</span> Hill Tribe Cocoa. Сан-Па-Тхонг (25 км юг): Thai High Concentrations (highconcentrations@outlook.com) — первый кооп Таиланда.</div></td><td class="thb">360</td></tr>
+    <tr><td class="dn">29</td><td class="dd">пт</td><td><span class="ltag l-n">ЧМ → Фанг</span></td><td><div class="stop">★ Lanna-Fang Cooperative — Khun Oi Supatra (день-поездка на север ЧМ)</div><div class="sub"><span class="ph">+66 81 716 8895</span> · Район Фанг (150 км север ЧМ, 2 ч). วิสาหกิจชุมชนโกโก้ล้านนา-ฝาง — IM.1 в высокогорном прохладном климате. Уникальный вкусовой профиль. Возврат ЧМ вечером.</div></td><td class="thb">380</td></tr>
+    <tr class="wknd"><td class="dn">—</td><td class="dd">сб–вс</td><td><span class="ltag l-n">Чиангмай</span></td><td>Воскресный ночной рынок Вуалай (дешёвая еда). Ревизия всех образцов Юг+Восток vs Север. Ранг-лист топ-5 поставщиков. Вечер вс: маршрутка Лампанг (1,5 ч, 100 ฿).</td><td class="thb">700</td></tr>
+    <tr><td class="dn">30</td><td class="dd">пн</td><td><span class="ltag l-n">Лампанг</span></td><td><div class="stop">★★ Thai Coffee & Cocoa Cooperation (21 000 деревьев) + Lampang IM.1 Network</div><div class="sub">FB: Thai Coffee & Cocoa (Khun Pathom). Экспорт Япония+Сингапур. Для введения: neil@siamayachocolate.com (Siamaya CEO). <span class="ph">+66 88 951 4798</span> Khun Ooi — сеть IM.1 в 5 районах Лампанга. Полный цикл переработки.</div></td><td class="thb">350</td></tr>
+    <tr><td class="dn">31</td><td class="dd">вт</td><td><span class="ltag l-n">→ Чианграй</span></td><td><div class="stop">Лампанг → Чианграй (2,5 ч, 200 ฿) · Чианграйский Какао-Коллектив</div><div class="sub">Прибытие ~12:00. Хостел. Введение через <span class="ph">+66 62 294 7542</span> (Chumphon Collective). Чумпхон 1 в прохладном горном климате. Звонок Hill Tribe Cocoa Мэ-Джан (<span class="ph">+66 61 304 9399</span> Khun Siriya) — запись на среду.</div></td><td class="thb">380</td></tr>
+    <tr><td class="dn">32</td><td class="dd">ср</td><td><span class="ltag l-n">Чианграй</span></td><td><div class="stop">★★ Чианграйский Коллектив + Hill Tribe Cocoa Мэ-Джан</div><div class="sub">Утро: Чианграйский коллектив. 13:00 маршрутка Мэ-Джан (40 км север, 40 ฿): Khun Siriya — сеть этнических фермеров. Японские покупатели уже интересуются. 100–300 кг. Образцы. Возврат ЧР вечером.</div></td><td class="thb">350</td></tr>
+    <tr><td class="dn">33</td><td class="dd">чт</td><td><span class="ltag l-n">Чианграй</span></td><td><div class="stop">Буфер: переговорные звонки + финальная документация</div><div class="sub">Обзвонить: <span class="ph">+66 62 294 7542</span> Chumphon Collective (КП для поставки), <span class="ph">+66 80 064 7515</span> Chocolasia (агрегация). Сравнение образцов: Чумпхон 1 Юг vs IM.1 vs Нан 133. Ранг-список для первого заказа. Вечер: 20:00 VIP-автобус Бангкок (Green Bus, 850 ฿, 12 ч).</div></td><td class="thb">1020</td></tr>
+  </tbody></table>
+
+  <!-- ВОЗВРАТ -->
+  <div class="seg-hdr s-r"><span style="font-size:14px">🚢</span><div><h3>ВОЗВРАТ — Бангкок → Сурат-Тани → Ко Самуи</h3><span class="sm">Дни 34–37 · Отдых перед вылетом домой</span></div><span class="pill">финал</span></div>
+  <table class="iti"><thead><tr><th>День</th><th>Дата</th><th>Локация</th><th>Активность</th><th>~฿</th></tr></thead><tbody>
+    <tr class="wknd"><td class="dn">—</td><td class="dd">сб</td><td><span class="ltag l-b">Бангкок</span></td><td>Прибытие ~08:00. Хостел. Отдых. Продовольственный рынок. 18:00 VIP-автобус Сурат-Тани (550 ฿, 10 ч).</td><td class="thb">720</td></tr>
+    <tr class="trav"><td class="dn">—</td><td class="dd">вс</td><td><span class="ltag l-ks">→ Ко Самуи</span></td><td><div class="stop">Сурат-Тани → пирс Дон-Сак → паром Ко Самуи 🏝</div><div class="sub">04:00 прибытие Сурат-Тани. Шаттл до пирса (~1 ч). 07:30 паром Ко Самуи (1 ч, 270 ฿). Прибытие ~09:00. <span class="kp">Возврат на базу</span>. ОТДЫХ несколько дней.</div></td><td class="thb">400</td></tr>
+    <tr class="wknd"><td class="dn">—</td><td class="dd">пн–ср</td><td><span class="ltag l-ks">Ко Самуи</span></td><td>Ко Самуи — финальный отчёт экспедиции. Систематизировать образцы + контакты. Паром → Сурат-Тани → автобус/поезд → Бангкок → международный рейс Бангкок → Сан-Паулу → Илеус.</td><td class="thb">1100</td></tr>
+  </tbody></table>
+</div>
+
+<!-- БЮДЖЕТ -->
+<div id="bud-sec" class="sec">
+  <h2 class="stitle">Бюджет — 1 иностранец, ~49 дней (Илеус ↔ Бангкок)</h2>
+  <div class="info-box">฿ = тайский бат. Курс: 1 USD ≈ 35 ฿ · 1 BRL ≈ 7 ฿. Хостелы + вентилятор (~360 ฿/ночь), уличная еда, местный транспорт.</div>
+  <div class="b-grid">
+    <div class="b-card fl"><div class="b-ch"><span>✈️</span><h3>Международные рейсы — Бразилия ↔ Бангкок</h3></div>
+    <table class="bt">
+      <tr><td>Илеус (IOS) → Сан-Паулу GRU</td><td>~3 500</td></tr>
+      <tr><td>GRU → Бангкок BKK (Qatar/Turkish/Ethiopian RT)</td><td>~44 000</td></tr>
+      <tr><td>GRU → Илеус IOS обратно</td><td>~3 500</td></tr>
+      <tr><td class="nr" colspan="2">Гибкие даты ±3 дня в Google Flights. Конец июля = средний сезон.</td></tr>
+      <tr class="sr"><td>Итого рейсы</td><td>~51 000</td></tr>
+    </table></div>
+    <div class="b-card"><div class="b-ch"><span>🛏</span><h3>Проживание — 44 ночи (~363 ฿/ночь)</h3></div>
+    <table class="bt">
+      <tr><td>Бангкок (5 ночей × 2 заезда + Исаан)</td><td>350 × 8 = 2 800</td></tr>
+      <tr><td>Ко Самуи (4 ночи)</td><td>370 × 4 = 1 480</td></tr>
+      <tr><td>Юг (СТ/ФНГ/НСТ/ТРГ/ЧМФ/РНГ/Прачуап — 12 н.)</td><td>360 × 12 = 4 320</td></tr>
+      <tr><td>Исаан (Корат/Чайяпхум/Удон/Нонгкхай — 4 н.)</td><td>360 × 4 = 1 440</td></tr>
+      <tr><td>Восток (Чонбури/Районг/Чантабури/Трат — 7 н.)</td><td>370 × 7 = 2 590</td></tr>
+      <tr><td>Север (Пхетчабун/Нан/ЧМ/Лампанг/ЧР — 13 н.)</td><td>360 × 13 = 4 680</td></tr>
+      <tr class="sr"><td>Итого (~363 ฿/ночь)</td><td>17 310</td></tr>
+    </table></div>
+    <div class="b-card"><div class="b-ch"><span>🚌</span><h3>Межгородской транспорт — только VIP + паромы</h3></div>
+    <table class="bt">
+      <tr><td>БКК → Ко Самуи (VIP автобус + паром) ×2</td><td>1 700</td></tr>
+      <tr><td>КС → СТ паром + переезды по Югу</td><td>2 800</td></tr>
+      <tr><td>Ранонг → Прачуап → БКК автобусы</td><td>1 200</td></tr>
+      <tr><td>Исаан петля (БКК → Корат → Чайяпхум → Удон → Нонгкхай → БКК)</td><td>1 500</td></tr>
+      <tr><td>Восток (БКК → Чонбури → Районг → Чантабури → Трат → БКК)</td><td>1 200</td></tr>
+      <tr><td>БКК → Пхетчабун → Нан → Чиангмай</td><td>1 400</td></tr>
+      <tr><td>Чиангмай → Фанг (туда-обратно)</td><td>250</td></tr>
+      <tr><td>Чиангмай → Лампанг → Чианграй</td><td>400</td></tr>
+      <tr><td>Чианграй → БКК ночной VIP</td><td>850</td></tr>
+      <tr class="sr"><td>Итого межгород</td><td>11 300</td></tr>
+    </table></div>
+    <div class="b-card"><div class="b-ch"><span>🛺</span><h3>Местный транспорт · Питание · Переводчик · Эссенциалы</h3></div>
+    <table class="bt">
+      <tr><td>Местный транспорт (сонгтхэо/мотобайк) 44 дня</td><td>65/д × 44 = 2 860</td></tr>
+      <tr><td>Питание (2 приёма + перекусы, 178 ฿/день)</td><td>178 × 49 = 8 722</td></tr>
+      <tr><td>Переводчик по телефону (18 сессий × 250 ฿)</td><td>4 500</td></tr>
+      <tr><td>Страховка Cherehapa 49 дней</td><td>~1 500</td></tr>
+      <tr><td>SIM AIS Tourist + продление</td><td>500</td></tr>
+      <tr><td>Буфер непредвиденное (10% от тайских расходов)</td><td>4 700</td></tr>
+      <tr><td>Образцы DFB + мелкие расходы</td><td>1 000</td></tr>
+      <tr class="sr"><td>Итого прочие расходы</td><td>23 782</td></tr>
+    </table></div>
+  </div>
+  <table class="st">
+    <thead><tr><th>Категория</th><th>฿</th><th>USD (~35)</th><th>% от итога</th></tr></thead>
+    <tbody>
+      <tr><td>✈️ Международные рейсы</td><td>51 000</td><td>1 457</td><td>52,3%</td></tr>
+      <tr><td>🛏 Проживание 44 ночи</td><td>17 310</td><td>495</td><td>17,7%</td></tr>
+      <tr><td>🚌 Межгород автобусы + паромы</td><td>11 300</td><td>323</td><td>11,6%</td></tr>
+      <tr><td>🛺 Местный транспорт</td><td>2 860</td><td>82</td><td>2,9%</td></tr>
+      <tr><td>🍜 Питание (178 ฿/день)</td><td>8 722</td><td>249</td><td>8,9%</td></tr>
+      <tr><td>🗣️ Переводчик (18 звонков)</td><td>4 500</td><td>129</td><td>4,6%</td></tr>
+      <tr><td>📱 Страховка + SIM</td><td>2 000</td><td>57</td><td>2,1%</td></tr>
+      <tr><td>🔄 Буфер + образцы + мелочи</td><td>5 700</td><td>163</td><td>5,8%</td></tr>
+      <tr class="tr"><td><strong>ИТОГО</strong></td><td><strong>103 392</strong></td><td><strong>~2 954</strong></td><td><strong>100%</strong></td></tr>
+      <tr><td colspan="4" style="font-size:9px;color:#888;padding:5px 11px">Только Таиланд без рейсов: 52 392 ฿ (~$1 497) за 49 дней = $30,5 USD/день</td></tr>
+    </tbody>
+  </table>
+  <div class="b-total">
+    <div><h3>Итого бюджет (вкл. перелёты из Бразилии)</h3><div style="font-size:10px;color:#c8a878;margin-top:2px">49-дневный маршрут · 22 города · 35+ поставщиков · 0 внутр. рейсов</div></div>
+    <div class="grand"><div class="tb">103 400 ฿</div><div class="us">≈ $2 954 USD · ≈ R$14 840 · ≈ €2 720</div></div>
+  </div>
+  <div class="bl"><strong>💡 Контекст закупки:</strong> Если найти 2 тонны Чумпхон 1 по 120 ฿/кг → стоимость 240 000 ฿ ($6 860). Вся экспедиция = 43% от стоимости. Нан 133 или IM.1 по 220 ฿/кг за 2 т → 440 000 ฿ ($12 570). Соотношение ещё выгоднее.<br><br><strong>🆕 Новые регионы v2:</strong> Исаан (Корат/Чайяпхум/Удон/Нонгкхай), Чонбури, Районг, Пхетчабун, Нан, Транг, Пханг-Нга, Сурат-Тани, Фанг — 9 полностью новых провинций добавлено к маршруту v1.</div>
+</div>
+
+<!-- КОНТАКТЫ -->
+<div id="con-sec" class="sec">
+  <h2 class="stitle">Приоритетные контакты — полный список v2</h2>
+  <div class="info-box"><strong>Стратегия звонков:</strong> До отъезда из Бразилии — написать в WhatsApp/Line ВСЕМ контактам с телефонами. Сообщить: «Небольшая тайская компания, ищем DFB напрямую, интересует 500 кг пробная → 2 т. Приедем лично в [дата].» <strong>Переводчик:</strong> студент тайского языка через Facebook-группы ЧМ/БКК, 200–300 ฿/ч по телефону.</div>
+  <div class="con-grid">
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">Chocolasia — Khun Bos</div><div style="font-size:9px;color:var(--muted)">Процессор + 9 провинций</div></div><span class="con-reg">Бангкок</span></div><div class="con-body"><div class="con-ph">📱 +66 80 064 7515 / +66 81 172 2106</div><div class="con-note">ПЕРВЫЙ ЗВОНОК. Агрегирует из 9 провинций. Возможно 1–3 т. Говорит по-английски. Визит День 1.</div><div class="con-badge cb-pr">Агрегатор</div></div></div>
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">Chumphon Collective — Somsak</div><div style="font-size:9px;color:var(--muted)">6 провинций в одном звонке</div></div><span class="con-reg">Многопровинц.</span></div><div class="con-body"><div class="con-ph">📱 +66 62 294 7542</div><div class="con-note">Лучший агрегатор: один звонок = 6 провинций. 1–2 т рутинно. Прозрачные цены.</div><div class="con-badge cb-co">Коллектив</div></div></div>
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">Thaiburi Cocoa Ltd (НСТ)</div><div style="font-size:9px;color:var(--muted)">Завод полного цикла, без мин.</div></div><span class="con-reg">Нак. Си Тхаммарат</span></div><div class="con-body"><div class="con-ph">📱 +66 81 893 6696</div><div class="con-note">Открыт 2024. Покупает без ограничений ~100 ฿/кг. Также знакомит с поставщиками.</div><div class="con-badge cb-pr">Завод</div></div></div>
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">Ranong Cacao Coop — Khun Thunpawat</div><div style="font-size:9px;color:var(--muted)">Председатель Южного Кластера</div></div><span class="con-reg">Ранонг</span></div><div class="con-body"><div class="con-ph">📱 +66 94 615 6944</div><div class="con-note">Большой кооп. 2М+ ฿/квартал. Полный цикл. Введения по всему Югу.</div><div class="con-badge cb-co">Кооператив</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Prof. Sanh / Rawisara — Mark Rin</div><div style="font-size:9px;color:var(--muted)">Создатель IM.1 — высшее качество</div></div><span class="con-reg">Чиангмай</span></div><div class="con-body"><div class="con-ph">📱 +66 85 914 6963 / +66 95 752 2770</div><div class="con-note">IM.1 = единственное какао тонкого вкуса в Таиланде. 2 000+ рай. CoEx NOC. Английский.</div><div class="con-badge cb-re">Исслед. ферма</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Cocoa Valley — Khun Manu (Нан 133)</div><div style="font-size:9px;color:var(--muted)">Создатель сорта Нан 133</div></div><span class="con-reg">Нан Провинция</span></div><div class="con-body"><div class="con-ph">📱 +66 63 791 1619 / +66 97 186 6116</div><div class="con-note">Нан 133 — зарегистрированный сорт. Сеть 400+ семей. Золото международный уровень.</div><div class="con-badge cb-re">Ферма</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">YellowChocolate — Khun Jack Badin</div><div style="font-size:9px;color:var(--muted)">Центр./Вост. Кластер, организатор TCCF</div></div><span class="con-reg">Бангкок</span></div><div class="con-body"><div class="con-ph">📱 +66 86 565 1005</div><div class="con-note">Пред. Центр./Вост. Кластера. Организует Thailand Craft Chocolate Festival. Все вост. введения через него.</div><div class="con-badge cb-pr">Кластер</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Khun Wirat — Исаан Кластер</div><div style="font-size:9px;color:var(--muted)">Rai Kim Suanwayu, Чайяпхум</div></div><span class="con-reg">Чайяпхум / Исаан</span></div><div class="con-body"><div class="con-ph">📱 +66 83 082 4936</div><div class="con-note">Пред. Исаанского какао-кластера. Работает с TCD + Chocotoss. Уникальное исаанское DFB.</div><div class="con-badge cb-fa">Ферма</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">PK Chocolate — Khun Keng (Чонбури)</div><div style="font-size:9px;color:var(--muted)">Фермер + переработчик + экспорт</div></div><span class="con-reg">Чонбури</span></div><div class="con-body"><div class="con-ph">📱 +66 80 642 9499</div><div class="con-note">DFB экспорт за рубеж. Продаёт оборудование. Центр обучения вост. Таиланда.</div><div class="con-badge cb-fa">Ферма+Перераб.</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Southern Thai Cocoa — Khun New</div><div style="font-size:9px;color:var(--muted)">Сурат-Тани + многопровинц. сеть</div></div><span class="con-reg">Сурат-Тани</span></div><div class="con-body"><div class="con-ph">📱 +66 92 556 5192</div><div class="con-note">IM.1 + Чумпхон 1 на юге. Агрегатор нескольких провинций. Тестовая система 10 000 деревьев в СТ.</div><div class="con-badge cb-co">Агрегатор</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Khun Ram — Пханг-Нга IM.1</div><div style="font-size:9px;color:var(--muted)">Southern Thai Cocoa Пханг-Нга</div></div><span class="con-reg">Пханг-Нга</span></div><div class="con-body"><div class="con-ph">📱 +66 89 993 5023</div><div class="con-note">IM.1 на Андаманском побережье (Тай-Мыанг). Единственный IM.1 на юге Таиланда. Уникальный террoir.</div><div class="con-badge cb-fa">IM.1 Юг</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Hill Tribe Cocoa — Khun Siriya</div><div style="font-size:9px;color:var(--muted)">Северный Кластер (ЧМ + ЧР)</div></div><span class="con-reg">Чианграй/ЧМ</span></div><div class="con-body"><div class="con-ph">📱 +66 61 304 9399</div><div class="con-note">Пред. Северного Кластера. 2 центра: Дой-Сакет (ЧМ) + Мэ-Джан (ЧР). Сеть этнических фермеров.</div><div class="con-badge cb-co">Кооп</div></div></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+function show(id,btn){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('act'));
+  document.getElementById(id).classList.add('on');btn.classList.add('act');
+  if(id==='map-sec')setTimeout(()=>{if(window._m)window._m.invalidateSize();},120);
+}
+const map=L.map('the-map',{zoomControl:true}).setView([13.0,101.5],6);
+window._m=map;
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:18}).addTo(map);
+
+// Full route polyline v2
+const route=[
+  [13.74,100.51], // BKK
+  [9.53,100.06],  // Ko Samui
+  [9.13,99.33],   // Surat Thani
+  [8.45,98.53],   // Phang Nga
+  [9.13,99.33],   // back Surat Thani
+  [8.43,99.96],   // NST
+  [7.56,99.61],   // Trang
+  [10.49,99.18],  // Chumphon
+  [9.96,98.63],   // Ranong
+  [10.49,99.18],  // back Chumphon
+  [11.82,99.80],  // Prachuap KK
+  [13.74,100.51], // BKK
+  [14.97,102.10], // Korat
+  [15.80,102.03], // Chaiyaphum
+  [17.42,102.79], // Udon Thani
+  [17.88,102.74], // Nong Khai
+  [13.74,100.51], // BKK
+  [13.36,100.98], // Chonburi
+  [12.68,101.28], // Rayong
+  [12.61,102.10], // Chanthaburi
+  [12.25,102.51], // Trat
+  [12.61,102.10], // back Chanthaburi
+  [13.74,100.51], // BKK
+  [16.42,101.16], // Phetchabun
+  [18.77,100.77], // Nan
+  [18.79,98.99],  // Chiang Mai
+  [19.92,99.22],  // Fang
+  [18.79,98.99],  // back CM
+  [18.29,99.50],  // Lampang
+  [19.91,99.84],  // Chiang Rai
+  [13.74,100.51], // BKK
+  [9.13,99.33],   // Surat Thani
+  [9.53,100.06],  // Ko Samui
+];
+L.polyline(route,{color:'#d4951e',weight:3,opacity:.75,dashArray:'8,5'}).addTo(map);
+
+const C={s:'#e74c3c',b:'#d4830a',i:'#8e44ad',e:'#2980b9',n:'#27ae60',ks:'#8e44ad'};
+const regions={
+  ks:{name:'Ко Самуи (База / Старт / Финиш)',days:'5',cost:'~1 900 ฿',stops:'1',price:'н/д',vol:'Транзитная база',top:'Паром Дон-Сак ↔ Ко Самуи (1 ч, 270 ฿). Лучший старт для Юга.'},
+  s:{name:'Юг (СТ · ФНГ · НСТ · ТРГ · ЧМФ · РНГ)',days:'10',cost:'~7 200 ฿',stops:'15',price:'100–160 ฿/кг',vol:'500 кг – 2 т (Чумпхон 1)',top:'Ranong Coop: +66 94 615 6944 · Thaiburi: +66 81 893 6696'},
+  b:{name:'Бангкок + Прачуап-Кхири-Кхан',days:'4',cost:'~4 200 ฿',stops:'5',price:'100–160 ฿/кг (агрег.)',vol:'1–3 т (Chocolasia 9 пров.)',top:'Chocolasia: +66 80 064 7515'},
+  i:{name:'Исаан (Корат · Чайяпхум · Удон · Нонгкхай) — НОВЫЙ',days:'4',cost:'~3 500 ฿',stops:'4',price:'80–130 ฿/кг',vol:'100–400 кг (уникальн.)',top:'Khun Wirat Чайяпхум: +66 83 082 4936'},
+  e:{name:'Восток (Чонбури · Районг · Чантабури · Трат)',days:'5',cost:'~5 400 ฿',stops:'6',price:'110–150 ฿/кг',vol:'500 кг – 2 т (TCD сеть)',top:'TCD: @TCDcacao · PK Chonburi: +66 80 642 9499'},
+  n:{name:'Север (Пхетчабун · Нан · ЧМ · Фанг · Лампанг · ЧР)',days:'10',cost:'~7 800 ฿',stops:'12',price:'180–260 ฿/кг IM.1 / Нан133',vol:'200 кг – 2 т (премиум)',top:'Prof. Sanh: +66 85 914 6963 · CocoaValley: +66 63 791 1619'},
+};
+function updateRp(seg){
+  const d=regions[seg];if(!d)return;
+  document.querySelector('.rph span').textContent=d.name.substring(0,28)+(d.name.length>28?'…':'');
+  const s=document.querySelectorAll('.rps');
+  [{v:d.days,l:'Раб. дней'},{v:d.cost,l:'Расходы'},{v:d.stops,l:'Точек'},{v:d.price,l:'Цена/кг'}].forEach((x,i)=>{
+    s[i].querySelector('.rpv').textContent=x.v;s[i].querySelector('.rpl').textContent=x.l;
+  });
+  document.querySelector('.rpb').innerHTML=`<strong>Объём:</strong> ${d.vol}`;
+  document.querySelector('.rpc').innerHTML=`<strong>Ключевые контакты:</strong><br>${d.top}`;
+}
+function mkI(c,l){return L.divIcon({className:'',html:`<div style="background:${c};color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.5);font-family:sans-serif">${l}</div>`,iconSize:[28,28],iconAnchor:[14,14],popupAnchor:[0,-16]});}
+function stI(c){return L.divIcon({className:'',html:`<div style="background:${c};color:#fff;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:14px;border:3px solid #fff;box-shadow:0 2px 10px rgba(0,0,0,.5)">★</div>`,iconSize:[36,36],iconAnchor:[18,18],popupAnchor:[0,-20]});}
+
+const stops=[
+  {ll:[9.53,100.06],seg:'ks',l:'КС',star:true,name:'КО САМУИ (Старт + Финиш)',sub:'🏝 База экспедиции. Паром Дон-Сак ↔ Ко Самуи (1 ч, 270 ฿).'},
+  {ll:[13.91,100.50],seg:'b',l:'Б0',star:true,name:'Бангкок — Chocolasia + YellowChocolate',sub:'★★★ Chocolasia: +66 80 064 7515 / +66 81 172 2106<br>★★ YellowChocolate: +66 86 565 1005<br>TACCO Thai: info@taccothai.org'},
+  {ll:[9.13,99.33],seg:'s',l:'Ю0',name:'Сурат-Тани (хаб юга)',sub:'★ Southern Thai Cocoa Khun New: +66 92 556 5192<br>Suan Namo Panno: +66 94 407 2801<br>Паром до Ко Самуи (1 ч)'},
+  {ll:[8.45,98.53],seg:'s',l:'Ю0b',name:'Пханг-Нга — IM.1 юга',sub:'★ Khun Ram: +66 89 993 5023<br>IM.1 на Андаманском побережье. Единственный IM.1 на юге!'},
+  {ll:[8.43,99.96],seg:'s',l:'Ю1',name:'Накхон-Си-Тхаммарат',sub:'★★ Thaiburi Cocoa: +66 81 893 6696<br>Rose Cocoa Garden (FB)<br>NST Premium Cacao Coop'},
+  {ll:[7.56,99.61],seg:'s',l:'Ю1b',name:'Тран (новый!)',sub:'วิสาหกิจชุมชนพะยอมทอง — Khun Phayom<br>22 члена, 400+ деревьев, 2 т/15 дней, 160 ฿/кг<br>Через: +66 92 556 5192'},
+  {ll:[10.49,99.18],seg:'s',l:'Ю2',name:'Чумпхон',sub:'★★ HRC DOA: +66 77 556 073 / 556 191<br>Chumphon Collective: +66 62 294 7542'},
+  {ll:[9.96,98.63],seg:'s',l:'Ю3',star:true,name:'Ранонг — Большой Кооператив',sub:'★★★ วิสาหกิจชุมชนโกโก้ระนอง<br>Khun Thunpawat: +66 94 615 6944<br>Пред. Южного Кластера'},
+  {ll:[11.82,99.80],seg:'b',l:'Б1',name:'Прачуап-Кхири-Кхан',sub:'★ Kad Kokoa / Khun Tong: +66 83 684 3921<br>Органик Прачуап + Чумпхон'},
+  {ll:[14.97,102.10],seg:'i',l:'И1',name:'Корат — PCF Tech Farm (новый!)',sub:'★ PCF Tech Farm: +66 93 456 6992<br>Покупатель + переработчик, Накхон-Ратчасима'},
+  {ll:[15.80,102.03],seg:'i',l:'И2',star:true,name:'Чайяпхум — Исаан Кластер (новый!)',sub:'★★ Rai Kim Suanwayu — Khun Wirat: +66 83 082 4936<br>Пред. Исаанского какао-кластера. TCD + Chocotoss'},
+  {ll:[17.42,102.79],seg:'i',l:'И3',name:'Удон-Тхани (новый!)',sub:'Khun Pisit: +66 92 892 8789<br>5 лет ферментации + переработки'},
+  {ll:[17.88,102.74],seg:'i',l:'И4',name:'Нонгкхай — река Меконг (новый!)',sub:'Khun Aun Jakkrit: +66 95 986 8303<br>Уникальный климат реки Меконг'},
+  {ll:[13.36,100.98],seg:'e',l:'В0',name:'Чонбури — PK Chocolate (новый!)',sub:'★ PK Chocolate Khun Keng: +66 80 642 9499<br>DFB экспорт + оборудование'},
+  {ll:[12.68,101.28],seg:'e',l:'В0b',name:'Районг — Infinite Cacao (новый!)',sub:'Infinite Cacao Khun Arm (FB: @infinitecacao)<br>วิสาหกิจชุมชนโกโก้ระยอง · Gold ICA 2026'},
+  {ll:[12.61,102.10],seg:'e',l:'В1',star:true,name:'Чантабури — TCD, Ферма Сурия',sub:'★★★ Thai Cacao Distribution (Ryan Berk)<br>WA: @TCDcacao · 40+ ферм · Ферма Сурия + Бум'},
+  {ll:[12.25,102.51],seg:'e',l:'В2',name:'Трат — Anarchy Chocolate',sub:'Пермакультурное какао через Chumphon Collective<br>+66 62 294 7542'},
+  {ll:[16.42,101.16],seg:'n',l:'С0',name:'Пхетчабун — Нан-гуа Кооп (новый!)',sub:'★ Khun Ton Prasert: +66 87 056 3308<br>วิสาหกิจชุมชนกลุ่มโกโก้นางั่ว'},
+  {ll:[18.77,100.77],seg:'n',l:'С0b',star:true,name:'Нан — Cocoa Valley (Нан 133) (новый!)',sub:'★★ Khun Manu: +66 63 791 1619 / +66 97 186 6116<br>Нан 133 — зарегистрированный сорт · 400+ семей · Золото'},
+  {ll:[18.79,98.99],seg:'n',l:'С1',star:true,name:'Чиангмай — Столица IM.1',sub:'★★★ Prof. Sanh: +66 85 914 6963 / +66 95 752 2770<br>★★★ Rawisara: +66 95 752 2770<br>+ Hill Tribe Cocoa + Thai High Concentrations'},
+  {ll:[19.92,99.22],seg:'n',l:'Фанг',name:'Фанг — Lanna-Fang Coop (новый!)',sub:'★ Khun Oi Supatra: +66 81 716 8895<br>วิสาหกิจชุมชนโกโก้ล้านนา-ฝาง · IM.1 высокогорье'},
+  {ll:[18.29,99.50],seg:'n',l:'С2',name:'Лампанг — Thai Coffee & Cocoa',sub:'Thai Coffee & Cocoa (21 000 деревьев) · Экспорт Япония<br>★ Khun Ooi: +66 88 951 4798 · IM.1 сеть Лампанг'},
+  {ll:[19.91,99.84],seg:'n',l:'С3',name:'Чианграй — Какао-Коллектив',sub:'Коллектив Чианграя (через Chumphon Coll.)<br>Hill Tribe Cocoa Мэ-Джан: +66 61 304 9399 (Khun Siriya)'},
+];
+
+stops.forEach(s=>{
+  const c=C[s.seg];
+  const ic=s.star?stI(c):mkI(c,s.l);
+  L.marker(s.ll,{icon:ic}).addTo(map)
+    .bindPopup(`<div style="font-family:sans-serif;min-width:210px"><b style="font-size:12px;color:#1f1008">${s.name}</b><div style="font-size:11px;color:#555;margin:4px 0;line-height:1.5">${s.sub}</div></div>`,{maxWidth:270})
+    .on('click',()=>updateRp(s.seg));
+});
+
+// Region labels
+[{ll:[8.9,99.4],seg:'s',txt:'ЮГ'},{ll:[12.8,100.2],seg:'b',txt:'БКК'},{ll:[16.5,103.2],seg:'i',txt:'ИСААН'},{ll:[12.2,103.2],seg:'e',txt:'ВОСТОК'},{ll:[18.0,97.5],seg:'n',txt:'СЕВЕР'},{ll:[9.53,100.8],seg:'ks',txt:'КО САМУИ'}].forEach(l=>{
+  L.marker(l.ll,{icon:L.divIcon({className:'',html:`<div style="background:${C[l.seg]};color:#fff;padding:2px 7px;border-radius:3px;font-size:9px;font-weight:800;font-family:sans-serif;opacity:.85;white-space:nowrap">${l.txt}</div>`,iconSize:[70,16],iconAnchor:[35,8]})}).addTo(map);
+});
+</script>
+</body>
+</html>
