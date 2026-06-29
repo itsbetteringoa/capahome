@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вьетнам — Полевая экспедиция по закупке какао</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bean:#1f1008;--cacao:#3d2008;--brown:#6b3d12;--amber:#b8731e;
+  --gold:#d4951e;--cream:#f4ede0;--parch:#ebe0cc;--forest:#0f2910;
+  --leaf:#1e5c1e;--lime:#4a8c2a;--mist:#edf4ec;--ink:#1a1208;
+  --muted:#7a6040;--border:#c8b494;--red:#b83020;--blue:#143d60;
+  --teal:#0a5c5c;--bg:#f7f1e8;--white:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
+.hdr{background:var(--bean);color:var(--cream);padding:14px 20px;position:sticky;top:0;z-index:3000;border-bottom:2px solid var(--amber)}
+.hdr-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.hdr h1{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:#fff;letter-spacing:.01em}
+.hdr p{font-size:11px;color:#c8a878;margin-top:1px}
+.hdr-pills{display:flex;gap:6px;flex-wrap:wrap}
+.hpill{font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(255,255,255,.1);color:#e8d0a8;padding:3px 10px;border-radius:4px}
+.hpill b{color:var(--gold)}
+nav{background:var(--cacao);position:sticky;top:56px;z-index:2999;border-bottom:1px solid var(--brown)}
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 16px;display:flex;gap:2px;overflow-x:auto}
+nav button{background:none;border:none;color:#c8a060;font-size:12px;font-weight:600;padding:10px 16px;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;border-bottom:3px solid transparent;font-family:'Syne',sans-serif;transition:all .15s;white-space:nowrap}
+nav button:hover{color:#fff}
+nav button.act{color:var(--gold);border-bottom-color:var(--gold)}
+.sec{display:none;max-width:1280px;margin:0 auto;padding:20px 16px}
+.sec.on{display:block}
+#map-sec{padding:0;max-width:100%}
+#map-sec.on{display:flex;flex-direction:column;height:calc(100vh - 100px)}
+#map-wrap{flex:1;position:relative}
+#the-map{height:100%;width:100%;min-height:400px}
+.map-bar{background:var(--forest);color:#d4f0d4;padding:9px 18px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:11px;font-family:'JetBrains Mono',monospace}
+.mb-seg{display:flex;align-items:center;gap:5px}
+.mb-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+#region-panel{position:absolute;top:12px;right:12px;z-index:1000;width:240px;background:rgba(20,10,4,.92);backdrop-filter:blur(6px);border:1px solid var(--amber);border-radius:8px;color:#eee;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.5)}
+.rp-header{background:var(--brown);padding:8px 12px;display:flex;justify-content:space-between;align-items:center}
+.rp-header span{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:#fff}
+.rp-header small{font-size:10px;color:#c8a878;font-family:'JetBrains Mono',monospace}
+.rp-grid{padding:10px 12px;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.rp-stat{background:rgba(255,255,255,.08);border-radius:4px;padding:6px 8px}
+.rp-val{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--gold)}
+.rp-lbl{font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;margin-top:1px}
+.rp-contact{padding:0 12px 8px;font-size:10px;color:#c8b888;line-height:1.5}
+.rp-contact strong{color:#fff;font-size:11px;display:block;margin-bottom:2px}
+.rp-beans{font-size:10px;color:#9fa;padding:4px 12px 10px;line-height:1.4}
+.rp-beans strong{color:var(--gold)}
+.seg-hdr{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:6px 6px 0 0;margin-top:20px;color:#fff}
+.seg-hdr:first-of-type{margin-top:0}
+.seg-hdr h3{font-family:'Syne',sans-serif;font-size:13px;font-weight:700}
+.seg-hdr .sm{font-size:10px;opacity:.8;font-family:'JetBrains Mono',monospace}
+.seg-hdr .pill{font-size:9px;background:rgba(255,255,255,.2);padding:2px 7px;border-radius:3px;margin-left:auto;white-space:nowrap}
+.s-hcm{background:#8c5a00}
+.s-mekong{background:#0a7060}
+.s-se{background:var(--blue)}
+.s-hl{background:var(--forest)}
+.s-dl{background:#1a4a18}
+table.iti{width:100%;border-collapse:collapse;background:#fff;border-radius:0 0 6px 6px;overflow:hidden;margin-bottom:0}
+table.iti th{background:var(--parch);color:var(--bean);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:7px 10px;text-align:left;border-bottom:1px solid var(--border)}
+table.iti td{padding:8px 10px;border-bottom:1px solid #f0e4d0;vertical-align:top;font-size:12px}
+table.iti tr.wknd td{background:#f8f2ea;color:#9a7850;font-style:italic}
+table.iti tr.hol td{background:#fff8e0;color:#806000}
+table.iti tr.trav td{background:#eef3f8}
+.dn{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;color:var(--muted);white-space:nowrap;width:28px}
+.dd{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);white-space:nowrap;width:82px}
+.ltag{display:inline-block;font-size:9px;padding:1px 6px;border-radius:3px;font-weight:700;margin-right:4px;white-space:nowrap}
+.l-h{background:#fed;color:#840}
+.l-m{background:#d0f5ee;color:#054}
+.l-se{background:#def;color:#048}
+.l-hl{background:#dfd;color:#060}
+.l-dl{background:#d4f4d4;color:#030}
+.stop{font-weight:600;color:var(--cacao);font-size:12px;line-height:1.3}
+.sub{color:var(--muted);font-size:11px;margin-top:2px;line-height:1.5}
+.ph{display:inline;font-family:'JetBrains Mono',monospace;font-size:10px;background:#dff5df;color:#1a6020;padding:1px 5px;border-radius:3px;margin-right:3px}
+.kp{display:inline;font-size:10px;font-weight:700;background:#ffd;color:#660;padding:1px 5px;border-radius:3px}
+td.thb{font-family:'JetBrains Mono',monospace;font-size:11px;text-align:right;color:var(--brown);white-space:nowrap;width:80px}
+.b-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px;margin-bottom:14px}
+.b-card{background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.b-ch{padding:9px 13px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.b-ch h3{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--bean)}
+.b-ch .ico{font-size:15px}
+.bt{width:100%;border-collapse:collapse}
+.bt td{padding:6px 13px;border-bottom:1px solid #f5ebe0;font-size:11px}
+.bt tr:last-child td{border-bottom:none}
+.bt td:last-child{text-align:right;font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--cacao)}
+.bt .sub-row td{background:var(--parch);font-weight:700;color:var(--bean)}
+.bt .note-row td{font-size:10px;color:#888;font-style:italic;background:#fdfaf6}
+.b-total{background:var(--bean);color:#fff;border-radius:8px;padding:16px 20px;margin-top:14px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px}
+.b-total h3{font-family:'Syne',sans-serif;font-size:17px;font-weight:800}
+.b-total .sub-t{font-size:11px;color:#c8a878;margin-top:3px}
+.grand{text-align:right}
+.grand .thb-big{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;color:var(--gold)}
+.grand .usd{font-size:12px;color:#c8b888;margin-top:2px}
+.b-legend{background:var(--parch);border:1px solid var(--border);border-radius:6px;padding:10px 14px;font-size:11px;color:var(--muted);line-height:1.7;margin-top:10px}
+.b-legend strong{color:var(--bean)}
+.sum-table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;border:1px solid var(--border);margin-top:12px}
+.sum-table th{background:var(--parch);color:var(--bean);font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:8px 12px;text-align:left;font-weight:700}
+.sum-table td{padding:7px 12px;border-bottom:1px solid #f0e8d8;font-size:12px}
+.sum-table td:nth-child(2),.sum-table td:nth-child(3){font-family:'JetBrains Mono',monospace;font-weight:500;text-align:right;color:var(--cacao)}
+.sum-table td:nth-child(4){text-align:right;color:var(--muted);font-size:11px}
+.sum-table tr.total-row td{background:var(--parch);font-weight:700;color:var(--bean)}
+.sum-table tr.total-row td:nth-child(2),.sum-table tr.total-row td:nth-child(3){color:var(--cacao)}
+.con-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:10px}
+.con-card{background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.con-card.pri{border-left:3px solid var(--leaf)}
+.con-hdr{padding:9px 11px;background:var(--parch);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;gap:6px}
+.con-name{font-weight:700;font-size:12px;color:var(--bean);line-height:1.3}
+.con-reg{font-size:9px;background:var(--forest);color:#9fc;padding:2px 6px;border-radius:3px;font-family:'JetBrains Mono',monospace;white-space:nowrap}
+.con-reg.r-hcm{background:#8c5a00}
+.con-reg.r-mek{background:#0a7060}
+.con-reg.r-se{background:var(--blue)}
+.con-reg.r-hl{background:var(--forest)}
+.con-reg.r-dl{background:#1a4a18}
+.con-body{padding:9px 11px}
+.con-ph{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--leaf);font-weight:700}
+.con-em{font-size:10px;color:var(--blue);word-break:break-all;margin-top:2px}
+.con-note{font-size:10px;color:var(--muted);margin-top:5px;line-height:1.4}
+.con-badge{display:inline-block;font-size:9px;padding:2px 6px;border-radius:3px;margin-top:4px}
+.cb-co{background:#e8f5e9;color:#1b5e20}
+.cb-pr{background:#e3f2fd;color:#0d47a1}
+.cb-re{background:#fff3e0;color:#e65100}
+.cb-fa{background:#fce4ec;color:#880e4f}
+.cb-ex{background:#f3e5f5;color:#6a1b9a}
+h2.stitle{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--bean);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--parch)}
+.info-box{background:var(--parch);border:1px solid var(--border);border-radius:6px;padding:10px 14px;font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:14px}
+.info-box strong{color:var(--bean)}
+.warn-box{background:#fff8e0;border:1px solid #e8d060;border-radius:6px;padding:9px 13px;font-size:11px;color:#604800;line-height:1.6;margin-bottom:14px}
+.stats-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.s-box{flex:1;min-width:100px;background:#fff;border:1px solid var(--border);border-radius:6px;padding:9px 12px}
+.s-box .val{font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:700;color:var(--cacao)}
+.s-box .lbl{font-size:10px;color:var(--muted);margin-top:1px}
+.con-section-hdr{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--bean);padding:10px 0 6px;border-bottom:1px solid var(--border);margin:14px 0 10px;display:flex;align-items:center;gap:8px}
+.con-section-dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <div>
+      <h1>🌿 Вьетнам — Закупочная экспедиция какао-бобов (30 дней)</h1>
+      <p>Хо Ши Мин → Дельта Меконга → Юго-Восток → Нагорья Лам-Донг → Дак Лак → Хо Ши Мин</p>
+    </div>
+    <div class="hdr-pills">
+      <div class="hpill">~<b>30</b> дней</div>
+      <div class="hpill"><b>28</b> визитов</div>
+      <div class="hpill"><b>28+</b> поставщиков</div>
+      <div class="hpill"><b>4</b> региона</div>
+      <div class="hpill">≈ <b>32M ₫</b></div>
+      <div class="hpill">≈ <b>$1 260</b> USD</div>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="nav-inner">
+    <button class="act" onclick="show('map-sec',this)">🗺 Карта маршрута</button>
+    <button onclick="show('iti-sec',this)">📅 По дням</button>
+    <button onclick="show('bud-sec',this)">💰 Бюджет</button>
+    <button onclick="show('con-sec',this)">📞 Контакты</button>
+  </div>
+</nav>
+
+<!-- КАРТА -->
+<div id="map-sec" class="sec on">
+  <div class="map-bar">
+    <strong style="font-family:'Syne',sans-serif;margin-right:4px">Сегменты маршрута →</strong>
+    <span class="mb-seg"><span class="mb-dot" style="background:#d4830a"></span>Хо Ши Мин (База)</span>
+    <span class="mb-seg"><span class="mb-dot" style="background:#0a9070"></span>Дельта Меконга (Бен Тре · Тьен Зянг · Тра Винь)</span>
+    <span class="mb-seg"><span class="mb-dot" style="background:#2980b9"></span>Юго-Восток (Донг Най · Ба Риа · Бинь Фыок)</span>
+    <span class="mb-seg"><span class="mb-dot" style="background:#27ae60"></span>Нагорья (Лам Донг · Дак Нонг · Дак Лак)</span>
+    <span style="margin-left:auto;color:#9fa;font-size:10px">Нажмите маркер для деталей</span>
+  </div>
+  <div id="map-wrap">
+    <div id="the-map"></div>
+    <div id="region-panel">
+      <div class="rp-header"><span>Сводка по региону</span><small>нажмите на точку</small></div>
+      <div class="rp-grid">
+        <div class="rp-stat"><div class="rp-val">—</div><div class="rp-lbl">Рабочих дней</div></div>
+        <div class="rp-stat"><div class="rp-val">—</div><div class="rp-lbl">Расходы</div></div>
+        <div class="rp-stat"><div class="rp-val">—</div><div class="rp-lbl">Визитов</div></div>
+        <div class="rp-stat"><div class="rp-val">—</div><div class="rp-lbl">Цена/кг СФБ</div></div>
+      </div>
+      <div class="rp-beans"><strong>Объём закупки:</strong> выберите регион</div>
+      <div class="rp-contact"><strong>Ключевой контакт:</strong> нажмите маркер</div>
+    </div>
+  </div>
+</div>
+
+<!-- МАРШРУТ ПО ДНЯМ -->
+<div id="iti-sec" class="sec">
+  <h2 class="stitle">Маршрут по дням · Октябрь–Ноябрь 2026</h2>
+  <div class="stats-row">
+    <div class="s-box"><div class="val">30</div><div class="lbl">Всего дней</div></div>
+    <div class="s-box"><div class="val">28</div><div class="lbl">Рабочих визитов</div></div>
+    <div class="s-box"><div class="val">11</div><div class="lbl">Провинций</div></div>
+    <div class="s-box"><div class="val">28+</div><div class="lbl">Поставщиков</div></div>
+    <div class="s-box"><div class="val">2→5 т</div><div class="lbl">Цель/месяц</div></div>
+    <div class="s-box"><div class="val">Пик ✓</div><div class="lbl">Сезон окт–дек</div></div>
+  </div>
+  <div class="warn-box">⚠️ <strong>Октябрь–декабрь = пиковый сезон сбора:</strong> главный урожай Вьетнама. Все фермы активны — встречи легче организовать, образцы свежие. Дельта Меконга: короткие ливни во второй половине дня, встречи с 08:00 до 13:00. Нагорья Дак Лак: климат прохладнее (+15–25°C). Zalo > WhatsApp для локальных контактов — большинство вьетнамцев используют Zalo. Переводчик обязателен для большинства встреч в провинциях.
+  </div>
+
+  <!-- ХО ШИ МИН -->
+  <div class="seg-hdr s-hcm"><span style="font-size:18px">🏙️</span><div><h3>ХО ШИ МИН — Главный шоколадный хаб Вьетнама</h3><span class="sm">12–16 окт. · ХШМ · ключевые агрегаторы, ассоциации, покупатели</span></div><span class="pill">5 дней · 6 визитов</span></div>
+  <table class="iti">
+    <thead><tr><th>День</th><th>Дата</th><th>Локация</th><th>Активность</th><th>~₫</th></tr></thead>
+    <tbody>
+      <tr><td class="dn">Д1</td><td class="dd">пн 12 окт</td><td><span class="ltag l-h">ХШМ</span>Прибытие</td><td><div class="stop">Хо Ши Мин · Ориентация + SIM + инструменты</div><div class="sub">Виетель или Viettel SIM 30 дней (150,000 ₫, в аэропорту Tân Sơn Nhất). Установить: Zalo (ключевой мессенджер Вьетнама), Google Translate (вьетнамский пакет офлайн), Maps.me Вьетнам. Заселение в хостел у Фам Нгу Лао (300,000–380,000 ₫/ночь). Вечером: написать всем контактам через Zalo/WA для подтверждения встреч.</div></td><td class="thb">450 000</td></tr>
+      <tr><td class="dn">Д2</td><td class="dd">вт 13 окт</td><td><span class="ltag l-h">ХШМ</span>Puratos ★★★</td><td><div class="stop">★★★ ПРИОРИТЕТ — Puratos Grand-Place Вьетнам (PGPV)</div><div class="sub"><span class="ph">+84 28 730 76565</span> · 1A Me Linh Square, Бен Нге, Р.1 (офис ХШМ). <span class="kp">Крупнейший покупатель вьетнамского какао — 60% всего объёма страны</span>. Сеть 2 000+ фермеров. Cacao-Trace программа. Спросить: условия перепродажи СФБ, регионы, объёмы, цены, список сертифицированных ферм. Контакт: Во Ань Туан (менеджер закупок Puratos Vietnam).</div></td><td class="thb">350 000</td></tr>
+      <tr><td class="dn">Д3</td><td class="dd">ср 14 окт</td><td><span class="ltag l-h">ХШМ</span>Marou+Vinacacao ×2</td><td><div class="stop">Maison Marou + Vinacacao (2 визита)</div><div class="sub">09:00 Maison Marou (167–169 ул. Кальметт, Р.1) <span class="ph">info@marouchocolate.com</span> — 500+ фермеров в 7 провинциях. Попросить введения к их фермам-партнёрам. Vincent Mourou (CEO) или менеджер закупок. 14:00 Vinacacao (Vietnam Cacao JSC, осн. 2007) <span class="ph">+84 28 391 03425</span> <span class="ph">talk2me@vinacacao.com.vn</span> — производитель какао-продуктов, покупатель сырья.</div></td><td class="thb">380 000</td></tr>
+      <tr><td class="dn">Д4</td><td class="dd">чт 15 окт</td><td><span class="ltag l-h">ХШМ</span>VICOFA+Belvie ×2</td><td><div class="stop">VICOFA + Belvie Chocolate (2 визита)</div><div class="sub">09:00 Vietnam Coffee–Cocoa Association (VICOFA) — торговая ассоциация. Попросить список членов-поставщиков СФБ + рекомендательные письма для провинций. Г-н Бак Тхань Туан (исполком). 14:00 Belvie Chocolate (Р.1) — бельгийско-вьетнамский бренд, закупает из Бен Тре, Донг Най, Лам Донг. Узнать детали цепочки поставок.</div></td><td class="thb">360 000</td></tr>
+      <tr><td class="dn">Д5</td><td class="dd">пт 16 окт</td><td><span class="ltag l-h">ХШМ</span>NLU+Alluvia ×2</td><td><div class="stop">Нонг Лам Университет + Alluvia Chocolate (2 визита)</div><div class="sub">09:00 Nong Lam University (Тху Дык) — Dr. Фам Хонг Дык Фыок, пионер какао-сортов Вьетнама. Лаборатория какао-исследований = лучший источник научных знакомств. 14:00 Alluvia Chocolate (Тьен Зянг/ХШМ) — ферма-завод в Тьен Зянге, крафтовый шоколад. Попросить контакты фермеров Тьен Зянга + Бен Тре.</div></td><td class="thb">360 000</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ДЕЛЬТА МЕКОНГА -->
+  <div class="seg-hdr s-mekong"><span style="background:#0a9070;width:14px;height:14px;border-radius:50%;display:inline-block"></span><div><h3>СЕГМЕНТ 1 — ДЕЛЬТА МЕКОНГА</h3><span class="sm">17–24 окт. · ХШМ → Бен Тре → Тьен Зянг → Тра Винь → ХШМ</span></div><span class="pill">7 рабочих дней · 7 визитов</span></div>
+  <table class="iti">
+    <thead><tr><th>День</th><th>Дата</th><th>Локация</th><th>Активность</th><th>~₫</th></tr></thead>
+    <tbody>
+      <tr class="trav"><td class="dn">—</td><td class="dd">сб 17 окт</td><td><span class="ltag l-m">→ Бен Тре</span></td><td>ХШМ → Бен Тре (автобус Фыонг Чанг, 2 ч, 70,000 ₫). Заселение в хостел. Позвонить в Puratos Бен Тре для подтверждения визита в понедельник. Прогулка по набережной, местные фрукты, кокосовый рынок.</td><td class="thb">250 000</td></tr>
+      <tr class="wknd"><td class="dn">—</td><td class="dd">вс 18 окт</td><td><span class="ltag l-m">Бен Тре</span>Отдых</td><td>Бен Тре. Экотур на лодке по каналам Меконга (100,000 ₫). Уличная еда — хю тьеу, барбекю из сома. Написать Zalo всем фермерам Бен Тре и Тьен Зянга для согласования встреч.</td><td class="thb">300 000</td></tr>
+      <tr><td class="dn">Д6</td><td class="dd">пн 19 окт</td><td><span class="ltag l-m">Бен Тре</span>Puratos FC ★★★</td><td><div class="stop">★★★ Puratos Grand-Place — Центр ферментации Бен Тре</div><div class="sub"><span class="ph">+84 274 730 6565</span> · Лот F1-F2-F3, Зяо Лонг Индастриал Зон, Тяу Тхань дистрикт, Бен Тре. <span class="kp">КЛЮЧЕВОЙ ОБЪЕКТ:</span> крупнейший ферментационный центр Вьетнама. Осмотр процесса ферментации в акациевых ящиках. Понять как Puratos закупает у фермеров. Попросить знакомство с партнёрами-кооперативами Бен Тре.</div></td><td class="thb">350 000</td></tr>
+      <tr><td class="dn">Д7</td><td class="dd">вт 20 окт</td><td><span class="ltag l-m">Бен Тре</span>Фермеры+Кооп ×2</td><td><div class="stop">Кооперативы фермеров Бен Тре + SWITCH-Asia демофермы (2 визита)</div><div class="sub">09:00 Кооперативы фермеров Бен Тре (через PGPV/VICOFA интро) — небольшие плантации, переплетённые с кокосовыми пальмами. Чоколатерро-фермеры. Пробы СФБ с пальм. 14:00 EU SWITCH-Asia демоферма Бен Тре (одна из 6 кольцевых демомоделей проекта). Проверить: влажность, ферментационный профиль, возможность объёма 1–2 т/мес.</div></td><td class="thb">320 000</td></tr>
+      <tr class="trav"><td class="dn">—</td><td class="dd">ср 21 окт</td><td><span class="ltag l-m">→ Тьен Зянг</span></td><td>Бен Тре → Митхо (Тьен Зянг) (автобус 1 ч, 40,000 ₫). Заселение. Звонок Alluvia для подтверждения фермерских встреч. Ужин на лодочном рынке Митхо.</td><td class="thb">250 000</td></tr>
+      <tr><td class="dn">Д8</td><td class="dd">чт 22 окт</td><td><span class="ltag l-m">Тьен Зянг</span>Alluvia+HTX ×2</td><td><div class="stop">Alluvia Chocolate Farm + Кооперативы фермеров Тьен Зянга (2 визита)</div><div class="sub">09:00 Alluvia Chocolate (ферма + мини-завод, Хоа-Тхань дистрикт) — bean-to-bar из Тьен Зянга. Осмотр ферментации, дегустация. Купить образцы. 14:00 Фермерские кооперативы Тьен Зянга (через Alluvia/VICOFA) — Trinitario-гибриды, переплетённые с фруктовыми деревьями. Оценить объём и качество.</div></td><td class="thb">330 000</td></tr>
+      <tr><td class="dn">Д9</td><td class="dd">пт 23 окт</td><td><span class="ltag l-m">→ Тра Винь</span>Cacao Mekong</td><td><div class="stop">Тьен Зянг → Тра Винь · Cacao Mekong (ISO 22000:2018)</div><div class="sub">09:00 автобус Тьен Зянг → Тра Винь (2 ч, 60,000 ₫). Cacao Mekong (осн. 2018, Тра Винь) — современный завод с ISO 22000:2018, мощность 3–5 т готовой продукции/мес. <span class="kp">Хорошая ферментация, есть экспортные возможности.</span> Спросить: объём СФБ, стандарты, цена, условия для нового покупателя. Возможна 5 т/мес поставка.</div></td><td class="thb">350 000</td></tr>
+      <tr class="trav"><td class="dn">—</td><td class="dd">сб 24 окт</td><td><span class="ltag l-m">→ ХШМ</span></td><td>Тра Винь → ХШМ (автобус 3 ч, 90,000 ₫). Отдых. Разобрать образцы Дельты. Написать юго-восточным контактам для согласования встреч на следующей неделе. Вечером: ужин на рынке Бен Тхань.</td><td class="thb">250 000</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ЮГО-ВОСТОК -->
+  <div class="seg-hdr s-se"><span style="background:#2980b9;width:14px;height:14px;border-radius:50%;display:inline-block"></span><div><h3>СЕГМЕНТ 2 — ЮГОВОСТОЧНАЯ ПЕТЛЯ</h3><span class="sm">25–31 окт. · ХШМ → Донг Най → Ба Риа-Вунг Тао → Бинь Фыок</span></div><span class="pill">6 рабочих дней · 7 визитов</span></div>
+  <table class="iti">
+    <thead><tr><th>День</th><th>Дата</th><th>Локация</th><th>Активность</th><th>~₫</th></tr></thead>
+    <tbody>
+      <tr class="wknd"><td class="dn">—</td><td class="dd">вс 25 окт</td><td><span class="ltag l-h">ХШМ</span>Отдых</td><td>ХШМ. Отдых. Написать Zalo: Chong Duc Cacao, Baria Chocolate, Cacao A1. Подготовить расписание встреч Юго-Востока. Рынок Бен Тхань.</td><td class="thb">300 000</td></tr>
+      <tr><td class="dn">Д10</td><td class="dd">пн 26 окт</td><td><span class="ltag l-se">Донг Най</span>Trong Duc ★★</td><td><div class="stop">★★ Trong Duc Cacao Co., Ltd (Донг Най, осн. 2005)</div><div class="sub">ХШМ → Донг Най (автобус 1,5 ч, 50,000 ₫). <span class="ph">trongduccacao.vn</span> · 12 Кху Дан Ку 16, Ап 4, Фу Хоа, Динь Куан дистрикт, Донг Най. 20 лет работы с фермерами Донг Ная. Обработка: порошок, масло, шоколад. <span class="kp">Хороший источник СФБ Донг Ная.</span> Спросить: объём закупаемых свежих + сухих ферментированных бобов, цены, минимальный заказ.</div></td><td class="thb">350 000</td></tr>
+      <tr><td class="dn">Д11</td><td class="dd">вт 27 окт</td><td><span class="ltag l-se">Донг Най</span>Фермеры+Bamboo ×2</td><td><div class="stop">Фермеры Донг Ная + Bamboo Capital Cacao Farm (2 визита)</div><div class="sub">09:00 Сеть фермеров Донг Ная (через Trong Duc/VICOFA интро) — фермы с какао-туризмом. Маэстро ферментации. 14:00 Bamboo Capital Cacao Farm (Динь Куан/Кам Ми) — крупная корпоративная плантация. Trinitario. Может продавать СФБ сторонним покупателям. Уточнить условия.</div></td><td class="thb">340 000</td></tr>
+      <tr class="trav"><td class="dn">—</td><td class="dd">ср 28 окт</td><td><span class="ltag l-se">→ Ба Риа</span></td><td>Донг Най → Ба Риа-Вунг Тао (автобус 2 ч, 80,000 ₫). Заселение. Позвонить Baria Chocolate и фермерам района Тяу Дык для подтверждения встреч.</td><td class="thb">280 000</td></tr>
+      <tr><td class="dn">Д12</td><td class="dd">чт 29 окт</td><td><span class="ltag l-se">Ба Риа-ВТ</span>Baria+Фермеры ×2</td><td><div class="stop">Baria Chocolate + Фермеры района Тяу Дык (2 визита)</div><div class="sub">09:00 Baria Chocolate Co. (источник Marou для Ба Риа бара) — крафт-переработчик с местным какао. Узнать контакты их фермеров-поставщиков. 13:30 Фермеры района Тяу Дык, провинция Ба Риа — хозяйства г-на Нгуен Хыу Ноня + соседей. Маленькие плантации, переплетённые с кешью. Оценить ферментацию и объём.</div></td><td class="thb">340 000</td></tr>
+      <tr><td class="dn">Д13</td><td class="dd">пт 30 окт</td><td><span class="ltag l-se">Ба Риа-ВТ</span>Кооп Тяу Дык</td><td><div class="stop">Кооперативы какао-фермеров Ба Риа — район Тяу Дык и Суан Лок</div><div class="sub">Кооперативы Ба Риа-Вунг Тао (Marou источник) — несколько малых объединений. Сорт: Trinitario, яркий фруктовый профиль с нотами красной смородины + цитруса. Popросить: мин. заказ, форма упаковки СФБ (мешки по 60 кг), транспорт до ХШМ. Сравнить качество с Дельтой.</div></td><td class="thb">320 000</td></tr>
+      <tr class="trav"><td class="dn">—</td><td class="dd">сб 31 окт</td><td><span class="ltag l-se">→ Бинь Фыок</span></td><td>Ба Риа → Бинь Фыок (Донг Xоай, автобус ~3,5 ч, 120,000 ₫). Заселение. Отдых. Подтвердить встречи с Cacao A1 и кооперативами Бинь Фыока.</td><td class="thb">280 000</td></tr>
+      <tr><td class="dn">Д14</td><td class="dd">вс 01 ноя</td><td><span class="ltag l-se">Бинь Фыок</span>Cacao A1 ×2</td><td><div class="stop">Cacao A1 Company + Кооперативы Бинь Фыока (2 визита)</div><div class="sub">09:00 Cacao A1 (г-н Донг Тьен Хунг, Бу Данг дистрикт, Бинь Фыок) — крупный закупщик + переработчик, поставщик Puratos. <span class="kp">Важный объёмный источник — выход на фермерскую сеть Бинь Фыока.</span> 14:00 Кооперативы Бинь Фыока: какао переплетено с кешью и перцем. Уникальный профиль.</div></td><td class="thb">360 000</td></tr>
+      <tr class="trav"><td class="dn">—</td><td class="dd">пн 02 ноя</td><td><span class="ltag l-se">→ ХШМ</span></td><td>Бинь Фыок → ХШМ (автобус 2,5 ч, 90,000 ₫). Прибытие ~12:00. Отдых + разбор образцов Юго-Востока. Написать нагорные контакты (Lam Dong, Dak Lak) для согласования встреч.</td><td class="thb">280 000</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ЛАМ-ДОНГ -->
+  <div class="seg-hdr s-hl"><span style="background:#27ae60;width:14px;height:14px;border-radius:50%;display:inline-block"></span><div><h3>СЕГМЕНТ 3 — НАГОРЬЯ ЛАМ-ДОНГ (Да Лат)</h3><span class="sm">3–6 ноя. · ХШМ → Лам Донг → Дак Нонг</span></div><span class="pill">4 рабочих дня · 5 визитов</span></div>
+  <table class="iti">
+    <thead><tr><th>День</th><th>Дата</th><th>Локация</th><th>Активность</th><th>~₫</th></tr></thead>
+    <tbody>
+      <tr class="trav"><td class="dn">—</td><td class="dd">вт 03 ноя</td><td><span class="ltag l-hl">→ Да Лат</span></td><td>ХШМ → Да Лат (Лам Донг) автобус (~4 ч, 120,000 ₫). Заселение в хостел в центре Да Лата. Позвонить местным фермерам. Цветочный рынок Да Лата, уличная кукуруза.</td><td class="thb">280 000</td></tr>
+      <tr><td class="dn">Д15</td><td class="dd">ср 04 ноя</td><td><span class="ltag l-hl">Лам Донг</span>Marou farms ×2</td><td><div class="stop">Какао-фермы Лам Донга (Marou источник 74% бар) (2 визита)</div><div class="sub">09:00 Фермы района Бао Лам (Лам Донг) — Marou Lam Dong 74% шоколад. Прохладный климат (~25°C), красные базальтовые почвы = ореховые, землистые ноты. Посетить 1–2 фермы через VICOFA/Marou интро. 14:00 Другой кластер Лам Донга: Ди Линь или Катьхинь дистрикт — мелкие фермеры, коллективная ферментация.</div></td><td class="thb">340 000</td></tr>
+      <tr><td class="dn">Д16</td><td class="dd">чт 05 ноя</td><td><span class="ltag l-hl">Лам Донг</span>Cacao Land ×2</td><td><div class="stop">Cacao Land + Фермерский Кооператив Лам Донга (2 визита)</div><div class="sub">09:00 Cacao Land (cacaoland.vn) — компания полного цикла от саженца до шоколада. Собственная плантация + переработка + шоколад. Выяснить: продают ли СФБ сторонним покупателям, объём, цена. 14:00 Кооператив фермеров Лам Донга — члены EU SWITCH-Asia проекта. Проверить стандарты ферментации нагорий.</div></td><td class="thb">340 000</td></tr>
+      <tr class="trav"><td class="dn">—</td><td class="dd">пт 06 ноя</td><td><span class="ltag l-hl">→ Дак Нонг</span></td><td>Да Лат → Дак Нонг (автобус ~3 ч, 100,000 ₫). Заселение. Посетить кооперативы Дак Нонга (EU SWITCH-Asia проект, Cu Jut дистрикт). Г-н Кам Ба Бьен — фермер с 700 деревьями: +300M ₫/год, 2025 цена 80,000 ₫/кг свежих бобов. Вечером: автобус Дак Нонг → Буон Ма Тхуот (Дак Лак, 2 ч, 80,000 ₫).</td><td class="thb">380 000</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ДАК ЛАК -->
+  <div class="seg-hdr s-dl"><span style="background:#1a5e18;width:14px;height:14px;border-radius:50%;display:inline-block"></span><div><h3>СЕГМЕНТ 4 — ДАК ЛАК (ЦЕНТРАЛЬНЫЕ НАГОРЬЯ)</h3><span class="sm">7–12 ноя. · Буон Ма Тхуот → Еа Кар → Кронг Ана → ХШМ</span></div><span class="pill">6 рабочих дней · 9 визитов · Высшее качество</span></div>
+  <table class="iti">
+    <thead><tr><th>День</th><th>Дата</th><th>Локация</th><th>Активность</th><th>~₫</th></tr></thead>
+    <tbody>
+      <tr><td class="dn">Д17</td><td class="dd">сб 07 ноя</td><td><span class="ltag l-dl">Дак Лак</span>Puratos BМТ+Anh Em ×2</td><td><div class="stop">★★★ Puratos Офис БМТ + Anh Em Cacao (Tbros) (2 визита)</div><div class="sub">09:00 Puratos BMT офис (108 Нац. шоссе 14, дер. 2, Хоа Тхуан, Буон Ма Тхуот) — региональный офис + агроном-консультант по Дак Лаку. Получить карту партнёров-ферм. 14:00 <span class="kp">Anh Em Cacao Co. (бренд Tbros)</span> — основан 2017 Чыонг Минь Тхангом. Лучшая ферментация Дак Лака. Сорт B14 Trinitario. Экспортирует в Европу. Нотки свежих слив, красного вина, ореха.</div></td><td class="thb">360 000</td></tr>
+      <tr><td class="dn">Д18</td><td class="dd">вс 08 ноя</td><td><span class="ltag l-dl">Кронг Ана</span>Nam Truong Son ★★</td><td><div class="stop">★★★ Nam Truong Son Cacao Co. Ltd (Кронг Ана дистрикт)</div><div class="sub">№ 107, дер. Тан Тьен, коммуна Еа На, дистрикт Кронг Ана, Дак Лак. Осн. 2007. Завод полного цикла: ферментация → порошок + масло какао + шоколад. UTZ стандарт. Купает у своей фермерской сети. <span class="kp">Один из крупнейших переработчиков Дак Лака.</span> Спросить: продают ли СФБ напрямую, объём, условия.</div></td><td class="thb">360 000</td></tr>
+      <tr><td class="dn">Д19</td><td class="dd">пн 09 ноя</td><td><span class="ltag l-dl">Еа Кар</span>Nhat Tam ★★★</td><td><div class="stop">★★★ Кооператив «Нят Там» — 700 га, 200 фермеров</div><div class="sub">Деревня 10, коммуна Еа Дар, дистрикт Еа Кар, Дак Лак. Директор: г-жа Нгуен Хонг Тхыонг (участник Cocoa Association of Asia конференции в Сингапуре). 700 га, 200 фермеров-партнёров. Круглогодичный сбор (9 мес/год). Доход: 500М–1 млрд ₫/га/год. <span class="kp">КЛЮЧЕВОЙ ОБЪЁМНЫЙ ИСТОЧНИК.</span> Гарантированная закупочная цена. Цель 1,200 га к 2030.</div></td><td class="thb">350 000</td></tr>
+      <tr><td class="dn">Д20</td><td class="dd">вт 10 ноя</td><td><span class="ltag l-dl">Еа Кар</span>Dong Tien ★★★</td><td><div class="stop">★★★ Кооператив «Донг Тьен» Еа Кар — 120 га, 300 т/год</div><div class="sub">80 членов, 120 га плантаций. Поставляет Puratos Grand-Place + Maison Marou. Директор: г-н Нгуен Динь Тьен. Годовой сбор ~300 т сухих бобов = <span class="kp">до 25 т/мес</span>. Ферментация в деревянных ящиках. Полная прослеживаемость. Расчёт дохода: 400М ₫/га/год после затрат. Это крупнейший потенциальный источник.</div></td><td class="thb">350 000</td></tr>
+      <tr><td class="dn">Д21</td><td class="dd">ср 11 ноя</td><td><span class="ltag l-dl">Буон Хо</span>Nhat Thong ★★</td><td><div class="stop">★★ Nhat Thong Dak Lak Agriculture Co. Ltd — 270 га органик</div><div class="sub">Буон Хо таун, Дак Лак. Директор: г-н Фам Хыу Тхой. Инвестиции $6 млн в органическую ферму 300 га (270 га какао). Основана 2020 — новая, современная. <span class="kp">Потенциально крупнейшая единая плантация Вьетнама.</span> Прежде всего проверить: готовы ли продавать СФБ на сторону или только переработка.</div></td><td class="thb">360 000</td></tr>
+      <tr><td class="dn">Д22</td><td class="dd">чт 12 ноя</td><td><span class="ltag l-dl">Еа Кар</span>Еа Кар Кооп+Буфер ×2</td><td><div class="stop">Еа Кар районный кооператив + Буфер переговоров (2 визита)</div><div class="sub">09:00 Районный какао-кооператив Еа Кар (через Нят Там / VICOFA интро) — ещё один кластер Еа Кара. В районе ~750 га. Цена свежих бобов 2025: ~90,000 ₫/кг. 14:00 Буфер: переговорные звонки 2-го раунда. Нанять студента-переводчика (200,000 ₫/ч, Дак Лакский университет). Запросить КП на 2 т/мес поставку.</div></td><td class="thb">380 000</td></tr>
+      <tr><td class="dn">Д23</td><td class="dd">пт 13 ноя</td><td><span class="ltag l-dl">Дак Лак</span>Финал + образцы</td><td><div class="stop">Финальная документация + образцы Дак Лака</div><div class="sub">Утро: фото + маркировка всех образцов (регион, дата, ферментатор, сорт, % влажности). Написать сравнительный рейтинг топ-5 вьетнамских поставщиков для первого пробного заказа. Запросить финальные условия у Dong Tien + Nhat Tam. Ночной автобус BMT → ХШМ (~8 ч, 180,000 ₫, Green Bus VIP).</div></td><td class="thb">400 000</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ФИНАЛ ХШМ -->
+  <div class="seg-hdr s-hcm"><span style="font-size:18px">🏁</span><div><h3>ФИНАЛ — Хо Ши Мин (Итог + Переговоры)</h3><span class="sm">14–15 ноя. · ХШМ · итоговые переговоры + отлёт</span></div><span class="pill">2 дня · финал</span></div>
+  <table class="iti">
+    <thead><tr><th>День</th><th>Дата</th><th>Локация</th><th>Активность</th><th>~₫</th></tr></thead>
+    <tbody>
+      <tr><td class="dn">Д24</td><td class="dd">сб 14 ноя</td><td><span class="ltag l-h">ХШМ</span>Итоговый день</td><td><div class="stop">ХШМ — Финальные встречи и переговоры</div><div class="sub">Прибытие ~06:00 ночным автобусом. Отдых до 10:00. Финальная встреча с Puratos ХШМ (обновление условий после всех полевых визитов). Составить матрицу поставщиков: регион · объём · цена/кг СФБ · транспорт до порта · контактное лицо. Вечером: встреча с Marou — обсудить возможность дополнительной закупки через их фермерскую сеть.</div></td><td class="thb">400 000</td></tr>
+      <tr><td class="dn">Д25</td><td class="dd">вс 15 ноя</td><td><span class="ltag l-h">ХШМ</span>Отъезд</td><td><div class="stop">Финальный отчёт + Отъезд из Вьетнама</div><div class="sub">Систематизировать: все образцы, контакты, цены, логистику. Написать топ-3 поставщика — запросить КП на первую пробную поставку 2 т. Трансфер в аэропорт Тан Шон Нят. Маршрут: ХШМ → (стыковка) → Ко Самуи или Бангкок.</div></td><td class="thb">350 000</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- БЮДЖЕТ -->
+<div id="bud-sec" class="sec">
+  <h2 class="stitle">Полный бюджет — 1 человек, ~30 дней (Ко Самуи → ХШМ → 4 региона → ХШМ → Ко Самуи)</h2>
+  <div class="info-box">
+    Все цены в вьетнамских донгах (₫). Курс: 1 USD ≈ 25 500 ₫ · 1 THB ≈ 720 ₫ · 1 EUR ≈ 28 000 ₫.<br>
+    <strong>Принцип бюджета:</strong> хостелы (~300 000–400 000 ₫/ночь), уличная еда + рынки (~200 000 ₫/день), местный транспорт (мотобайк-такси, Grab, автобусы), студент-переводчик только для ключевых переговоров. Октябрь-ноябрь = пиковый сезон. Рейс ХШМ ↔ Ко Самуи не включён — отдельная статья.
+  </div>
+  <div class="b-grid">
+    <div class="b-card">
+      <div class="b-ch"><span class="ico">🛏</span><h3>Проживание — 27 оплачиваемых ночей</h3></div>
+      <table class="bt">
+        <tr><td>Хо Ши Мин (7 ночей — 3 заезда)</td><td>350 000 × 7 = 2 450 000</td></tr>
+        <tr><td>Бен Тре (3 ночи)</td><td>280 000 × 3 = 840 000</td></tr>
+        <tr><td>Тьен Зянг / Тра Винь (2 ночи)</td><td>270 000 × 2 = 540 000</td></tr>
+        <tr><td>Донг Най / Ба Риа (4 ночи)</td><td>320 000 × 4 = 1 280 000</td></tr>
+        <tr><td>Бинь Фыок (2 ночи)</td><td>280 000 × 2 = 560 000</td></tr>
+        <tr><td>Да Лат — Лам Донг (2 ночи)</td><td>320 000 × 2 = 640 000</td></tr>
+        <tr><td>Дак Нонг (1 ночь)</td><td>270 000 × 1 = 270 000</td></tr>
+        <tr><td>Буон Ма Тхуот — Дак Лак (6 ночей)</td><td>320 000 × 6 = 1 920 000</td></tr>
+        <tr><td class="note-row" colspan="2">Hostelworld или Agoda. В провинциях просить «phòng quạt» (без кондиционера, ~50 000 ₫ дешевле). Отели Дак Лака и Да Лата недорогие. В ХШМ — р-н Фам Нгу Лао для экономии.</td></tr>
+        <tr class="sub-row"><td>Итого (средн. ~305 000 ₫/ночь)</td><td>8 500 000</td></tr>
+      </table>
+    </div>
+    <div class="b-card">
+      <div class="b-ch"><span class="ico">🚌</span><h3>Межгородской транспорт — автобусы + паромы</h3></div>
+      <table class="bt">
+        <tr><td>ХШМ → Бен Тре автобус (×3 в/из)</td><td>70 000 × 3 = 210 000</td></tr>
+        <tr><td>Паром каналами Меконга (прогулки)</td><td>150 000</td></tr>
+        <tr><td>Бен Тре → Тьен Зянг → Тра Винь автобусы</td><td>200 000</td></tr>
+        <tr><td>Тра Винь → ХШМ автобус</td><td>90 000</td></tr>
+        <tr><td>ХШМ → Донг Най автобус (×2)</td><td>100 000</td></tr>
+        <tr><td>Донг Най → Ба Риа-Вунг Тао (×2)</td><td>160 000</td></tr>
+        <tr><td>Ба Риа → Бинь Фыок автобус</td><td>120 000</td></tr>
+        <tr><td>Бинь Фыок → ХШМ автобус</td><td>90 000</td></tr>
+        <tr><td>ХШМ → Да Лат (×2, туда-обратно)</td><td>240 000</td></tr>
+        <tr><td>Да Лат → Дак Нонг → БМТ автобусы</td><td>180 000</td></tr>
+        <tr><td>Внутри Дак Лака (БМТ ↔ Еа Кар ↔ Кронг Ана)</td><td>300 000</td></tr>
+        <tr><td>БМТ → ХШМ VIP ночной автобус (Green Bus)</td><td>180 000</td></tr>
+        <tr><td class="note-row" colspan="2">Green Bus (VIP): реклайнеры, кондиционер, вода. Phương Trang — лучший оператор для ХШМ ↔ провинции. Для Дак Лака: Kumho Samco, Vietnam Airlines (рейс ~500 000 ₫ Tan Son Nhat → BMT).</td></tr>
+        <tr class="sub-row"><td>Итого межгород</td><td>2 020 000</td></tr>
+      </table>
+    </div>
+    <div class="b-card">
+      <div class="b-ch"><span class="ico">🛺</span><h3>Местный транспорт — Grab, мотобайк, Zalo Car</h3></div>
+      <table class="bt">
+        <tr><td>ХШМ Grab/мотобайк (MRT нет у большинства точек)</td><td>100 000/д × 7 = 700 000</td></tr>
+        <tr><td>Бен Тре мотобайк-такси к фермам</td><td>80 000/д × 3 = 240 000</td></tr>
+        <tr><td>Тьен Зянг / Тра Винь местный</td><td>70 000/д × 3 = 210 000</td></tr>
+        <tr><td>Донг Най + Ба Риа + Бинь Фыок</td><td>100 000/д × 6 = 600 000</td></tr>
+        <tr><td>Да Лат + Дак Нонг мотобайк-такси</td><td>80 000/д × 3 = 240 000</td></tr>
+        <tr><td>Дак Лак (к фермам Еа Кара, 40 км)</td><td>150 000/д × 6 = 900 000</td></tr>
+        <tr class="sub-row"><td>Итого местный транспорт</td><td>2 890 000</td></tr>
+      </table>
+    </div>
+    <div class="b-card">
+      <div class="b-ch"><span class="ico">🍜</span><h3>Питание — 30 дней вьетнамской уличной едой</h3></div>
+      <table class="bt">
+        <tr><td>Завтрак (фо, хю тьеу, bánh mì, 30–50к ₫)</td><td>40 000 × 30 = 1 200 000</td></tr>
+        <tr><td>Обед (ком тхит, лапша, рис с мясом, 40–80к ₫)</td><td>60 000 × 30 = 1 800 000</td></tr>
+        <tr><td>Ужин (рынок, рыба, овощи, 60–100к ₫)</td><td>80 000 × 30 = 2 400 000</td></tr>
+        <tr><td>Кофе + вода + снеки (кофе тхыа 15к, пиво 20к)</td><td>40 000 × 30 = 1 200 000</td></tr>
+        <tr><td class="note-row" colspan="2">~220 000 ₫/день ($8,6 USD) при полностью уличном питании — Вьетнам один из самых дешёвых гастрономических рынков ЮВА. Рынок Бен Тхань, рынки провинций — ещё дешевле. Bánh mì — лучший перекус в дороге (30 000 ₫).</td></tr>
+        <tr class="sub-row"><td>Итого питание (~220 000 ₫/день)</td><td>6 600 000</td></tr>
+      </table>
+    </div>
+    <div class="b-card">
+      <div class="b-ch"><span class="ico">🗣️</span><h3>Коммуникации + переводчик</h3></div>
+      <table class="bt">
+        <tr><td>Студент-переводчик (10 сессий × 2 ч × 200 000 ₫/ч)</td><td>4 000 000</td></tr>
+        <tr><td>Viettel SIM 30 дней (150 000 ₫) + пополнения</td><td>350 000</td></tr>
+        <tr><td>Zalo Premium подписка (если нужно)</td><td>бесплатно</td></tr>
+        <tr><td class="note-row" colspan="2">Zalo — ключевой мессенджер. WhatsApp работает, но большинство фермеров используют Zalo. Студенты-переводчики в Нонг Лам (ХШМ), Дак Лакском университете: 150 000–250 000 ₫/ч. Google Translate покрывает ~60% ситуаций с мессенджерами.</td></tr>
+        <tr class="sub-row"><td>Итого коммуникации</td><td>4 350 000</td></tr>
+      </table>
+    </div>
+    <div class="b-card">
+      <div class="b-ch"><span class="ico">📦</span><h3>Образцы СФБ + Прочее</h3></div>
+      <table class="bt">
+        <tr><td>Покупка образцов СФБ (~1 кг × 28 точек)</td><td>~3 500 000</td></tr>
+        <tr><td>Зипперные пакеты, этикетки, маркеры</td><td>100 000</td></tr>
+        <tr><td>Буфер 10% от трат</td><td>4 000 000</td></tr>
+        <tr><td>Чаевые, ксерокопии, вода в автобусе</td><td>500 000</td></tr>
+        <tr><td class="note-row" colspan="2">Цена СФБ: ~150 000–180 000 ₫/кг сухих (~$5,9–7 USD/кг). При 2 т/мес целевой объём = 300–360 млн ₫ ($12 000–14 000 USD) стоимость бобов. Экспедиция = ~10% стоимости годового контракта.</td></tr>
+        <tr class="sub-row"><td>Итого прочее + буфер</td><td>8 100 000</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <table class="sum-table">
+    <thead><tr><th>Категория</th><th>₫</th><th>USD (~25 500)</th><th>% от итога</th></tr></thead>
+    <tbody>
+      <tr><td>🛏 Проживание (27 ночей, средн. ~315 000 ₫)</td><td>8 500 000</td><td>333</td><td>26,5%</td></tr>
+      <tr><td>🚌 Межгородской транспорт (автобусы + паромы)</td><td>2 020 000</td><td>79</td><td>6,3%</td></tr>
+      <tr><td>🛺 Местный транспорт (Grab + мотобайк + Zalo Car)</td><td>2 890 000</td><td>113</td><td>9,0%</td></tr>
+      <tr><td>🍜 Питание (220 000 ₫/день × 30)</td><td>6 600 000</td><td>259</td><td>20,6%</td></tr>
+      <tr><td>🗣️ Переводчик + SIM Viettel</td><td>4 350 000</td><td>171</td><td>13,6%</td></tr>
+      <tr><td>📦 Образцы СФБ с ферм (28 точек)</td><td>3 500 000</td><td>137</td><td>10,9%</td></tr>
+      <tr><td>🔄 Буфер + прочее (10% + мелкие расходы)</td><td>4 600 000</td><td>180</td><td>14,4%</td></tr>
+      <tr class="total-row"><td><strong>ИТОГО (вся экспедиция внутри Вьетнама)</strong></td><td><strong>32 460 000</strong></td><td><strong>~1 273</strong></td><td><strong>100%</strong></td></tr>
+      <tr style="background:#f8f5f0"><td colspan="4" style="font-size:10px;color:#888;padding:6px 12px">~1 082 000 ₫/день ($42 USD/день «всё включено») · без рейсов ХШМ ↔ Ко Самуи (~$120–180 USD)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="b-total">
+    <div>
+      <h3>Полный бюджет экспедиции (внутри Вьетнама)</h3>
+      <div class="sub-t">30 дней · 4 региона · 11 провинций · 28 визитов · Пиковый сезон октябрь–ноябрь</div>
+    </div>
+    <div class="grand">
+      <div class="thb-big">~32 500 000 ₫</div>
+      <div class="usd">≈ $1 275 USD &nbsp;·&nbsp; ≈ €1 160 EUR &nbsp;·&nbsp; ≈ 44 500 ฿ THB</div>
+    </div>
+  </div>
+
+  <div class="b-legend">
+    <strong>💡 Контекст: цена СФБ vs стоимость экспедиции:</strong> Если купить 2 т/мес Вьетнам Trinitario по 165 000 ₫/кг → 330 000 000 ₫/мес ($13 000). Экспедиция = 9,8% стоимости одной партии — отличный ROI. При 5 т/мес — экспедиция = всего 3,9% стоимости первой партии.<br><br>
+    <strong>🎯 Главные выводы:</strong> Dong Tien Ea Kar (300 т/год ≈ 25 т/мес) + Nhat Tam (700 га) + Puratos Ben Tre сеть = три источника, гарантирующие 5 т/мес СФБ. Качество Дак Лака — признано лучшим во Вьетнаме. Цена 2025: 150 000–180 000 ₫/кг ($5,9–7 USD/кг) сухих бобов FOB.
+  </div>
+</div>
+
+<!-- КОНТАКТЫ -->
+<div id="con-sec" class="sec">
+  <h2 class="stitle">Все контакты — 28+ поставщиков по регионам</h2>
+  <div class="info-box"><strong>Порядок обзвона:</strong> Использовать Zalo (не WhatsApp!) для первого контакта с провинциальными фермерами. Первое сообщение: «Chúng tôi là công ty nhỏ của Thái Lan đang tìm mua hạt cacao lên men khô. Chúng tôi muốn gặp trực tiếp và mua thử 500 kg». Большинство ответят в течение 24–48 ч. VICOFA = ключевое вводное письмо — получить до отъезда из Таиланда.</div>
+
+  <!-- ХО ШИ МИН -->
+  <div class="con-section-hdr"><span class="con-section-dot" style="background:#d4830a"></span>ХО ШИ МИН — Агрегаторы, ассоциации, bean-to-bar бренды (7 контактов)</div>
+  <div class="con-grid">
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">Puratos Grand-Place Vietnam (PGPV)</div><div style="font-size:10px;color:var(--muted)">Крупнейший покупатель вьетнамского какао — 60% объёма</div></div><span class="con-reg r-hcm">ХШМ + Бен Тре</span></div><div class="con-body"><div class="con-ph">📞 +84 28 730 76565</div><div class="con-ph">📞 +84 274 730 6565 (Бен Тре)</div><div class="con-em">puratosgrandplace.com · cacaofinesse.vn</div><div class="con-note">ПЕРВЫЙ КОНТАКТ. Самая большая сеть закупки какао во Вьетнаме. 2 000+ фермеров. Cacao-Trace программа. Ферментационный центр в Бен Тре. Также покупает и перепродаёт. Менеджер: Во Ань Туан.</div><div class="con-badge cb-pr">Процессор / Агрегатор ⭐⭐⭐</div></div></div>
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">Marou Chocolate / Maison Marou</div><div style="font-size:10px;color:var(--muted)">Bean-to-bar · 500+ фермеров · 7 провинций</div></div><span class="con-reg r-hcm">ХШМ (Тху Дык, завод)</span></div><div class="con-body"><div class="con-em">info@marouchocolate.com · marouchocolate.com</div><div class="con-note">Первый bean-to-bar Вьетнама (2011). Закупает из Дак Лака, Лам Донга, Донг Ная, Ба Риа, Тьен Зянга, Бен Тре. 500+ фермеров в 7 провинциях. CEO Vincent Mourou. Даёт интро к своим фермерам-партнёрам если запросить.</div><div class="con-badge cb-pr">Bean-to-Bar / Источник знакомств ⭐⭐⭐</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Vinacacao (Vietnam Cacao JSC)</div><div style="font-size:10px;color:var(--muted)">Осн. 2007 · производитель какао-продуктов</div></div><span class="con-reg r-hcm">ХШМ</span></div><div class="con-body"><div class="con-ph">📞 +84 28 391 03425</div><div class="con-em">talk2me@vinacacao.com.vn · vinacacao.com.vn</div><div class="con-note">Ведущая компания по производству какао-продуктов (2007). Закупает СФБ у местных фермеров. Производит порошок, масло, нибсы. Хороший контакт для понимания рынка + потенциальный продавец.</div><div class="con-badge cb-pr">Производитель/Покупатель</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">VICOFA — Вьетнамская ассоциация кофе и какао</div><div style="font-size:10px;color:var(--muted)">Торговая ассоциация · вводные письма</div></div><span class="con-reg r-hcm">ХШМ / Ханой</span></div><div class="con-body"><div class="con-note">Vietnam Coffee–Cocoa Association (VICOFA). Г-н Бак Тхань Туан — исполком. Написать за 2 недели. Попросить список членов-производителей СФБ по регионам + рекомендательные письма для провинций.</div><div class="con-badge cb-co">Торговая ассоциация</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Belvie Chocolate</div><div style="font-size:10px;color:var(--muted)">Бельгийско-вьетнамский · закупка из Бен Тре, Донг Ная, Лам Донга</div></div><span class="con-reg r-hcm">ХШМ, Р.1</span></div><div class="con-body"><div class="con-note">Основан Jannie Ha Tran и Marc Vanborren. Bean-to-bar, прямые связи с фермерами. Academy of Chocolate Awards. Хороший источник знакомств с надёжными фермерами-поставщиками.</div><div class="con-badge cb-pr">Источник знакомств</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Alluvia Chocolate</div><div style="font-size:10px;color:var(--muted)">Ферма-завод · Тьен Зянг + ХШМ</div></div><span class="con-reg r-hcm">ХШМ + Тьен Зянг</span></div><div class="con-body"><div class="con-note">Ферма Alluvia в Тьен Зянге + шоурум в ХШМ. Собственные фермеры Дельты. Шоколад из Меконга. Хорош для вводного знакомства с тьен-зянгской фермерской сетью. Шоколатерия в Р.1 ХШМ.</div><div class="con-badge cb-fa">Ферма-Завод</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Nong Lam University — Dr. Фам Хонг Дык Фыок</div><div style="font-size:10px;color:var(--muted)">Исследователь какао-сортов Вьетнама · Тху Дык</div></div><span class="con-reg r-hcm">ХШМ, Тху Дык</span></div><div class="con-body"><div class="con-note">Dr. Phạm Hồng Đức Phước — пионер какао-сортов Вьетнама. Идентифицировал 4 сильных сорта какао для ЮВА. После выхода на пенсию работает над Stone Hill Chocolate. Академический источник знакомств с лучшими фермерами.</div><div class="con-badge cb-re">Исследователь</div></div></div>
+  </div>
+
+  <!-- ДЕЛЬТА МЕКОНГА -->
+  <div class="con-section-hdr"><span class="con-section-dot" style="background:#0a9070"></span>ДЕЛЬТА МЕКОНГА — Бен Тре · Тьен Зянг · Тра Винь (7 контактов)</div>
+  <div class="con-grid">
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">Puratos Grand-Place — Ферм. центр Бен Тре</div><div style="font-size:10px;color:var(--muted)">Крупнейший ферментационный центр страны</div></div><span class="con-reg r-mek">Бен Тре, Тяу Тхань</span></div><div class="con-body"><div class="con-ph">📞 +84 274 730 6565</div><div class="con-em">cacaofinesse.vn</div><div class="con-note">Лот F1-F2-F3, Зяо Лонг Индастриал Зон, Тяу Тхань дистрикт. Завод ферментации + Cacao-Trace приёмный центр. Открыт 2013. Ферментация в акациевых ящиках с хессианским покрытием. Гарантирует минимальную цену фермерам. Закупает у 2 000+ фермеров.</div><div class="con-badge cb-pr">Ферментационный центр ⭐⭐⭐</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Кооперативы фермеров Бен Тре</div><div style="font-size:10px;color:var(--muted)">SWITCH-Asia · Cacao-Trace партнёры</div></div><span class="con-reg r-mek">Провинция Бен Тре</span></div><div class="con-body"><div class="con-note">Несколько кооперативов фермеров в Бен Тре — партнёры Puratos и Marou. Trinitario, переплетённое с кокосом. Fruity, floral профиль. Контакт через PGPV/VICOFA. Закупка через Puratos — возможна прямая работа.</div><div class="con-badge cb-co">Кооперативы фермеров</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">EU SWITCH-Asia демо-фермы Бен Тре</div><div style="font-size:10px;color:var(--muted)">6 кольцевых демомоделей · EU финансирование</div></div><span class="con-reg r-mek">Провинция Бен Тре</span></div><div class="con-body"><div class="con-note">Проект EU SWITCH-Asia (€1,93 млн, 2022–2026) — 6 демомоделей кольцевой экономики для какао. Стандартизированное производство. Высокое качество ферментации. Отличный вход для нового покупателя с долгосрочными намерениями.</div><div class="con-badge cb-re">Проект ЕС / Демоферма</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Alluvia Chocolate Farm</div><div style="font-size:10px;color:var(--muted)">Собственная ферма · bean-to-bar из Дельты</div></div><span class="con-reg r-mek">Тьен Зянг, Хоа Тхань</span></div><div class="con-body"><div class="con-note">Ферма-завод в Тьен Зянге. Shоколад с мягкими тропическими нотами. Фруктовый кокосовый профиль. Хороший вход в сеть тьен-зянгских фермеров. Посещение с туром возможно.</div><div class="con-badge cb-fa">Ферма-Завод</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Кооперативы фермеров Тьен Зянга</div><div style="font-size:10px;color:var(--muted)">Trinitario · Дельта Меконга</div></div><span class="con-reg r-mek">Провинция Тьен Зянг</span></div><div class="con-body"><div class="con-note">Несколько кооперативов в Тьен Зянге — через Alluvia/VICOFA. Какао переплетено с фруктовыми деревьями. Фруктовый тропический профиль. Объём небольшой, но стабильный.</div><div class="con-badge cb-co">Кооперативы фермеров</div></div></div>
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">Cacao Mekong (Тра Винь)</div><div style="font-size:10px;color:var(--muted)">ISO 22000:2018 · мощность 3–5 т/мес</div></div><span class="con-reg r-mek">Провинция Тра Винь</span></div><div class="con-body"><div class="con-note">Основан 2018, Тра Винь. Современный завод ISO 22000:2018. Мощность: 3–5 т готовой продукции/мес. <span style="font-weight:700">Может поставлять до 5 т/мес СФБ.</span> Стандарт OCOP. Кольцевое производство: какао-порошок, какао-масло, органические удобрения. HQ в Тра Винь, офис в Са Дек (Донг Тхап).</div><div class="con-badge cb-pr">Процессор / Поставщик ⭐⭐</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Кооперативы Виньлонг / Хаузянг</div><div style="font-size:10px;color:var(--muted)">Дополнительные источники Дельты</div></div><span class="con-reg r-mek">Виньлонг / Хаузянг</span></div><div class="con-body"><div class="con-note">Малые кооперативы в Виньлонге и Хаузянге. Неосновные источники, но полезны для диверсификации. Контакт через VICOFA. Небольшой объём, хорошая ферментация.</div><div class="con-badge cb-co">Малые кооперативы</div></div></div>
+  </div>
+
+  <!-- ЮГО-ВОСТОК -->
+  <div class="con-section-hdr"><span class="con-section-dot" style="background:#2980b9"></span>ЮГО-ВОСТОК — Донг Най · Ба Риа-Вунг Тао · Бинь Фыок (7 контактов)</div>
+  <div class="con-grid">
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">Trong Duc Cacao Co., Ltd</div><div style="font-size:10px;color:var(--muted)">Осн. 2005 · 20 лет с фермерами Донг Ная</div></div><span class="con-reg r-se">Донг Най, Динь Куан</span></div><div class="con-body"><div class="con-em">trongduccacao.vn · cacaotrongduc.com</div><div class="con-note">Основан 2005, Донг Най. 20+ лет работы с местными фермерами. Переработка: шоколад, порошок, масло. Проект расширения плантаций. Хороший источник СФБ Донг Ная. Завод в Динь Куан дистрикте.</div><div class="con-badge cb-pr">Процессор / Фермерская сеть ⭐⭐</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Bamboo Capital Cacao Farm</div><div style="font-size:10px;color:var(--muted)">Крупная корпоративная плантация Донг Ная</div></div><span class="con-reg r-se">Донг Най, Кам Ми/Динь Куан</span></div><div class="con-body"><div class="con-note">Крупная инвестиционная плантация компании Bamboo Capital (JSC). Trinitario. Возможна продажа СФБ сторонним покупателям. Корпоративный масштаб — проверить условия напрямую.</div><div class="con-badge cb-fa">Корп. плантация</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Baria Chocolate Co.</div><div style="font-size:10px;color:var(--muted)">Крафт-переработчик · Marou источник Ба Риа 76%</div></div><span class="con-reg r-se">Ба Риа-Вунг Тао</span></div><div class="con-body"><div class="con-note">Крафт-переработчик Ба Риа. Источник Marou для «Bà Rịa 76%» бара (интенсивный фруктовый, красная смородина + цитрус). Хорошо знает местных фермеров. Попросить контакты их поставщиков СФБ.</div><div class="con-badge cb-pr">Переработчик / Знакомства</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Кооперативы Тяу Дык (Ба Риа)</div><div style="font-size:10px;color:var(--muted)">Trinitario · яркий фруктовый профиль</div></div><span class="con-reg r-se">Ба Риа-Вунг Тао, Тяу Дык</span></div><div class="con-body"><div class="con-note">Группа фермеров района Тяу Дык — партнёры Marou и PGPV. Г-н Нгуен Хыу Нонь и соседи. Вкусовой профиль: красная смородина, цитрус, высокая кислотность. Небольшие плантации, переплетённые с кешью.</div><div class="con-badge cb-co">Кооперативы фермеров</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Кооперативы Суан Лок (Ба Риа)</div><div style="font-size:10px;color:var(--muted)">Дополнительный источник восточного Ба Риа</div></div><span class="con-reg r-se">Ба Риа-Вунг Тао</span></div><div class="con-body"><div class="con-note">Дополнительные кооперативы Ба Риа. Контакт через PGPV/VICOFA. Небольшой объём. Важны для диверсификации источников при заказах 5 т/мес.</div><div class="con-badge cb-co">Кооперативы</div></div></div>
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">Cacao A1 — Г-н Донг Тьен Хунг</div><div style="font-size:10px;color:var(--muted)">Крупный закупщик · поставщик Puratos</div></div><span class="con-reg r-se">Бинь Фыок, Бу Данг</span></div><div class="con-body"><div class="con-note">Донг Тьен Хунг (Bù Đăng дистрикт, Бинь Фыок) — представитель ВНА на международной конференции Cocoa Association of Asia (Сингапур). Стабильный поставщик Puratos. Выход на фермерскую сеть Бинь Фыока.</div><div class="con-badge cb-co">Закупщик / Поставщик ⭐⭐</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Кооперативы какао-фермеров Бинь Фыока</div><div style="font-size:10px;color:var(--muted)">Какао + кешью + перец · особый профиль</div></div><span class="con-reg r-se">Провинция Бинь Фыок</span></div><div class="con-body"><div class="con-note">Несколько кооперативов в Бинь Фыоке. Какао переплетено с кешью и чёрным перцем — даёт уникальный пикантный профиль. SWITCH-Asia проект здесь. Контакт через VICOFA/Cacao A1.</div><div class="con-badge cb-co">Кооперативы</div></div></div>
+  </div>
+
+  <!-- НАГОРЬЯ -->
+  <div class="con-section-hdr"><span class="con-section-dot" style="background:#27ae60"></span>НАГОРЬЯ (ЛАМ-ДОНГ · ДАК НОНГ · ДАК ЛАК) — Высшее качество Вьетнама (10 контактов)</div>
+  <div class="con-grid">
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Cacao Land (cacaoland.vn)</div><div style="font-size:10px;color:var(--muted)">Полный цикл · Лам Донг</div></div><span class="con-reg r-hl">Лам Донг</span></div><div class="con-body"><div class="con-em">cacaoland.vn</div><div class="con-note">Компания полного цикла от саженца до шоколада в Лам Донге. Собственная плантация + переработка + шоколад. Выяснить возможность прямой продажи СФБ. Участник программы «Миллиард деревьев».</div><div class="con-badge cb-fa">Ферма-завод</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Фермы района Бао Лам (Лам Донг)</div><div style="font-size:10px;color:var(--muted)">Marou Lam Dong 74% источник</div></div><span class="con-reg r-hl">Лам Донг, Бао Лам</span></div><div class="con-body"><div class="con-note">Фермеры-партнёры Marou в Бао Ламе — источник Marou Lam Dong 74% бара (ноты сухофруктов + эспрессо). Прохладный высокогорный климат, красные базальтовые почвы. Контакт через Marou/VICOFA.</div><div class="con-badge cb-fa">Партнёры Marou</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Кооперативы Ди Линь / Катьхинь (Лам Донг)</div><div style="font-size:10px;color:var(--muted)">Коллективная ферментация горных районов</div></div><span class="con-reg r-hl">Лам Донг</span></div><div class="con-body"><div class="con-note">Малые кооперативы Ди Линя и Катьхиня. Коллективная ферментация. Горный профиль с ореховыми нотами. Контакт через SWITCH-Asia проект. Хороши для понимания разнообразия лам-донгского какао.</div><div class="con-badge cb-co">Горные кооперативы</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">EU SWITCH-Asia Демоферма Дак Нонг</div><div style="font-size:10px;color:var(--muted)">Ку Джут дистрикт · кольцевое производство</div></div><span class="con-reg r-hl">Дак Нонг, Ку Джут</span></div><div class="con-body"><div class="con-note">Г-н Кам Ба Бьен, деревня Хамлет 2, коммуна Дак Виль, Ку Джут дистрикт, Дак Нонг. 700 деревьев, доход 200–300М ₫/год. Одна из 6 демомоделей EU SWITCH-Asia. Кольцевая экономика + качественная ферментация.</div><div class="con-badge cb-re">ЕС демо-ферма</div></div></div>
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">Anh Em Cacao Co. (бренд Tbros)</div><div style="font-size:10px;color:var(--muted)">Лучшая ферментация Дак Лака · экспорт в Европу</div></div><span class="con-reg r-dl">Дак Лак</span></div><div class="con-body"><div class="con-note">Осн. 2017 Чыонг Минь Тхангом и Нгуен Зюй Тхонгом. Сорт B14 Trinitario. Ферментация: 5 дней, 3 переворота. Сушка: 7–10 дней. Ноты: свежих слив, красного вина, ореховый финиш. Экспортирует в Европу (Daarnhouwer). Лучшие СФБ Дак Лака.</div><div class="con-badge cb-ex">Экспортёр / Fine Flavor ⭐⭐⭐</div></div></div>
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">Nam Truong Son Cacao Co. Ltd</div><div style="font-size:10px;color:var(--muted)">Крупнейший переработчик Дак Лака · осн. 2007</div></div><span class="con-reg r-dl">Дак Лак, Кронг Ана</span></div><div class="con-body"><div class="con-em">cacaonamtruongson.com.vn</div><div class="con-note">№ 107 дер. Тан Тьен, коммуна Еа На, Кронг Ана, Дак Лак. Осн. 2007. UTZ стандарт. Полный цикл. Сертификат OCOP 4★. OCOP 2020. Сеть фермеров Кронг Ана + собственное производство. 4 награды Министерства с/х.</div><div class="con-badge cb-pr">Переработчик / Поставщик ⭐⭐</div></div></div>
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">Кооператив «Нят Там» — Г-жа Нгуен Хонг Тхыонг</div><div style="font-size:10px;color:var(--muted)">700 га · 200 фермеров · Еа Кар · ★★★</div></div><span class="con-reg r-dl">Дак Лак, Еа Кар</span></div><div class="con-body"><div class="con-note">Дер. 10, коммуна Еа Дар, дистрикт Еа Кар. 200 фермеров, 700 га. Круглогодичный сбор. Доход 500М–1 млрд ₫/га/год. Участник Cocoa Association of Asia Singapore. PGPV Puratos партнёр. <span style="font-weight:700">КЛЮЧЕВОЙ ОБЪЁМ — 5 т/мес гарантировано.</span></div><div class="con-badge cb-co">Кооператив ⭐⭐⭐</div></div></div>
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">Кооп. «Донг Тьен Еа Кар» — Г-н Нгуен Динь Тьен</div><div style="font-size:10px;color:var(--muted)">120 га · 80 членов · 300 т/год · Puratos + Marou</div></div><span class="con-reg r-dl">Дак Лак, Еа Кар</span></div><div class="con-body"><div class="con-note">80 членов, 120 га, ~300 т/год сухих бобов. Поставляет Puratos Grand-Place + Maison Marou. Прибыль: 400М ₫/га/год. Полная прослеживаемость. Деревянные ящики для ферментации. <span style="font-weight:700">25 т/мес — САМЫЙ КРУПНЫЙ ИСТОЧНИК.</span></div><div class="con-badge cb-co">Кооператив ⭐⭐⭐</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Nhat Thong Dak Lak Agriculture</div><div style="font-size:10px;color:var(--muted)">270 га органик · $6 млн инвестиций · Буон Хо</div></div><span class="con-reg r-dl">Дак Лак, Буон Хо</span></div><div class="con-body"><div class="con-note">Директор: г-н Фам Хыу Тхой. 300 га всего, 270 га какао-органик, Буон Хо. Инвестиции $6 млн (с 2020). Новая, крупная. Проверить: готовы ли к продаже СФБ сторонним покупателям или только внутренняя переработка. Потенциально крупнейшая единая плантация.</div><div class="con-badge cb-fa">Органик-плантация ⭐⭐</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Районный Кооператив Еа Кара</div><div style="font-size:10px;color:var(--muted)">750 га в Еа Каре · районный агрегатор</div></div><span class="con-reg r-dl">Дак Лак, Еа Кар</span></div><div class="con-body"><div class="con-note">Районный какао-кооператив Еа Кара (через Нят Там + VICOFA). В дистрикте ~750 га. Цена 2025: ~90 000 ₫/кг свежих бобов. Дополнительный агрегирующий источник для крупных объёмов. Контакт: DASC (сельскохозяйственный отдел дистрикта Еа Кар).</div><div class="con-badge cb-co">Районный агрегатор ⭐⭐</div></div></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+function show(id,btn){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('act'));
+  document.getElementById(id).classList.add('on');
+  btn.classList.add('act');
+  if(id==='map-sec')setTimeout(()=>{if(window._map)window._map.invalidateSize();},120);
+}
+const map=L.map('the-map',{zoomControl:true}).setView([11.5,107.2],7);
+window._map=map;
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:18}).addTo(map);
+// Маршрут: ХШМ→БенТре→ТьенЗянг→ТраВинь→ХШМ→ДонгНай→БаРиа→БиньФыок→ХШМ→ДаЛат→ДакНонг→БМТ→ЕаКар→БМТ→ХШМ
+const route=[
+  [10.78,106.70],[10.24,106.37],[10.35,106.35],[9.94,106.34],[10.78,106.70],
+  [10.95,106.82],[10.53,107.24],[11.53,106.90],[10.78,106.70],
+  [11.95,108.44],[11.98,107.69],[12.68,108.05],[12.77,108.45],[12.68,108.05],[10.78,106.70]
+];
+L.polyline(route,{color:'#d4951e',weight:3,opacity:.75,dashArray:'9,5'}).addTo(map);
+
+const regions={
+  hcm:{name:'Хо Ши Мин (Шоколадный хаб)',days:'5',cost:'~2 200 000 ₫',stops:'6',price:'Н/Д — агрегат / закупки',vol:'до 5 т/мес через Puratos сеть',top:'Puratos ХШМ: +84 28 730 76565',note:'Главный хаб. PGPV закупает 60% вьетнамского какао. Marou — 500+ фермеров в 7 провинциях. VICOFA = рекомендательные письма.'},
+  mekong:{name:'Дельта Меконга (Бен Тре · Тьен Зянг · Тра Винь)',days:'7',cost:'~2 500 000 ₫',stops:'7',price:'140 000–165 000 ₫/кг СФБ',vol:'до 5 т/мес (Cacao Mekong + Puratos сеть)',top:'Puratos Бен Тре: +84 274 730 6565',note:'Тропический фруктовый профиль, кокосовые нотки. Trinitario. Cacao-Trace. Cacao Mekong ISO 22000. Пиковый сезон окт–дек.'},
+  se:{name:'Юго-Восток (Донг Най · Ба Риа · Бинь Фыок)',days:'6',cost:'~2 600 000 ₫',stops:'7',price:'145 000–170 000 ₫/кг СФБ',vol:'2–3 т/мес (Trong Duc + Baria сеть)',top:'Trong Duc: trongduccacao.vn',note:'Близко к ХШМ (1–3 ч). Яркий фруктовый Ба Риа + шоколадный Бинь Фыок. Trong Duc — 20 лет работы. Cacao A1 = поставщик Puratos.'},
+  highland:{name:'Нагорья (Лам Донг · Дак Нонг · Дак Лак)',days:'9',cost:'~4 500 000 ₫',stops:'10',price:'155 000–180 000 ₫/кг СФБ',vol:'5–25 т/мес (Донг Тьен + Нят Там)',top:'Нят Там: Ms Нгуен Хонг Тхыонг',note:'ВЫСШЕЕ КАЧЕСТВО. Дак Лак = лучшее какао Вьетнама. Донг Тьен — 300 т/год (25 т/мес). Нят Там — 700 га. Anh Em Cacao — лучшая ферментация + экспорт в Европу.'}
+};
+function updatePanel(r){
+  const d=regions[r];
+  document.querySelector('.rp-header span').textContent=d.name.substring(0,34)+(d.name.length>34?'…':'');
+  const stats=document.querySelectorAll('.rp-stat');
+  const vals=[d.days,d.cost,d.stops,d.price];
+  const lbls=['Рабочих дней','Расходы','Визитов','Цена/кг СФБ'];
+  vals.forEach((v,i)=>{stats[i].querySelector('.rp-val').textContent=v;stats[i].querySelector('.rp-lbl').textContent=lbls[i];});
+  document.querySelector('.rp-beans').innerHTML=`<strong>Объём закупки:</strong> ${d.vol}`;
+  document.querySelector('.rp-contact').innerHTML=`<strong>Ключевой контакт:</strong><br>${d.top}<br><em style="font-size:9px;opacity:.8">${d.note}</em>`;
+}
+function mkIcon(c,lbl){return L.divIcon({className:'',html:`<div style="background:${c};color:#fff;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.45);font-family:sans-serif">${lbl}</div>`,iconSize:[30,30],iconAnchor:[15,15],popupAnchor:[0,-18]});}
+function starIcon(c){return L.divIcon({className:'',html:`<div style="background:${c};color:#fff;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:16px;border:3px solid #fff;box-shadow:0 2px 10px rgba(0,0,0,.5)">★</div>`,iconSize:[38,38],iconAnchor:[19,19],popupAnchor:[0,-22]});}
+const C={hcm:'#d4830a',mekong:'#0a9070',se:'#2980b9',highland:'#27ae60'};
+const stops=[
+  {ll:[10.78,106.70],seg:'hcm',lbl:'ХШМ',star:true,name:'Хо Ши Мин — 6 визитов',sub:'★★★ Puratos: +84 28 730 76565<br>Marou: info@marouchocolate.com<br>Vinacacao · VICOFA · Belvie · Nong Lam Univ',pop:'КЛЮЧЕВАЯ БАЗА · 5 дней · 6 визитов · Аэропорт Тан Шон Нят'},
+  {ll:[10.24,106.37],seg:'mekong',lbl:'М1',star:true,name:'Бен Тре — Puratos Ферм. Центр',sub:'★★★ Puratos: +84 274 730 6565<br>Лот F1-F2-F3, Зяо Лонг · SWITCH-Asia<br>Фермеры Бен Тре (Cacao-Trace)',pop:'2 дня · 3 визита · Trinitario · 140–160к ₫/кг · кокосовый профиль'},
+  {ll:[10.35,106.35],seg:'mekong',lbl:'М2',name:'Тьен Зянг — Alluvia Farm',sub:'Alluvia Chocolate Farm<br>Кооперативы Тьен Зянга<br>Trinitario Дельта',pop:'1–2 дня · тропический фруктовый профиль'},
+  {ll:[9.94,106.34],seg:'mekong',lbl:'М3',star:true,name:'Тра Винь — Cacao Mekong',sub:'★★ Cacao Mekong · ISO 22000:2018<br>Мощность 3–5 т/мес<br>Осн. 2018',pop:'1 день · 5 т/мес · ISO 22000 · OCOP'},
+  {ll:[10.95,106.82],seg:'se',lbl:'В1',name:'Донг Най — Trong Duc Cacao',sub:'Trong Duc Cacao Co. Ltd (2005)<br>Bamboo Capital Farm<br>20+ лет с фермерами',pop:'2 дня · 2 визита · 2 т/мес возможно'},
+  {ll:[10.53,107.24],seg:'se',lbl:'В2',star:true,name:'Ба Риа-Вунг Тао',sub:'Baria Chocolate · Кооп. Тяу Дык<br>Marou «Bà Rịa 76%» источник<br>Красная смородина + цитрус',pop:'2 дня · 3 визита · 1–2 т/мес · уникальный яркий профиль'},
+  {ll:[11.53,106.90],seg:'se',lbl:'В3',name:'Бинь Фыок — Cacao A1',sub:'Cacao A1 (Г-н Донг Тьен Хунг)<br>Кооперативы Бу Данг<br>Поставщик Puratos',pop:'1–2 дня · 2 визита · кешью + перец профиль'},
+  {ll:[11.95,108.44],seg:'highland',lbl:'Г1',name:'Лам Донг (Да Лат)',sub:'Cacao Land · Фермы Бао Лама<br>Marou «Lam Dong 74%» источник<br>Прохладный горный климат',pop:'2 дня · 2 визита · орехи + сухофрукты профиль'},
+  {ll:[11.98,107.69],seg:'highland',lbl:'Г2',name:'Дак Нонг',sub:'EU SWITCH-Asia демоферма<br>Ку Джут дистрикт<br>Кольцевое производство',pop:'½ дня · транзит · демоферма кольцевой экономики'},
+  {ll:[12.68,108.05],seg:'highland',lbl:'ДЛ1',star:true,name:'Буон Ма Тхуот — Дак Лак',sub:'★★★ Nam Truong Son · Anh Em (Tbros)<br>Puratos офис БМТ<br>Лучшее какао Вьетнама',pop:'3 дня · 3 визита · UTZ · B14 · экспорт в Европу'},
+  {ll:[12.77,108.45],seg:'highland',lbl:'ДЛ2',star:true,name:'Еа Кар — ТОП КЛАСТЕР',sub:'★★★ Кооп. «Нят Там» (700 га, 200 фермеров)<br>Кооп. «Донг Тьен» (120 га, 300 т/год)<br>Nhat Thong Organic (270 га)',pop:'3 дня · 4 визита · ДО 25 Т/МЕС · КЛЮЧЕВОЙ ИСТОЧНИК'},
+];
+stops.forEach(s=>{
+  const c=C[s.seg];
+  const icon=s.star?starIcon(c):mkIcon(c,s.lbl);
+  L.marker(s.ll,{icon}).addTo(map)
+    .bindPopup(`<div style="font-family:sans-serif;min-width:220px"><b style="font-size:12px;color:#1f1008">${s.name}</b><div style="font-size:11px;color:#555;margin:4px 0;line-height:1.5">${s.sub}</div><div style="font-size:10px;background:#f5ede0;padding:3px 6px;border-radius:3px;color:#6b3d12;margin-top:4px">${s.pop}</div></div>`,{maxWidth:280})
+    .on('click',()=>updatePanel(s.seg));
+});
+const labels=[
+  {ll:[9.5,106.0],seg:'mekong',txt:'ДЕЛЬТА'},
+  {ll:[10.6,106.4],seg:'hcm',txt:'ХШМ'},
+  {ll:[10.3,107.6],seg:'se',txt:'ЮГО-ВОСТОК'},
+  {ll:[12.9,108.8],seg:'highland',txt:'НАГОРЬЯ'},
+];
+labels.forEach(l=>{
+  L.marker(l.ll,{icon:L.divIcon({className:'',html:`<div style="background:${C[l.seg]};color:#fff;padding:3px 9px;border-radius:3px;font-size:9px;font-weight:800;font-family:sans-serif;white-space:nowrap;opacity:.82">${l.txt}</div>`,iconSize:[90,18],iconAnchor:[45,9]})}).addTo(map);
+});
+</script>
+</body>
+</html>
