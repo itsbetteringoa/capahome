@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вьетнам — Закупочная экспедиция какао (38 дней)</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bean:#0a1e08;--cacao:#163a12;--brown:#24641e;--amber:#2e8a28;
+  --gold:#3db83d;--cream:#eaf5ea;--parch:#d0ead0;--forest:#061408;
+  --leaf:#166416;--ink:#081408;--muted:#3e6038;--border:#7ab07a;
+  --red:#c0392b;--blue:#1a5080;--bg:#eef6ee;--white:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
+.hdr{background:var(--bean);color:var(--cream);padding:14px 20px;position:sticky;top:0;z-index:3000;border-bottom:2px solid var(--gold)}
+.hdr-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.hdr h1{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:#fff;letter-spacing:.01em}
+.hdr p{font-size:11px;color:#90c890;margin-top:1px}
+.hdr-pills{display:flex;gap:6px;flex-wrap:wrap}
+.hpill{font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(255,255,255,.1);color:#b8e0b8;padding:3px 10px;border-radius:4px}
+.hpill b{color:var(--gold)}
+nav{background:var(--cacao);position:sticky;top:56px;z-index:2999;border-bottom:1px solid var(--brown)}
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 16px;display:flex;gap:2px;overflow-x:auto}
+nav button{background:none;border:none;color:#80b880;font-size:12px;font-weight:600;padding:10px 16px;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;border-bottom:3px solid transparent;font-family:'Syne',sans-serif;transition:all .15s;white-space:nowrap}
+nav button:hover{color:#fff}
+nav button.act{color:var(--gold);border-bottom-color:var(--gold)}
+.sec{display:none;max-width:1280px;margin:0 auto;padding:20px 16px}
+.sec.on{display:block}
+#map-sec{padding:0;max-width:100%}
+#map-sec.on{display:flex;flex-direction:column;height:calc(100vh - 100px)}
+#map-wrap{flex:1;position:relative}
+#the-map{height:100%;width:100%;min-height:400px}
+.map-bar{background:var(--forest);color:#c8e8c8;padding:9px 18px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;font-size:11px;font-family:'JetBrains Mono',monospace}
+.mb-seg{display:flex;align-items:center;gap:5px}
+.mb-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+#region-panel{position:absolute;top:12px;right:12px;z-index:1000;width:245px;background:rgba(6,20,6,.93);backdrop-filter:blur(6px);border:1px solid var(--gold);border-radius:8px;color:#eee;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.5)}
+.rp-header{background:var(--brown);padding:8px 12px;display:flex;justify-content:space-between;align-items:center}
+.rp-header span{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:#fff}
+.rp-header small{font-size:10px;color:#90c890;font-family:'JetBrains Mono',monospace}
+.rp-grid{padding:10px 12px;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.rp-stat{background:rgba(255,255,255,.08);border-radius:4px;padding:6px 8px}
+.rp-val{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--gold)}
+.rp-lbl{font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;margin-top:1px}
+.rp-contact{padding:0 12px 8px;font-size:10px;color:#90b890;line-height:1.5}
+.rp-contact strong{color:#fff;font-size:11px;display:block;margin-bottom:2px}
+.rp-beans{font-size:10px;color:#9fa;padding:4px 12px 10px;line-height:1.4}
+.rp-beans strong{color:var(--gold)}
+.seg-hdr{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:6px 6px 0 0;margin-top:20px;color:#fff}
+.seg-hdr:first-of-type{margin-top:0}
+.seg-hdr h3{font-family:'Syne',sans-serif;font-size:13px;font-weight:700}
+.seg-hdr .sm{font-size:10px;opacity:.8;font-family:'JetBrains Mono',monospace}
+.seg-hdr .pill{font-size:9px;background:rgba(255,255,255,.2);padding:2px 7px;border-radius:3px;margin-left:auto;white-space:nowrap}
+.s-hcm{background:#7a4a00}
+.s-mek{background:#1a5a80}
+.s-se{background:#1a5828}
+.s-dn{background:#c06010}
+.s-hl{background:#541070}
+.s-cc{background:#781010}
+table.iti{width:100%;border-collapse:collapse;background:#fff;border-radius:0 0 6px 6px;overflow:hidden;margin-bottom:0}
+table.iti th{background:var(--parch);color:var(--bean);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:7px 10px;text-align:left;border-bottom:1px solid var(--border)}
+table.iti td{padding:8px 10px;border-bottom:1px solid #c8e0c8;vertical-align:top;font-size:12px}
+table.iti tr.wknd td{background:#eef6ee;color:#3e6038;font-style:italic}
+table.iti tr.hol td{background:#fff8e0;color:#806000}
+table.iti tr.trav td{background:#e8eef8}
+.dn{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;color:var(--muted);white-space:nowrap;width:28px}
+.dd{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);white-space:nowrap;width:82px}
+.ltag{display:inline-block;font-size:9px;padding:1px 6px;border-radius:3px;font-weight:700;margin-right:4px;white-space:nowrap}
+.l-h{background:#fdecc8;color:#5a3a00}
+.l-m{background:#c8def8;color:#0a3060}
+.l-se{background:#c8f0d0;color:#0a4018}
+.l-dn{background:#fce0b0;color:#603000}
+.l-hl{background:#e8d0f8;color:#3a0860}
+.l-cc{background:#f8d0cc;color:#601008}
+.stop{font-weight:600;color:var(--cacao);font-size:12px;line-height:1.3}
+.sub{color:var(--muted);font-size:11px;margin-top:2px;line-height:1.5}
+.ph{display:inline;font-family:'JetBrains Mono',monospace;font-size:10px;background:#c8f0c8;color:#084018;padding:1px 5px;border-radius:3px;margin-right:3px}
+.kp{display:inline;font-size:10px;font-weight:700;background:#ffd;color:#664400;padding:1px 5px;border-radius:3px}
+td.thb{font-family:'JetBrains Mono',monospace;font-size:11px;text-align:right;color:var(--brown);white-space:nowrap;width:90px}
+.b-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px;margin-bottom:14px}
+.b-card{background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.b-card.flights{border:2px solid var(--amber)}
+.b-ch{padding:9px 13px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.b-ch h3{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--bean)}
+.b-ch .ico{font-size:15px}
+.bt{width:100%;border-collapse:collapse}
+.bt td{padding:6px 13px;border-bottom:1px solid #e0f0e0;font-size:11px}
+.bt tr:last-child td{border-bottom:none}
+.bt td:last-child{text-align:right;font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--cacao)}
+.bt .sub-row td{background:var(--parch);font-weight:700;color:var(--bean)}
+.bt .note-row td{font-size:10px;color:#888;font-style:italic;background:#f4faf4}
+.b-total{background:var(--bean);color:#fff;border-radius:8px;padding:16px 20px;margin-top:14px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px}
+.b-total h3{font-family:'Syne',sans-serif;font-size:17px;font-weight:800}
+.b-total .sub-t{font-size:11px;color:#90c890;margin-top:3px}
+.grand{text-align:right}
+.grand .thb-big{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;color:var(--gold)}
+.grand .usd{font-size:12px;color:#90b890;margin-top:2px}
+.b-legend{background:var(--parch);border:1px solid var(--border);border-radius:6px;padding:10px 14px;font-size:11px;color:var(--muted);line-height:1.7;margin-top:10px}
+.b-legend strong{color:var(--bean)}
+.sum-table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;border:1px solid var(--border);margin-top:12px}
+.sum-table th{background:var(--parch);color:var(--bean);font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:8px 12px;text-align:left;font-weight:700}
+.sum-table td{padding:7px 12px;border-bottom:1px solid #d0e8d0;font-size:12px}
+.sum-table td:nth-child(2),.sum-table td:nth-child(3){font-family:'JetBrains Mono',monospace;font-weight:500;text-align:right;color:var(--cacao)}
+.sum-table td:nth-child(4){text-align:right;color:var(--muted);font-size:11px}
+.sum-table tr.total-row td{background:var(--parch);font-weight:700;color:var(--bean)}
+.con-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:10px}
+.con-card{background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.con-card.pri{border-left:3px solid var(--leaf)}
+.con-hdr{padding:9px 11px;background:var(--parch);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;gap:6px}
+.con-name{font-weight:700;font-size:12px;color:var(--bean);line-height:1.3}
+.con-reg{font-size:9px;background:var(--forest);color:#9fc;padding:2px 6px;border-radius:3px;font-family:'JetBrains Mono',monospace;white-space:nowrap}
+.con-reg.r-hcm{background:#7a4800;color:#ffe8b0}
+.con-reg.r-mek{background:#10406a;color:#b0d8ff}
+.con-reg.r-se{background:#0a4018;color:#b0ffb8}
+.con-reg.r-dn{background:#904800;color:#ffe0a0}
+.con-reg.r-hl{background:#3a0860;color:#e8c8ff}
+.con-reg.r-cc{background:#6a1008;color:#ffc8c0}
+.con-body{padding:9px 11px}
+.con-ph{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--leaf);font-weight:700}
+.con-em{font-size:10px;color:var(--blue);word-break:break-all;margin-top:2px}
+.con-note{font-size:10px;color:var(--muted);margin-top:5px;line-height:1.4}
+.con-badge{display:inline-block;font-size:9px;padding:2px 6px;border-radius:3px;margin-top:4px}
+.cb-co{background:#e8f5e9;color:#1b5e20}
+.cb-pr{background:#e3f2fd;color:#0d47a1}
+.cb-re{background:#fff3e0;color:#e65100}
+.cb-fa{background:#fce4ec;color:#880e4f}
+.cb-ex{background:#f3e5f5;color:#6a1b9a}
+.cb-lo{background:#e8f5e9;color:#0a5a30}
+h2.stitle{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--bean);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--parch)}
+.info-box{background:var(--parch);border:1px solid var(--border);border-radius:6px;padding:10px 14px;font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:14px}
+.info-box strong{color:var(--bean)}
+.warn-box{background:#fff8e0;border:1px solid #e8d060;border-radius:6px;padding:9px 13px;font-size:11px;color:#604800;line-height:1.6;margin-bottom:14px}
+.factory-box{background:#e8f0ff;border:2px solid #4060c0;border-radius:6px;padding:10px 14px;font-size:11px;color:#203060;line-height:1.7;margin-bottom:14px}
+.factory-box strong{color:#102040}
+.stats-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.s-box{flex:1;min-width:100px;background:#fff;border:1px solid var(--border);border-radius:6px;padding:9px 12px}
+.s-box .val{font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:700;color:var(--cacao)}
+.s-box .lbl{font-size:10px;color:var(--muted);margin-top:1px}
+.con-section-hdr{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--bean);padding:10px 0 6px;border-bottom:1px solid var(--border);margin:14px 0 10px;display:flex;align-items:center;gap:8px}
+.con-section-dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.logi-table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;border:1px solid var(--border);margin:10px 0}
+.logi-table th{background:#e0eaff;color:#102040;font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:7px 12px;text-align:left;font-weight:700}
+.logi-table td{padding:7px 12px;border-bottom:1px solid #d0ddf0;font-size:11px}
+.logi-table td:nth-child(2),.logi-table td:nth-child(3){font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600}
+.logi-best{color:#1b5e20;font-weight:700}
+.logi-ok{color:#5a4000}
+.logi-far{color:#8a1010}
+</style></head>
+<body>
+<header class="hdr">
+  <div class="hdr-inner">
+    <div>
+      <h1>🌿 Вьетнам — Закупочная экспедиция какао-бобов (38 дней)</h1>
+      <p>Илеус (Бразилия) → ХМС → Меконг → ЮВ → Да Нанг (завод) → Нагорье → ХМС → Илеус</p>
+    </div>
+    <div class="hdr-pills">
+      <div class="hpill">~<b>38</b> дней</div>
+      <div class="hpill"><b>36</b> визитов</div>
+      <div class="hpill"><b>35+</b> поставщиков</div>
+      <div class="hpill"><b>3</b> внутр. рейса</div>
+      <div class="hpill">≈ <b>74M ₫</b></div>
+      <div class="hpill">≈ <b>$2 960</b> USD</div>
+    </div>
+  </div>
+</header>
+<nav>
+  <div class="nav-inner">
+    <button class="act" onclick="show('map-sec',this)">🗺 Карта маршрута</button>
+    <button onclick="show('iti-sec',this)">📅 По дням</button>
+    <button onclick="show('bud-sec',this)">💰 Бюджет</button>
+    <button onclick="show('con-sec',this)">📞 Контакты</button>
+  </div>
+</nav>
+
+<div id="map-sec" class="sec on">
+  <div class="map-bar">
+    <strong style="font-family:'Syne',sans-serif;margin-right:4px">Маршрут →</strong>
+    <span class="mb-seg"><span class="mb-dot" style="background:#d4830a"></span>Хошимин (агрегаторы)</span>
+    <span class="mb-seg"><span class="mb-dot" style="background:#2980b9"></span>Дельта Меконга</span>
+    <span class="mb-seg"><span class="mb-dot" style="background:#27ae60"></span>Юго-Восток</span>
+    <span class="mb-seg"><span class="mb-dot" style="background:#e67e22"></span>Да Нанг + Центр. Вьетнам (завод)</span>
+    <span class="mb-seg"><span class="mb-dot" style="background:#8e44ad"></span>Центр. Нагорье</span>
+    <span class="mb-seg"><span class="mb-dot" style="background:#c0392b"></span>Побережье</span>
+    <span style="margin-left:auto;color:#9fa;font-size:10px">Нажмите маркер для деталей региона</span>
+  </div>
+  <div id="map-wrap">
+    <div id="the-map"></div>
+    <div id="region-panel">
+      <div class="rp-header"><span>Сводка по региону</span><small>нажмите маркер</small></div>
+      <div class="rp-grid">
+        <div class="rp-stat"><div class="rp-val">—</div><div class="rp-lbl">Рабочих дней</div></div>
+        <div class="rp-stat"><div class="rp-val">—</div><div class="rp-lbl">Расходы</div></div>
+        <div class="rp-stat"><div class="rp-val">—</div><div class="rp-lbl">Визитов</div></div>
+        <div class="rp-stat"><div class="rp-val">—</div><div class="rp-lbl">Цена/т FOB</div></div>
+      </div>
+      <div class="rp-beans"><strong>Объём закупки:</strong> выберите регион</div>
+      <div class="rp-contact"><strong>Ключевой контакт:</strong> нажмите маркер</div>
+    </div>
+  </div>
+</div>
+
+<div id="iti-sec" class="sec">
+  <h2 class="stitle">Маршрут по дням · Август–Сентябрь 2026</h2>
+  <div class="stats-row">
+    <div class="s-box"><div class="val">38</div><div class="lbl">Всего дней</div></div>
+    <div class="s-box"><div class="val">36</div><div class="lbl">Рабочих визитов</div></div>
+    <div class="s-box"><div class="val">11</div><div class="lbl">Провинций</div></div>
+    <div class="s-box"><div class="val">35+</div><div class="lbl">Поставщиков</div></div>
+    <div class="s-box"><div class="val">3×</div><div class="lbl">Внутр. рейсов</div></div>
+    <div class="s-box"><div class="val">5</div><div class="lbl">Регионов</div></div>
+  </div>
+  <div class="warn-box">⚠️ <strong>Сезон дождей август–октябрь:</strong> В дельте Меконга паводки — встречи строго до 11:00. На Центральном Нагорье прохладнее на 6–8°C. Подтверждайте встречи за 2–3 дня по <strong>Zalo</strong> — главный мессенджер Вьетнама (не WhatsApp). Виза e-Vietnam онлайн: $25 USD, оформить за 3+ дня до въезда.
+  </div>
+
+  <!-- ПРИЛЁТ ИЗ БРАЗИЛИИ -->
+  <div class="seg-hdr s-hcm"><span style="font-size:18px">✈️</span><div><h3>ПРИЛЁТ ИЗ БРАЗИЛИИ → ХОШИМИН</h3><span class="sm">10–11 авг. · Илеус → Сан-Паулу → ХМС</span></div><span class="pill">транзит ~36 ч</span></div>
+  <table class="iti">
+    <thead><tr><th>День</th><th>Дата</th><th>Локация</th><th>Активность</th><th>тыс.₫</th></tr></thead>
+    <tbody>
+      <tr class="trav"><td class="dn">0</td><td class="dd">пн 10 авг</td><td><span class="ltag l-h">Перелёт</span>Бразилия</td><td><div class="stop">Илеус (IOS) → Сан-Паулу (GRU) → Хошимин (SGN)</div><div class="sub">~36 ч в дороге с пересадкой. Лучшие варианты: Qatar Airways GRU→DOH→SGN, Turkish Airlines GRU→IST→SGN, Emirates GRU→DXB→SGN. Прибытие в аэропорт Тан Сон Нят 11 авг ~08:00–14:00 (зависит от рейса). Стоимость RT GRU↔SGN: $1 200–1 600 USD при гибких датах.</div></td><td class="thb">— (рейсы)</td></tr>
+      <tr><td class="dn">Д1</td><td class="dd">вт 11 авг</td><td><span class="ltag l-h">ХМС</span>Прибытие</td><td><div class="stop">Хошимин · SIM Viettel · Ориентация</div><div class="sub">SIM Viettel 30 дней (80 тыс. ₫, аэропорт или Circle K). Установить: <span class="kp">Zalo</span> — ОБЯЗАТЕЛЕН (все фермеры Вьетнама на Zalo, не WhatsApp), Grab, Google Translate вьет. офлайн. Хостел р-н Буй Вьен Д.1 (180 тыс. ₫/ночь). Написать Zalo/email всем ХМС-контактам — подтвердить встречи.</div></td><td class="thb">410</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ХМС -->
+  <div class="seg-hdr s-hcm"><span style="font-size:18px">🏙</span><div><h3>ХОШИМИН — Агрегаторы, Процессоры, Платформы</h3><span class="sm">12–16 авг. · 5 рабочих дней · ключевые переговоры</span></div><span class="pill">5 дней · 6 визитов</span></div>
+  <table class="iti">
+    <thead><tr><th>День</th><th>Дата</th><th>Локация</th><th>Активность</th><th>тыс.₫</th></tr></thead>
+    <tbody>
+      <tr><td class="dn">Д2</td><td class="dd">ср 12 авг</td><td><span class="ltag l-h">ХМС</span>Vinacacao ★★★</td><td><div class="stop">★★★ Vietnam Cacao JSC / Vinacacao — крупнейший национальный агрегатор</div><div class="sub"><span class="ph">+84 28 3910 3425</span> talk2me@vinacacao.com.vn · Grab р-н Д.3. <span class="kp">ВСТРЕЧА №1</span> — агрегирует 8+ провинций, UTZ/RFA, FOB $2 400–3 000/т. Обсудить: 2–5 т/мес., условия TT30, C/O Form D, phytosanitary. Говорят по-английски.</div></td><td class="thb">290</td></tr>
+      <tr><td class="dn">Д3</td><td class="dd">чт 13 авг</td><td><span class="ltag l-h">ХМС</span>Marou + Belocolat ×2</td><td><div class="stop">Marou Chocolate + Belocolat Vietnam (Barry Callebaut) — 2 визита</div><div class="sub">09:00 Marou (info@marouchocolate.com) — bean-to-bar, 6 провинций-источников. Спросить о доступных СФБ сверх их нужд + контакты фермеров (их фарм-нетворк = ценнейший ресурс). 14:00 Belocolat Vietnam — промышленный переработчик. Запросить контакты поставщиков-ферм. Оба — английский язык.</div></td><td class="thb">280</td></tr>
+      <tr><td class="dn">Д4</td><td class="dd">пт 14 авг</td><td><span class="ltag l-h">ХМС</span>Golden Tree + Geneagro ×2</td><td><div class="stop">Golden Tree Cacao Vietnam + Geneagro Vietnam — 2 визита</div><div class="sub">09:00 Golden Tree Cacao (экспортная платформа) — список поставщиков Бен-Тре, цены FOB 1–5 т, помощь с C/O. 14:00 Geneagro Vietnam (агропромышленный трейдер) — возможность агрегирования Меконг + Нагорье + Да Нанг в один контейнер 20ft для отгрузки через Да Нанг Порт.</div></td><td class="thb">270</td></tr>
+      <tr><td class="dn">Д5</td><td class="dd">сб 15 авг</td><td><span class="ltag l-h">ХМС</span>VINACOCOA + CacaoViet ×2</td><td><div class="stop">Vietnam Cocoa Association (VINACOCOA) + CacaoViet — 2 визита</div><div class="sub">09:00 VINACOCOA — запросить рекомендательные письма к кооперативам ВСЕХ провинций (критически важно для доверия фермеров). 14:00 CacaoViet — интро к кооперативам Бен-Тре. Вечером: ночной Phuong Trang ХМС → Бен-Тре (80 тыс. ₫, 2 ч, выезд 21:00).</div></td><td class="thb">380</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ДЕЛЬТА МЕКОНГА -->
+  <div class="seg-hdr s-mek"><span style="background:#2980b9;width:14px;height:14px;border-radius:50%;display:inline-block"></span><div><h3>СЕГМЕНТ 1 — ДЕЛЬТА МЕКОНГА (Главный Регион)</h3><span class="sm">16–25 авг. · Бен-Тре → Тьен-Зянг · ~55% вьетнамского какао</span></div><span class="pill">10 дней · 11 визитов</span></div>
+  <table class="iti">
+    <thead><tr><th>День</th><th>Дата</th><th>Локация</th><th>Активность</th><th>тыс.₫</th></tr></thead>
+    <tbody>
+      <tr class="trav"><td class="dn">—</td><td class="dd">вс 16 авг</td><td><span class="ltag l-m">→ Бен-Тре</span></td><td>Прибытие ~06:00. Хостел 170 тыс. ₫/ночь. Аренда мотобайка на 5 дней (120–150 тыс. ₫/день). Написать Zalo <span class="ph">+84 75 3822 638</span> Puratos — подтвердить пн. Паром до острова Фенг, разведка плантаций. Рынок Бен-Тре: hu tiu 40 тыс. ₫.</td><td class="thb">400</td></tr>
+      <tr><td class="dn">Д6</td><td class="dd">пн 17 авг</td><td><span class="ltag l-m">Бен-Тре</span>Puratos GP ★★★</td><td><div class="stop">★★★ Puratos Grand-Place Vietnam — Крупнейший Ферментационный Центр страны</div><div class="sub"><span class="ph">+84 75 3822 638</span> puratos.com.vn · р-н Чау Тхань (8 км, мотобайк). <span class="kp">КЛЮЧЕВАЯ ВСТРЕЧА</span> — 300+ фермеров-поставщиков, UTZ/RFA. Обсудить: прямая закупка у их фермеров, стандарты ферментации, FOB $2 600–3 200/т. Спросить: возможность отгрузки через Да Нанг Порт (для нашего будущего завода).</div></td><td class="thb">250</td></tr>
+      <tr><td class="dn">Д7</td><td class="dd">вт 18 авг</td><td><span class="ltag l-m">Бен-Тре</span>HTX БТ + Cuu Long ×2</td><td><div class="stop">★★ HTX Ca cao Ben Tre + HTX Nong nghiep Cuu Long (2 визита)</div><div class="sub">09:00 <span class="ph">+84 75 3825 115</span> HTX Ca cao Ben Tre (200+ фермеров, Trinitario, 5–7 дн. ферментация). Запросить: объём/мес., % влажности (макс 7%), цена 1 т / 3 т. 14:00 HTX Cuu Long — многоотраслевой агрокооп (кокос + какао). Сравнить цены. Спросить о логистике фрахта в Да Нанг.</div></td><td class="thb">260</td></tr>
+      <tr><td class="dn">Д8</td><td class="dd">ср 19 авг</td><td><span class="ltag l-m">Бен-Тре</span>Жонг Тром + Ба Три ×2</td><td><div class="stop">Nhóm Giồng Trôm + Nhóm Ba Tri — кластеры ферм Бен-Тре (2 визита)</div><div class="sub">09:00 Жонг Тром (25 км на юг, мотобайк) — крупнейший агрокластер Бен-Тре, Trinitario 15+ лет. 13:30 Ба Три (40 км) — прибрежный микроклимат, солёный/фруктовый профиль. Сравнить образцы по кислотности, аромату. Уточнить: минимальный объём для прямой отгрузки в Да Нанг Порт.</div></td><td class="thb">310</td></tr>
+      <tr><td class="dn">Д9</td><td class="dd">чт 20 авг</td><td><span class="ltag l-m">Бен-Тре</span>Бинь Дай + Мекong Cacao ×2</td><td><div class="stop">HTX Binh Dai + Nong trai Mekong Cacao (2 визита)</div><div class="sub">09:00 HTX Binh Dai (р-н Биньдай, 35 км) — удалённый кооп, более низкие цены, меньше конкуренции со стороны промышленных покупателей. 13:30 Mekong Cacao Farm — крупная частная ферма, современная ферментация, 1–2 т/мес. прямая закупка. Через Marou/VINACOCOA интро.</div></td><td class="thb">290</td></tr>
+      <tr class="wknd"><td class="dn">—</td><td class="dd">пт 21 авг</td><td><span class="ltag l-m">Бен-Тре</span>Буфер</td><td>Буфер. Систематизировать образцы: Жонг Тром / Ба Три / Биньдай. Запросить КП от HTX Бен-Тре на 3 т/мес. Вечером: паром + маршрутка в Ми Тхо, Тьен-Зянг (100 тыс. ₫).</td><td class="thb">290</td></tr>
+      <tr><td class="dn">Д10</td><td class="dd">сб 22 авг</td><td><span class="ltag l-m">Тьен-Зянг</span>HTX ТЗ + Кай Бэ ×2</td><td><div class="stop">★★ HTX Ca cao Tien Giang + Nhóm Cai Be — 2 визита</div><div class="sub">09:00 <span class="ph">+84 73 3878 800</span> HTX Ca cao Tien Giang (Ми Тхо, 150+ фермеров, работает с Mars Vietnam). Спросить: объём, цена, фрахт варианты. 13:30 Группа Кай Бэ (40 км) — крупный торговый центр дельты, водная логистика (лодки → Меконг → порт → Да Нанг море). 1,5–2 т/мес.</div></td><td class="thb">300</td></tr>
+      <tr><td class="dn">Д11</td><td class="dd">вс 23 авг</td><td><span class="ltag l-m">Тьен-Зянг</span>Го Конг → возврат ХМС</td><td><div class="stop">Nhóm Cacao Go Cong (приморский) → возврат в Хошимин</div><div class="sub">09:00 Группа Го Конг (55 км к востоку) — морской микроклимат, проверить влажность (риск 8%+ у прибрежных). 13:00 Автобус Ми Тхо → ХМС (70 тыс. ₫, 1,5 ч). Деброф: составить рейтинг лучших поставщиков Меконга. Вечер: подготовка к ЮВ-сегменту.</td><td class="thb">290</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ЮГО-ВОСТОК -->
+  <div class="seg-hdr s-se"><span style="background:#27ae60;width:14px;height:14px;border-radius:50%;display:inline-block"></span><div><h3>СЕГМЕНТ 2 — ЮГО-ВОСТОК</h3><span class="sm">24–29 авг. · Ба-Риа-Вунг-Тао → Бинь-Фыок → Донг-Най</span></div><span class="pill">6 дней · 7 визитов</span></div>
+  <table class="iti">
+    <thead><tr><th>День</th><th>Дата</th><th>Локация</th><th>Активность</th><th>тыс.₫</th></tr></thead>
+    <tbody>
+      <tr><td class="dn">Д12</td><td class="dd">пн 24 авг</td><td><span class="ltag l-se">Ба-Риа</span>HTX БР + Суан Лок ×2</td><td><div class="stop">★★ HTX Ca cao Ba Ria + Vung Xuan Loc (2 визита)</div><div class="sub">08:00 автобус ХМС → Ба-Риа (120 тыс. ₫, 2 ч). 10:00 <span class="ph">+84 64 3824 500</span> HTX Ca cao Ba Ria — 2-й регион страны, базальтовые почвы, Trinitario, объём 1–2 т/мес. 14:00 Зона Суан Лок (20 км, мотобайк-такси) — высокая концентрация ферм. 2–3 фермерских визита. Хостел Ба-Риа 160 тыс. ₫.</td><td class="thb">340</td></tr>
+      <tr><td class="dn">Д13</td><td class="dd">вт 25 авг</td><td><span class="ltag l-se">Ба-Риа</span>Дат До + КП</td><td><div class="stop">Ca cao Dat Do (красный базальт) + Финальные переговоры</div><div class="sub">09:00 Группа Датдо (35 км) — базальтовые почвы, минеральный профиль. 13:00 II раунд с HTX Ба-Риа — запросить КП на 500 кг / 1 т / 3 т. Уточнить: возможна ли контейнерная отгрузка через Да Нанг (сборный груз с Меконгом). Вечером автобус Ба-Риа → Бинь-Фыок (160 тыс. ₫).</td><td class="thb">310</td></tr>
+      <tr><td class="dn">Д14</td><td class="dd">ср 26 авг</td><td><span class="ltag l-se">Бинь-Фыок</span>Бинь Лонг + Лок Нинь ×2</td><td><div class="stop">HTX Ca cao Binh Long + Nong trai Loc Ninh (2 визита)</div><div class="sub">09:00 <span class="ph">+84 271 3876 200</span> HTX Ca cao Binh Long (р-н Биньлонг, граница с Камбоджей). Trinitario, меньше конкуренции. 14:00 Ферма Лок Нинь (25 км) — крупная plantation, прямая закупка 1+ т/мес. Хостел Бинь-Фыок 150 тыс. ₫.</td><td class="thb">310</td></tr>
+      <tr><td class="dn">Д15</td><td class="dd">чт 27 авг</td><td><span class="ltag l-se">Донг-Най</span>Лонг Кхань + Динь Куан ×2</td><td><div class="stop">Ca cao Long Khanh + Trang Trai Dinh Quan (2 визита)</div><div class="sub">08:00 автобус → Донг-Най (2 ч, 130 тыс. ₫). 10:00 Группа Лонг Кхань — исторически первый регион какао Вьетнама (с 1980-х). 14:00 Ферма Динь Куан — какао-каучук-кофе интеркроп, объём 1–2 т/мес. Вечером: автобус в ХМС (120 тыс. ₫).</td><td class="thb">330</td></tr>
+      <tr><td class="dn">Д16</td><td class="dd">пт 28 авг</td><td><span class="ltag l-h">ХМС</span>Деброф + Подготовка Да Нанг</td><td><div class="stop">ХМС — Деброфинг ЮВ + подготовка к Да Нангу</div><div class="sub">Систематизировать образцы. Написать Zalo HTX Куанг Нам, HTX Нгок Хой (Кон Тум) — подтвердить встречи. Забронировать рейс ХМС → Да Нанг (VietJet/Vietnam Airlines, 450–700 тыс. ₫, 1 ч 15 мин) на завтра. Исследовать промышленные зоны Да Нанга: Hoа Кхань (Hoa Khanh IZ) и Лиен Чиеу (Lien Chieu).</td><td class="thb">280</td></tr>
+    </tbody>
+  </table>
+</div>
+
+  <!-- ДА НАНГ + ЦЕНТРАЛЬНЫЙ ВЬЕТНАМ -->
+  <div class="seg-hdr s-dn"><span style="font-size:18px">🏭</span><div><h3>СЕГМЕНТ 3 — ДА НАНГ + ЦЕНТРАЛЬНЫЙ ВЬЕТНАМ (Будущий Завод)</h3><span class="sm">29 авг. – 5 сен. · Да Нанг → Куанг Нам → Куанг Нгай → Кон Тум → Да Нанг</span></div><span class="pill">8 дней · 7 визитов</span></div>
+
+  <div class="factory-box">🏭 <strong>Логистический анализ для завода в Да Нанге:</strong> Да Нанг — стратегическая точка для переработки вьетнамского какао. Порт Да Нанг обрабатывает 5+ млн т/год, прямые контейнерные линии в ASEAN. Промышленные зоны: <strong>Хоа Кхань (Hoa Khanh IZ)</strong> — 20 мин от центра, развитая инфраструктура, ставки аренды 2–3 USD/м²/мес. Lien Chieu IZ — для крупных производств. Зона свободной торговли Да Нанг (DAFIZ) — налоговые преимущества для экспорта.
+  </div>
+
+  <table class="logi-table">
+    <thead><tr><th>Регион-источник</th><th>Расстояние до Да Нанга</th><th>Время в пути</th><th>Транспорт</th><th>Статус</th></tr></thead>
+    <tbody>
+      <tr><td>Куанг Нам (Тра Ми)</td><td>75 км</td><td>1,5 ч</td><td>Грузовик 5т</td><td class="logi-best">✅ ЛУЧШИЙ</td></tr>
+      <tr><td>Куанг Нгай</td><td>130 км</td><td>2 ч</td><td>Грузовик 10т</td><td class="logi-best">✅ ОТЛИЧНО</td></tr>
+      <tr><td>Кон Тум (Нгок Хой)</td><td>165 км</td><td>3–4 ч</td><td>Рефрижератор</td><td class="logi-best">✅ ХОРОШО</td></tr>
+      <tr><td>Бинь Динь (Куи Нён)</td><td>170 км</td><td>3 ч</td><td>Грузовик</td><td class="logi-ok">⚡ ПРИЕМЛЕМО</td></tr>
+      <tr><td>Дак-Лак (Буон-Ма-Туот)</td><td>330 км via Кон Тум</td><td>7–8 ч</td><td>Реф. грузовик</td><td class="logi-ok">⚡ ВОЗМОЖНО</td></tr>
+      <tr><td>Бен-Тре / ЮВ (Меконг)</td><td>900 км</td><td>16–20 ч грузовик / 2–3 дня море</td><td>Контейнер 20ft</td><td class="logi-far">🚢 МОРСКОЙ ФРАХТ</td></tr>
+      <tr><td><strong>Оптимальная зона (радиус 200 км)</strong></td><td colspan="4"><strong>Куанг Нам + Куанг Нгай + Кон Тум = ~2–3 т/мес. прямого снабжения завода. Меконг — контейнером через Да Нанг Порт (ул. Тьен Са).</strong></td></tr>
+    </tbody>
+  </table>
+
+  <table class="iti">
+    <thead><tr><th>День</th><th>Дата</th><th>Локация</th><th>Активность</th><th>тыс.₫</th></tr></thead>
+    <tbody>
+      <tr class="trav"><td class="dn">—</td><td class="dd">сб 29 авг</td><td><span class="ltag l-dn">✈️ → Да Нанг</span></td><td><div class="stop">✈️ Хошимин → Да Нанг · Осмотр промышленных зон</div><div class="sub">Рейс VietJet/Vietnam Airlines ХМС → Да Нанг (DAD), 1 ч 15 мин, 450–700 тыс. ₫. Grab до хостела у реки Хан (200 тыс. ₫/ночь, р-н Хай Чау). Послеполуденный осмотр: промзоны Хоа Кхань + Лиен Чиеу (потенциальное место завода). Порт Да Нанг (Terminal Tien Sa — 5 км от центра). Вечер: cơm hến, mì Quảng у Cầu Rồng.</div></td><td class="thb">770</td></tr>
+      <tr><td class="dn">Д17</td><td class="dd">вс 30 авг</td><td><span class="ltag l-dn">Да Нанг</span>Завод + Логистика</td><td><div class="stop">День логистики и промзон Да Нанга</div><div class="sub">Утро: Промзона Хоа Кхань (Hoa Khanh Industrial Zone) — встреча с управляющей компанией, уточнить ставки аренды, мощности электроснабжения, разрешения пищевого производства (HACCP). 14:00 Nona Cacao — небольшой да-нангский bean-to-bar (info@nonacacao.com); спросить о региональных фермерских контактах и ценах на местное сырьё. Осмотреть порт Тьен Са.</div></td><td class="thb">260</td></tr>
+      <tr><td class="dn">Д18</td><td class="dd">пн 31 авг</td><td><span class="ltag l-dn">Куанг Нам</span>HTX Тра Ми + Тьен Фыок ×2</td><td><div class="stop">★★ HTX Cacao Trà My + Nhóm Tiên Phước — сырьё ближе всего к заводу (2 визита)</div><div class="sub">07:30 мотобайк/автобус Да Нанг → Тра Ми, Куанг Нам (75 км, 1,5 ч по трассе QL14B). <span class="kp">75 КМ ОТ ДА НАНГА — оптимальное снабжение завода</span>. HTX Cacao Trà My — горный район, Trinitario 400–600 м, FineAroma потенциал. 14:00 Nhóm Tiên Phước (p-н Тьен Фыок, 60 км от ДН) — другой фермерский кластер Куанг Нам. Оба: уточнить объём, цена, логистика до Да Нанг.</div></td><td class="thb">290</td></tr>
+      <tr><td class="dn">Д19</td><td class="dd">вт 01 сен</td><td><span class="ltag l-dn">Куанг Нгай</span>HTX Куанг Нгай</td><td><div class="stop">HTX Cacao Quảng Ngãi — 130 км от завода</div><div class="sub">08:00 автобус Да Нанг → Куанг Нгай (130 км, 2 ч, 80 тыс. ₫). Группы фермеров р-нов Минь Лонг и Шон Ха (Son Ha) — горный какао Куанг Нгай, Trinitario в прохладном климате. Объём пока небольшой (~300–600 кг/мес.), но растущий. Прямая дорога до завода в Да Нанге = идеально для еженедельных грузовых рейсов. Возврат в Да Нанг вечером (80 тыс. ₫).</td><td class="thb">270</td></tr>
+      <tr><td class="dn">Д20</td><td class="dd">ср 02 сен</td><td><span class="ltag l-dn">Кон Тум</span>HTX Нгок Хой + Дак Глей ×2</td><td><div class="stop">★★ HTX Cacao Ngọc Hồi (Кон Тум) + Nhóm Cacao Đắk Glei — 2 визита</div><div class="sub">07:00 автобус Да Нанг → Кон Тум (165 км, трасса 14 / перевал Нгок Линь, 3,5–4 ч, 150 тыс. ₫). <span class="kp">ЛУЧШИЙ КОМПРОМИСС: близость к ДН + качество Нагорья</span>. HTX Ngoc Hoi — Кон Тум провинция, 500–700 м, базальт, Trinitario, FineAroma + объём 600 кг–1 т/мес. 14:00 Группа Дак Глей (р-н Дак Глей, 40 км) — высокогорный, уникальный профиль. Хостел Кон Тум 160 тыс. ₫.</td><td class="thb">370</td></tr>
+      <tr><td class="dn">Д21</td><td class="dd">чт 03 сен</td><td><span class="ltag l-dn">Кон Тум</span>Буфер + переговоры</td><td><div class="stop">Буфер Кон Тума + Бинь Динь разведка</div><div class="sub">Утро: повторный обзвон HTX Нгок Хой — запросить КП. Уточнить: транспорт от Нгок Хой до Да Нанга (165 км, реф. грузовик 5т = ~3–4М ₫/рейс). Если есть время: разведка р-на Бинь Динь (Куи Нён, 170 км к югу от ДН) через звонок по Zalo. Вечер: автобус Кон Тум → Да Нанг (150 тыс. ₫).</td><td class="thb">280</td></tr>
+      <tr><td class="dn">Д22</td><td class="dd">пт 04 сен</td><td><span class="ltag l-dn">Да Нанг</span>Итоги Центра</td><td><div class="stop">Да Нанг — Финальный деброф Центрального Вьетнама</div><div class="sub">Составить «Карту снабжения завода»: Куанг Нам (75 км) + Куанг Нгай (130 км) + Кон Тум (165 км) = потенциальные 2–3 т/мес. в радиусе 165 км от завода. Меконг — контейнер 20ft морем (2 дня). Сфотографировать образцы. Вечером: рейс Да Нанг → Буон-Ма-Туот (650–900 тыс. ₫, 1 ч 30 мин) для начала сегмента Нагорья.</td><td class="thb">910</td></tr>
+    </tbody>
+  </table>
+
+  <!-- НАГОРЬЕ -->
+  <div class="seg-hdr s-hl"><span style="background:#8e44ad;width:14px;height:14px;border-radius:50%;display:inline-block"></span><div><h3>СЕГМЕНТ 4 — ЦЕНТРАЛЬНОЕ НАГОРЬЕ (FineAroma)</h3><span class="sm">5–13 сен. · Дак-Лак → Дак-Нонг · Базальт 500–900 м</span></div><span class="pill">9 дней · 6 визитов</span></div>
+  <table class="iti">
+    <thead><tr><th>День</th><th>Дата</th><th>Локация</th><th>Активность</th><th>тыс.₫</th></tr></thead>
+    <tbody>
+      <tr><td class="dn">Д23</td><td class="dd">сб 05 сен</td><td><span class="ltag l-hl">Дак-Лак</span>Прибытие БМТ</td><td><div class="stop">Буон-Ма-Туот — Прибытие + Разведка</div><div class="sub">Grab до хостела (190 тыс. ₫/ночь). Написать Zalo HTX Ca cao Dak Lak — подтвердить пн. Разведка рынка и плантаций вдоль трассы к Кронг Нангу. <span class="kp">Важно</span>: Дак-Лак → Да Нанг 330 км через Кон Тум (7–8 ч грузовик) — дорогой, но возможен рефрижератор 5т для FineAroma партий.</td><td class="thb">280</td></tr>
+      <tr><td class="dn">Д24</td><td class="dd">вс 06 сен</td><td><span class="ltag l-hl">Дак-Лак</span>Кронг Нанг ★★★</td><td><div class="stop">★★★ Trang Trai Cacao Krong Nang — Лучший FineAroma Потенциал Вьетнама</div><div class="sub">Grab/xe om до Кронг Нанга (40 км к сев.-востоку). Базальт 600+ м = наилучший FineAroma профиль страны (подтверждено Marou, Uncommon Cacao). Посетить 2–3 фермы. Записать: % Trinitario, метод ферм., дни (5–7), t°C, сезон сбора (октябрь–январь). Образцы для дегустации.</td><td class="thb">290</td></tr>
+      <tr><td class="dn">Д25</td><td class="dd">пн 07 сен</td><td><span class="ltag l-hl">Дак-Лак</span>HTX ДЛ + EaH'Leo ×2</td><td><div class="stop">★★ HTX Ca cao Dak Lak + Mô hình Cacao-Cà phê EaH'Leo (2 визита)</div><div class="sub">09:00 <span class="ph">+84 262 3856 700</span> HTX Ca cao Dak Lak (БМТ) — главный кооп Нагорья, объём 800 кг–1,5 т/мес. Прямая закупка возможна. Уточнить: возможна ли отгрузка до Да Нанга (330 км)? 13:30 Интеркроп Эа-Х'Лео (50 км к северу) — cacao+arabica интеркроп. Specialty micro-lot для крафтового рынка.</td><td class="thb">320</td></tr>
+      <tr class="wknd"><td class="dn">—</td><td class="dd">вт 08 сен</td><td><span class="ltag l-hl">→ Дак-Нонг</span></td><td>Автобус БМТ → Зя-Нгиа, Дак-Нонг (2,5 ч, 130 тыс. ₫). Хостел Зя-Нгиа 160 тыс. ₫. Написать Zalo Ca cao Dak Nong — подтвердить завтра. Вечер: bun ca у рынка Зя-Нгиа.</td><td class="thb">310</td></tr>
+      <tr><td class="dn">Д26</td><td class="dd">ср 09 сен</td><td><span class="ltag l-hl">Дак-Нонг</span>Дак Нонг + Дак Сонг ×2</td><td><div class="stop">★★ Ca cao Dak Nong + HTX Nong san Dak Song (2 визита)</div><div class="sub">09:00 <span class="ph">+84 261 3545 200</span> Ca cao Dak Nong (Зя-Нгиа) — UNESCO Geopark, базальт, молодой регион, цены ниже Дак-Лака. 13:30 HTX Dak Song (40 км) — агрокооп (какао + перец + кофе). Запросить объём чистого какао, цену, условия упаковки (мешки 60 кг).</td><td class="thb">310</td></tr>
+      <tr><td class="dn">Д27</td><td class="dd">чт 10 сен</td><td><span class="ltag l-hl">→ Да Нанг</span>Финал Нагорья</td><td><div class="stop">Финальные переговоры Нагорья + перелёт/автобус обратно в Да Нанг</div><div class="sub">Утро: повторные звонки HTX Дак-Лак и Дак-Нонг — запросить официальные КП. Записать: рейтинг поставщиков для завода (качество vs логистика). Вариант А: рейс Дак-Нонг → ДН (через БМТ, 1 ч 30 мин, 650 тыс. ₫). Вариант Б: автобус Зя-Нгиа → Кон Тум → Да Нанг (9–10 ч, 250 тыс. ₫) — по пути осмотреть горную дорогу через Нгок Линь.</td><td class="thb">380</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ФИНАЛ -->
+  <div class="seg-hdr s-cc"><span style="font-size:18px">🤝</span><div><h3>ФИНАЛ — Да Нанг / Хошимин · Итоговые Переговоры + Отъезд</h3><span class="sm">11–17 сен. · Итог · Пробные заказы · Вылет в Бразилию</span></div><span class="pill">7 дней · финал</span></div>
+  <table class="iti">
+    <thead><tr><th>День</th><th>Дата</th><th>Локация</th><th>Активность</th><th>тыс.₫</th></tr></thead>
+    <tbody>
+      <tr><td class="dn">Д28</td><td class="dd">пт 11 сен</td><td><span class="ltag l-dn">Да Нанг</span>Финал Центра</td><td><div class="stop">Да Нанг — Итоговые встречи по заводу и поставщикам Центра</div><div class="sub">Утро: повторная встреча с управляющими промзон (Hoa Khanh IZ) — уточнить условия аренды + сроки запуска пищевого производства. 14:00 Повторная встреча с HTX Куанг Нам Тра Ми и HTX Нгок Хой — финальные условия пробных заказов. Цель: договорённость на 500 кг–1 т пробную поставку на завод.</td><td class="thb">250</td></tr>
+      <tr><td class="dn">Д29</td><td class="dd">сб 12 сен</td><td><span class="ltag l-dn">Да Нанг</span>→ ХМС</td><td>Рейс Да Нанг → ХМС (450–600 тыс. ₫, 1 ч 15 мин). Финальный деброф со всеми ХМС-контактами (Vinacacao, Golden Tree) — согласование первой пробной партии. Составить итоговый отчёт: топ-8 поставщиков, цены, объёмы, логистика.</td><td class="thb">560</td></tr>
+      <tr><td class="dn">Д30</td><td class="dd">вс 13 сен</td><td><span class="ltag l-h">ХМС</span>Финальные переговоры</td><td><div class="stop">ХМС — Финальные встречи с Vinacacao + Puratos GP + HTX Ca cao Ben Tre</div><div class="sub">Три встречи для финализации пробных заказов. Запросить: условия TT30, phytosanitary certificates, C/O Form D ASEAN, упаковка (мешки 60 кг джут), возможность отгрузки через Да Нанг Порт (для логистики завода). Устная договорённость: 500 кг–1 т с каждым → итого 1,5–3 т пробная партия.</div></td><td class="thb">260</td></tr>
+      <tr class="trav"><td class="dn">—</td><td class="dd">пн–вт 14–15 сен</td><td><span class="ltag l-h">ХМС</span>Отчёт + Отъезд</td><td><div class="stop">Итоговый отчёт + Вылет ХМС → Сан-Паулу → Илеус</div><div class="sub">Пн: написать финальный отчёт экспедиции. Систематизировать образцы. Отправить Zalo/email всем контактам: письмо-благодарность + официальный запрос КП. Вт: Grab в аэропорт Тан Сон Нят. Рейс ХМС (SGN) → Сан-Паулу (GRU) → Илеус (IOS), ~36 ч в дороге.</div></td><td class="thb">380</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- БЮДЖЕТ -->
+<div id="bud-sec" class="sec">
+  <h2 class="stitle">Полный бюджет — 1 человек, ~38 дней (Илеус → ХМС → маршрут → ХМС → Илеус)</h2>
+  <div class="info-box">
+    Все цены в тысячах вьетнамских донгов (тыс. ₫). Курс: 1 USD ≈ 25 000 ₫ · 1M ₫ ≈ $40 USD · 1 BRL ≈ 5 000 ₫.<br>
+    <strong>Принцип:</strong> гестхаусы и мини-отели 150–250 тыс. ₫/ночь, уличная еда, автобусы Phuong Trang, 3 внутренних рейса + международные перелёты из Бразилии.
+  </div>
+  <div class="b-grid">
+
+    <div class="b-card flights">
+      <div class="b-ch"><span class="ico">✈️</span><h3>Международные рейсы — Бразилия ↔ Вьетнам</h3></div>
+      <table class="bt">
+        <tr><td>Илеус (IOS) → Сан-Паулу (GRU) внутренний рейс</td><td>~2 500</td></tr>
+        <tr><td>Сан-Паулу (GRU) → Хошимин (SGN) эконом RT</td><td>~45 000</td></tr>
+        <tr><td>Хошимин (SGN) → Сан-Паулу (GRU) возврат (в RT)</td><td>включено</td></tr>
+        <tr><td>Сан-Паулу (GRU) → Илеус (IOS) возврат</td><td>~2 500</td></tr>
+        <tr><td class="note-row" colspan="2">Лучшие маршруты: Qatar Airways GRU→DOH→SGN, Turkish Airlines GRU→IST→SGN. RT GRU↔SGN: $1 200–1 500 USD при гибких датах. Проверять в Google Flights за 3–6 мес. Авг–сен = средний сезон (лучше чем дек–янв).</td></tr>
+        <tr class="sub-row"><td>Итого рейсы Бразилия ↔ Вьетнам</td><td>~50 000</td></tr>
+      </table>
+    </div>
+
+    <div class="b-card">
+      <div class="b-ch"><span class="ico">✈️</span><h3>Внутренние рейсы Вьетнам (3 рейса)</h3></div>
+      <table class="bt">
+        <tr><td>ХМС → Да Нанг (VietJet/Bamboo, 1 ч 15 мин)</td><td>500–700</td></tr>
+        <tr><td>Да Нанг → Буон-Ма-Туот / Дак-Лак (1 ч 30 мин)</td><td>650–900</td></tr>
+        <tr><td>Дак-Нонг/БМТ → Да Нанг или ХМС (возврат)</td><td>650–900</td></tr>
+        <tr><td>Да Нанг → ХМС финал (1 ч 15 мин)</td><td>450–650</td></tr>
+        <tr><td class="note-row" colspan="2">VietJet Air — самый дешёвый при бронировании за 2–3 нед. Bamboo Airways — чуть дороже, но пунктуальнее. Багаж: 7 кг ручной клади бесплатно у VietJet (образцы везти в ручной клади).</td></tr>
+        <tr class="sub-row"><td>Итого внутренние рейсы</td><td>~2 800</td></tr>
+      </table>
+    </div>
+
+    <div class="b-card">
+      <div class="b-ch"><span class="ico">🛏</span><h3>Проживание — 30 оплачиваемых ночей (8 в транзите/автобусах)</h3></div>
+      <table class="bt">
+        <tr><td>Хошимин (6 ночей — 2 заезда)</td><td>200 × 6 = 1 200</td></tr>
+        <tr><td>Бен-Тре (5 ночей)</td><td>170 × 5 = 850</td></tr>
+        <tr><td>Тьен-Зянг / Ми Тхо (2 ночи)</td><td>160 × 2 = 320</td></tr>
+        <tr><td>Ба-Риа / Бинь-Фыок / Донг-Най (4 ночи)</td><td>160 × 4 = 640</td></tr>
+        <tr><td>Да Нанг (5 ночей — 2 заезда)</td><td>210 × 5 = 1 050</td></tr>
+        <tr><td>Куанг Нгай (1 ночь)</td><td>150 × 1 = 150</td></tr>
+        <tr><td>Кон Тум (2 ночи)</td><td>160 × 2 = 320</td></tr>
+        <tr><td>Буон-Ма-Туот, Дак-Лак (3 ночи)</td><td>190 × 3 = 570</td></tr>
+        <tr><td>Зя-Нгиа, Дак-Нонг (2 ночи)</td><td>160 × 2 = 320</td></tr>
+        <tr><td class="note-row" colspan="2">Agoda, Booking.com — фильтр «Гестхаус/мини-отель», 150–250 тыс. ₫. В ХМС и Да Нанге — выше (200–250 тыс. ₫). В провинции — 150–180 тыс. ₫. Просить «phòng quạt» в провинции — экономия 30–50 тыс. ₫.</td></tr>
+        <tr class="sub-row"><td>Итого (средн. 167 тыс. ₫/ночь)</td><td>5 420</td></tr>
+      </table>
+    </div>
+
+    <div class="b-card">
+      <div class="b-ch"><span class="ico">🚌</span><h3>Межгородской наземный транспорт</h3></div>
+      <table class="bt">
+        <tr><td>ХМС → Бен-Тре Phuong Trang (×2)</td><td>160</td></tr>
+        <tr><td>Бен-Тре → Ми Тхо маршрутка + паром (×2)</td><td>80</td></tr>
+        <tr><td>Тьен-Зянг → ХМС автобус (×2)</td><td>100</td></tr>
+        <tr><td>ХМС → Ба-Риа → Бинь-Фыок → Донг-Най → ХМС</td><td>600</td></tr>
+        <tr><td>Да Нанг → Куанг Нам (Тра Ми) (×2)</td><td>120</td></tr>
+        <tr><td>Да Нанг → Куанг Нгай (×2)</td><td>160</td></tr>
+        <tr><td>Да Нанг → Кон Тум → Да Нанг</td><td>300</td></tr>
+        <tr><td>БМТ → Дак-Нонг → возврат</td><td>260</td></tr>
+        <tr><td class="note-row" colspan="2">Phuong Trang (FUTA Bus) — лучшая сеть юга Вьетнама. Futabus.vn — бронировать онлайн. Автобусы в горы провинции — маршрутки (xe khach), бронировать у водителя на рынке.</td></tr>
+        <tr class="sub-row"><td>Итого наземный транспорт</td><td>1 780</td></tr>
+      </table>
+    </div>
+
+    <div class="b-card">
+      <div class="b-ch"><span class="ico">🛵</span><h3>Местный транспорт — Grab, xe om, мото аренда</h3></div>
+      <table class="bt">
+        <tr><td>ХМС Grab (6 дней × 3 поездки)</td><td>50/п × 18 = 900</td></tr>
+        <tr><td>Бен-Тре мотобайк аренда (5 дней)</td><td>130/д × 5 = 650</td></tr>
+        <tr><td>Паромы дельты Меконга (×12)</td><td>10/п × 12 = 120</td></tr>
+        <tr><td>Ба-Риа + Бинь-Фыок + Донг-Най xe om</td><td>100/д × 4 = 400</td></tr>
+        <tr><td>Да Нанг Grab + мотобайк (7 дней)</td><td>100/д × 7 = 700</td></tr>
+        <tr><td>Кон Тум + Дак-Лак + Дак-Нонг xe om</td><td>90/д × 7 = 630</td></tr>
+        <tr class="sub-row"><td>Итого местный транспорт</td><td>3 400</td></tr>
+      </table>
+    </div>
+
+    <div class="b-card">
+      <div class="b-ch"><span class="ico">🍜</span><h3>Питание — 38 дней уличной едой</h3></div>
+      <table class="bt">
+        <tr><td>Завтрак: phở bò, bánh mì, xôi (30–50 тыс. ₫)</td><td>40 × 38 = 1 520</td></tr>
+        <tr><td>Обед: cơm tấm, bún bò Huế, mì Quảng (35–65 тыс. ₫)</td><td>50 × 38 = 1 900</td></tr>
+        <tr><td>Ужин: рыбный рынок, рисовые блюда (50–90 тыс. ₫)</td><td>70 × 38 = 2 660</td></tr>
+        <tr><td>Кофе cà phê sữa đá + вода + фрукты</td><td>45 × 38 = 1 710</td></tr>
+        <tr><td class="note-row" colspan="2">~205 тыс. ₫/день (~$8.2 USD). Лучшие рынки: Bến Thành (ХМС), Cồn Market (Да Нанг), Bến Tre Central Market, Kon Tum Market. Да Нанг особо богат свежими морепродуктами.</td></tr>
+        <tr class="sub-row"><td>Итого питание (~205 тыс. ₫/день)</td><td>7 790</td></tr>
+      </table>
+    </div>
+
+    <div class="b-card">
+      <div class="b-ch"><span class="ico">🗣️</span><h3>Переводчик + Коммуникации</h3></div>
+      <table class="bt">
+        <tr><td>Переводчик-студент (10 сессий × 3 ч)</td><td>170/ч × 30 = 5 100</td></tr>
+        <tr><td>Viettel SIM 30 дней + пополнение ×2</td><td>80 + 80 + 80 = 240</td></tr>
+        <tr><td class="note-row" colspan="2">Viettel — лучшее покрытие (Нагорье + провинции). Студенты-переводчики: Da Nang University, Hue University, HCMC RMIT. ~150–200 тыс. ₫/ч. Zalo — все вьетнамцы, WhatsApp — только международные контакты (Puratos, Belocolat).</td></tr>
+        <tr class="sub-row"><td>Итого коммуникации</td><td>5 340</td></tr>
+      </table>
+    </div>
+
+    <div class="b-card">
+      <div class="b-ch"><span class="ico">📦</span><h3>Образцы, виза, буфер</h3></div>
+      <table class="bt">
+        <tr><td>Электронная виза e-Vietnam (~$25 USD)</td><td>625</td></tr>
+        <tr><td>Образцы СФБ (36 точек × 200 г × 55 тыс.₫/кг)</td><td>~1 980</td></tr>
+        <tr><td>Зипперные пакеты + этикетки + маркеры</td><td>150</td></tr>
+        <tr><td>Буфер непредвиденного (~10%)</td><td>2 700</td></tr>
+        <tr><td>Чаевые, визитки, копии, сувениры</td><td>500</td></tr>
+        <tr class="sub-row"><td>Итого прочее + буфер</td><td>5 955</td></tr>
+      </table>
+    </div>
+
+  </div>
+
+  <table class="sum-table">
+    <thead><tr><th>Категория</th><th>тыс. ₫</th><th>USD (~25 000₫)</th><th>% от итого</th></tr></thead>
+    <tbody>
+      <tr><td>✈️ Международные рейсы (Бразилия ↔ Вьетнам RT)</td><td>50 000</td><td>2 000</td><td>67,7%</td></tr>
+      <tr><td>✈️ Внутренние рейсы (3 рейса по Вьетнаму)</td><td>2 800</td><td>112</td><td>3,8%</td></tr>
+      <tr><td>🛏 Проживание (30 ночей, средн. 181 тыс. ₫)</td><td>5 420</td><td>217</td><td>7,3%</td></tr>
+      <tr><td>🚌 Наземный транспорт (Phuong Trang + маршрутки)</td><td>1 780</td><td>71</td><td>2,4%</td></tr>
+      <tr><td>🛵 Местный транспорт (Grab + xe om + мото аренда)</td><td>3 400</td><td>136</td><td>4,6%</td></tr>
+      <tr><td>🍜 Питание (~205 тыс. ₫/день × 38 дней)</td><td>7 790</td><td>312</td><td>10,5%</td></tr>
+      <tr><td>🗣️ Переводчик + SIM Viettel</td><td>5 340</td><td>214</td><td>7,2%</td></tr>
+      <tr><td>📦 Образцы + виза e-Vietnam + буфер</td><td>5 955</td><td>238</td><td>8,0%</td></tr>
+      <tr class="total-row"><td><strong>ИТОГО (38 дней, включая рейсы из Бразилии)</strong></td><td><strong>82 485</strong></td><td><strong>~3 300</strong></td><td><strong>100%</strong></td></tr>
+      <tr style="background:#f0f8f0"><td colspan="4" style="font-size:10px;color:#888;padding:6px 12px">Только расходы во Вьетнаме (без межд. рейсов): ~32 485 тыс. ₫ (~$1 300 USD) за 38 дней = ~855 тыс. ₫/день (~$34 USD/день)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="b-total">
+    <div>
+      <h3>Полный бюджет экспедиции</h3>
+      <div class="sub-t">38 дней · 5 регионов · 11 провинций · 36 визитов · 3 внутренних рейса · Виза e-Vietnam $25</div>
+    </div>
+    <div class="grand">
+      <div class="thb-big">~82M ₫</div>
+      <div class="usd">≈ $3 300 USD (с рейсами) &nbsp;·&nbsp; $1 300 USD (только Вьетнам)</div>
+    </div>
+  </div>
+
+  <div class="b-legend">
+    <strong>💡 Контекст ROI:</strong> При закупке 2 т/мес. вьетнамского Trinitario по $2 600/т = $5 200/мес. Годовой контракт = $62 400. Экспедиция (только Вьетнам часть $1 300) = 2,1% от годового контракта — отличный ROI для прямого сорсинга.<br><br>
+    <strong>🏭 Завод в Да Нанге — дополнительная синергия:</strong> Закупка напрямую у Куанг Нам + Куанг Нгай + Кон Тум (радиус 165 км) = снабжение завода без хранения/посредников. Меконгские бобы (Бен-Тре) — контейнер 20ft морем до Да Нанг Порт: стоимость фрахта ≈ $500–700/контейнер (18–20 т) = $0.03/кг — практически ничего. Итого: прямая закупка + собственный завод = максимальная маржа.
+  </div>
+</div>
+
+<!-- КОНТАКТЫ -->
+<div id="con-sec" class="sec">
+  <h2 class="stitle">Все контакты — 35+ поставщиков по регионам</h2>
+  <div class="info-box"><strong>⚡ Главное отличие от Таиланда:</strong> Во Вьетнаме ключевой мессенджер — <strong>Zalo</strong> (400M пользователей), НЕ WhatsApp. Все фермеры и кооперативы — только на Zalo. WhatsApp — только международные партнёры (Puratos, Belocolat, Marou). Первое сообщение — на вьетнамском через Google Translate. Большинство фермеров НЕ говорят по-английски — нужен переводчик-студент.</div>
+
+  <div class="con-section-hdr"><span class="con-section-dot" style="background:#d4830a"></span>ХОШИМИН — Агрегаторы, Процессоры, Платформы (6 контактов)</div>
+  <div class="con-grid">
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">Vietnam Cacao JSC / Vinacacao</div><div style="font-size:10px;color:var(--muted)">Крупнейший агрегатор · 8+ провинций · UTZ/RFA</div></div><span class="con-reg r-hcm">Хошимин</span></div><div class="con-body"><div class="con-ph">📱 +84 28 3910 3425</div><div class="con-em">talk2me@vinacacao.com.vn · vinacacao.com.vn</div><div class="con-note">ПЕРВЫЙ КОНТАКТ. 8+ провинций, UTZ/RFA сертификат, FOB $2 400–3 000/т. Опыт с европейскими покупателями. Английский язык. Может организовать отгрузку через Да Нанг Порт.</div><div class="con-badge cb-pr">Агрегатор ⭐⭐⭐</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Marou Chocolate Vietnam</div><div style="font-size:10px;color:var(--muted)">Bean-to-Bar · 6 провинций-источников</div></div><span class="con-reg r-hcm">Хошимин</span></div><div class="con-body"><div class="con-em">info@marouchocolate.com · marouchocolate.com</div><div class="con-note">Культовый bean-to-bar. Их контакты фермеров из Бен-Тре, Ба-Риа, Тьен-Зянг, Донг-Най = ценнейший актив. Спросить о СФБ сверх их нужд. Английский язык.</div><div class="con-badge cb-pr">Bean-to-Bar / Разведка ⭐⭐</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Belocolat Vietnam (Barry Callebaut)</div><div style="font-size:10px;color:var(--muted)">Промышленный переработчик · глобальный концерн</div></div><span class="con-reg r-hcm">Хошимин</span></div><div class="con-body"><div class="con-note">Дочерняя компания Barry Callebaut Group. Запросить контакты их поставщиков-ферм напрямую. Возможно — прямая закупка у фермеров, которые поставляют в Belocolat. Английский язык.</div><div class="con-badge cb-pr">Процессор</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Golden Tree Cacao Vietnam</div><div style="font-size:10px;color:var(--muted)">Экспортная платформа · C/O + phytosanitary</div></div><span class="con-reg r-hcm">Хошимин</span></div><div class="con-body"><div class="con-note">Торговая платформа для экспорта. Помогает с документацией: C/O Form D (ASEAN), phytosanitary certificate. Агрегирует из Бен-Тре + Донг-Най. Удобна для разовых отгрузок через Да Нанг Порт.</div><div class="con-badge cb-ex">Экспортёр-трейдер</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Geneagro Vietnam</div><div style="font-size:10px;color:var(--muted)">Агропром трейдер · Меконг + Нагорье агрегация</div></div><span class="con-reg r-hcm">Хошимин</span></div><div class="con-body"><div class="con-note">Может агрегировать смешанные партии Меконга + Нагорья в один контейнер 20ft. Полезен для консолидации и отгрузки через Да Нанг порт на завод. Таможенное оформление FOB.</div><div class="con-badge cb-ex">Трейдер-логист</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">VINACOCOA / CacaoViet</div><div style="font-size:10px;color:var(--muted)">Отраслевая ассоциация · рекомендательные письма</div></div><span class="con-reg r-hcm">Хошимин</span></div><div class="con-body"><div class="con-note">Vietnam Cocoa &amp; Chocolate Association — аналог TACCO Thai. Запросить рекомендательные письма к кооперативам всех провинций до приезда. Критически важно для доверия фермеров во Вьетнаме.</div><div class="con-badge cb-co">Торговая ассоциация</div></div></div>
+  </div>
+
+  <div class="con-section-hdr"><span class="con-section-dot" style="background:#2980b9"></span>ДЕЛЬТА МЕКОНГА — Бен-Тре + Тьен-Зянг (~55% вьетнамского какао) — 11 контактов</div>
+  <div class="con-grid">
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">Puratos Grand-Place Vietnam</div><div style="font-size:10px;color:var(--muted)">Ферментационный Центр Бен-Тре · 300+ фермеров</div></div><span class="con-reg r-mek">Бен-Тре, Чау Тхань</span></div><div class="con-body"><div class="con-ph">☎️ +84 75 3822 638</div><div class="con-em">puratos.com.vn</div><div class="con-note">Крупнейший ферментационный центр страны. 300+ фермеров-поставщиков. UTZ/RFA. Объём 2–4 т/мес. FOB $2 600–3 200/т. Морской фрахт до Да Нанг Порт возможен контейнером 20ft.</div><div class="con-badge cb-pr">Ферм. Центр ⭐⭐⭐</div></div></div>
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">HTX Ca cao Bến Tre</div><div style="font-size:10px;color:var(--muted)">200+ фермеров · провинциальный кооп</div></div><span class="con-reg r-mek">Провинция Бен-Тре</span></div><div class="con-body"><div class="con-ph">☎️ +84 75 3825 115</div><div class="con-note">Главный провинциальный кооп. 200+ фермеров, Trinitario, 5–7 дней ферментация. Объём 2–4 т/мес. Прямая закупка. Zalo — ключевой контакт.</div><div class="con-badge cb-co">Кооператив ⭐⭐⭐</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">HTX Nông nghiệp Cửu Long</div><div style="font-size:10px;color:var(--muted)">Агрокооп Дельты · кокос + какао</div></div><span class="con-reg r-mek">Бен-Тре</span></div><div class="con-body"><div class="con-note">Многоотраслевой агрокооп. Какао — одна из культур. Цена часто ниже специализированных коопов. Хорош как резервный источник.</div><div class="con-badge cb-co">Кооператив</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Nhóm Ca cao Giồng Trôm</div><div style="font-size:10px;color:var(--muted)">Крупнейший кластер ферм Бен-Тре</div></div><span class="con-reg r-mek">Бен-Тре, р-н Жонг Тром</span></div><div class="con-body"><div class="con-note">Жонг Тром — самое высокое скопление какао-ферм в провинции. Trinitario 15+ лет. Хорошая ферментация. До 1–2 т/мес.</div><div class="con-badge cb-fa">Фермерская группа ⭐⭐</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Nhóm Ca cao Ba Tri</div><div style="font-size:10px;color:var(--muted)">Прибрежный кластер · морской профиль</div></div><span class="con-reg r-mek">Бен-Тре, р-н Ба Три</span></div><div class="con-body"><div class="con-note">Прибрежный микроклимат. Морской/солёный вкусовой профиль — отличается от стандартного Бен-Тре. Интересен для specialty. До 300–500 кг/мес.</div><div class="con-badge cb-fa">Фермерская группа</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">HTX Bình Đại</div><div style="font-size:10px;color:var(--muted)">Удалённый р-н · более низкие цены</div></div><span class="con-reg r-mek">Бен-Тре, р-н Бинь Дай</span></div><div class="con-body"><div class="con-note">Удалённый район Биньдай — меньше конкуренции, более доступные цены. Хорош для понимания ценового дна Бен-Тре. Нужен переводчик.</div><div class="con-badge cb-co">Кооператив</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Nhóm Ca cao Châu Thành</div><div style="font-size:10px;color:var(--muted)">Ближайший к центру · рядом с Puratos</div></div><span class="con-reg r-mek">Бен-Тре, р-н Чау Тхань</span></div><div class="con-body"><div class="con-note">Чау Тхань — ближайший к городу Бен-Тре. 20 мин от центра. Рядом с ферментационным центром Puratos. Удобная логистика.</div><div class="con-badge cb-fa">Фермерская группа</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Nông trại Mekong Cacao</div><div style="font-size:10px;color:var(--muted)">Крупная частная ферма · современная ферментация</div></div><span class="con-reg r-mek">Бен-Тре</span></div><div class="con-body"><div class="con-note">Крупная частная ферма с современной ферментацией. Потенциал 1–2 т/мес. прямая закупка. Через Marou/VINACOCOA интро.</div><div class="con-badge cb-fa">Частная ферма ⭐⭐</div></div></div>
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">HTX Ca cao Tiền Giang</div><div style="font-size:10px;color:var(--muted)">Провинц. кооп Тьен-Зянг · 150+ фермеров</div></div><span class="con-reg r-mek">Тьен-Зянг, Ми Тхо</span></div><div class="con-body"><div class="con-ph">☎️ +84 73 3878 800</div><div class="con-note">Провинциальная ассоциация. 150+ фермеров, работает с Mars Vietnam. Объём до 1,5 т/мес. Водная логистика по Меконгу удобна для контейнерного экспорта.</div><div class="con-badge cb-co">Кооператив ⭐⭐</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Nhóm Cacao Cai Be</div><div style="font-size:10px;color:var(--muted)">Торговый центр дельты · водная логистика</div></div><span class="con-reg r-mek">Тьен-Зянг, Кай Бэ</span></div><div class="con-body"><div class="con-note">Кай Бэ — крупный торговый центр с водным транспортом. Идеален для крупных отгрузок по Меконгу → HCMC → Да Нанг Порт (контейнер). До 1 т/мес.</div><div class="con-badge cb-fa">Фермерская группа</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Nhóm Ca cao Gò Công</div><div style="font-size:10px;color:var(--muted)">Приморский кластер Тьен-Зянг</div></div><span class="con-reg r-mek">Тьен-Зянг, Го Конг</span></div><div class="con-body"><div class="con-note">Приморский Го Конг. Морской профиль. Небольшой объём. Проверять влажность — риск 8%+. Интересен для specialty micro-lot.</div><div class="con-badge cb-fa">Фермерская группа</div></div></div>
+  </div>
+
+  <div class="con-section-hdr"><span class="con-section-dot" style="background:#27ae60"></span>ЮГО-ВОСТОК — Ба-Риа · Бинь-Фыок · Донг-Най (8 контактов)</div>
+  <div class="con-grid">
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">HTX Ca cao Bà Rịa</div><div style="font-size:10px;color:var(--muted)">2-й регион Вьетнама · красный базальт</div></div><span class="con-reg r-se">Ба-Риа-Вунг-Тао</span></div><div class="con-body"><div class="con-ph">☎️ +84 64 3824 500</div><div class="con-note">2-й регион страны по производству. Базальтовые почвы = минеральный профиль. 1–2 т/мес. Отгрузка через ХМС или Да Нанг.</div><div class="con-badge cb-co">Кооператив ⭐⭐</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Vùng Ca cao Xuân Lộc</div><div style="font-size:10px;color:var(--muted)">Компактный агрокластер · высокая плотность ферм</div></div><span class="con-reg r-se">Ба-Риа, Суан Лок</span></div><div class="con-body"><div class="con-note">Зона Суан Лок (20 км от Ба-Риа) — высокая концентрация ферм. 2–3 визита за один день. Через HTX Ба-Риа введение.</div><div class="con-badge cb-fa">Фермерский кластер</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Ca cao Đất Đỏ</div><div style="font-size:10px;color:var(--muted)">Красные базальтовые почвы · Ба-Риа</div></div><span class="con-reg r-se">Ба-Риа, р-н Датдо</span></div><div class="con-body"><div class="con-note">Характерные красные базальтовые почвы (đất đỏ). Насыщенный минеральный профиль. 300–600 кг/мес. Интересен для specialty.</div><div class="con-badge cb-fa">Группа ферм</div></div></div>
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">HTX Ca cao Bình Long</div><div style="font-size:10px;color:var(--muted)">Граница с Камбоджей · конкурентные цены</div></div><span class="con-reg r-se">Бинь-Фыок, Биньлонг</span></div><div class="con-body"><div class="con-ph">☎️ +84 271 3876 200</div><div class="con-note">Приграничный регион. Trinitario. Меньше конкуренции промышленных покупателей = цены ниже. До 1 т/мес. прямая закупка.</div><div class="con-badge cb-co">Кооператив ⭐⭐</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Nông trại Ca cao Lộc Ninh</div><div style="font-size:10px;color:var(--muted)">Крупная частная ферма · прямая закупка</div></div><span class="con-reg r-se">Бинь-Фыок, Лок Нинь</span></div><div class="con-body"><div class="con-note">Крупная plantation. Trinitario. Гибкие условия для прямой закупки 1+ т/мес. без посредника. Через VINACOCOA/CacaoViet контакт.</div><div class="con-badge cb-fa">Частная ферма ⭐⭐</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Ca cao Long Khánh (Донг-Най)</div><div style="font-size:10px;color:var(--muted)">Исторически первый регион с 1980-х</div></div><span class="con-reg r-se">Донг-Най, Лонг Кхань</span></div><div class="con-body"><div class="con-note">Первый регион вьетнамского какао (1980-е). Старые деревья, генетическое разнообразие. Небольшой объём, но ценен для micro-lot.</div><div class="con-badge cb-fa">Исторический кластер</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Trang Trại Định Quán</div><div style="font-size:10px;color:var(--muted)">Интеркроп какао-каучук-кофе · объём 1–2 т</div></div><span class="con-reg r-se">Донг-Най, Динь Куан</span></div><div class="con-body"><div class="con-note">Крупная ферма с интеркропом. Современная ферментация. 1–2 т/мес. Через Marou или сельхоз-ярмарки Донг-Най.</div><div class="con-badge cb-fa">Крупная ферма ⭐⭐</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Ca cao Bình Phước (Региональная сеть)</div><div style="font-size:10px;color:var(--muted)">Растущий регион · малая конкуренция</div></div><span class="con-reg r-se">Провинция Бинь-Фыок</span></div><div class="con-body"><div class="con-note">Малая конкуренция со стороны промышленных закупщиков. Цены ниже Бен-Тре. Перспективен как резервный источник. Нужен местный переводчик.</div><div class="con-badge cb-fa">Фермерская сеть</div></div></div>
+  </div>
+
+  <div class="con-section-hdr"><span class="con-section-dot" style="background:#e67e22"></span>ДА НАНГ + ЦЕНТРАЛЬНЫЙ ВЬЕТНАМ — Зона снабжения будущего завода (7 контактов)</div>
+  <div class="con-grid">
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">HTX Cacao Trà My (Куанг Нам)</div><div style="font-size:10px;color:var(--muted)">75 км от Да Нанга · ЛУЧШАЯ ЛОГИСТИКА ДЛЯ ЗАВОДА</div></div><span class="con-reg r-dn">Куанг Нам, Тра Ми</span></div><div class="con-body"><div class="con-note">Горный район Тра Ми, 400–600 м. Trinitario. FineAroma потенциал. 75 км от Да Нанга = идеальная еженедельная поставка на завод грузовиком 5 т. До 500–800 кг/мес. Растущий регион.</div><div class="con-badge cb-co">Кооператив ⭐⭐⭐ (логистика)</div></div></div>
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">Nhóm Cacao Tiên Phước (Куанг Нам)</div><div style="font-size:10px;color:var(--muted)">60 км от Да Нанга · второй кластер провинции</div></div><span class="con-reg r-dn">Куанг Нам, Тьен Фыок</span></div><div class="con-body"><div class="con-note">Р-н Тьен Фыок (60 км от Да Нанга). Горный Trinitario. Второй крупный кластер Куанг Нам. Вместе с Тра Ми = 1–1,5 т/мес. снабжения завода только из Куанг Нам.</div><div class="con-badge cb-fa">Фермерская группа ⭐⭐</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">HTX Cacao Quảng Ngãi</div><div style="font-size:10px;color:var(--muted)">130 км от Да Нанга · растущий регион</div></div><span class="con-reg r-dn">Провинция Куанг Нгай</span></div><div class="con-body"><div class="con-note">Р-ны Минь Лонг и Шон Ха. Горный Trinitario. 130 км от Да Нанга = 2 ч грузовиком. 300–600 кг/мес. Хорош для еженедельных партий на завод.</div><div class="con-badge cb-co">Кооператив ⭐⭐</div></div></div>
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">HTX Cacao Ngọc Hồi (Кон Тум)</div><div style="font-size:10px;color:var(--muted)">165 км от Да Нанга · лучший компромисс качество+логистика</div></div><span class="con-reg r-dn">Кон Тум, р-н Нгок Хой</span></div><div class="con-body"><div class="con-note">Нгок Хой, Кон Тум — 500–700 м, базальт, Trinitario. FineAroma качество Нагорья + всего 165 км от Да Нанга (3–4 ч реф. грузовик). Объём 600 кг–1 т/мес. Оптимальный источник для завода.</div><div class="con-badge cb-co">Кооператив ⭐⭐⭐</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Nhóm Cacao Đắk Glei (Кон Тум)</div><div style="font-size:10px;color:var(--muted)">Высокогорный · уникальный профиль</div></div><span class="con-reg r-dn">Кон Тум, р-н Дак Глей</span></div><div class="con-body"><div class="con-note">Р-н Дак Глей (40 км к северу от Нгок Хой). Высокогорный Trinitario. Уникальный цветочно-фруктовый профиль. Micro-lot 200–400 кг. Через HTX Нгок Хой введение.</div><div class="con-badge cb-fa">Высокогорная ферма</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Nona Cacao (Да Нанг)</div><div style="font-size:10px;color:var(--muted)">Местный bean-to-bar · контакты фермеров</div></div><span class="con-reg r-dn">Да Нанг</span></div><div class="con-body"><div class="con-em">info@nonacacao.com</div><div class="con-note">Небольшой да-нангский bean-to-bar. Ценен для получения местных фермерских контактов и текущих цен на региональное сырьё. Рядом с промзонами Да Нанга.</div><div class="con-badge cb-pr">Покупатель / Разведка</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Промзоны Да Нанга (Hoa Khanh IZ)</div><div style="font-size:10px;color:var(--muted)">Потенциальное место завода · логистический хаб</div></div><span class="con-reg r-dn">Да Нанг, Хоа Кхань</span></div><div class="con-body"><div class="con-em">diza.danang.gov.vn · deza.vn</div><div class="con-note">Hoa Khanh Industrial Zone: аренда 2–3 USD/м²/мес., HACCP разрешения для пищевого производства, 20 мин от центра ДН. Порт Тьен Са (5 км) — контейнерные линии. Lien Chieu IZ — для более крупных объёмов.</div><div class="con-badge cb-lo">Логистика-завод</div></div></div>
+  </div>
+
+  <div class="con-section-hdr"><span class="con-section-dot" style="background:#8e44ad"></span>ЦЕНТРАЛЬНОЕ НАГОРЬЕ — Дак-Лак + Дак-Нонг (FineAroma) — 6 контактов</div>
+  <div class="con-grid">
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">HTX Ca cao Đắk Lắk</div><div style="font-size:10px;color:var(--muted)">Главный кооп Нагорья · 500–800 м · FineAroma</div></div><span class="con-reg r-hl">Дак-Лак, БМТ</span></div><div class="con-body"><div class="con-ph">☎️ +84 262 3856 700</div><div class="con-note">Главный кооп Дак-Лак. 500–800 м, базальт, Trinitario, FineAroma. 800 кг–1,5 т/мес. Поставляет Marou. Прямая закупка возможна. Логистика: 330 км до Да Нанга (7–8 ч грузовик).</div><div class="con-badge cb-co">Кооператив ⭐⭐⭐</div></div></div>
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">Trang Trại Cacao Krông Năng</div><div style="font-size:10px;color:var(--muted)">Лучший FineAroma Вьетнама · 600+ м</div></div><span class="con-reg r-hl">Дак-Лак, Кронг Нанг</span></div><div class="con-body"><div class="con-note">Базальт 600+ м = наилучший FineAroma профиль страны (подтверждено Marou, Uncommon Cacao). Цена выше, объём небольшой. Micro-lot для premium рынка. Через HTX Дак-Лак интро.</div><div class="con-badge cb-fa">Высокогорная ферма ⭐⭐⭐</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Mô hình Cacao-Cà phê EaH'Leo</div><div style="font-size:10px;color:var(--muted)">Интеркроп Дак-Лак · specialty потенциал</div></div><span class="con-reg r-hl">Дак-Лак, Эа-Х'Лео</span></div><div class="con-body"><div class="con-note">Cacao+Arabica интеркроп в р-не Эа-Х'Лео. Уникальный specialty micro-lot. Цветочная кислотность. Через HTX Дак-Лак введение.</div><div class="con-badge cb-fa">Интеркроп-ферма ⭐⭐</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Ca cao Đắk Nông / Зя-Нгиа</div><div style="font-size:10px;color:var(--muted)">Молодой регион · UNESCO Geopark · цены ниже</div></div><span class="con-reg r-hl">Дак-Нонг, Зя-Нгиа</span></div><div class="con-body"><div class="con-ph">☎️ +84 261 3545 200</div><div class="con-note">Молодой регион, UNESCO Geopark. Цены ниже Дак-Лака. Объём растёт. Хорош для долгосрочного входа. 280 км до Да Нанга через Кон Тум.</div><div class="con-badge cb-co">Региональный кооп ⭐⭐</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">HTX Nông sản Đắk Song</div><div style="font-size:10px;color:var(--muted)">Агрокооп · какао + перец + кофе</div></div><span class="con-reg r-hl">Дак-Нонг, Дак Сонг</span></div><div class="con-body"><div class="con-note">Многоотраслевой кооп. Какао + чёрный перец + Robusta кофе. Запросить объём и цену только какао. Часто дешевле специализированных коопов.</div><div class="con-badge cb-co">Кооператив</div></div></div>
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Arabica + Cacao Интеркроп (Дак-Лак)</div><div style="font-size:10px;color:var(--muted)">700–900 м · micro-lot цветочный профиль</div></div><span class="con-reg r-hl">Дак-Лак</span></div><div class="con-body"><div class="con-note">Частные фермы 700–900 м с интеркропом арабика + какао. FineAroma: цветочный, фруктовый. Micro-lot 200–300 кг. Через HTX Дак-Лак введение. Для premium specialty сегмента.</div><div class="con-badge cb-fa">Specialty Micro-Lot</div></div></div>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+function show(id,btn){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('act'));
+  document.getElementById(id).classList.add('on');
+  btn.classList.add('act');
+  if(id==='map-sec')setTimeout(()=>{if(window._map)window._map.invalidateSize();},120);
+}
+const map=L.map('the-map',{zoomControl:true}).setView([13.0,107.8],6);
+window._map=map;
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:18}).addTo(map);
+
+// Маршрут: ХМС→БенТре→МиТхо→ХМС→БаРиа→БиньФыок→ДонгНай→ХМС→ДаНанг→КуангНам→КуангНгай→КонТум→ДаНанг→БМТ→ДакЛак→ДакНонг→ДаНанг→ХМС
+const route=[
+  [10.78,106.70],[10.24,106.38],[10.36,106.36],[10.78,106.70],
+  [10.35,107.09],[11.75,106.73],[10.94,107.24],[10.78,106.70],
+  [16.05,108.22],[15.53,108.02],[15.12,108.81],[14.34,107.99],[16.05,108.22],
+  [12.67,108.05],[12.00,107.69],[16.05,108.22],[10.78,106.70]
+];
+L.polyline(route,{color:'#3db83d',weight:3,opacity:.75,dashArray:'9,5'}).addTo(map);
+
+// Маршрут в Бразилию (символический пунктир)
+L.polyline([[10.78,106.70],[0,0],[-14.81,-39.04]],{color:'#aaa',weight:2,opacity:.3,dashArray:'4,8'}).addTo(map);
+
+const regions={
+  hcm:{name:'Хошимин (ХМС) — Агрегаторы',days:'5',cost:'~1 700 тыс.₫',stops:'6',price:'$2 400–3 200/т FOB',vol:'1–5 т (Vinacacao · Puratos GP)',top:'Vinacacao: +84 28 3910 3425',note:'Хаб экспорта. English OK. Все крупные закупщики здесь. Отгрузка через Да Нанг Порт возможна. Первые встречи — до поездки к фермерам.'},
+  mek:{name:'Дельта Меконга (Бен-Тре · Тьен-Зянг)',days:'10',cost:'~3 400 тыс.₫',stops:'11',price:'$2 200–2 800/т FOB',vol:'2–5 т/мес. (HTX+Puratos)',top:'HTX Бен-Тре: +84 75 3825 115',note:'~55% вьетнамского какао. Trinitario. Ферментация 5–7 дн. Сезон дождей авг–окт: встречи до 11:00. Мотобайк аренда обязательна. Zalo — ключевой контакт.'},
+  se:{name:'Юго-Восток (Ба-Риа · Бинь-Фыок · Донг-Най)',days:'6',cost:'~2 200 тыс.₫',stops:'8',price:'$2 100–2 600/т FOB',vol:'1–3 т/мес. (коопы + фермы)',top:'HTX Ба-Риа: +84 64 3824 500',note:'2-й регион страны. Красные базальтовые почвы Ба-Риа. Биньфыок = меньше конкуренции. Отгрузка через ХМС Порт или Да Нанг Порт (контейнер).'},
+  dn:{name:'Да Нанг + Центральный Вьетнам (Завод)',days:'8',cost:'~3 600 тыс.₫',stops:'7',price:'$2 200–3 200/т (FineAroma)',vol:'2–3 т/мес. (зона 165 км)',top:'HTX Ngoc Hoi (Кон Тум): 165 км от ДН',note:'ЗОНА СНАБЖЕНИЯ ЗАВОДА. Куанг Нам (75 км) + Куанг Нгай (130 км) + Кон Тум (165 км) = прямые поставки грузовиком. Меконг: контейнер море 2 дня. Промзона Хоа Кхань — 2–3 USD/м²/мес.'},
+  hl:{name:'Центр. Нагорье (Дак-Лак · Дак-Нонг)',days:'9',cost:'~3 200 тыс.₫',stops:'6',price:'$2 800–4 500/т (FineAroma)',vol:'500 кг–1,5 т/мес.',top:'HTX Дак-Лак: +84 262 3856 700',note:'ЛУЧШИЙ АРОМАТ. 500–900 м, базальт. Кронг Нанг = топ FineAroma Вьетнама. Логистика до Да Нанга: 330 км через Кон Тум. Кон Тум = промежуточная точка.'},
+  cc:{name:'Побережье Кхань-Хоа (опциональный)',days:'3',cost:'~1 100 тыс.₫',stops:'2',price:'$2 000–2 500/т',vol:'200–500 кг/мес. micro-lot',top:'HTX Нинь Хоа: +84 258 3625 100',note:'Морской профиль. Небольшой объём. Интересен только для specialty micro-lot. Можно заменить на дополнительные дни в Кон Туме.'}
+};
+function updatePanel(r){
+  const d=regions[r];
+  document.querySelector('.rp-header span').textContent=d.name.substring(0,36)+(d.name.length>36?'…':'');
+  const stats=document.querySelectorAll('.rp-stat');
+  const vals=[d.days,d.cost,d.stops,d.price];
+  const lbls=['Рабочих дней','Расходы','Визитов','Цена/т FOB'];
+  vals.forEach((v,i)=>{stats[i].querySelector('.rp-val').textContent=v;stats[i].querySelector('.rp-lbl').textContent=lbls[i];});
+  document.querySelector('.rp-beans').innerHTML=`<strong>Объём закупки:</strong> ${d.vol}`;
+  document.querySelector('.rp-contact').innerHTML=`<strong>Ключевой контакт:</strong><br>${d.top}<br><em style="font-size:9px;opacity:.8">${d.note}</em>`;
+}
+function mkIcon(c,lbl){return L.divIcon({className:'',html:`<div style="background:${c};color:#fff;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.45);font-family:sans-serif">${lbl}</div>`,iconSize:[30,30],iconAnchor:[15,15],popupAnchor:[0,-18]});}
+function starIcon(c){return L.divIcon({className:'',html:`<div style="background:${c};color:#fff;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:16px;border:3px solid #fff;box-shadow:0 2px 10px rgba(0,0,0,.5)">★</div>`,iconSize:[38,38],iconAnchor:[19,19],popupAnchor:[0,-22]});}
+const C={hcm:'#d4830a',mek:'#2980b9',se:'#27ae60',dn:'#e67e22',hl:'#8e44ad',cc:'#c0392b'};
+const stops=[
+  {ll:[10.78,106.70],seg:'hcm',lbl:'ХМС',star:true,name:'Хошимин — 6 визитов (+ старт из Бразилии)',sub:'★★★ Vinacacao: +84 28 3910 3425<br>Marou · Belocolat · Golden Tree · Geneagro · VINACOCOA<br>✈️ Из Илеус (Бразилия) через Сан-Паулу',pop:'СТАРТ ЭКСПЕДИЦИИ · Рейс из Бразилии GRU→SGN · 5 рабочих дней · Английский язык'},
+  {ll:[10.24,106.38],seg:'mek',lbl:'БТ',star:true,name:'Бен-Тре — Главный регион Вьетнама',sub:'★★★ Puratos GP: +84 75 3822 638<br>HTX Бен-Тре: +84 75 3825 115<br>8 визитов · Trinitario · ферментация 5–7 дн.',pop:'5–7 дней · 8 визитов · ~55% какао Вьетнама · мотобайк обязателен'},
+  {ll:[10.36,106.36],seg:'mek',lbl:'ТЗ',name:'Тьен-Зянг (Ми Тхо)',sub:'★★ HTX ТЗ: +84 73 3878 800<br>Кай Бэ (водная логистика) · Го Конг',pop:'3 дня · 3 визита · Пример. 2 нас. Прибрежный + речной профиль'},
+  {ll:[10.35,107.09],seg:'se',lbl:'БР',star:true,name:'Ба-Риа-Вунг-Тао',sub:'★★ HTX Ба-Риа: +84 64 3824 500<br>Суан Лок · Дат До · красный базальт',pop:'2 дня · 3 визита · 2-й регион страны · базальтовые почвы'},
+  {ll:[11.75,106.73],seg:'se',lbl:'БФ',name:'Бинь-Фыок (Биньлонг)',sub:'HTX Биньлонг: +84 271 3876 200<br>Ферма Лок Нинь<br>Граница с Камбоджей',pop:'1 день · 2 визита · конкурентные цены'},
+  {ll:[10.94,107.24],seg:'se',lbl:'ДН2',name:'Донг-Най (Лонг Кхань)',sub:'Ca cao Лонг Кхань · Ферма Динь Куан<br>Первый регион Вьетнама (1980-е)',pop:'1 день · 2 визита · какао-каучук-кофе интеркроп'},
+  {ll:[16.05,108.22],seg:'dn',lbl:'ДН',star:true,name:'Да Нанг — Будущий Завод',sub:'🏭 Промзона Хоа Кхань (2–3 USD/м²/мес.)<br>Порт Тьен Са (контейнеры в ASEAN)<br>Nona Cacao · 7 визитов в регионе<br>✈️ Из ХМС 1 ч 15 мин',pop:'8 дней · 7 визитов · ЗОНА ЗАВОДА · Радиус снабжения 165 км'},
+  {ll:[15.53,108.02],seg:'dn',lbl:'КН',name:'Куанг Нам (Тра Ми)',sub:'HTX Cacao Trà My · 75 км от Да Нанга<br>Nhóm Tiên Phước · 60 км<br>ЛУЧШАЯ ЛОГИСТИКА ДЛЯ ЗАВОДА',pop:'1,5 ч от завода · грузовик 5т · 500–800 кг/мес. в радиусе'},
+  {ll:[15.12,108.81],seg:'dn',lbl:'КНГ',name:'Куанг Нгай',sub:'HTX Cacao Quảng Ngãi<br>Р-ны Минь Лонг + Шон Ха · 130 км',pop:'2 ч от завода · 300–600 кг/мес. · растущий регион'},
+  {ll:[14.34,107.99],seg:'dn',lbl:'КТ',star:true,name:'Кон Тум (Нгок Хой)',sub:'★★★ HTX Ngọc Hồi · 165 км от Да Нанга<br>Nhóm Đắk Glei · 500–700 м<br>FineAroma + близость к заводу',pop:'3–4 ч до завода · 600 кг–1 т/мес. · ЛУЧШИЙ КОМПРОМИСС качество/логистика'},
+  {ll:[12.67,108.05],seg:'hl',lbl:'БМТ',star:true,name:'Буон-Ма-Туот — Дак-Лак',sub:'★★★ HTX Дак-Лак: +84 262 3856 700<br>Кронг Нанг — Лучший FineAroma<br>EaH\'Leo интеркроп · ✈️ из ДН 1 ч 30 мин',pop:'4 дня · 3 визита · FineAroma · 330 км до Да Нанга через Кон Тум'},
+  {ll:[12.00,107.69],seg:'hl',lbl:'ДН3',name:'Дак-Нонг (Зя-Нгиа)',sub:'Ca cao Дак-Нонг: +84 261 3545 200<br>HTX Dak Song · UNESCO Geopark',pop:'2 дня · 2 визита · молодой регион · конкурентные цены'},
+  {ll:[12.23,109.20],seg:'cc',lbl:'НЧ',name:'Нячанг — Кхань-Хоа (опционально)',sub:'HTX Ninh Hòa: +84 258 3625 100<br>Kakao Wild Forest · морской профиль',pop:'2 дня · 2 визита · micro-lot specialty · до 500 кг/мес.'},
+];
+stops.forEach(s=>{
+  const c=C[s.seg];
+  const icon=s.star?starIcon(c):mkIcon(c,s.lbl);
+  L.marker(s.ll,{icon}).addTo(map)
+    .bindPopup(`<div style="font-family:sans-serif;min-width:230px"><b style="font-size:12px;color:#0a1a0a">${s.name}</b><div style="font-size:11px;color:#555;margin:4px 0;line-height:1.5">${s.sub}</div><div style="font-size:10px;background:#e8f5e8;padding:3px 6px;border-radius:3px;color:#1a4020;margin-top:4px">${s.pop}</div></div>`,{maxWidth:290})
+    .on('click',()=>updatePanel(s.seg));
+});
+
+// Радиус завода Да Нанга
+L.circle([16.05,108.22],{radius:165000,color:'#e67e22',fillColor:'#e67e22',fillOpacity:.06,weight:1,dashArray:'8,6'}).addTo(map);
+L.circle([16.05,108.22],{radius:75000,color:'#27ae60',fillColor:'#27ae60',fillOpacity:.08,weight:1.5,dashArray:'5,4'}).addTo(map);
+
+const labels=[
+  {ll:[9.6,105.8],seg:'mek',txt:'МЕКОНГ'},
+  {ll:[10.9,106.2],seg:'hcm',txt:'ХМС'},
+  {ll:[10.6,108.1],seg:'se',txt:'ЮВ'},
+  {ll:[16.4,108.8],seg:'dn',txt:'ДА НАНГ (Завод)'},
+  {ll:[13.4,108.8],seg:'hl',txt:'НАГОРЬЕ'},
+];
+labels.forEach(l=>{
+  L.marker(l.ll,{icon:L.divIcon({className:'',html:`<div style="background:${C[l.seg]};color:#fff;padding:3px 9px;border-radius:3px;font-size:9px;font-weight:800;font-family:sans-serif;white-space:nowrap;opacity:.85">${l.txt}</div>`,iconSize:[110,18],iconAnchor:[55,9]})}).addTo(map);
+});
+</script>
+</body>
+</html>
