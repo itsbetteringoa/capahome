@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вьетнам — Закупочная экспедиция какао (27 дней)</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bean:#0a1e08;--cacao:#163a12;--brown:#24641e;--amber:#2e8a28;
+  --gold:#3db83d;--cream:#eaf5ea;--parch:#d0ead0;--forest:#061408;
+  --leaf:#166416;--ink:#081408;--muted:#3e6038;--border:#7ab07a;
+  --red:#c0392b;--blue:#1a5080;--bg:#eef6ee;--white:#fff;
+  --heading:'Be Vietnam Pro',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
+.hdr{background:var(--bean);color:var(--cream);padding:14px 20px;position:sticky;top:0;z-index:3000;border-bottom:2px solid var(--gold)}
+.hdr-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.hdr h1{font-family:var(--heading);font-size:17px;font-weight:800;color:#fff;letter-spacing:0}
+.hdr p{font-size:11px;color:#90c890;margin-top:1px}
+.hdr-pills{display:flex;gap:6px;flex-wrap:wrap}
+.hpill{font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(255,255,255,.1);color:#b8e0b8;padding:3px 10px;border-radius:4px}
+.hpill b{color:var(--gold)}
+.hpill.cost{background:var(--gold);color:#062006;font-weight:700}
+.hpill.cost b{color:#062006}
+nav{background:var(--cacao);position:sticky;top:56px;z-index:2999;border-bottom:1px solid var(--brown)}
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 16px;display:flex;gap:2px;overflow-x:auto}
+nav button{background:none;border:none;color:#80b880;font-size:12px;font-weight:600;padding:10px 16px;cursor:pointer;letter-spacing:.04em;text-transform:uppercase;border-bottom:3px solid transparent;font-family:var(--heading);transition:all .15s;white-space:nowrap}
+nav button:hover{color:#fff}
+nav button.act{color:var(--gold);border-bottom-color:var(--gold)}
+.sec{display:none;max-width:1280px;margin:0 auto;padding:20px 16px}
+.sec.on{display:block}
+#map-sec{padding:0;max-width:100%}
+#map-sec.on{display:flex;flex-direction:column;height:calc(100vh - 100px)}
+#map-wrap{flex:1;position:relative}
+#the-map{height:100%;width:100%;min-height:400px}
+.map-bar{background:var(--forest);color:#c8e8c8;padding:9px 18px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;font-size:11px;font-family:'JetBrains Mono',monospace}
+.mb-seg{display:flex;align-items:center;gap:5px}
+.mb-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+#region-panel{position:absolute;top:12px;right:12px;z-index:1000;width:250px;background:rgba(6,20,6,.93);backdrop-filter:blur(6px);border:1px solid var(--gold);border-radius:8px;color:#eee;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.5)}
+.rp-header{background:var(--brown);padding:8px 12px;display:flex;justify-content:space-between;align-items:center}
+.rp-header span{font-family:var(--heading);font-size:11px;font-weight:700;color:#fff}
+.rp-header small{font-size:10px;color:#90c890;font-family:'JetBrains Mono',monospace}
+.rp-grid{padding:10px 12px;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.rp-stat{background:rgba(255,255,255,.08);border-radius:4px;padding:6px 8px}
+.rp-val{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--gold)}
+.rp-lbl{font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;margin-top:1px}
+.rp-contact{padding:0 12px 8px;font-size:10px;color:#90b890;line-height:1.5}
+.rp-contact strong{color:#fff;font-size:11px;display:block;margin-bottom:2px}
+.rp-beans{font-size:10px;color:#9fa;padding:4px 12px 10px;line-height:1.4}
+.rp-beans strong{color:var(--gold)}
+.seg-hdr{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:6px 6px 0 0;margin-top:20px;color:#fff}
+.seg-hdr:first-of-type{margin-top:0}
+.seg-hdr h3{font-family:var(--heading);font-size:13px;font-weight:700}
+.seg-hdr .sm{font-size:10px;opacity:.8;font-family:'JetBrains Mono',monospace}
+.seg-hdr .pill{font-size:9px;background:rgba(255,255,255,.2);padding:2px 7px;border-radius:3px;margin-left:auto;white-space:nowrap}
+.s-hcm{background:#7a4a00}
+.s-south{background:#1a5828}
+.s-dl{background:#5a1080}
+.s-fin{background:#1a5a80}
+table.iti{width:100%;border-collapse:collapse;background:#fff;border-radius:0 0 6px 6px;overflow:hidden;margin-bottom:0}
+table.iti th{background:var(--parch);color:var(--bean);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:7px 10px;text-align:left;border-bottom:1px solid var(--border)}
+table.iti td{padding:8px 10px;border-bottom:1px solid #c8e0c8;vertical-align:top;font-size:12px}
+table.iti tr.wknd td{background:#eef6ee;color:#3e6038;font-style:italic}
+table.iti tr.trav td{background:#e8eef8}
+.dn{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;color:var(--muted);white-space:nowrap;width:28px}
+.dd{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);white-space:nowrap;width:82px}
+.ltag{display:inline-block;font-size:9px;padding:1px 6px;border-radius:3px;font-weight:700;margin-right:4px;white-space:nowrap}
+.l-h{background:#fdecc8;color:#5a3a00}
+.l-s{background:#c8f0d0;color:#0a4018}
+.l-dl{background:#e8d0f8;color:#3a0860}
+.stop{font-weight:600;color:var(--cacao);font-size:12px;line-height:1.3}
+.sub{color:var(--muted);font-size:11px;margin-top:2px;line-height:1.5}
+.ph{display:inline;font-family:'JetBrains Mono',monospace;font-size:10px;background:#c8f0c8;color:#084018;padding:1px 5px;border-radius:3px;margin-right:3px}
+.kp{display:inline;font-size:10px;font-weight:700;background:#ffd;color:#664400;padding:1px 5px;border-radius:3px}
+.warn-inline{display:inline;font-size:10px;font-weight:700;background:#ffe0d0;color:#7a2000;padding:1px 5px;border-radius:3px}
+td.thb{font-family:'JetBrains Mono',monospace;font-size:11px;text-align:right;color:var(--brown);white-space:nowrap;width:90px}
+.b-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px;margin-bottom:14px}
+.b-card{background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.b-card.flights{border:2px solid var(--amber)}
+.b-ch{padding:9px 13px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.b-ch h3{font-family:var(--heading);font-size:13px;font-weight:700;color:var(--bean)}
+.b-ch .ico{font-size:15px}
+.bt{width:100%;border-collapse:collapse}
+.bt td{padding:6px 13px;border-bottom:1px solid #e0f0e0;font-size:11px}
+.bt tr:last-child td{border-bottom:none}
+.bt td:last-child{text-align:right;font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--cacao)}
+.bt .sub-row td{background:var(--parch);font-weight:700;color:var(--bean)}
+.bt .note-row td{font-size:10px;color:#888;font-style:italic;background:#f4faf4}
+.b-total{background:var(--bean);color:#fff;border-radius:8px;padding:16px 20px;margin-top:14px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px}
+.b-total h3{font-family:var(--heading);font-size:17px;font-weight:800}
+.b-total .sub-t{font-size:11px;color:#90c890;margin-top:3px}
+.grand{text-align:right}
+.grand .thb-big{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;color:var(--gold)}
+.grand .usd{font-size:12px;color:#90b890;margin-top:2px}
+.b-legend{background:var(--parch);border:1px solid var(--border);border-radius:6px;padding:10px 14px;font-size:11px;color:var(--muted);line-height:1.7;margin-top:10px}
+.b-legend strong{color:var(--bean)}
+.sum-table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;border:1px solid var(--border);margin-top:12px}
+.sum-table th{background:var(--parch);color:var(--bean);font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:8px 12px;text-align:left;font-weight:700}
+.sum-table td{padding:7px 12px;border-bottom:1px solid #d0e8d0;font-size:12px}
+.sum-table td:nth-child(2),.sum-table td:nth-child(3){font-family:'JetBrains Mono',monospace;font-weight:500;text-align:right;color:var(--cacao)}
+.sum-table tr.total-row td{background:var(--parch);font-weight:700;color:var(--bean)}
+.con-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.con-card{background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.con-card.pri{border-left:3px solid var(--leaf)}
+.con-hdr{padding:9px 11px;background:var(--parch);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;gap:6px}
+.con-name{font-weight:700;font-size:12px;color:var(--bean);line-height:1.3}
+.con-reg{font-size:9px;background:var(--forest);color:#9fc;padding:2px 6px;border-radius:3px;font-family:'JetBrains Mono',monospace;white-space:nowrap}
+.con-reg.r-dl{background:#3a0860;color:#e8c8ff}
+.con-reg.r-hcm{background:#7a4800;color:#ffe8b0}
+.con-reg.r-south{background:#0a4018;color:#b0ffb8}
+.con-body{padding:9px 11px}
+.con-ph{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--leaf);font-weight:700}
+.con-em{font-size:10px;color:var(--blue);word-break:break-all;margin-top:2px}
+.con-note{font-size:10px;color:var(--muted);margin-top:5px;line-height:1.4}
+.con-badge{display:inline-block;font-size:9px;padding:2px 6px;border-radius:3px;margin-top:4px}
+.cb-co{background:#e8f5e9;color:#1b5e20}
+.cb-pr{background:#e3f2fd;color:#0d47a1}
+.cb-warn{background:#ffe0d0;color:#7a2000}
+h2.stitle{font-family:var(--heading);font-size:17px;font-weight:800;color:var(--bean);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--parch)}
+.info-box{background:var(--parch);border:1px solid var(--border);border-radius:6px;padding:10px 14px;font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:14px}
+.info-box strong{color:var(--bean)}
+.warn-box{background:#fff8e0;border:1px solid #e8d060;border-radius:6px;padding:9px 13px;font-size:11px;color:#604800;line-height:1.6;margin-bottom:14px}
+.reform-box{background:#fde8e0;border:1px solid #d08060;border-radius:6px;padding:9px 13px;font-size:11px;color:#602000;line-height:1.6;margin-bottom:14px}
+.price-box{background:#e8f0ff;border:2px solid #4060c0;border-radius:8px;padding:14px 18px;font-size:13px;color:#102040;line-height:1.8;margin-bottom:14px}
+.price-box .big{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:#1a3a8a}
+.stats-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.s-box{flex:1;min-width:100px;background:#fff;border:1px solid var(--border);border-radius:6px;padding:9px 12px}
+.s-box .val{font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:700;color:var(--cacao)}
+.s-box .lbl{font-size:10px;color:var(--muted);margin-top:1px}
+.con-section-hdr{font-family:var(--heading);font-size:13px;font-weight:700;color:var(--bean);padding:10px 0 6px;border-bottom:1px solid var(--border);margin:14px 0 10px;display:flex;align-items:center;gap:8px}
+.con-section-dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+</style></head>
+<body>
+<header class="hdr">
+  <div class="hdr-inner">
+    <div>
+      <h1>Вьетнам — Закупочная экспедиция какао-бобов (27 дней)</h1>
+      <p>Илеус (Бразилия) → Хошимин → Юг (Bà Rịa+Tiền Giang) → Đắk Lắk → Хошимин → Илеус</p>
+    </div>
+    <div class="hdr-pills">
+      <div class="hpill">~<b>27</b> дней</div>
+      <div class="hpill"><b>13</b> визитов</div>
+      <div class="hpill"><b>1</b> внутр. рейс (RT)</div>
+      <div class="hpill">7 сен – 3 окт 2026</div>
+      <div class="hpill cost">≈ <b>68 млн ₫</b> · $2 590</div>
+    </div>
+  </div>
+</header>
+<nav>
+  <div class="nav-inner">
+    <button class="act" onclick="show('map-sec',this)">Карта маршрута</button>
+    <button onclick="show('iti-sec',this)">По дням</button>
+    <button onclick="show('bud-sec',this)">Бюджет и цены</button>
+    <button onclick="show('con-sec',this)">Контакты</button>
+  </div>
+</nav>
+
+<div id="map-sec" class="sec on">
+  <div class="map-bar">
+    <strong style="font-family:var(--heading);margin-right:4px">Маршрут →</strong>
+    <span class="mb-seg"><span class="mb-dot" style="background:#d4830a"></span>Хошимин</span>
+    <span class="mb-seg"><span class="mb-dot" style="background:#27ae60"></span>Юг (Bà Rịa · Tiền Giang)</span>
+    <span class="mb-seg"><span class="mb-dot" style="background:#8e44ad"></span>Đắk Lắk (ядро закупки)</span>
+    <span style="margin-left:auto;color:#9fa;font-size:10px">Нажмите маркер для деталей</span>
+  </div>
+  <div id="map-wrap">
+    <div id="the-map"></div>
+    <div id="region-panel">
+      <div class="rp-header"><span>Сводка по региону</span><small>нажмите маркер</small></div>
+      <div class="rp-grid">
+        <div class="rp-stat"><div class="rp-val">—</div><div class="rp-lbl">Визитов</div></div>
+        <div class="rp-stat"><div class="rp-val">—</div><div class="rp-lbl">Группа</div></div>
+      </div>
+      <div class="rp-beans"><strong>Что это:</strong> выберите точку</div>
+      <div class="rp-contact"><strong>Детали:</strong> нажмите маркер</div>
+    </div>
+  </div>
+</div>
+
+<div id="iti-sec" class="sec">
+  <h2 class="stitle">Маршрут по дням · 7 сентября – 3 октября 2026</h2>
+  <div class="stats-row">
+    <div class="s-box"><div class="val">27</div><div class="lbl">Всего дней</div></div>
+    <div class="s-box"><div class="val">13</div><div class="lbl">Визитов (11 поставщиков + 2 канала)</div></div>
+    <div class="s-box"><div class="val">1×</div><div class="lbl">Внутр. рейс (RT)</div></div>
+    <div class="s-box"><div class="val">3</div><div class="lbl">Региона</div></div>
+  </div>
+
+  <div class="reform-box">⚠ <strong>Административная реформа Вьетнама (с 12.06.2025):</strong> Đắk Nông вошёл в состав Lâm Đồng · Bà Rịa–Vũng Tàu вошла в состав Хошимина · Bến Tre вошла в состав Vĩnh Long. Адреса в старых источниках даны по старому делению — фермы физически на месте, привязка в реестрах изменилась.</div>
+
+  <div class="warn-box">⚠ <strong>Достоверность контактов:</strong> Прямые телефоны есть не у всех — для кооперативов без опубликованного номера выход через административные каналы (Sở Công Thương tỉnh Đắk Lắk, admin-портал Ea Kar, Liên minh HTX tỉnh Đắk Lắk). Рынок дефицитный — хороший лот, как правило, уже законтрактован (см. вкладку «Бюджет и цены»).</div>
+
+  <div class="seg-hdr s-hcm"><span style="font-size:18px">✈️</span><div><h3>ПЕРЕЛЁТ ИЗ БРАЗИЛИИ + ХОШИМИН</h3><span class="sm">7–10 сен · ориентация + 2 точки группы Б (проверка избыточных лотов)</span></div><span class="pill">4 дня · 2 визита</span></div>
+  <table class="iti">
+    <thead><tr><th>День</th><th>Дата</th><th>Локация</th><th>Пункт</th><th>тыс.₫</th></tr></thead>
+    <tbody>
+      <tr class="trav"><td class="dn">1</td><td class="dd">пн 07 сен</td><td><span class="ltag l-h">Перелёт</span></td><td><div class="stop">Илеус (IOS) → Сан-Паулу (GRU) → международный вылет</div><div class="sub">Внутренний рейс IOS→GRU + международный GRU→SGN (Qatar через DOH / Turkish через IST / Emirates через DXB). Общее время в пути с пересадкой ≈ 30–36 ч.</div></td><td class="thb">—</td></tr>
+      <tr class="trav"><td class="dn">2</td><td class="dd">вт 08 сен</td><td><span class="ltag l-h">ХМС</span>Прибытие</td><td><div class="stop">Прибытие в Хошимин (Тан Сон Нят)</div><div class="sub">SIM Viettel, Zalo (основной мессенджер), Grab. Заселение р-н Д.1.</div></td><td class="thb">410</td></tr>
+      <tr><td class="dn">3</td><td class="dd">ср 09 сен</td><td><span class="ltag l-h">ХМС</span>Belvie</td><td><div class="stop">Belvie Chocolate — группа Б</div><div class="sub">☎️ +84 28 3620 1098 · 📱 +84 94 182 8298 · info@belviechocolate.com. Только Тринитарио, закупка выше fair trade. Перерабатывает сам, но имеет действующий телефонный контакт и может иметь избыточные лоты — стоит короткой проверки.</div></td><td class="thb">280</td></tr>
+      <tr><td class="dn">4</td><td class="dd">чт 10 сен</td><td><span class="ltag l-h">ХМС</span>Stone Hill + звонки</td><td><div class="stop">Stone Hill (Ca Cao Nông Lâm) — группа Б + подготовительные звонки в Đắk Lắk</div><div class="sub">202 Ван Кьеп, Биньтхань, Хошимин · stonehill.vn. Собственная градация S/A/B/C, класс C в производство не берут — потенциально доступный лот. Вечером — звонки Sở Công Thương Đắk Lắk и Nam Trường Sơn для подтверждения дальнейших встреч.</div></td><td class="thb">280</td></tr>
+    </tbody>
+  </table>
+
+  <div class="seg-hdr s-south"><span style="background:#27ae60;width:14px;height:14px;border-radius:50%;display:inline-block"></span><div><h3>ЮГ — Bà Rịa (р-н ХМС) · Tiền Giang</h3><span class="sm">10–16 сен · 3 верифицированных продавца группы Б</span></div><span class="pill">6 дней · 3 визита</span></div>
+  <table class="iti">
+    <thead><tr><th>День</th><th>Дата</th><th>Локация</th><th>Пункт</th><th>тыс.₫</th></tr></thead>
+    <tbody>
+      <tr class="trav"><td class="dn">5</td><td class="dd">пт 11 сен</td><td><span class="ltag l-s">→ Bà Rịa</span></td><td>Переезд Хошимин → Bà Rịa (р-н Хошимина после реформы), ~90 км, ~2 ч.</td><td class="thb">300</td></tr>
+      <tr><td class="dn">6</td><td class="dd">сб 12 сен</td><td><span class="ltag l-s">Bà Rịa</span>Binon Cacao</td><td><div class="stop">Binon Cacao — группа Б</div><div class="sub">Ферма: пос. Бау Шен, с. Ксабанг, Тьаудык · binon-cacao.com. Основатель — Эндо Аяко, японский контроль обработки; экспорт в Японию, Корею, ЕС. Экспортно-ориентирован — вероятны избыточные/отбракованные лоты выше среднего качества.</div></td><td class="thb">330</td></tr>
+      <tr class="wknd"><td class="dn">7</td><td class="dd">вс 13 сен</td><td><span class="ltag l-s">→ Tiền Giang</span></td><td>Переезд Bà Rịa → Tiền Giang (через ХМС, ~150–180 км, 3–4 ч).</td><td class="thb">300</td></tr>
+      <tr><td class="dn">8</td><td class="dd">пн 14 сен</td><td><span class="ltag l-s">Tiền Giang</span>Alluvia</td><td><div class="stop">Alluvia (Xuân Ron Chợ Gạo) — группа Б</div><div class="sub">alluviachocolate.com. В ассортименте прямо указаны бобы, тёртое и масло как отдельный товар для продажи; экспорт в Японию. Из группы Б — наиболее вероятный прямой продавец бобов как самостоятельного товара, а не только сырья для себя.</div></td><td class="thb">300</td></tr>
+      <tr><td class="dn">9</td><td class="dd">вт 15 сен</td><td><span class="ltag l-s">Tiền Giang</span>Kimmy's Chocolate</td><td><div class="stop">Kimmy's Chocolate — группа Б</div><div class="sub">☎️ (0273) 3633256 · 265A, с. Лонгдинь, Тьаутхань · kimmychocolatier.com. Сырьё от кооператива Чогао по стандарту UTZ — прослеживаемый источник, действующий телефон.</div></td><td class="thb">300</td></tr>
+      <tr class="wknd"><td class="dn">10</td><td class="dd">ср 16 сен</td><td><span class="ltag l-h">→ ХМС</span></td><td>Возврат Tiền Giang → ХМС (~70 км, 1,5 ч). Подготовка к перелёту в Đắk Lắk.</td><td class="thb">300</td></tr>
+    </tbody>
+  </table>
+
+  <div class="seg-hdr s-dl"><span style="background:#8e44ad;width:14px;height:14px;border-radius:50%;display:inline-block"></span><div><h3>ĐẮK LẮK — Ядро закупки (группа А: кооперативы-производители)</h3><span class="sm">17–29 сен · Buôn Ma Thuột — все продавцы группы А в радиусе ~50 км</span></div><span class="pill">13 дней · 6 визитов + 2 канала</span></div>
+  <table class="iti">
+    <thead><tr><th>День</th><th>Дата</th><th>Локация</th><th>Пункт</th><th>тыс.₫</th></tr></thead>
+    <tbody>
+      <tr class="trav"><td class="dn">11</td><td class="dd">чт 17 сен</td><td><span class="ltag l-dl">✈️ → BMT</span></td><td><div class="stop">Хошимин → Buôn Ma Thuột (~1 ч)</div><div class="sub">Прямые рейсы SGN→BMV ежедневно (Vietjet, Vietnam Airlines). RT-тариф $95–210 при бронировании за 2–4 недели.</div></td><td class="thb">3 700</td></tr>
+      <tr><td class="dn">12</td><td class="dd">пт 18 сен</td><td><span class="ltag l-dl">BMT</span>Sở Công Thương + Liên minh HTX</td><td><div class="stop">Sở Công Thương tỉnh Đắk Lắk + Liên minh HTX tỉnh Đắk Lắk</div><div class="sub">Sở Công Thương: 17 Trường Chinh, Buôn Ma Thuột · ☎️ 0262 3952635 · congthuong@daklak.gov.vn — открытый реестр предприятий по какао. Liên minh HTX — официальный канал к HTX Ea Kar и HTX Nhất Tâm, у которых нет опубликованных телефонов. Оба офиса в черте города.</div></td><td class="thb">280</td></tr>
+      <tr class="wknd"><td class="dn">13–14</td><td class="dd">сб–вс 19–20 сен</td><td><span class="ltag l-dl">BMT</span>Буфер</td><td>Разведка местного рынка, сверка цен.</td><td class="thb">560</td></tr>
+      <tr><td class="dn">15</td><td class="dd">пн 21 сен</td><td><span class="ltag l-dl">Krông Ana</span>Nam Trường Sơn</td><td><div class="stop">Nam Trường Sơn — группа А, приоритет №1 (телефон + объём)</div><div class="sub">107 Тан Тьен, с. Эана, Кронгана (~30 км от BMT) · ☎️ (0262) 3638879 · 📱 +84 91 920 47 47 · 📱 +84 96 561 7232 (Ms. Thanh, продажи) · info@cacaonamtruongson.com.vn. ~250 га, 200–250 т сухих бобов/год, ~200 хозяйств, собственная ферментация, платит на 20% выше рынка. Единственный, кто управляет сырьевой базой сам. <span class="warn-inline">⚠ портал IPC Đắk Lắk даёт другой адрес/тел — проверять</span>.</div></td><td class="thb">260</td></tr>
+      <tr><td class="dn">16</td><td class="dd">вт 22 сен</td><td><span class="ltag l-dl">BMT + Krông Ana</span>AnA + Tân Thành</td><td><div class="stop">Nông trại Cacao AnA + HTX Tân Thành (2 визита) — группа А</div><div class="sub">AnA: переулок 50, ул. Фан Хюи Тю, Buôn Ma Thuột · cacaoana.com — единственный продавец, прямо заявляющий складской запас ферментированных сухих бобов, отгрузка по запросу; для пилота на 2 т/мес рабочий вход. Tân Thành: с. Эана, Кронгана (осн. 2023) — &gt;60 га, ~100 т/год, молодой, вероятно менее законтрактован; телефон не опубликован.</div></td><td class="thb">300</td></tr>
+      <tr class="wknd"><td class="dn">17</td><td class="dd">ср 23 сен</td><td><span class="ltag l-dl">BMT</span>Буфер</td><td>Резервный день на перенос встреч.</td><td class="thb">280</td></tr>
+      <tr><td class="dn">18</td><td class="dd">чт 24 сен</td><td><span class="ltag l-dl">Ea Kar</span>HTX Ca cao Ea Kar</td><td><div class="stop">HTX Ca cao Ea Kar — группа А, наибольший подтверждённый экспортный опыт</div><div class="sub">Ea Kar, Đắk Lắk (~50 км от BMT) · контакты не опубликованы, выход через admin-портал eakar.daklak.gov.vn либо Sở Công Thương. Уже отгружал сухие ферментированные бобы в Японию (13 т за I кв. 2022). 65 пайщиков + 189 связанных, 250 га (180 плодоносящих), 220 т/год, собственное оборудование, OCOP 3–4 звезды.</div></td><td class="thb">310</td></tr>
+      <tr><td class="dn">19</td><td class="dd">пт 25 сен</td><td><span class="ltag l-dl">Ea Đar, Ea Kar</span>HTX Nhất Tâm</td><td><div class="stop">HTX Dịch vụ nông nghiệp Nhất Tâm — группа А, крупнейший по объёму</div><div class="sub">Посёлок 10, с. Эадар, Ea Kar · телефон не опубликован (тот же admin-канал). Руководитель — Nguyễn Hồng Thương. ~300 т сухих бобов в сезон, 200 связанных хозяйств. Прямо заявляет приём иностранных шоколадных компаний для переговоров.</div></td><td class="thb">300</td></tr>
+      <tr class="wknd"><td class="dn">20–21</td><td class="dd">сб–вс 26–27 сен</td><td><span class="ltag l-dl">BMT</span>Буфер + систематизация</td><td>Буфер на повторные визиты. Систематизация образцов и условий по всем поставщикам Đắk Lắk.</td><td class="thb">560</td></tr>
+      <tr><td class="dn">22</td><td class="dd">пн 28 сен</td><td><span class="ltag l-dl">→ Cư Jút</span></td><td><div class="stop">Buôn Ma Thuột → Cư Jút (обл. Lâm Đồng, быв. Đắk Nông), ~40 км</div><div class="sub">Автомобиль/такси, ~1 ч.</div></td><td class="thb">280</td></tr>
+      <tr><td class="dn">23</td><td class="dd">вт 29 сен</td><td><span class="ltag l-dl">Đắk Wil, Cư Jút</span>HTX Thiên Lộc Phát</td><td><div class="stop">HTX Thiên Lộc Phát — группа А, качество подтверждено Marou</div><div class="sub">с. Đắk Wil, Cư Jút · контакты не опубликованы. ~100 т сухих бобов/год, 200 связанных хозяйств. Поставляет Marou — лот уже прошёл отбор самого требовательного покупателя страны. С 2025 отказались от продажи влажных бобов, ферментируют сами.</div></td><td class="thb">280</td></tr>
+    </tbody>
+  </table>
+
+  <div class="seg-hdr s-fin"><span style="font-size:18px">🤝</span><div><h3>ХОШИМИН — Завершение экспедиции</h3><span class="sm">30 сен – 3 окт · Возврат, систематизация, вылет в Бразилию</span></div><span class="pill">4 дня</span></div>
+  <table class="iti">
+    <thead><tr><th>День</th><th>Дата</th><th>Локация</th><th>Пункт</th><th>тыс.₫</th></tr></thead>
+    <tbody>
+      <tr class="trav"><td class="dn">24</td><td class="dd">ср 30 сен</td><td><span class="ltag l-h">✈️ → ХМС</span></td><td>Cư Jút → Buôn Ma Thuột → Хошимин (обратный рейс).</td><td class="thb">3 700</td></tr>
+      <tr><td class="dn">25</td><td class="dd">чт 01 окт</td><td><span class="ltag l-h">ХМС</span>Буфер</td><td>Резервный день на повторные звонки поставщикам (уточнение свободных объёмов).</td><td class="thb">280</td></tr>
+      <tr><td class="dn">26</td><td class="dd">пт 02 окт</td><td><span class="ltag l-h">ХМС</span>Систематизация</td><td>Систематизация всех образцов, цен и контактов, собранных за экспедицию.</td><td class="thb">280</td></tr>
+      <tr class="trav"><td class="dn">27</td><td class="dd">сб 03 окт</td><td><span class="ltag l-h">Вылет</span></td><td>Хошимин (SGN) → Сан-Паулу (GRU) → Илеус (IOS), ~30–36 ч в пути.</td><td class="thb">380</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div id="bud-sec" class="sec">
+  <h2 class="stitle">Цена на какао-бобы + бюджет экспедиции (27 дней)</h2>
+
+  <div class="price-box">
+    Мировой биржевой ориентир на конец июля 2026: <span class="big">≈ $5 600–5 700 / т</span> (~$5,6–5,7/кг).<br><br>
+    По данным регионального мониторинга Đắk Lắk (крупнейший район сорсинга), закупочная цена сухих ферментированных бобов «с земли» (farm-gate) в среднем идёт <strong>на 15–20% ниже</strong> этого биржевого ориентира — то есть примерно <span class="big">$4,5–4,8/кг</span> для стандартного качества. Премиальные лоты тонкого вкуса (fine flavour) с прослеживаемостью и известные производители (напр. Nam Trường Sơn) могут платить фермерам премию до +20% к среднерыночной цене региона — переговорная цена уточняется индивидуально у каждого поставщика.
+  </div>
+  <div class="info-box">Курс на конец июля 2026 (Vietcombank): ≈ 26 300 ₫/USD. Публичной проверяемой закупочной цены премиального экспортного класса на конкретную дату не существует — точную цену даёт только прямой запрос поставщику при визите.</div>
+
+  <h2 class="stitle" style="margin-top:28px">Бюджет путешествия — 27 дней</h2>
+
+  <div class="b-grid">
+    <div class="b-card flights">
+      <div class="b-ch"><span class="ico">✈️</span><h3>Международные рейсы — Бразилия ↔ Вьетнам</h3></div>
+      <table class="bt">
+        <tr><td>Илеус (IOS) → Сан-Паулу (GRU) внутр. рейс RT</td><td>~800–1 200 BRL (~$150–220)</td></tr>
+        <tr><td>Сан-Паулу (GRU) → Хошимин (SGN) RT, эконом</td><td>$1 360–1 600</td></tr>
+        <tr><td class="note-row" colspan="2">Проверено на сентябрь–октябрь 2026: RT GRU↔SGN от $1 360 (Qatar Airways через DOH, Turkish через IST). Бронировать за 2–3 мес., гибкие даты снижают цену на 10–15%.</td></tr>
+        <tr class="sub-row"><td>Итого международные рейсы (RT)</td><td>~$1 550–1 800</td></tr>
+      </table>
+    </div>
+
+    <div class="b-card">
+      <div class="b-ch"><span class="ico">✈️</span><h3>Внутренний рейс Вьетнам (1 RT)</h3></div>
+      <table class="bt">
+        <tr><td>Хошимин ↔ Buôn Ma Thuột (Vietjet/Vietnam Airlines, RT)</td><td>$95–210</td></tr>
+        <tr><td class="note-row" colspan="2">Google Flights: RT от $95 (Vietjet), одиночный сегмент от $48. Цены сильно зависят от окна бронирования — планировать за 3–4 недели.</td></tr>
+        <tr class="sub-row"><td>Итого внутренний рейс</td><td>~$140 (3 700 тыс.₫)</td></tr>
+      </table>
+    </div>
+
+    <div class="b-card">
+      <div class="b-ch"><span class="ico">🛏</span><h3>Проживание — ~24 ночи во Вьетнаме</h3></div>
+      <table class="bt">
+        <tr><td>Хошимин (7 ночей — 2 заезда)</td><td>200 × 7 = 1 400</td></tr>
+        <tr><td>Bà Rịa + Tiền Giang (5 ночей)</td><td>250 × 5 = 1 250</td></tr>
+        <tr><td>Buôn Ma Thuột / Đắk Lắk (10 ночей)</td><td>210 × 10 = 2 100</td></tr>
+        <tr><td>Cư Jút (2 ночи)</td><td>200 × 2 = 400</td></tr>
+        <tr><td class="note-row" colspan="2">Проверено (Kayak, Tripadvisor, Hikersbay, июль 2026): бюджетный хостел/гестхаус Buôn Ma Thuột — 204 000–463 000 ₫; провинция — от 250 000–400 000 ₫. Заложены реалистичные средние 200–250 тыс. ₫/ночь.</td></tr>
+        <tr class="sub-row"><td>Итого проживание (средн. 214 тыс. ₫/ночь)</td><td>5 150</td></tr>
+      </table>
+    </div>
+
+    <div class="b-card">
+      <div class="b-ch"><span class="ico">🚌🛵</span><h3>Наземный + местный транспорт</h3></div>
+      <table class="bt">
+        <tr><td>ХМС ↔ Bà Rịa ↔ Tiền Giang (автобусы)</td><td>~700</td></tr>
+        <tr><td>Buôn Ma Thuột ↔ Krông Ana / Ea Kar / Cư Jút (такси/мото)</td><td>~1 200</td></tr>
+        <tr><td>Grab / xe om в городах (весь маршрут)</td><td>~1 400</td></tr>
+        <tr class="sub-row"><td>Итого наземный + местный транспорт</td><td>3 300</td></tr>
+      </table>
+    </div>
+
+    <div class="b-card">
+      <div class="b-ch"><span class="ico">🍜</span><h3>Питание — 27 дней</h3></div>
+      <table class="bt">
+        <tr><td>Уличная еда (phở, cơm tấm, bún) + кофе + вода</td><td>200 × 27 = 5 400</td></tr>
+        <tr><td class="note-row" colspan="2">Реалистичный бюджет уличной еды с кофе — 150 000–250 000 ₫/день ($6–11). Заложено среднее 200 тыс. ₫/день.</td></tr>
+        <tr class="sub-row"><td>Итого питание (~200 тыс. ₫/день)</td><td>5 400</td></tr>
+      </table>
+    </div>
+
+    <div class="b-card">
+      <div class="b-ch"><span class="ico">🗣️📦</span><h3>Переводчик, SIM, виза, буфер</h3></div>
+      <table class="bt">
+        <tr><td>Переводчик-фрилансер (по факту, ~7 сессий × 3 ч × 170 тыс.₫/ч)</td><td>3 570</td></tr>
+        <tr><td>SIM Viettel 30 дней + пополнение</td><td>240</td></tr>
+        <tr><td>Электронная виза e-Vietnam (~$25)</td><td>625</td></tr>
+        <tr><td>Образцы СФБ (11 точек × 300 г × ~90 тыс.₫/кг)</td><td>~300</td></tr>
+        <tr><td>Буфер непредвиденного (~10%)</td><td>1 800</td></tr>
+        <tr class="sub-row"><td>Итого прочее</td><td>6 535</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <table class="sum-table">
+    <thead><tr><th>Категория</th><th>тыс. ₫</th><th>USD (~26 300₫)</th></tr></thead>
+    <tbody>
+      <tr><td>✈️ Международные рейсы (Бразилия ↔ Вьетнам, RT)</td><td>~44 250</td><td>~1 680</td></tr>
+      <tr><td>✈️ Внутренний рейс Вьетнам (1 RT)</td><td>3 700</td><td>141</td></tr>
+      <tr><td>🛏 Проживание (~24 ночи)</td><td>5 150</td><td>196</td></tr>
+      <tr><td>🚌🛵 Наземный + местный транспорт</td><td>3 300</td><td>125</td></tr>
+      <tr><td>🍜 Питание (27 дней)</td><td>5 400</td><td>205</td></tr>
+      <tr><td>🗣️📦 Переводчик + SIM + виза + образцы + буфер</td><td>6 535</td><td>248</td></tr>
+      <tr class="total-row"><td><strong>ИТОГО (27 дней, включая рейсы из Бразилии)</strong></td><td><strong>~68 335</strong></td><td><strong>~2 598</strong></td></tr>
+      <tr style="background:#f0f8f0"><td colspan="3" style="font-size:10px;color:#888;padding:6px 12px">Только расходы во Вьетнаме (без межд. рейсов): ~24 085 тыс. ₫ (~$916) за 27 дней ≈ $34/день</td></tr>
+    </tbody>
+  </table>
+
+  <div class="b-total">
+    <div>
+      <h3>Полный бюджет экспедиции</h3>
+      <div class="sub-t">27 дней · 3 региона · 11 поставщиков + 2 админ-канала · 1 внутр. рейс · сен–окт 2026</div>
+    </div>
+    <div class="grand">
+      <div class="thb-big">~68 млн ₫</div>
+      <div class="usd">≈ $2 598 USD (с межд. рейсами) &nbsp;·&nbsp; $916 (только Вьетнам)</div>
+    </div>
+  </div>
+</div>
+
+<div id="con-sec" class="sec">
+  <h2 class="stitle">Все контакты — 2 группы, приоритет по объёму и наличию телефона</h2>
+  <div class="info-box">Разделение на 2 группы: <strong>Группа А</strong> — средние/крупные кооперативы-производители, которые выращивают какао и в состоянии продать бобы напрямую. <strong>Группа Б</strong> — все прочие потенциальные продавцы: переработчики лучшего качества, у которых могут быть избыточные/отбракованные лоты, либо экспортно-ориентированные производители, продающие бобы как отдельный товар. Внутри каждой группы — по убыванию приоритета (объём + наличие телефона).</div>
+
+  <div class="con-section-hdr"><span class="con-section-dot" style="background:#8e44ad"></span>ГРУППА А — Кооперативы-производители (Đắk Lắk / Lâm Đồng, быв. Đắk Nông)</div>
+  <div class="con-grid">
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">Nam Trường Sơn</div><div style="font-size:10px;color:var(--muted)">Осн. 2007 · телефон + наибольший объём среди частных</div></div><span class="con-reg r-dl">Krông Ana, Đắk Lắk</span></div><div class="con-body"><div class="con-ph">☎️ (0262) 3638879</div><div class="con-ph">📱 +84 91 920 47 47</div><div class="con-ph">📱 +84 96 561 7232 (Ms. Thanh, продажи)</div><div class="con-em">info@cacaonamtruongson.com.vn · cacaonamtruongson.com.vn</div><div class="con-note">107 Тан Тьен, с. Эана, Кронгана. ~250 га, 200–250 т сухих бобов/год, ~200 хозяйств. Собственная ферментация, платит на 20% выше рынка. Единственный, кто управляет сырьевой базой сам — приоритет №1.</div><div class="con-badge cb-co">Приоритет 1 ⭐⭐⭐</div><div class="con-badge cb-warn">⚠ портал IPC Đắk Lắk даёт другой адрес/тел</div></div></div>
+
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">HTX Dịch vụ nông nghiệp Nhất Tâm</div><div style="font-size:10px;color:var(--muted)">Крупнейший объём (~300 т/сезон)</div></div><span class="con-reg r-dl">Ea Đar, Ea Kar, Đắk Lắk</span></div><div class="con-body"><div class="con-note">Посёлок 10, с. Эадар. Руководитель — Nguyễn Hồng Thương. ~300 т сухих бобов в сезон, 200 связанных хозяйств — крупнейший объём в списке. Прямо заявляет приём иностранных шоколадных компаний для переговоров. Телефон не опубликован — через Liên minh HTX / Sở Công Thương.</div><div class="con-badge cb-co">Приоритет 2 ⭐⭐⭐</div><div class="con-badge cb-warn">⚠ телефон не опубликован</div></div></div>
+
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">HTX Ca cao Ea Kar</div><div style="font-size:10px;color:var(--muted)">Подтверждённый экспорт в Японию</div></div><span class="con-reg r-dl">Ea Kar, Đắk Lắk</span></div><div class="con-body"><div class="con-note">220 т/год, 65 пайщиков + 189 связанных, 250 га (180 плодоносящих). Отгружал сухие ферментированные бобы в Японию (13 т за I кв. 2022) — самый доказанный экспортёр среди кооперативов. Своё оборудование, OCOP 3–4 звезды. Телефон не опубликован — через admin-портал eakar.daklak.gov.vn.</div><div class="con-badge cb-co">Приоритет 3 ⭐⭐⭐</div><div class="con-badge cb-warn">⚠ телефон не опубликован</div></div></div>
+
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">HTX Thiên Lộc Phát</div><div style="font-size:10px;color:var(--muted)">Качество подтверждено — поставляет Marou</div></div><span class="con-reg r-dl">Đắk Wil, Cư Jút (Lâm Đồng)</span></div><div class="con-body"><div class="con-note">~100 т/год, 200 связанных хозяйств. Поставляет Marou — лот уже прошёл отбор самого требовательного покупателя страны. С 2025 ферментируют сами (раньше продавали влажные бобы) — сознательный переход в премиум.</div><div class="con-badge cb-co">Приоритет 4 ⭐⭐</div><div class="con-badge cb-warn">⚠ контакты не опубликованы</div></div></div>
+
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">HTX Tân Thành</div><div style="font-size:10px;color:var(--muted)">Молодой, вероятно менее законтрактован</div></div><span class="con-reg r-dl">Ea Na, Krông Ana, Đắk Lắk</span></div><div class="con-body"><div class="con-note">Осн. 2023, &gt;60 га, ~100 т/год. В том же районе, что и Nam Trường Sơn — удобно совместить визит.</div><div class="con-badge cb-co">Приоритет 5 ⭐⭐</div><div class="con-badge cb-warn">⚠ контакты не опубликованы</div></div></div>
+
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Nông trại Cacao AnA</div><div style="font-size:10px;color:var(--muted)">Явный складской запас, малый объём</div></div><span class="con-reg r-dl">Buôn Ma Thuột, Đắk Lắk</span></div><div class="con-body"><div class="con-em">cacaoana.com</div><div class="con-note">Переулок 50, ул. Фан Хюи Тю. Единственный, кто прямо заявляет складской запас ферментированных сухих бобов и отгрузку по запросу. Масштаб небольшой — рабочий вход для пилота на 2 т/мес.</div><div class="con-badge cb-co">Приоритет 6 ⭐⭐ (пилотный объём)</div></div></div>
+  </div>
+
+  <div class="con-section-hdr"><span class="con-section-dot" style="background:#27ae60"></span>ГРУППА Б — Прочие продавцы: переработчики с избыточными лотами / экспортёры бобов (Хошимин · Bà Rịa · Tiền Giang)</div>
+  <div class="con-grid">
+    <div class="con-card pri"><div class="con-hdr"><div><div class="con-name">Alluvia (Xuân Ron Chợ Gạo)</div><div style="font-size:10px;color:var(--muted)">Продаёт бобы как отдельный товар, не только для себя</div></div><span class="con-reg r-south">Tiền Giang</span></div><div class="con-body"><div class="con-em">alluviachocolate.com</div><div class="con-note">В ассортименте прямо указаны бобы, тёртое и масло как отдельные товары; экспорт в Японию. Из группы Б — наиболее вероятный прямой продавец именно бобов.</div><div class="con-badge cb-pr">Приоритет 1 в группе Б</div></div></div>
+
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Belvie Chocolate</div><div style="font-size:10px;color:var(--muted)">Действующий телефон · закупка выше fair trade</div></div><span class="con-reg r-hcm">Хошимин + фермы</span></div><div class="con-body"><div class="con-ph">☎️ +84 28 3620 1098</div><div class="con-ph">📱 +84 94 182 8298</div><div class="con-em">info@belviechocolate.com</div><div class="con-note">Только Тринитарио. Прямо ищет партнёрства — перерабатывает сам, но стоит проверки на избыточные лоты.</div><div class="con-badge cb-pr">Приоритет 2 в группе Б</div></div></div>
+
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Kimmy's Chocolate</div><div style="font-size:10px;color:var(--muted)">Действующий телефон · прослеживаемый источник UTZ</div></div><span class="con-reg r-south">Tiền Giang</span></div><div class="con-body"><div class="con-ph">☎️ (0273) 3633256</div><div class="con-em">kimmychocolatier.com</div><div class="con-note">265A, с. Лонгдинь, Тьаутхань. Сырьё от кооператива Чогао по стандарту UTZ.</div><div class="con-badge cb-pr">Приоритет 3 в группе Б</div></div></div>
+
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Binon Cacao</div><div style="font-size:10px;color:var(--muted)">Экспорт в Японию/Корею/ЕС · японский контроль качества</div></div><span class="con-reg r-south">Bà Rịa (р-н ХМС)</span></div><div class="con-body"><div class="con-em">binon-cacao.com</div><div class="con-note">Ферма: пос. Бау Шен, с. Ксабанг, Тьаудык. Основатель — Эндо Аяко. Экспортно-ориентирован, вероятны отбракованные лоты выше среднего качества.</div><div class="con-badge cb-pr">Приоритет 4 в группе Б</div></div></div>
+
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Stone Hill (Ca Cao Nông Lâm)</div><div style="font-size:10px;color:var(--muted)">Собственная градация, класс C потенциально доступен</div></div><span class="con-reg r-hcm">Хошимин + ферма</span></div><div class="con-body"><div class="con-em">stonehill.vn</div><div class="con-note">202 Ван Кьеп, Биньтхань. Своя градация S/A/B/C, класс C в производство не берут.</div><div class="con-badge cb-pr">Приоритет 5 в группе Б</div></div></div>
+  </div>
+
+  <div class="con-section-hdr"><span class="con-section-dot" style="background:#3a0860"></span>АДМИНИСТРАТИВНЫЕ КАНАЛЫ (Đắk Lắk)</div>
+  <div class="con-grid">
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Sở Công Thương tỉnh Đắk Lắk</div><div style="font-size:10px;color:var(--muted)">Департамент промышленности и торговли</div></div><span class="con-reg r-dl">Buôn Ma Thuột</span></div><div class="con-body"><div class="con-ph">☎️ 0262 3952635</div><div class="con-em">congthuong@daklak.gov.vn</div><div class="con-note">17 Trường Chinh, Buôn Ma Thuột. Открытый реестр предприятий по какао — канал выхода на HTX Ea Kar и HTX Nhất Tâm.</div></div></div>
+
+    <div class="con-card"><div class="con-hdr"><div><div class="con-name">Liên minh HTX tỉnh Đắk Lắk</div><div style="font-size:10px;color:var(--muted)">Союз кооперативов провинции</div></div><span class="con-reg r-dl">Buôn Ma Thuột</span></div><div class="con-body"><div class="con-note">Официальный канал к кооперативам всей провинции — параллельный вход помимо Sở Công Thương. Также: admin-портал eakar.daklak.gov.vn напрямую для района Ea Kar.</div></div></div>
+  </div>
+
+  <div class="info-box" style="margin-top:16px"><strong>Сознательно не включены в маршрут (референсные ориентиры цены, не продавцы):</strong> Marou — эталон премиального сегмента и главный конкурент за то же сырьё, закупает напрямую у &gt;500 фермеров в 6 провинциях; Trọng Đức (Đồng Nai, ☎️ (0251) 3629168, sales.cacaotrongduc@gmail.com) — крупный переработчик, открыто держит и комментирует цену региона, но прямо не продаёт бобы. Оба полезны как справочные точки при переговорах о цене, но не как пункты маршрута.</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+function show(id,btn){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('act'));
+  document.getElementById(id).classList.add('on');
+  btn.classList.add('act');
+  if(id==='map-sec')setTimeout(()=>{if(window._map)window._map.invalidateSize();},120);
+}
+const map=L.map('the-map',{zoomControl:true}).setView([11.5,107.6],6);
+window._map=map;
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:18}).addTo(map);
+
+const route=[
+  [10.78,106.70],[10.50,107.17],[10.36,106.36],[10.78,106.70],
+  [12.67,108.05],[12.42,107.75],[12.67,108.05],[10.78,106.70]
+];
+L.polyline(route,{color:'#3db83d',weight:3,opacity:.75,dashArray:'9,5'}).addTo(map);
+L.polyline([[10.78,106.70],[0,0],[-14.81,-39.04]],{color:'#aaa',weight:2,opacity:.3,dashArray:'4,8'}).addTo(map);
+
+const regions={
+  hcm:{name:'Хошимин — старт/финиш',n:'2 визита',grp:'Группа Б',note:'Belvie, Stone Hill — переработчики, возможны избыточные лоты. Старт и финиш экспедиции.'},
+  south:{name:'Bà Rịa · Tiền Giang',n:'3 визита',grp:'Группа Б',note:'Binon Cacao · Alluvia · Kimmy\'s Chocolate. Экспортно-ориентированные переработчики.'},
+  dl:{name:'Đắk Lắk / Cư Jút — ядро закупки',n:'6 визитов + 2 канала',grp:'Группа А',note:'Nam Trường Sơn, HTX Nhất Tâm, HTX Ea Kar, HTX Thiên Lộc Phát, HTX Tân Thành, AnA. Единственный регион, где сосредоточены кооперативы-производители.'}
+};
+function updatePanel(r){
+  const d=regions[r];
+  document.querySelector('.rp-header span').textContent=d.name.substring(0,36)+(d.name.length>36?'…':'');
+  const stats=document.querySelectorAll('.rp-stat');
+  stats[0].querySelector('.rp-val').textContent=d.n;
+  stats[0].querySelector('.rp-lbl').textContent='Визитов';
+  stats[1].querySelector('.rp-val').textContent=d.grp;
+  stats[1].querySelector('.rp-lbl').textContent='Группа';
+  document.querySelector('.rp-beans').innerHTML=`<strong>Что это:</strong> ${d.grp}`;
+  document.querySelector('.rp-contact').innerHTML=`<em style="font-size:9px;opacity:.9">${d.note}</em>`;
+}
+function mkIcon(c,lbl){return L.divIcon({className:'',html:`<div style="background:${c};color:#fff;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.45);font-family:sans-serif">${lbl}</div>`,iconSize:[30,30],iconAnchor:[15,15],popupAnchor:[0,-18]});}
+function starIcon(c){return L.divIcon({className:'',html:`<div style="background:${c};color:#fff;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:16px;border:3px solid #fff;box-shadow:0 2px 10px rgba(0,0,0,.5)">★</div>`,iconSize:[38,38],iconAnchor:[19,19],popupAnchor:[0,-22]});}
+const C={hcm:'#d4830a',south:'#27ae60',dl:'#8e44ad'};
+const stops=[
+  {ll:[10.78,106.70],seg:'hcm',lbl:'ХМС',star:true,name:'Хошимин — старт/финиш',sub:'Belvie · Stone Hill · рейсы из/в Бразилию',pop:'2 визита · группа Б'},
+  {ll:[10.50,107.17],seg:'south',lbl:'BR',name:'Bà Rịa (р-н Хошимина)',sub:'Binon Cacao — японский контроль качества',pop:'Группа Б'},
+  {ll:[10.36,106.36],seg:'south',lbl:'TG',name:'Tiền Giang',sub:'Alluvia · Kimmy\'s Chocolate',pop:'2 визита · группа Б'},
+  {ll:[12.67,108.05],seg:'dl',lbl:'BMT',star:true,name:'Buôn Ma Thuột — Đắk Lắk (ЯДРО)',sub:'★★★ Nam Trường Sơn · HTX Nhất Tâm · HTX Ea Kar<br>AnA · HTX Tân Thành · Sở Công Thương · Liên minh HTX',pop:'6 визитов + 2 канала · группа А · весь премиальный сорсинг здесь'},
+  {ll:[12.42,107.75],seg:'dl',lbl:'CJ',name:'Cư Jút (Lâm Đồng, быв. Đắk Nông)',sub:'HTX Thiên Lộc Phát — поставщик Marou',pop:'Группа А'},
+];
+stops.forEach(s=>{
+  const c=C[s.seg];
+  const icon=s.star?starIcon(c):mkIcon(c,s.lbl);
+  L.marker(s.ll,{icon}).addTo(map)
+    .bindPopup(`<div style="font-family:sans-serif;min-width:230px"><b style="font-size:12px;color:#0a1a0a">${s.name}</b><div style="font-size:11px;color:#555;margin:4px 0;line-height:1.5">${s.sub}</div><div style="font-size:10px;background:#e8f5e8;padding:3px 6px;border-radius:3px;color:#1a4020;margin-top:4px">${s.pop}</div></div>`,{maxWidth:290})
+    .on('click',()=>updatePanel(s.seg));
+});
+const labels=[
+  {ll:[9.9,106.3],seg:'hcm',txt:'ХМС'},
+  {ll:[9.7,107.9],seg:'south',txt:'ЮГ'},
+  {ll:[13.3,108.6],seg:'dl',txt:'ĐẮK LẮK (ядро)'},
+];
+labels.forEach(l=>{
+  L.marker(l.ll,{icon:L.divIcon({className:'',html:`<div style="background:${C[l.seg]};color:#fff;padding:3px 9px;border-radius:3px;font-size:9px;font-weight:800;font-family:sans-serif;white-space:nowrap;opacity:.85">${l.txt}</div>`,iconSize:[110,18],iconAnchor:[55,9]})}).addTo(map);
+});
+</script>
+</body>
+</html>
