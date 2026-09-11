@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Телесно-ориентированная терапия — домашний комплекс</title>
+<style>
+  :root {
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --surface2: #f0ede7;
+    --text: #1a1918;
+    --text2: #5a5854;
+    --text3: #8a8783;
+    --accent: #2d6a4f;
+    --accent-bg: #e8f5ee;
+    --accent-border: #a8d5bc;
+    --warm: #8b4513;
+    --warm-bg: #fdf0e8;
+    --cool: #1a5276;
+    --cool-bg: #e8f0fd;
+    --border: #d8d4cc;
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+  .header {
+    background: var(--accent);
+    color: #fff;
+    padding: 28px 24px 20px;
+  }
+  .header h1 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+  .header p { font-size: 13px; opacity: 0.8; }
+  .tabs {
+    display: flex;
+    gap: 0;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tab {
+    padding: 12px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text2);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.15s;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+  }
+  .tab:hover { color: var(--text); background: var(--border); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); background: var(--surface); }
+  .page { display: none; padding: 20px 20px 40px; max-width: 760px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  /* Map */
+  .body-map-wrap {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .body-map-svg { flex: 0 0 auto; }
+  .seg-list { flex: 1; min-width: 200px; }
+  .seg-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    background: var(--surface);
+    transition: all 0.15s;
+    width: 100%;
+    text-align: left;
+    font-size: 14px;
+  }
+  .seg-btn:hover { border-color: var(--border); background: var(--surface2); }
+  .seg-btn.selected { background: var(--accent-bg); border-color: var(--accent-border); }
+  .seg-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .seg-name { font-weight: 500; }
+  .seg-sub { font-size: 12px; color: var(--text3); margin-left: auto; }
+  .seg-detail {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 18px;
+    margin-top: 16px;
+    display: none;
+  }
+  .seg-detail.open { display: block; }
+  .seg-detail h3 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+  .seg-detail .block-desc { font-size: 13px; color: var(--text2); margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+  .ex-list { list-style: none; }
+  .ex-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--surface2);
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .ex-list li:last-child { border-bottom: none; }
+  .ex-num { font-size: 12px; font-weight: 600; color: var(--accent); min-width: 22px; margin-top: 1px; }
+  .ex-body { flex: 1; }
+  .ex-name { font-weight: 500; font-size: 14px; margin-bottom: 3px; }
+  .ex-desc { font-size: 13px; color: var(--text2); }
+  .ex-time { font-size: 12px; color: var(--text3); margin-top: 3px; }
+
+  /* Daily/Weekly plan */
+  .plan-block {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .plan-header {
+    padding: 14px 18px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .plan-header h3 { font-size: 15px; font-weight: 600; }
+  .plan-header .badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: var(--accent-bg);
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .plan-steps { padding: 6px 18px 14px; }
+  .plan-step {
+    display: flex;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--surface2);
+    align-items: flex-start;
+  }
+  .plan-step:last-child { border-bottom: none; }
+  .step-n {
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--accent);
+    min-width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+  .step-body { flex: 1; }
+  .step-name { font-weight: 500; font-size: 14px; }
+  .step-desc { font-size: 13px; color: var(--text2); margin-top: 2px; }
+  .step-time { font-size: 12px; color: var(--text3); }
+
+  /* Massage */
+  .massage-zone {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .mz-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    cursor: pointer;
+    background: var(--surface2);
+    border-bottom: 1px solid transparent;
+    transition: all 0.15s;
+  }
+  .mz-header:hover { background: var(--accent-bg); }
+  .mz-header.open { border-bottom-color: var(--border); }
+  .mz-icon { font-size: 18px; }
+  .mz-name { font-weight: 500; font-size: 14px; flex: 1; }
+  .mz-arrow { font-size: 12px; color: var(--text3); transition: transform 0.2s; }
+  .mz-header.open .mz-arrow { transform: rotate(90deg); }
+  .mz-body { display: none; padding: 14px 16px; }
+  .mz-header.open + .mz-body { display: block; }
+  .mz-steps { list-style: disc; padding-left: 18px; }
+  .mz-steps li { margin-bottom: 6px; font-size: 13px; color: var(--text2); }
+
+  /* Autogenic */
+  .auto-phase {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    margin-bottom: 14px;
+    padding: 16px 18px;
+  }
+  .auto-phase h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .phase-n { font-size: 11px; font-weight: 700; color: #fff; background: var(--cool); padding: 2px 7px; border-radius: 10px; }
+  .formula {
+    font-style: italic;
+    color: var(--cool);
+    background: var(--cool-bg);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    margin: 8px 0;
+    border-left: 3px solid var(--cool);
+  }
+  .note {
+    font-size: 12px;
+    color: var(--text3);
+  }
+  .tip-box {
+    background: var(--warm-bg);
+    border: 1px solid #e8c4a0;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-size: 13px;
+    color: var(--warm);
+  }
+  .tip-box strong { display: block; margin-bottom: 4px; font-size: 14px; }
+
+  /* Colors for segments */
+  .c0 { background: #d4a5a5; }
+  .c1 { background: #c4a0c8; }
+  .c2 { background: #a0b8c8; }
+  .c3 { background: #a0c4a8; }
+  .c4 { background: #d4c4a0; }
+  .c5 { background: #d4b8a0; }
+  .c6 { background: #c8a8b8; }
+
+  @media (max-width: 500px) {
+    .body-map-wrap { flex-direction: column; }
+    .body-map-svg { width: 100%; display: flex; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+<h2 class="sr-only" style="position:absolute;left:-9999px">Телесно-ориентированная терапия — домашний справочник</h2>
+
+<div class="header">
+  <h1>Телесно-ориентированная терапия</h1>
+  <p>По Райху / Лоуэну — домашний комплекс · Биоэнергетика · Самомассаж · Аутогенная тренировка</p>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('map')">Карта блоков</button>
+  <button class="tab" onclick="showTab('daily')">Ежедневный</button>
+  <button class="tab" onclick="showTab('deep')">Глубокая сессия</button>
+  <button class="tab" onclick="showTab('massage')">Самомассаж</button>
+  <button class="tab" onclick="showTab('auto')">Самогипноз</button>
+  <button class="tab" onclick="showTab('breath')">Дыхание</button>
+  <button class="tab" onclick="showTab('apps')">Приложения</button>
+</div>
+
+<!-- TAB: MAP -->
+<div class="page active" id="tab-map">
+  <p style="font-size:13px;color:var(--text2);margin-bottom:16px">Семь сегментов мышечного панциря по Райху. Кликни сегмент — увидишь упражнения именно для него.</p>
+  <div class="body-map-wrap">
+    <div class="body-map-svg">
+      <svg width="160" viewBox="0 0 160 420" xmlns="http://www.w3.org/2000/svg" role="img">
+        <title>Схема семи сегментов мышечного панциря по Вильгельму Райху</title>
+        <!-- Head -->
+        <ellipse cx="80" cy="36" rx="32" ry="36" fill="#d4a5a5" stroke="#b88080" stroke-width="1" opacity="0.9" style="cursor:pointer" onclick="selectSeg(0)" id="svg0"/>
+        <text x="80" y="39" text-anchor="middle" font-size="10" font-weight="600" fill="#5a2020">1. Окулярный</text>
+        <!-- Neck -->
+        <rect x="64" y="72" width="32" height="24" rx="8" fill="#c4a0c8" stroke="#9070a0" stroke-width="1" opacity="0.9" style="cursor:pointer" onclick="selectSeg(1)" id="svg1"/>
+        <text x="80" y="87" text-anchor="middle" font-size="9" font-weight="600" fill="#3a1050">2. Оральный</text>
+        <!-- Neck 2 -->
+        <rect x="62" y="96" width="36" height="20" rx="6" fill="#a0b8c8" stroke="#6090b0" stroke-width="1" opacity="0.85" style="cursor:pointer" onclick="selectSeg(2)" id="svg2"/>
+        <text x="80" y="109" text-anchor="middle" font-size="9" font-weight="600" fill="#102840">3. Цервикальный</text>
+        <!-- Chest -->
+        <rect x="40" y="116" width="80" height="70" rx="10" fill="#a0c4a8" stroke="#608070" stroke-width="1" opacity="0.85" style="cursor:pointer" onclick="selectSeg(3)" id="svg3"/>
+        <text x="80" y="155" text-anchor="middle" font-size="10" font-weight="600" fill="#183820">4. Грудной</text>
+        <!-- Diaphragm -->
+        <rect x="44" y="186" width="72" height="28" rx="8" fill="#d4c4a0" stroke="#a09060" stroke-width="1" opacity="0.9" style="cursor:pointer" onclick="selectSeg(4)" id="svg4"/>
+        <text x="80" y="204" text-anchor="middle" font-size="9" font-weight="600" fill="#403010">5. Диафрагм.</text>
+        <!-- Abdomen -->
+        <rect x="44" y="214" width="72" height="52" rx="8" fill="#d4b8a0" stroke="#a08060" stroke-width="1" opacity="0.9" style="cursor:pointer" onclick="selectSeg(5)" id="svg5"/>
+        <text x="80" y="244" text-anchor="middle" font-size="10" font-weight="600" fill="#402010">6. Абдоминальный</text>
+        <!-- Pelvis -->
+        <ellipse cx="80" cy="296" rx="44" ry="30" fill="#c8a8b8" stroke="#a07090" stroke-width="1" opacity="0.9" style="cursor:pointer" onclick="selectSeg(6)" id="svg6"/>
+        <text x="80" y="299" text-anchor="middle" font-size="10" font-weight="600" fill="#3a1030">7. Тазовый</text>
+        <!-- Legs -->
+        <rect x="52" y="322" width="24" height="80" rx="8" fill="#c8a8b8" stroke="#a07090" stroke-width="0.5" opacity="0.5"/>
+        <rect x="84" y="322" width="24" height="80" rx="8" fill="#c8a8b8" stroke="#a07090" stroke-width="0.5" opacity="0.5"/>
+        <!-- Arrow labels -->
+        <text x="4" y="39" font-size="9" fill="#888">↑ голова</text>
+        <text x="4" y="155" font-size="9" fill="#888">↑ грудь</text>
+        <text x="4" y="299" font-size="9" fill="#888">↑ таз</text>
+      </svg>
+    </div>
+
+    <div class="seg-list">
+      <div class="seg-btn selected" id="seg-btn-0" onclick="selectSeg(0)">
+        <span class="seg-dot c0"></span>
+        <span class="seg-name">1. Окулярный</span>
+        <span class="seg-sub">глаза, лоб, затылок</span>
+      </div>
+      <div class="seg-btn" id="seg-btn-1" onclick="selectSeg(1)">
+        <span class="seg-dot c1"></span>
+        <span class="seg-name">2. Оральный</span>
+        <span class="seg-sub">рот, подбородок, горло</span>
+      </div>
+      <div class="seg-btn" id="seg-btn-2" onclick="selectSeg(2)">
+        <span class="seg-dot c2"></span>
+        <span class="seg-name">3. Цервикальный</span>
+        <span class="seg-sub">шея, язык</span>
+      </div>
+      <div class="seg-btn" id="seg-btn-3" onclick="selectSeg(3)">
+        <span class="seg-dot c3"></span>
+        <span class="seg-name">4. Грудной</span>
+        <span class="seg-sub">грудь, плечи, руки</span>
+      </div>
+      <div class="seg-btn" id="seg-btn-4" onclick="selectSeg(4)">
+        <span class="seg-dot c4"></span>
+        <span class="seg-name">5. Диафрагмальный</span>
+        <span class="seg-sub">диафрагма, солнечное сплетение</span>
+      </div>
+      <div class="seg-btn" id="seg-btn-5" onclick="selectSeg(5)">
+        <span class="seg-dot c5"></span>
+        <span class="seg-name">6. Абдоминальный</span>
+        <span class="seg-sub">живот, поясница</span>
+      </div>
+      <div class="seg-btn" id="seg-btn-6" onclick="selectSeg(6)">
+        <span class="seg-dot c6"></span>
+        <span class="seg-name">7. Тазовый</span>
+        <span class="seg-sub">таз, ноги</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="seg-detail open" id="seg-detail">
+    <h3 id="sd-title"></h3>
+    <div class="block-desc" id="sd-block"></div>
+    <ul class="ex-list" id="sd-exlist"></ul>
+  </div>
+</div>
+
+<!-- TAB: DAILY -->
+<div class="page" id="tab-daily">
+  <div class="tip-box">
+    <strong>Когда делать</strong>
+    Вечером, 20:00–20:30 — перед сном. Либо как заминка после тренировки (7–8 утра). Вечер предпочтительнее: комплекс снимает дневное напряжение и улучшает сон.
+  </div>
+  <div class="plan-block">
+    <div class="plan-header">
+      <h3>Базовый ежедневный комплекс</h3>
+      <span class="badge">15–20 мин</span>
+    </div>
+    <div class="plan-steps">
+      <div class="plan-step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <div class="step-name">Заземление (Grounding)</div>
+          <div class="step-desc">Стоя, ноги шир. плеч, колени чуть согнуты, вес на подушечки стоп. Руки свободны. Дышишь вниз в живот. Закрываешь глаза, внимание в стопы — ждёшь лёгкую вибрацию или тепло в ногах. Это — сигнал заземлённости.</div>
+          <div class="step-time">2–3 мин</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <div class="step-name">Дыхательная волна</div>
+          <div class="step-desc">Лёжа на спине, колени согнуты, стопы на полу. Вдох: живот → рёбра → грудь → плечи (снизу вверх). Выдох: расслабление сверху вниз. Дыхание связное, без паузы между вдохом и выдохом. Не форсировать — искать естественный ритм волны.</div>
+          <div class="step-time">3–5 мин</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <div class="step-name">Дуга Лоуэна (Lowen Bow)</div>
+          <div class="step-desc">Стоя, пятки на ширине бёдер, кулаки на пояснице костяшками внутрь. Медленно прогибаешься назад через кулаки, колени слегка сгибаются, вес остаётся на подушечках. Дышишь открыто. Ощущение — растяжение передней поверхности тела. Если появляется дрожь — это хорошо, не блокируй.</div>
+          <div class="step-time">1–2 мин</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <div class="step-name">Вибрация ног</div>
+          <div class="step-desc">Стоя, ноги чуть шире плеч, колени согнуты, небольшой наклон вперёд. Позволяешь ногам дрожать — не форсируешь, а разрешаешь. Через 30–60 сек дрожь пойдёт сама, если не зажимать. Это разряд хронического тонуса мышц ног. Можно поддерживать руками о стену.</div>
+          <div class="step-time">2–3 мин</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n">5</div>
+        <div class="step-body">
+          <div class="step-name">Раскрытие груди</div>
+          <div class="step-desc">Лёжа на спине. Скатанное в валик полотенце (или твёрдая подушка) — под лопатки, примерно на уровне сердца. Руки в стороны ладонями вверх, голова свободно запрокидывается. Дышишь в грудную клетку, позволяешь ей раскрываться. Могут возникнуть эмоции — позволяешь.</div>
+          <div class="step-time">1–2 мин</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n">6</div>
+        <div class="step-body">
+          <div class="step-name">Удар ногами</div>
+          <div class="step-desc">Лёжа на спине, ноги прямые. Поочерёдно или одновременно бьёшь пятками по матрасу — удар от бедра, нога прямая. Темп нарастающий. Можно добавить вокализацию: на каждый удар — короткий выдох "нет!" или просто звук. 30–40 ударов подход, 2–3 серии.</div>
+          <div class="step-time">2 мин</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n">7</div>
+        <div class="step-body">
+          <div class="step-name">Тазовые качания + завершение</div>
+          <div class="step-desc">Лёжа, колени согнуты. Медленно качаешь таз: вперёд (поясница прижимается к полу) на выдохе, назад (поясница отрывается) на вдохе. Ритм спокойный. В финале — просто лежишь 2–3 мин, отслеживаешь ощущения в теле без оценки.</div>
+          <div class="step-time">3 мин</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB: DEEP -->
+<div class="page" id="tab-deep">
+  <div class="tip-box">
+    <strong>Когда делать</strong>
+    1 раз в неделю — воскресенье (выходной от тренировок). Отдельно от физической нагрузки. Минимум 2 часа до сна. Важно: не делать "из-под палки" — только при наличии внутреннего ресурса.
+  </div>
+
+  <div class="plan-block">
+    <div class="plan-header"><h3>Блок 1 — Разгрузка верхних сегментов</h3><span class="badge">10–12 мин</span></div>
+    <div class="plan-steps">
+      <div class="plan-step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <div class="step-name">Работа с глазами</div>
+          <div class="step-desc">Широко открываешь глаза — максимально, как будто сильно испугался. Держишь 5 сек, расслабляешь. Затем вращение глаз по кругу — 8 раз в каждую сторону, медленно. Потом: быстрые движения глаз влево-вправо (EMDR-стиль), 20–30 раз. Завершаешь — лёгкими покачиваниями головы. Нахмуриваешь лоб — задерживаешь — отпускаешь. Повтор 3 раза.</div>
+          <div class="step-time">3 мин</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <div class="step-name">Работа с ртом и горлом</div>
+          <div class="step-desc">Преувеличенные жевательные движения — 30 сек. Выдвигаешь нижнюю челюсть вперёд и задерживаешь. Высовываешь язык максимально — ждёшь позыв на "аааа". Звуки: произносишь "ма-ма-ма", "ба-ба-ба" — с разным давлением, от шёпота до громкого. Долгий открытый звук "АААА" на выдохе — 3–4 раза. Намеренный широкий зевок с потягиванием.</div>
+          <div class="step-time">3–4 мин</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <div class="step-name">Шея и цервикальный сегмент</div>
+          <div class="step-desc">Медленные повороты головы с фиксацией в крайних точках — 30 сек. Вытягиваешь шею вперёд (как черепаха), задерживаешь, убираешь обратно. Надавливаешь ладонью на лоб, сопротивляясь шеей — держишь 7 сек, отпускаешь. То же — надавливание сбоку и сзади. Крик в подушку или вслух: "НЕТ!" — коротко и резко, 5–8 раз.</div>
+          <div class="step-time">3–4 мин</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="plan-block">
+    <div class="plan-header"><h3>Блок 2 — Грудь и диафрагма</h3><span class="badge">12–15 мин</span></div>
+    <div class="plan-steps">
+      <div class="plan-step">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <div class="step-name">Удары по кровати (Lowen)</div>
+          <div class="step-desc">Стоишь сбоку от кровати. Поднимаешь руки над головой, делаешь вдох, затем на выдохе — удар сжатыми кулаками/ладонями по матрасу. Максимальная амплитуда, удар из плеч, не из локтей. Звук: "ХА!" или "НЕТ!" на каждый удар. 15–20 ударов, 3 серии. Это прямая работа с грудным и оральным блоком — подавленный гнев.</div>
+          <div class="step-time">4 мин</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n">5</div>
+        <div class="step-body">
+          <div class="step-name">Раскрытие груди (расширенное)</div>
+          <div class="step-desc">Валик под лопатки, лёжа. Руки в стороны. Дышишь глубоко в грудь — на вдохе грудная клетка поднимается, на выдохе опускается с лёгким звуком. Затем: руки тянешь вперёд как будто обнимаешь кого-то — максимально, задерживаешь — отпускаешь. Повтор 5 раз. После — обхватываешь себя руками за плечи: самообъятие, 30–60 сек.</div>
+          <div class="step-time">4 мин</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n">6</div>
+        <div class="step-body">
+          <div class="step-name">Диафрагмальное дыхание + рефлекс рвоты</div>
+          <div class="step-desc">Лёжа, дышишь в живот — диафрагма вниз. Затем: намеренно делаешь несколько попыток "позыва на рвоту" — это не про рвоту, а про сброс зажима диафрагмы (т.н. gag reflex). Высовываешь язык, сжимаешь живот снизу, издаёшь звук "ХАААК". 3–5 раз. После — прогиб назад через стул: сидишь на краю стула, откидываешься назад, руки на пол, голова запрокинута. 60 сек.</div>
+          <div class="step-time">4 мин</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="plan-block">
+    <div class="plan-header"><h3>Блок 3 — Живот и таз</h3><span class="badge">12–15 мин</span></div>
+    <div class="plan-steps">
+      <div class="plan-step">
+        <div class="step-n">7</div>
+        <div class="step-body">
+          <div class="step-name">Активация абдоминального сегмента</div>
+          <div class="step-desc">Лёжа на спине, голову поднимаешь и смотришь на живот с усилием — как будто "давишь взглядом". Напрягаешь живот и одновременно бьёшь ногами по матрасу. Это активирует подавленную агрессию нижней части тела. 20–30 ударов. После: вакуум — стоя, ноги согнуты, руки на бёдрах, выдох полный, живот втягиваешь максимально под рёбра, держишь 5–10 сек.</div>
+          <div class="step-time">4 мин</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n">8</div>
+        <div class="step-body">
+          <div class="step-name">Тазовый рывок и круговые движения</div>
+          <div class="step-desc">Стоя, ноги согнуты, как в заземлении. Медленные круговые движения тазом — 8 раз каждую сторону. Затем тазовый "рывок" вперёд (thrust): таз резко выдвигается вперёд на выдохе, возвращается на вдохе. Это центральное упражнение Лоуэна для тазового блока. 10–15 повторений. Не зажимать ягодицы — движение от бёдер.</div>
+          <div class="step-time">4 мин</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n">9</div>
+        <div class="step-body">
+          <div class="step-name">Завершение и интеграция</div>
+          <div class="step-desc">Лёжа 5–7 мин. Просто лежишь, тело сканируешь от стоп к голове. Отмечаешь изменения: где тепло появилось, где ощущение "отпустило". Не нужно ничего делать — это время для интеграции. Опционально: аутогенная тренировка (вкладка "Самогипноз") после этой паузы.</div>
+          <div class="step-time">5–7 мин</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB: MASSAGE -->
+<div class="page" id="tab-massage">
+  <p style="font-size:13px;color:var(--text2);margin-bottom:16px">Самомассаж — вспомогательный инструмент. Делается отдельно или до/после комплекса. Главное — работать медленно, с вниманием к ощущениям, без насилия над собой.</p>
+
+  <div class="massage-zone">
+    <div class="mz-header open" onclick="toggleMZ(this)">
+      <span class="mz-icon">🦷</span>
+      <span class="mz-name">Жевательные мышцы (ВНЧС) — оральный и окулярный блок</span>
+      <span class="mz-arrow">▶</span>
+    </div>
+    <div class="mz-body" style="display:block">
+      <ul class="mz-steps">
+        <li>Большие пальцы — под скуловыми дугами, чуть впереди ушей. Надавливаешь с умеренной силой и делаешь маленькие круговые движения. Ищешь болезненные точки.</li>
+        <li>Указательный и средний пальцы — на виски, медленные круговые движения по ходу часовой стрелки.</li>
+        <li>Пальцами по кости нижней челюсти — от подбородка к ушам. Прижимаешь и медленно двигаешься, находишь уплотнения.</li>
+        <li>Сжимаешь зубы — нащупываешь напряжённые жевательные мышцы — надавливаешь в эту точку на 30–60 сек.</li>
+        <li>Завершаешь: рот слегка приоткрыт, нижняя челюсть свободно "свисает".</li>
+      </ul>
+      <div class="note" style="margin-top:10px">Время: 3–5 мин. Особенно актуально при стрессе, работе с экраном, ночном скрежете зубов.</div>
+    </div>
+  </div>
+
+  <div class="massage-zone">
+    <div class="mz-header" onclick="toggleMZ(this)">
+      <span class="mz-icon">🫒</span>
+      <span class="mz-name">Шея и основание черепа — цервикальный блок</span>
+      <span class="mz-arrow">▶</span>
+    </div>
+    <div class="mz-body">
+      <ul class="mz-steps">
+        <li>Обеими руками — захват трапеций. Медленное сдавливание и отпускание. Ищешь "твёрдые" участки.</li>
+        <li>Большие пальцы в основание черепа (субокципитальные мышцы): надавливаешь вверх и вперёд, держишь 30 сек на каждой болезненной точке.</li>
+        <li>Пальцами по боковой поверхности шеи — от уха к ключице — медленное поглаживание с умеренным давлением.</li>
+        <li>Вращение головы с поддержкой рукой — одна рука на затылке направляет движение, не форсируя.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="massage-zone">
+    <div class="mz-header" onclick="toggleMZ(this)">
+      <span class="mz-icon">🫁</span>
+      <span class="mz-name">Межрёберные промежутки — грудной и диафрагмальный блок</span>
+      <span class="mz-arrow">▶</span>
+    </div>
+    <div class="mz-body">
+      <ul class="mz-steps">
+        <li>Пальцами (2–3–4) вдоль межрёберных промежутков — от грудины в стороны. Умеренное давление, медленно.</li>
+        <li>Особое внимание — нижним рёбрам и зоне вокруг мечевидного отростка (место прикрепления диафрагмы).</li>
+        <li>Надавливание на грудину (середина грудной клетки) — медленные круговые движения ладонью.</li>
+        <li>Зона под ключицами — пальцами по малой грудной мышце, особенно в крайних точках у плечевого сустава.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="massage-zone">
+    <div class="mz-header" onclick="toggleMZ(this)">
+      <span class="mz-icon">🫃</span>
+      <span class="mz-name">Живот — абдоминальный блок</span>
+      <span class="mz-arrow">▶</span>
+    </div>
+    <div class="mz-body">
+      <ul class="mz-steps">
+        <li>Лёжа на спине, колени согнуты. Обеими руками — круговые движения по животу по ходу часовой стрелки (по ходу кишечника). 2–3 мин.</li>
+        <li>Надавливание в зоне солнечного сплетения (центр живота, чуть выше пупка) — мягко, на выдохе. Держишь 20–30 сек.</li>
+        <li>Вдоль прямых мышц живота: от рёбер вниз к лобку — медленное поглаживание с умеренным давлением.</li>
+        <li>Зона паха (подвздошно-поясничная мышца): надавливание изнутри паховой складки — держишь, дышишь. Часто болезненно при хроническом стрессе.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="massage-zone">
+    <div class="mz-header" onclick="toggleMZ(this)">
+      <span class="mz-icon">🦵</span>
+      <span class="mz-name">Ягодицы, бёдра, стопы — тазовый блок</span>
+      <span class="mz-arrow">▶</span>
+    </div>
+    <div class="mz-body">
+      <ul class="mz-steps">
+        <li>Кулаки — по ягодицам и внешней стороне бёдер. Умеренные удары-постукивания, разогрев.</li>
+        <li>Теннисный мяч под ягодицу (сидя или лёжа): медленно перекатываешься по болезненным точкам.</li>
+        <li>Грушевидная мышца (глубокая ягодичная) — большой палец руки, надавливание в точку между копчиком и большим вертелом.</li>
+        <li>Стопы: кулаком по подошве — разминка. Указательным пальцем — по рефлекторным зонам свода стопы.</li>
+        <li>Растяжка аддукторов: сидя, ноги согнуты "бабочкой", мягкие надавливания на внутренние бёдра руками вниз.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TAB: AUTOGENIC -->
+<div class="page" id="tab-auto">
+
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px">
+    <p style="font-size:13px;font-weight:600;margin-bottom:8px;color:var(--text)">Три подхода — принципиальная разница</p>
+    <table style="width:100%;font-size:12px;border-collapse:collapse">
+      <tr style="background:var(--surface2)">
+        <td style="padding:6px 10px;font-weight:600;border:1px solid var(--border)">Шульц (АТ)</td>
+        <td style="padding:6px 10px;border:1px solid var(--border)">Директива: <em>«рука тяжёлая»</em> — приказ телу. Работает через повторение. Медленно проникает глубже сознательного.</td>
+      </tr>
+      <tr>
+        <td style="padding:6px 10px;font-weight:600;border:1px solid var(--border);color:var(--accent)">Эриксон</td>
+        <td style="padding:6px 10px;border:1px solid var(--border)">Пермиссия: <em>«возможно, ты начнёшь замечать...»</em> — обходит сопротивление. Косвенность = глубже проникновение. Работа с бессознательным через метафору.</td>
+      </tr>
+      <tr style="background:var(--surface2)">
+        <td style="padding:6px 10px;font-weight:600;border:1px solid var(--border);color:var(--cool)">Волинский</td>
+        <td style="padding:6px 10px;border:1px solid var(--border)">Метауровень: <em>«кто замечает этот транс?»</em> — ты уже в трансе (блоке). Задача не войти в «хороший транс», а выйти из патологического. Работает с наблюдателем.</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ERICKSON BLOCK -->
+  <div style="font-size:14px;font-weight:600;color:var(--accent);margin:20px 0 10px;padding-left:4px">Эриксоновский самогипноз</div>
+
+  <div class="plan-block">
+    <div class="plan-header"><h3>Индукция 3-2-1 (вход в транс)</h3><span class="badge">базовая техника</span></div>
+    <div class="plan-steps">
+      <div class="plan-step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <div class="step-name">Тройное сканирование</div>
+          <div class="step-desc">Лёжа или сидя, глаза открыты. Произносишь мысленно, медленно: <em>«Я вижу [предмет]... Я слышу [звук]... Я чувствую [ощущение в теле]»</em> — три разных наблюдения. Затем снова: 3 вижу, 3 слышу, 3 чувствую. Потом по 2. Потом по 1. После третьего раунда глаза закрываются сами. Транс пришёл — не было команды «войди в транс», был просто поток настоящего момента.</div>
+          <div class="step-time">5–7 мин · вход перед любой техникой</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="plan-block">
+    <div class="plan-header"><h3>Пермиссивные внушения на блоки</h3><span class="badge">ядро метода</span></div>
+    <div class="plan-steps">
+      <div class="plan-step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <div class="step-name">Принцип: косвенность вместо директивы</div>
+          <div class="step-desc">Сознание блокирует прямые команды — именно этим объясняется слабость директивного самовнушения при наличии сопротивления. Эриксон открыл: косвенное допущение проходит без сопротивления. Вместо «моя грудь расслаблена» → «интересно, когда именно моя грудь начнёт расслабляться — прямо сейчас или чуть позже...» Бессознательное отвечает на вопрос, обходя критику.</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <div class="step-name">Формулы на 7 сегментов (пермиссивные)</div>
+          <div class="step-desc">
+            <strong>Окулярный:</strong> <span style="font-style:italic;color:var(--cool)">"Возможно, ты заметишь, как вокруг глаз что-то начинает слегка смягчаться... как будто веки становятся чуть тяжелее сами по себе..."</span><br><br>
+            <strong>Оральный/горло:</strong> <span style="font-style:italic;color:var(--cool)">"Интересно, позволит ли горло стать чуть просторнее... и, возможно, ты позволишь себе издать самый тихий звук — или нет — это не важно..."</span><br><br>
+            <strong>Грудной:</strong> <span style="font-style:italic;color:var(--cool)">"Твоя грудная клетка может начать двигаться так, как ей хочется... и, возможно, с каждым вдохом она раскрывается немного больше, чем ты ожидал..."</span><br><br>
+            <strong>Диафрагма:</strong> <span style="font-style:italic;color:var(--cool)">"Где-то в центре тела... что-то может начать отпускать. Ты не знаешь, что именно. Твоё бессознательное знает лучше тебя..."</span><br><br>
+            <strong>Тазовый:</strong> <span style="font-style:italic;color:var(--cool)">"Интересно, сколько тепла начнёт накапливаться в нижней части тела... как будто ты медленно погружаешься в тёплую воду снизу вверх..."</span>
+          </div>
+          <div class="step-time">Выбираешь 1–2 формулы на сессию · произносишь 3–5 раз медленно</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <div class="step-name">Возрастная регрессия в ресурс</div>
+          <div class="step-desc">В трансовом состоянии: <em>«Позволь своей памяти найти момент — когда тело чувствовало себя полностью живым и свободным. Ты не знаешь, какой это момент — просто позволь ему прийти...»</em> Когда образ появился — побудь в нём, почувствуй телесно. Это имплантация ресурсного состояния в нервную систему.</div>
+          <div class="step-time">5–10 мин</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n">5</div>
+        <div class="step-body">
+          <div class="step-name">Телесный якорь</div>
+          <div class="step-desc">В пике ресурсного состояния (ощущение тепла, расширения, потока) — сжимаешь большой и указательный палец одной руки. Держишь 30 сек, отпускаешь. Повторяешь 3 раза в эту же сессию и 3 следующие сессии. После закрепления — прикосновение пальцев воспроизводит состояние. Это кинестетический якорь.</div>
+          <div class="step-time">Интегрируется в ресурсную работу</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n">6</div>
+        <div class="step-body">
+          <div class="step-name">Метафора исцеления тела</div>
+          <div class="step-desc">В трансе: <em>«Представь своё тело как пространство — сад, пейзаж, здание — любой образ, который сам придёт. Найди в нём место, где что-то кажется закрытым, замёрзшим, тёмным. Не торопись — просто побудь рядом с этим местом и позволь ему показать, что ему нужно...»</em> Бессознательное само предложит образ трансформации. Ты не управляешь — наблюдаешь.</div>
+          <div class="step-time">10–15 мин</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WOLINSKY BLOCK -->
+  <div style="font-size:14px;font-weight:600;color:var(--cool);margin:24px 0 10px;padding-left:4px">Методы Стивена Волинского</div>
+
+  <div class="auto-phase" style="border-left:3px solid var(--cool)">
+    <h4 style="font-size:13px;font-weight:600;margin-bottom:8px">Ключевая идея</h4>
+    <p style="font-size:13px;color:var(--text2)">«Трансы, в которых живут люди» (1991) — главная книга. Волинский утверждает: телесный блок, эмоциональный паттерн, повторяющаяся реакция — это <strong>уже транс</strong>, наведённый в раннем детстве. Задача не входить в «хороший транс», а <strong>выйти из патологического</strong>, заметив его. Инструмент — наблюдатель, который шире любого транса.</p>
+  </div>
+
+  <div class="plan-block" style="margin-top:14px">
+    <div class="plan-header"><h3>Техника Свидетеля (The Witness)</h3><span class="badge">базовая у Волинского</span></div>
+    <div class="plan-steps">
+      <div class="plan-step">
+        <div class="step-n" style="background:var(--cool)">1</div>
+        <div class="step-body">
+          <div class="step-name">Три уровня наблюдения</div>
+          <div class="step-desc">Замечаешь напряжение или блок в теле (например, сжатая грудь). Спрашиваешь себя: <em>«Кто замечает это сжатие?»</em> — и переносишь внимание на того, кто замечает. Потом: <em>«А кто замечает того, кто замечает?»</em> Этот регресс наблюдателя приводит к позиции, из которой никакой блок не является «тобой» — он просто явление в поле осознавания. Из этой позиции блок часто начинает растворяться без усилий.</div>
+          <div class="step-time">5–10 мин · с любым блоком или дискомфортом</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="plan-block">
+    <div class="plan-header"><h3>Демонтаж корневого транса</h3><span class="badge">глубокая работа</span></div>
+    <div class="plan-steps">
+      <div class="plan-step">
+        <div class="step-n" style="background:var(--cool)">2</div>
+        <div class="step-body">
+          <div class="step-name">Вход в транс намеренно</div>
+          <div class="step-desc">Парадоксальная техника. Замечаешь паттерн (тревога в животе, зажатое горло). Вместо того, чтобы расслабить или устранить — <strong>усиливаешь намеренно</strong>: «Я позволяю этому напряжению стать ещё более явным, ещё более полным...» Двигаешься в транс, а не из него. При достаточном «вхождении» транс начинает рассыпаться сам — потому что теперь им управляешь ты, а не он тобой.</div>
+          <div class="step-time">5–7 мин</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n" style="background:var(--cool)">3</div>
+        <div class="step-body">
+          <div class="step-name">Возврат к корневому событию</div>
+          <div class="step-desc">В состоянии наблюдателя спрашиваешь: <em>«Когда впервые появилось это ощущение в теле? Позволь памяти найти первый раз...»</em> Образ или ощущение из прошлого появятся. Ты наблюдаешь за ребёнком-собой с позиции Свидетеля — не входишь в воспоминание, а смотришь на него из взрослой позиции. Говоришь себе-ребёнку: <em>«Я вижу тебя. Это кончилось. Ты справился.»</em> Потом возвращаешь в настоящее.</div>
+          <div class="step-time">10–15 мин · только после освоения техники Свидетеля</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n" style="background:var(--cool)">4</div>
+        <div class="step-body">
+          <div class="step-name">Квантовое наблюдение</div>
+          <div class="step-desc">Финальная практика сессии. Просто сидишь или лежишь. Внимание — без объекта. Не наблюдаешь «за чем-то» — просто присутствуешь как пространство, в котором что-то происходит. Если мысль: замечаешь её без названия. Если ощущение: замечаешь без интерпретации. Это «пустое осознавание» (Волинский называл это «Я есть»). Не достижение — просто пребывание в этом.</div>
+          <div class="step-time">5–10 мин · завершение любой сессии</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCHULTZ as base -->
+  <div style="font-size:14px;font-weight:600;color:var(--text2);margin:24px 0 10px;padding-left:4px">АТ по Шульцу — базовый фундамент</div>
+
+  <div class="auto-phase">
+    <h4 style="font-size:13px;margin-bottom:6px">Зачем оставить в арсенале</h4>
+    <p style="font-size:13px;color:var(--text2)">Шульц даёт надёжный, предсказуемый вход в расслабленное состояние — особенно на начальном этапе или когда нет сил на более тонкую работу. Используй его как платформу для входа, затем переключайся на эриксоновские или волинский-техники.</p>
+  </div>
+
+  <div class="auto-phase">
+    <h4><span class="phase-n" style="background:var(--text3)">1–6</span>Шесть этапов (кратко)</h4>
+    <div class="formula">"Рука тяжёлая... рука тёплая... сердце спокойно... дыхание свободно... солнечное сплетение тёплое... лоб прохладный..."</div>
+    <p style="font-size:13px;color:var(--text2)">Каждую формулу — 3–5 раз, медленно. Весь цикл: 10–15 мин. Используешь как <strong>ввод</strong>, после которого применяешь эриксоновские пермиссивные внушения или технику Свидетеля Волинского.</p>
+  </div>
+
+  <!-- RECOMMENDED SEQUENCE -->
+  <div class="plan-block" style="margin-top:20px">
+    <div class="plan-header"><h3>Рекомендуемая последовательность сессии</h3><span class="badge">20–30 мин</span></div>
+    <div class="plan-steps">
+      <div class="plan-step">
+        <div class="step-n">А</div>
+        <div class="step-body">
+          <div class="step-name">Вход — индукция 3-2-1 (Эриксон)</div>
+          <div class="step-desc">5–7 мин. Плавный транс через поток наблюдений. Никаких усилий, никакого сопротивления.</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n">Б</div>
+        <div class="step-body">
+          <div class="step-name">Углубление — тяжесть/тепло (Шульц, сокращённо)</div>
+          <div class="step-desc">3–5 мин. Быстрое физическое расслабление тела как платформа для более тонкой работы.</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n">В</div>
+        <div class="step-body">
+          <div class="step-name">Основная работа — выбираешь одно</div>
+          <div class="step-desc">Пермиссивные внушения на конкретный блок (Эриксон) — для направленной работы с сегментом. ИЛИ техника Свидетеля (Волинский) — если есть острое напряжение, тревога, паттерн. ИЛИ демонтаж корневого транса (Волинский) — глубокая сессия раз в 1–2 недели.</div>
+          <div class="step-time">10–15 мин</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n">Г</div>
+        <div class="step-body">
+          <div class="step-name">Завершение — квантовое наблюдение (Волинский)</div>
+          <div class="step-desc">5 мин пустого присутствия. Затем: сжать кулаки 3 раза — потянуться — медленно открыть глаза — посидеть 1–2 мин, не торопясь вставать.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip-box" style="margin-top:4px">
+    <strong>Ключевой принцип Волинского</strong>
+    Ты не ломаешь блок и не убеждаешь его уйти. Ты становишься больше блока — и он перестаёт быть тобой. Свидетель, который замечает зажим, никогда сам не зажат.
+  </div>
+</div>
+
+<!-- TAB: BREATH -->
+<div class="page" id="tab-breath">
+  <p style="font-size:13px;color:var(--text2);margin-bottom:16px">Дыхание — самый прямой рычаг воздействия на вегетативную нервную систему. Техники ниже организованы по эффекту: успокоение, энергия, глубокая проработка, экстренный сброс.</p>
+
+  <div class="plan-block">
+    <div class="plan-header"><h3>Успокоение и ВСР — ежедневные</h3><span class="badge">парасимпатика</span></div>
+    <div class="plan-steps">
+      <div class="plan-step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <div class="step-name">Резонансное дыхание (Coherent Breathing) — 5:5</div>
+          <div class="step-desc">Вдох 5 сек — выдох 5 сек. Без пауз, плавно. Это ровно 6 циклов в минуту — резонансная частота сердечного ритма, при которой ВСР (вариабельность сердечного ритма) максимальна. Лучшая техника для долгосрочного восстановления нервной системы. Делать 10–20 мин в день — через 4–6 недель заметный сдвиг в стрессоустойчивости.</div>
+          <div class="step-time">10–20 мин · ежедневно</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <div class="step-name">4-7-8 (Weil)</div>
+          <div class="step-desc">Вдох через нос — 4 сек. Задержка — 7 сек. Выдох через рот со звуком — 8 сек. 4 цикла подход, максимум 8. Задержка дыхания + длинный выдох резко активируют парасимпатику. Эффект — через 2–4 цикла. Лучшее применение: перед сном, после острого стресса, при тревоге.</div>
+          <div class="step-time">2–4 мин · по потребности</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <div class="step-name">Попеременное дыхание через ноздри (Нади Шодхана)</div>
+          <div class="step-desc">Правой рукой: большой палец закрывает правую ноздрю — вдох через левую (4 сек). Безымянный закрывает левую, открывается правая — выдох через правую (8 сек). Вдох через правую (4 сек) — закрыть правую, выдох через левую (8 сек). Это один цикл. 5–10 циклов. Балансирует полушария, снимает напряжение мозга. Хорошо перед аутогенной тренировкой.</div>
+          <div class="step-time">5 мин · вечером или перед практикой</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="plan-block">
+    <div class="plan-header"><h3>Быстрый сброс — ситуативные</h3><span class="badge">экстренный эффект</span></div>
+    <div class="plan-steps">
+      <div class="plan-step">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <div class="step-name">Физиологический вздох (Double Inhale)</div>
+          <div class="step-desc">Двойной вдох через нос: короткий — пауза — ещё короткий (довдох, заполняя альвеолы до максимума) — затем долгий медленный выдох через рот. Это самый быстрый известный способ снизить острый стресс — буквально 1–2 цикла. Открыли в Стэнфорде (Huberman Lab). Делать прямо в моменте стресса.</div>
+          <div class="step-time">10–30 сек · в момент стресса</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n">5</div>
+        <div class="step-body">
+          <div class="step-name">Боксовое дыхание (Box Breathing) 4-4-4-4</div>
+          <div class="step-desc">Вдох — 4 сек. Задержка — 4 сек. Выдох — 4 сек. Задержка — 4 сек. Используется спецназом США (SEAL) для управления состоянием под давлением. Нейтрализует острую тревогу, восстанавливает фокус. Начинаешь с 4-секундных сторон, можно увеличивать до 6 или 8 по мере практики.</div>
+          <div class="step-time">3–5 мин · перед важным событием или при стрессе</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="plan-block">
+    <div class="plan-header"><h3>Энергия и активация</h3><span class="badge">симпатика / заряд</span></div>
+    <div class="plan-steps">
+      <div class="plan-step">
+        <div class="step-n">6</div>
+        <div class="step-body">
+          <div class="step-name">Дыхание Вима Хофа (упрощённая домашняя версия)</div>
+          <div class="step-desc">Лёжа или сидя. 30 глубоких быстрых вдохов-выдохов через рот (вдох полный в живот и грудь, выдох пассивный — просто отпускаешь). После 30-го — выдох и задержка без воздуха. Держишь сколько комфортно (обычно 1–2 мин). Затем вдох — задержка 15 сек — выдох. Это 1 раунд. 3 раунда. <strong>Внимание:</strong> никогда стоя, никогда в воде. Возможно лёгкое головокружение и покалывание — норма. Мощно поднимает энергетику, снижает воспаление, укрепляет иммунитет.</div>
+          <div class="step-time">15–20 мин · утром, до еды, 3–4 раза в неделю</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n">7</div>
+        <div class="step-body">
+          <div class="step-name">Капалабхати (очистительное дыхание)</div>
+          <div class="step-desc">Сидя, спина прямая. Резкие короткие выдохи через нос — живот резко втягивается на каждом выдохе. Вдох пассивный, сам собой. Темп: 1 выдох/сек → нарастает до 2–3 в секунду. Начинать с 30 выдохов, отдых 30 сек, 3 серии. Активирует нервную систему лучше кофе, очищает дыхательные пути. Хорошо перед тренировкой или физическим комплексом.</div>
+          <div class="step-time">5 мин · утром перед физической практикой</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="plan-block">
+    <div class="plan-header"><h3>Глубокая проработка — для сессий ТОТ</h3><span class="badge">интеграция</span></div>
+    <div class="plan-steps">
+      <div class="plan-step">
+        <div class="step-n">8</div>
+        <div class="step-body">
+          <div class="step-name">Связное дыхание (Rebirthing-style)</div>
+          <div class="step-desc">Непрерывный круговой цикл: вдох — без паузы — выдох — без паузы — снова вдох. Никаких задержек. Дыхание в живот и грудь. Темп умеренный (не гипервентиляция). 20–30 мин. Это основа ребёфинга — прямой доступ к телесной памяти и блокам. При должном внимании через 10–15 мин могут появиться покалывание в конечностях, тепло, эмоции — это признак высвобождения. Делать лёжа, после физического комплекса или отдельно. Первые 5–7 сессий — ограничивать 15 мин.</div>
+          <div class="step-time">20–30 мин · 1 раз в неделю в день глубокой сессии</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n">9</div>
+        <div class="step-body">
+          <div class="step-name">Дыхательная волна (по Лоуэну) — расширенная версия</div>
+          <div class="step-desc">Лёжа, колени согнуты, стопы на полу. Вдох начинается с таза (нижний живот расширяется вниз и вперёд) → волна идёт вверх: живот → рёбра → грудь → плечи. Выдох: плечи → грудь → рёбра → живот → таз (таз слегка поднимается на выдохе). Движение — реальное, не воображаемое. Стремишься сделать волну непрерывной и плавной. Это восстанавливает оргастический рефлекс по Райху — свободный поток энергии через всё тело.</div>
+          <div class="step-time">10–15 мин · в конце глубокой сессии или отдельно</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <strong>Как встроить в расписание</strong>
+    Утро (до тренировки): Капалабхати 5 мин — активация. · Вечер (перед сном): Резонансное 5:5 или 4-7-8 — расслабление и ВСР. · Воскресная сессия: Связное дыхание 20–30 мин — глубокая проработка. · В любой момент стресса: Физиологический вздох или Бокс.
+  </div>
+</div>
+
+<!-- TAB: APPS -->
+<div class="page" id="tab-apps">
+  <p style="font-size:13px;color:var(--text2);margin-bottom:16px">Лучшие бесплатные Android-приложения под эту практику. Проверены по критериям: полная бесплатность нужных функций, поддержка кастомных паттернов, офлайн-режим.</p>
+
+  <div class="plan-block">
+    <div class="plan-header"><h3>Prana Breath: Calm &amp; Meditate</h3><span class="badge">выбор №1</span></div>
+    <div class="plan-steps">
+      <div class="plan-step">
+        <div class="step-n" style="background:#1a6b5e">★</div>
+        <div class="step-body">
+          <div class="step-name">Почему лучший выбор для этой практики</div>
+          <div class="step-desc">Полностью бесплатное ядро — все основные дыхательные паттерны доступны без подписки. Позволяет создавать любые кастомные ритмы (вдох-задержка-выдох-задержка — любое количество секунд). Визуальная анимация вдоха/выдоха. Статистика сессий. Офлайн. Работает для 4-7-8, 5:5, бокс-дыхания, Вима Хофа и любого кастомного ритма.</div>
+          <div class="step-time">Google Play: "Prana Breath" · разработчик: Ipnos Software</div>
+        </div>
+      </div>
+      <div class="plan-step">
+        <div class="step-n" style="background:#1a6b5e">+</div>
+        <div class="step-body">
+          <div class="step-name">Как настроить под комплекс</div>
+          <div class="step-desc">Создай три пресета: (1) Утро — Капалабхати или 4:0:4:0 ритм, 5 мин. (2) Вечер — 5:0:5:0 резонансное, 10–15 мин. (3) Сессия — 4:4:4:4 бокс или 4:7:8, как разминка перед ТОТ-практикой. Таймер отмеряет сессию, уведомления можно настроить на конкретное время.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="plan-block">
+    <div class="plan-header"><h3>Insight Timer</h3><span class="badge">для медитации и АТ</span></div>
+    <div class="plan-steps">
+      <div class="plan-step">
+        <div class="step-n" style="background:#8b4513">2</div>
+        <div class="step-body">
+          <div class="step-name">Зачем нужен в связке</div>
+          <div class="step-desc">Крупнейшая бесплатная библиотека медитаций — более 100 000 записей. Для этого комплекса: найти "body scan", "progressive muscle relaxation", "autogenic training", "somatic release". Есть русскоязычные треки. Таймер медитации с колоколом — удобно для аутогенной тренировки без счёта времени. Офлайн (скачивание избранных треков бесплатно).</div>
+          <div class="step-time">Google Play: "Insight Timer" · использовать как дополнение к Prana Breath</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="plan-block">
+    <div class="plan-header"><h3>Wim Hof Method</h3><span class="badge">если практикуешь ВХ</span></div>
+    <div class="plan-steps">
+      <div class="plan-step">
+        <div class="step-n" style="background:#2c5282">3</div>
+        <div class="step-body">
+          <div class="step-name">Официальное приложение</div>
+          <div class="step-desc">Официальное приложение Вима Хофа. Бесплатный базовый модуль включает полную дыхательную сессию (3 раунда) с таймером задержки дыхания и голосовым сопровождением. Анимация и отслеживание задержек. Остальные курсы — платно, но дыхалка бесплатна полностью. Использовать именно для дыхания ВХ — Prana Breath для этой техники менее удобен.</div>
+          <div class="step-time">Google Play: "Wim Hof Method"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip-box" style="margin-top:8px">
+    <strong>Итоговая связка на Android (всё бесплатно)</strong>
+    Prana Breath — ежедневные дыхательные ритмы и таймеры для всего комплекса. · Wim Hof Method — сессии по технике ВХ (4–5 раз/нед если практикуешь). · Insight Timer — таймер и звуки для аутогенной тренировки + библиотека соматических медитаций.
+  </div>
+
+  <div class="auto-phase" style="margin-top:16px">
+    <h4 style="font-size:14px;font-weight:600;margin-bottom:8px">Что не стоит устанавливать</h4>
+    <p style="font-size:13px;color:var(--text2)">Calm и Headspace — большинство контента платное, бесплатная версия слишком ограничена. Breathwrk — красивый интерфейс, но кастомные паттерны только в Pro. Balance — первый год бесплатно, потом $70/год. Для данной практики эти приложения проигрывают Prana Breath по соотношению функционал/бесплатность.</p>
+  </div>
+</div>
+
+<script>
+const segments = [
+  {
+    name: "1. Окулярный сегмент",
+    zone: "глаза, лоб, затылок, скальп",
+    block: "Страх, нежелание видеть. Подавление реакции «бегства» глазами. Проявляется: напряжение вокруг глаз, морщины лба, ощущение давления в голове, тупые взгляд.",
+    ex: [
+      { n:"1", name:"Максимальное раскрытие глаз", desc:"Открываешь глаза настолько широко, насколько возможно — как при сильном испуге. Держишь 5 сек, расслабляешь. 5–8 повторений.", time:"2 мин" },
+      { n:"2", name:"Вращение глаз", desc:"Широко открытые глаза медленно вращаешь по полному кругу — 8 раз по часовой, 8 — против. Голова неподвижна.", time:"1 мин" },
+      { n:"3", name:"EMDR-стиль", desc:"Быстрые движения глаз строго влево-вправо, 20–30 раз. Взгляд не задерживается. Разгружает эмоциональные отпечатки в окулярном сегменте.", time:"30 сек" },
+      { n:"4", name:"Гримасы лица", desc:"Поочерёдно: нахмуриваешь лоб — держишь 5 сек, расслабляешь. Поднимаешь брови максимально — держишь — расслабляешь. Морщишь нос. Растягиваешь лицо «в ужасе».", time:"2 мин" },
+      { n:"5", name:"Пальпация волосистой части", desc:"Кончиками пальцев — круговые движения по скальпу. Затылок, виски, темя. Ищешь напряжённые участки. Самомассаж.", time:"2 мин" },
+    ]
+  },
+  {
+    name: "2. Оральный сегмент",
+    zone: "губы, подбородок, горло, подъязычные мышцы",
+    block: "Сдерживание плача, крика, сосательного рефлекса. Невысказанное. Проявляется: напряжение подбородка, поджатые губы, комок в горле, голос «из горла».",
+    ex: [
+      { n:"1", name:"Жевательные движения", desc:"Преувеличенные жевательные движения — широко открываешь рот, закрываешь с давлением. 30–40 раз. Как будто жуёшь что-то очень твёрдое.", time:"1 мин" },
+      { n:"2", name:"Вытягивание языка", desc:"Максимально высовываешь язык и удерживаешь — 10 сек. Это активирует рвотный рефлекс и освобождает диафрагму. 5 повторений.", time:"1 мин" },
+      { n:"3", name:"Вокализация", desc:"Долгий звук «АААА» на выдохе — без форсирования, просто позволяешь ему быть. Затем «ма-ма-ма», «ба-ба-ба» с разной интенсивностью. Намеренный плач (без реального повода): движения лица плача, звук — часто эмоции идут следом.", time:"3 мин" },
+      { n:"4", name:"Выдвижение челюсти", desc:"Выдвигаешь нижнюю челюсть вперёд и двигаешь в стороны. Чередуешь: вправо — центр — влево — центр. Снимает напряжение ВНЧС.", time:"1 мин" },
+    ]
+  },
+  {
+    name: "3. Цервикальный сегмент",
+    zone: "шея, трапеции (верх), язык",
+    block: "Подавление гнева и крика. «Проглоченные» слова. Проявляется: хроническое напряжение шеи, частые головные боли, голос из шеи, не из груди.",
+    ex: [
+      { n:"1", name:"Растяжка шеи", desc:"Медленные наклоны головы в каждую сторону с задержкой 15–20 сек. Противоположная рука свободно опущена вниз (натяжение плечевого пояса усиливает растяжку).", time:"2 мин" },
+      { n:"2", name:"Изометрическое сопротивление", desc:"Ладонь на лоб — давишь ладонью вперёд, шеей сопротивляешься. 7 сек — отпускаешь. Затем ладонь на затылок, на каждый висок. Пострелаксационное расслабление глубокое.", time:"2 мин" },
+      { n:"3", name:"Крик", desc:"В подушку или в пространство: «НЕТ!» — коротко, резко, с силой. 5–8 раз. Это прямая разгрузка цервикального и грудного блока. Если не получается громко — начни тихо, нарастая.", time:"1 мин" },
+      { n:"4", name:"Черепаха", desc:"Вытягиваешь шею и голову максимально вперёд — задерживаешь 5 сек. Возвращаешь. Затем максимально вниз к груди — задерживаешь. 5 раз по кругу.", time:"1 мин" },
+    ]
+  },
+  {
+    name: "4. Грудной сегмент",
+    zone: "грудная клетка, плечи, лопатки, руки",
+    block: "Подавление тоски, тяги к любви, гнева. Сдерживание вздохов и рыданий. Проявляется: сутулость, сжатые плечи, «деревянная» грудь, поверхностное дыхание.",
+    ex: [
+      { n:"1", name:"Раскрытие груди (валик)", desc:"Скатанное полотенце под лопатки (уровень сердца). Руки в стороны или за голову, голова запрокинута. 2–3 мин глубокого дыхания в этом положении. Позволяешь любым чувствам приходить и уходить.", time:"3 мин" },
+      { n:"2", name:"Удары по кровати", desc:"Стоя сбоку от кровати. Подъём рук над головой — вдох. Удар сжатыми кулаками по матрасу на выдохе с звуком «ХА!» или «НЕТ!». Полная амплитуда из плеч. 15–20 ударов, 3 серии.", time:"5 мин" },
+      { n:"3", name:"Тяга и отталкивание", desc:"Руки вытянуты вперёд: тянешь к себе воображаемое (или реальное полотенце, дверную ручку) — максимальное усилие 7 сек, отпускаешь. Затем — отталкиваешь от себя с полным усилием. 5 раз каждое.", time:"2 мин" },
+      { n:"4", name:"Шраги", desc:"Поднимаешь плечи максимально к ушам — задерживаешь 5 сек — резкий сброс с выдохом. 8–10 раз. Финально: круговые вращения плечами назад, широкая амплитуда.", time:"2 мин" },
+    ]
+  },
+  {
+    name: "5. Диафрагмальный сегмент",
+    zone: "диафрагма, солнечное сплетение, нижние рёбра",
+    block: "Хроническая тревога, отвращение, сдерживание гнева. Проявляется: поверхностное дыхание «только в грудь», «нет воздуха», хроническое ощущение тревоги в животе.",
+    ex: [
+      { n:"1", name:"Диафрагмальное дыхание", desc:"Лёжа. Одна рука на животе — на вдохе поднимается, на выдохе опускается. Грудь по возможности неподвижна. Медленный вдох 4 сек, выдох 6–8 сек. 5–10 мин. Это само по себе сильная практика.", time:"5–10 мин" },
+      { n:"2", name:"Прогиб через стул", desc:"Сидишь на краю твёрдого стула. Откидываешься назад, руки тянутся к полу или за голову, голова запрокинута. Дышишь в раскрытую грудь. 60–90 сек.", time:"2 мин" },
+      { n:"3", name:"Рефлекс выброса диафрагмы", desc:"Высовываешь язык, надавливаешь руками снизу на живот и произносишь «ХАААК» — как при попытке кашля. 3–5 раз. Это снимает хронический спазм диафрагмы.", time:"1 мин" },
+      { n:"4", name:"Звук «А» на полном выдохе", desc:"Полный выдох — затем открытый звук «АААА» до конца воздуха. Не форсируешь, позволяешь. Диафрагма расслабляется в конце выдоха. 5–8 раз.", time:"2 мин" },
+    ]
+  },
+  {
+    name: "6. Абдоминальный сегмент",
+    zone: "живот, поясница, мышцы спины",
+    block: "Подавление страха нападения, злобы, агрессии. Проявляется: втянутый или «каменный» живот, хроническое напряжение поясницы, ощущение «дыры» в животе.",
+    ex: [
+      { n:"1", name:"Гнев через живот", desc:"Лёжа, голову поднимаешь и смотришь на живот — напрягаешь его с усилием, как при попытке «давить взглядом». Одновременно — удары ногами по матрасу. 20–30 ударов.", time:"2 мин" },
+      { n:"2", name:"Вакуум живота", desc:"Стоя, ноги согнуты, руки на бёдрах. Полный выдох — живот втягиваешь максимально вверх под рёбра. Задерживаешь 5–10 сек. Вдох — расслабляешь. 8–10 раз.", time:"2 мин" },
+      { n:"3", name:"Самомассаж живота", desc:"Лёжа, колени согнуты. Обеими руками — круговые движения по животу по часовой стрелке с умеренным давлением. Особое внимание солнечному сплетению — мягкое надавливание на выдохе.", time:"3 мин" },
+      { n:"4", name:"Растяжка поясницы", desc:"Колени к груди — обнимаешь руками и мягко покачиваешься на спине. Или «поза эмбриона» на боку. Поясница расслабляется — это снимает защитное напряжение.", time:"2 мин" },
+    ]
+  },
+  {
+    name: "7. Тазовый сегмент",
+    zone: "таз, крестец, ягодицы, внутренняя поверхность бёдер, ноги",
+    block: "Подавление сексуальной энергии, оргастического рефлекса, удовольствия, потока. Проявляется: «мёртвый» таз, зажатые ягодицы, холодные ноги, оторванность от тела.",
+    ex: [
+      { n:"1", name:"Тазовые качания", desc:"Лёжа, колени согнуты. Качания таза вперёд-назад: вперёд (поясница к полу) — выдох, назад (поясница отрывается) — вдох. Медленно, ритмично, 3–5 мин. Это восстанавливает связь таза с дыханием.", time:"3–5 мин" },
+      { n:"2", name:"Тазовый рывок (Thrust)", desc:"Стоя, ноги согнуты (позиция заземления). Таз резко выдвигается вперёд на выдохе, возвращается на вдохе. Ягодицы не зажимаешь — движение от бёдер. 15–20 повторений, 3 серии.", time:"3 мин" },
+      { n:"3", name:"Круговые движения тазом", desc:"Стоя, руки на бёдрах. Медленные широкие круги тазом — 10 раз по часовой, 10 — против. Ищешь точки сопротивления в круге, замедляешься в них.", time:"2 мин" },
+      { n:"4", name:"Вибрация ног", desc:"Стоя, ноги шире плеч, колени согнуты. Позволяешь ногам дрожать — не форсируешь. Через 30–60 сек дрожь идёт сама. Это разряд хронического тонуса. 3–5 мин.", time:"3–5 мин" },
+      { n:"5", name:"Велосипед лёжа", desc:"Лёжа на спине. Ноги в воздухе — поочерёдный удар пятками вниз (как велосипед в обратную сторону, пятки идут вниз). Темп нарастает. Можно сопровождать звуком.", time:"2 мин" },
+    ]
+  }
+];
+
+let currentSeg = 0;
+
+function selectSeg(n) {
+  currentSeg = n;
+  document.querySelectorAll('.seg-btn').forEach((b,i) => b.classList.toggle('selected', i===n));
+  document.querySelectorAll('[id^="svg"]').forEach((el,i) => el.style.opacity = i===n ? '1' : '0.7');
+  const seg = segments[n];
+  document.getElementById('sd-title').textContent = seg.name;
+  document.getElementById('sd-block').innerHTML = '<strong>Характер блока:</strong> ' + seg.block + '<br><strong>Зона:</strong> ' + seg.zone;
+  const ul = document.getElementById('sd-exlist');
+  ul.innerHTML = seg.ex.map(e =>
+    `<li><span class="ex-num">${e.n}</span><div class="ex-body"><div class="ex-name">${e.name}</div><div class="ex-desc">${e.desc}</div><div class="ex-time">⏱ ${e.time}</div></div></li>`
+  ).join('');
+  document.getElementById('seg-detail').classList.add('open');
+}
+
+function showTab(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function toggleMZ(header) {
+  header.classList.toggle('open');
+}
+
+selectSeg(0);
+</script>
+</body>
+</html>
